@@ -9,7 +9,6 @@ import org.geogebra.web.html5.event.PointerEvent;
 import org.geogebra.web.html5.event.ZeroOffset;
 
 import com.google.gwt.dom.client.Element;
-
 /**
  * Handles pointer events in Euclidian view(or MSPointer events in case of IE10)
  * 
