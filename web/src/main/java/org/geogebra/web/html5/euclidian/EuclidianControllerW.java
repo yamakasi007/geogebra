@@ -501,5 +501,9 @@ public class EuclidianControllerW extends EuclidianController implements
 		}
 		return textController;
 	}
+
+	public MouseTouchGestureControllerW getMouseTouchGestureController() {
+		return mtg;
+	}
 }
 

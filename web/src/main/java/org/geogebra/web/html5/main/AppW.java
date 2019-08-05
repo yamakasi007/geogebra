@@ -92,6 +92,7 @@ import org.geogebra.web.html5.euclidian.EuclidianPanelWAbstract;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
 import org.geogebra.web.html5.euclidian.EuclidianViewWInterface;
 import org.geogebra.web.html5.euclidian.MouseTouchGestureControllerW;
+import org.geogebra.web.html5.euclidian.profiler.DrawingEmulator;
 import org.geogebra.web.html5.euclidian.profiler.FpsProfilerW;
 import org.geogebra.web.html5.export.GeoGebraToAsymptoteW;
 import org.geogebra.web.html5.export.GeoGebraToPgfW;
@@ -246,6 +247,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	private VendorSettings vendorSettings;
 	private DefaultSettings defaultSettings;
 	private FpsProfiler fpsProfiler;
+	private DrawingEmulator drawingEmulator;
 
 	Timer timeruc = new Timer() {
 		@Override
@@ -4025,5 +4027,19 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			fpsProfiler = new FpsProfilerW();
 		}
 		return fpsProfiler;
+	}
+
+	@Override
+	public void testDraw() {
+		if (drawingEmulator == null) {
+			drawingEmulator =
+					new DrawingEmulator(getEuclidianController().getMouseTouchGestureController());
+		}
+		drawingEmulator.draw();
+	}
+
+	@Override
+	protected EuclidianControllerW getEuclidianController() {
+		return (EuclidianControllerW) super.getEuclidianController();
 	}
 }
