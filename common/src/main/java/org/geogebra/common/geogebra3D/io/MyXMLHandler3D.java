@@ -19,16 +19,16 @@ import org.geogebra.common.util.debug.Log;
 
 /**
  * Class extending MyXMLHandler for 3D
- * 
+ *
  * @author ggb3D
- * 
+ *
  *
  */
 public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * See Kernel3D for using the constructor
-	 * 
+	 *
 	 * @param kernel
 	 *            kernel
 	 * @param cons
@@ -43,7 +43,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 	// ====================================
 	/**
 	 * only used in MyXMLHandler3D
-	 * 
+	 *
 	 * @param eName
 	 *            element name
 	 * @param attrs
@@ -115,6 +115,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 				ok = handleARRatio(((EuclidianView3D) app.getActiveEuclidianView()).getRenderer(),
 						attrs);
 			}
+			break;
 		default:
 			Log.error("unknown tag in <euclidianView3D>: " + eName);
 		}
@@ -159,7 +160,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles plane attributes (show plate) for EuclidianView3D
-	 * 
+	 *
 	 * @param evs
 	 *            settings
 	 * @param attrs
@@ -185,7 +186,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles if axes are colored in EuclidianView3D
-	 * 
+	 *
 	 * @param evs
 	 *            settings
 	 * @param attrs
@@ -212,7 +213,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles plane attributes (show plate) for EuclidianView3D
-	 * 
+	 *
 	 * @param evs
 	 *            settings
 	 * @param attrs
@@ -238,7 +239,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles light attributes for EuclidianView3D
-	 * 
+	 *
 	 * @param evs
 	 *            settings
 	 * @param attrs
@@ -264,7 +265,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles plane attributes (show grid) for EuclidianView3D
-	 * 
+	 *
 	 * @param evs
 	 *            euclidian settings
 	 * @param attrs
@@ -326,7 +327,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	/**
 	 * handles projection attribute
-	 * 
+	 *
 	 * @param evs
 	 *            settings
 	 * @param attrs

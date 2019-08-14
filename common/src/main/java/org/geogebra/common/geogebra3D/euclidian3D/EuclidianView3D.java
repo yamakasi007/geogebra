@@ -805,7 +805,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	}
 
 	/**
-	 * 
+	 *
 	 * @return transposed to scene matrix
 	 */
 	final public CoordMatrix4x4 getToSceneMatrixTranspose() {
@@ -1032,7 +1032,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	 * Gives direction vector from user input, e.g. if user clicks on screen, it
 	 * will return the user-to-screen vector in ggb scene coordinate system; for
 	 * orthographic projection, the vector will be orthogonal to the screen.
-	 * 
+	 *
 	 * @param ret
 	 *            returned direction
 	 */
@@ -1442,7 +1442,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	 * Gives origin coordinates from user input, e.g. if user clicks on screen,
 	 * it will return the click coordinates in ggb scene coordinate system. The
 	 * depth position is calculated to be between the user and scene objects.
-	 * 
+	 *
 	 * @param mouse
 	 *            mouse position
 	 * @param ret
@@ -2150,7 +2150,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	}
 
 	/**
-	 * 
+	 *
 	 * @return true if 3D cursor is visible
 	 */
 	public boolean isCursor3DVisible() {
@@ -2537,7 +2537,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	// ///////////////////////////////////////////////////
 
 	/**
-	 * 
+	 *
 	 * @return current cursor path
 	 */
 	public GeoElement getCursorPath() {
@@ -3113,7 +3113,6 @@ public abstract class EuclidianView3D extends EuclidianView
 			sb.append("\"/>\n");
 		}
 
-
 		// ar ratio
 		if (app.has(Feature.G3D_AR_RATIO_SETTINGS)) {
 			sb.append("\t<arRatio");
@@ -3604,7 +3603,7 @@ public abstract class EuclidianView3D extends EuclidianView
 
 	@Override
 	public Previewable createPreviewPerpendicularLine(
-			ArrayList<GeoPointND> selectedPoints, 
+			ArrayList<GeoPointND> selectedPoints,
 			ArrayList<GeoLineND> selectedLines,
 			ArrayList<GeoFunction> selectedFunctions) {
 		// not implemented in 3D
@@ -4923,7 +4922,7 @@ public abstract class EuclidianView3D extends EuclidianView
     }
 
 	/**
-	 * 
+	 *
 	 * @return shift used for AR floor
 	 */
     public double getARFloorShift() {
@@ -4950,7 +4949,7 @@ public abstract class EuclidianView3D extends EuclidianView
 
 	/**
 	 * set AR enabled/disabled
-	 * 
+	 *
 	 * @param isAREnabled
 	 *            flag
 	 */
@@ -4988,7 +4987,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	}
 
 	/**
-	 * 
+	 *
 	 * @return cursor matrix
 	 */
 	public CoordMatrix4x4 getCursorMatrix() {
@@ -5017,7 +5016,7 @@ public abstract class EuclidianView3D extends EuclidianView
 
 	/**
 	 * enlarge clipping values regarding point coords
-	 * 
+	 *
 	 * @param point
 	 *            point
 	 */
@@ -5079,7 +5078,7 @@ public abstract class EuclidianView3D extends EuclidianView
 	}
 
 	/**
-	 * 
+	 *
 	 * @return mouse/touch gesture controller
 	 */
 	public MouseTouchGestureController getEuclidianPanelOnTouchListner() {

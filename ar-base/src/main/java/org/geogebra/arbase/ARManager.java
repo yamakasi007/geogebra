@@ -560,7 +560,6 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
 
     public void setARRatio(double ratio) {
         ratioManager.setARRatio(ratio); // ratio is always converted to cm
-        ratioManager.setARRatio(ratio);
         arGestureManager.resetScaleFactor();
         fitThickness();
         showSnackbar();
@@ -579,7 +578,8 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
 
     public void setARRatioMetricSystem(int metricSystem) {
         ratioManager.setARRatioMetricSystem(metricSystem);
-        showSnackbar();    }
+        showSnackbar();
+    }
 
     public void setARRatioAtStart(double arRatioAtStart) {
         setARScaleAtStart();
