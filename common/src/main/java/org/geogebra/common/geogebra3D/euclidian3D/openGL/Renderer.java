@@ -815,7 +815,7 @@ public abstract class Renderer {
 
 	/**
 	 * draw view cursor
-	 * 
+	 *
 	 * WARNING: needs to be protected for iOS
 	 */
 	protected void drawCursor() {
@@ -879,7 +879,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return geometry manager
 	 */
 	final public Manager getGeometryManager() {
@@ -887,7 +887,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return textures manager
 	 */
 	public Textures getTextures() {
@@ -918,7 +918,7 @@ public abstract class Renderer {
 
 	/**
 	 * draws a 3D cross cursor; doesn't modify the lighting
-	 * 
+	 *
 	 * @param dotMatrix
 	 *            matrix for target dot
 	 * @param circleMatrix
@@ -1037,7 +1037,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen left
 	 */
 	public int getLeft() {
@@ -1045,7 +1045,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen right
 	 */
 	public int getRight() {
@@ -1053,7 +1053,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen width
 	 */
 	public int getWidth() {
@@ -1070,7 +1070,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen bottom
 	 */
 	public int getBottom() {
@@ -1078,7 +1078,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen top
 	 */
 	public int getTop() {
@@ -1086,7 +1086,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return screen height
 	 */
 	public int getHeight() {
@@ -1103,7 +1103,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return visible depth
 	 */
 	final public double getVisibleDepth() {
@@ -1111,7 +1111,7 @@ public abstract class Renderer {
 	} // keep visible objects at twice center-to-right distance
 
 	/**
-	 * 
+	 *
 	 * @return near distance
 	 */
 	public int getNear() {
@@ -1119,7 +1119,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return far distance
 	 */
 	public int getFar() {
@@ -1343,7 +1343,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return oblique orthogonal direction
 	 */
 	public Coords getObliqueOrthoDirection() {
@@ -1536,7 +1536,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return scene to screen matrix
 	 */
 	public CoordMatrix4x4 getToScreenMatrix() {
@@ -1553,7 +1553,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return current export type
 	 */
 	protected ExportType getExportType() {
@@ -1561,7 +1561,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return slider used for exporting animated gifs
 	 */
 	protected AnimationExportSlider getExportNum() {
@@ -1569,7 +1569,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return current slider value for exporting animated gifs
 	 */
 	protected double getExportVal() {
@@ -1577,7 +1577,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return slider max value for exporting animated gifs
 	 */
 	protected double getExportMax() {
@@ -1585,7 +1585,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return slider min value for exporting animated gifs
 	 */
 	protected double getExportMin() {
@@ -1593,7 +1593,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return animated gifs current image id
 	 */
 	protected int getExportI() {
@@ -1601,7 +1601,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return animated gifs images count
 	 */
 	protected double getExportN() {
@@ -1609,7 +1609,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return slider step for exporting animated gifs
 	 */
 	protected double getExportStep() {
@@ -1617,7 +1617,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return renderer type
 	 */
 	protected RendererType getType() {
@@ -1626,7 +1626,7 @@ public abstract class Renderer {
 
 	/**
 	 * set renderer type
-	 * 
+	 *
 	 * @param t
 	 *            type
 	 */
@@ -1636,7 +1636,7 @@ public abstract class Renderer {
 
 	/**
 	 * set slider step for exporting animated gifs
-	 * 
+	 *
 	 * @param step
 	 *            step
 	 */
@@ -1646,7 +1646,7 @@ public abstract class Renderer {
 
 	/**
 	 * set slider value for exporting animated gifs
-	 * 
+	 *
 	 * @param val
 	 *            value
 	 */
@@ -1656,7 +1656,7 @@ public abstract class Renderer {
 
 	/**
 	 * set animated gifs image id
-	 * 
+	 *
 	 * @param i
 	 *            id
 	 */
@@ -1666,7 +1666,7 @@ public abstract class Renderer {
 
 	/**
 	 * set export type
-	 * 
+	 *
 	 * @param type
 	 *            type
 	 */
@@ -1693,6 +1693,16 @@ public abstract class Renderer {
 	}
 
 	/**
+	 * set ARRatioAtStart
+	 */
+	public void setARRatioAtStart(double arRatioAtStart) {
+		ARManagerInterface<?> arManager = getARManager();
+		if (arManager != null) {
+			arManager.setARRatioAtStart(arRatioAtStart);
+		}
+	}
+
+	/**
 	 * set background color
 	 */
 	public void setBackgroundColor() {
@@ -1704,7 +1714,7 @@ public abstract class Renderer {
 
 	/**
 	 * set background style
-	 * 
+	 *
 	 * @param backgroundStyle
 	 *            style
 	 */
@@ -1830,7 +1840,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return true if uses shaders
 	 */
 	public boolean useShaders() {
@@ -1839,7 +1849,7 @@ public abstract class Renderer {
 
 	/**
 	 * set hits for mouse location
-	 * 
+	 *
 	 * @param mouseLoc
 	 *            mouse location
 	 * @param threshold
@@ -1865,7 +1875,7 @@ public abstract class Renderer {
 
 	/**
 	 * set label hits for mouse location
-	 * 
+	 *
 	 * @param mouseLoc
 	 *            mouse location
 	 * @return first label hitted geo
@@ -1902,10 +1912,10 @@ public abstract class Renderer {
 
 	/**
 	 * get alpha channel of the array ARGB description
-	 * 
+	 *
 	 * @param label
 	 *            label
-	 * 
+	 *
 	 * @param pix
 	 *            bitmap
 	 * @return the alpha channel of the array ARGB description
@@ -1916,7 +1926,7 @@ public abstract class Renderer {
 
 	/**
 	 * get alpha channel of the array ARGB description
-	 * 
+	 *
 	 * @param label
 	 *            label
 	 * @param labelWidthRes
@@ -2012,7 +2022,7 @@ public abstract class Renderer {
 			rendererImpl.needExportImage(scale, w, h);
 		}
 	}
-	
+
 	/**
 	 * @return implementation
 	 */
@@ -2054,7 +2064,7 @@ public abstract class Renderer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return canvas (for desktop version at least)
 	 */
 	abstract public Object getCanvas();
@@ -2065,7 +2075,7 @@ public abstract class Renderer {
 
 	/**
 	 * set line width
-	 * 
+	 *
 	 * @param width
 	 *            line width
 	 */
@@ -2082,7 +2092,7 @@ public abstract class Renderer {
 	abstract public void disableTextures2D();
 
 	/**
-	 * 
+	 *
 	 * @param label
 	 *            label
 	 * @return buffered image for drawing label
@@ -2091,7 +2101,7 @@ public abstract class Renderer {
 
 	/**
 	 * create alpha texture for label from image
-	 * 
+	 *
 	 * @param label
 	 *            label
 	 * @param bimg
@@ -2101,7 +2111,7 @@ public abstract class Renderer {
 			GBufferedImage bimg);
 
 	/**
-	 * 
+	 *
 	 * @param sizeX
 	 *            width
 	 * @param sizeY

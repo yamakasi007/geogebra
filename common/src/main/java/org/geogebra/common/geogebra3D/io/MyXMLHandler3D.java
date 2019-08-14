@@ -2,6 +2,8 @@ package org.geogebra.common.geogebra3D.io;
 
 import java.util.LinkedHashMap;
 
+import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
+import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.geogebra3D.kernel3D.geos.GeoPoint3D;
 import org.geogebra.common.geogebra3D.main.settings.EuclidianSettingsForPlane;
 import org.geogebra.common.io.MyXMLHandler;
@@ -9,6 +11,7 @@ import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
+import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.main.settings.EuclidianSettings3D;
 import org.geogebra.common.util.StringUtil;
@@ -107,6 +110,11 @@ public class MyXMLHandler3D extends MyXMLHandler {
 		case "yAxisVertical":
 			ok = handleYAxisIsUp((EuclidianSettings3D) evSet, attrs);
 			break;
+		case "arRatio":
+			if (app.has(Feature.G3D_AR_RATIO_SETTINGS)) {
+				ok = handleARRatio(((EuclidianView3D) app.getActiveEuclidianView()).getRenderer(),
+						attrs);
+			}
 		default:
 			Log.error("unknown tag in <euclidianView3D>: " + eName);
 		}
@@ -418,4 +426,15 @@ public class MyXMLHandler3D extends MyXMLHandler {
 		}
 	}
 
+	private static boolean handleARRatio(Renderer renderer,
+										 LinkedHashMap<String, String> attrs) {
+		double arRatio;
+		try {
+			arRatio = Double.parseDouble(attrs.get("arRatio"));
+		} catch (RuntimeException e) {
+			return false;
+		}
+		renderer.setARRatio(arRatio);
+		return true;
+	}
 }

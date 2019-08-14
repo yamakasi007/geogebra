@@ -6,7 +6,7 @@ import org.geogebra.common.kernel.Matrix.Coords;
 
 /**
  * Interface for Augmented Reality managers
- * 
+ *
  * @param <T>
  *            touch event type
  */
@@ -53,6 +53,8 @@ public interface ARManagerInterface<T> {
 
     void setARScaleAtStart();
 
+    void setARRatioAtStart(double arRatioAtStart);
+
     CoordMatrix4x4 getUndoRotationMatrix();
 
     CoordMatrix4x4 getViewModelMatrix();
@@ -77,4 +79,4 @@ public interface ARManagerInterface<T> {
 
     void setARRatioMetricSystem(int metricSystem);
 
-    }
+}
