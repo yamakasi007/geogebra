@@ -559,12 +559,13 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     }
 
     public void setARRatio(double ratio) {
+        ratioManager.setARRatio(ratio); // ratio is always converted to cm
         ratioManager.setARRatio(ratio);
         arGestureManager.resetScaleFactor();
         fitThickness();
         showSnackbar();
         if (mView.getApplication().has(Feature.G3D_AR_RATIO_SETTINGS)) {
-            mView.setARRatioAtStart(ratio);
+            mView.setARRatioAtStart(ratioManager.getARRatio());
         }
     }
 
@@ -577,8 +578,8 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     }
 
     public void setARRatioMetricSystem(int metricSystem) {
-        ratioManager.setARRatioMetricSystem(metricSystem, arGestureManager, mView.getApplication());
-    }
+        ratioManager.setARRatioMetricSystem(metricSystem);
+        showSnackbar();    }
 
     public void setARRatioAtStart(double arRatioAtStart) {
         setARScaleAtStart();
