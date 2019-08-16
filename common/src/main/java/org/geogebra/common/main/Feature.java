@@ -126,6 +126,9 @@ public enum Feature {
 	/** G3D-372 */
 	G3D_AR_RATIO_SETTINGS,
 
+	/** G3D-372 */
+	G3D_AR_RATIO_SETTINGS_ROUNDING,
+
 	/** APPS-1035 */
 	SYMBOLIC_INPUTFIELDS;
 }

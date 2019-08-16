@@ -4,6 +4,7 @@ import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.main.App;
+import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.properties.AbstractProperty;
 import org.geogebra.common.properties.PropertiesList;
@@ -34,6 +35,11 @@ public class ARRatioPropertyCollection extends AbstractProperty
         properties.add(new ARRatioProperty(localization, renderer, kernel));
         properties.add(new RatioUnitProperty((EuclidianView3D) app.getActiveEuclidianView(),
                 localization));
+        if (app.has(Feature.G3D_AR_RATIO_SETTINGS_ROUNDING)) {
+            properties.add(new RatioRoundingProperty(((EuclidianView3D)
+                    app.getActiveEuclidianView()).getRenderer(), localization));
+        }
+
 
         collection = new PropertiesList(properties);
     }
