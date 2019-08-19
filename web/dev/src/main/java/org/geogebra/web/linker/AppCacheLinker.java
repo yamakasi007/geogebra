@@ -24,9 +24,7 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.AbstractLinker;
-import com.google.gwt.core.ext.linker.Artifact;
 import com.google.gwt.core.ext.linker.ArtifactSet;
-import com.google.gwt.core.ext.linker.EmittedArtifact;
 import com.google.gwt.core.ext.linker.LinkerOrder;
 import com.google.gwt.core.ext.linker.LinkerOrder.Order;
 import com.google.gwt.core.ext.linker.Shardable;
@@ -77,6 +75,7 @@ import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 public class AppCacheLinker extends AbstractLinker {
 
 	private static final String SWORKER = "sworker.js";
+	private static final String FILES = "files.json";
 	private static final String MANIFEST = "appcache.nocache.manifest";
 
 	@Override
@@ -88,7 +87,6 @@ public class AppCacheLinker extends AbstractLinker {
 	public ArtifactSet link(TreeLogger logger, LinkerContext context,
 			ArtifactSet artifacts, boolean onePermutation)
 			throws UnableToCompleteException {
-
 		ArtifactSet toReturn = new ArtifactSet(artifacts);
 
 		if (onePermutation) {
@@ -99,68 +97,27 @@ public class AppCacheLinker extends AbstractLinker {
 			logger.log(TreeLogger.INFO,
 					"devmode: generating empty " + MANIFEST);
 		} else {
-			emitLandingPageCacheManifest(context, logger, artifacts, toReturn);
+			emitLandingPageCacheManifest(logger, artifacts, toReturn);
 		}
-
-		// Create the general cache-manifest resource for the landing page:
 
 		return toReturn;
 	}
 
-
 	/**
 	 * Creates the cache-manifest resource specific for the landing page.
 	 * 
-	 * @param context
-	 *            the linker environment
 	 * @param logger
 	 *            the tree logger to record to
 	 * @param artifacts
 	 *            {@code null} to generate an empty cache manifest
 	 * @param toReturn
+	 *            artifact set to return
 	 */
-	private void emitLandingPageCacheManifest(LinkerContext context,
-			TreeLogger logger, ArtifactSet artifacts, ArtifactSet toReturn)
+	private void emitLandingPageCacheManifest(TreeLogger logger, ArtifactSet artifacts, ArtifactSet toReturn)
 			throws UnableToCompleteException {
-		StringBuilder publicSourcesSb = new StringBuilder();
 		StringBuilder staticResoucesSb = new StringBuilder();
 
 		if (artifacts != null) {
-			// Iterate over all emitted artifacts, and collect all cacheable
-			// artifacts
-			for (@SuppressWarnings("rawtypes")
-			Artifact artifact : artifacts) {
-				if (artifact instanceof EmittedArtifact) {
-					EmittedArtifact ea = (EmittedArtifact) artifact;
-					String pathName = ea.getPartialPath();
-					if (pathName.endsWith("symbolMap")
-							|| pathName.endsWith(".xml.gz")
-							|| pathName.endsWith("rpc.log")
-							|| pathName.endsWith("gwt.rpc")
-							|| pathName.endsWith("manifest.txt")
-							|| pathName.startsWith("rpcPolicyManifest")
-							|| pathName.endsWith("cssmap")
-							|| pathName.endsWith("MANIFEST.MF")
-							|| pathName.endsWith(".txt")
-							|| pathName.endsWith(".php")
-							|| pathName.endsWith("README")
-							|| pathName.endsWith("COPYING")
-							|| pathName.endsWith("LICENSE")
-							|| pathName.endsWith("oauthWindow.html")
-							|| pathName.endsWith("windowslive.html")
-							|| pathName.endsWith("devmode.js")
-							|| pathName.startsWith("js/properties_")
-							|| pathName.endsWith("6.nocache.js")) {
-						// skip these resources
-					} else {
-						publicSourcesSb
-								.append("\"https://download.geogebra.org/web/5.0/latest/web3d/"
-										+ pathName.replace("\\", "/")
-										+ "\",\n");
-					}
-				}
-			}
-
 			String[] cacheExtraFiles = AppCacheLinkerSettings
 					.otherCachedFiles();
 			for (int i = 0; i < cacheExtraFiles.length; i++) {
@@ -170,7 +127,6 @@ public class AppCacheLinker extends AbstractLinker {
 				if (i < cacheExtraFiles.length - 1) {
 					staticResoucesSb.append(",\n");
 				}
-
 			}
 		}
 
@@ -183,25 +139,15 @@ public class AppCacheLinker extends AbstractLinker {
 		// build cache list
 		StringBuilder sb = new StringBuilder();
 
-		// logger.log(
-		// TreeLogger.INFO,
-		// "Make sure you have the following"
-		// + " attribute added to your landing page's <html> tag: <html
-		// manifest=\""
-		// + context.getModuleFunctionName() + "/" + MANIFEST
-		// + "\">");
-
 		// Create the manifest as a new artifact and return it:
 		try {
 			InputStream s = AppCacheLinker.class.getResourceAsStream(
 					"/org/geogebra/web/worker_template.js");
 			byte[] contents = new byte[1024];
-			int bytesRead = 0;
+			int bytesRead;
 			while ((bytesRead = s.read(contents)) != -1) {
 				sb.append(new String(contents, 0, bytesRead)
-						.replace("%URLS%",
-								publicSourcesSb.toString()
-										+ staticResoucesSb.toString())
+						.replace("%URLS%", staticResoucesSb.toString())
 						.replace("%ID%", id));
 			}
 			// fbr.close();
@@ -209,13 +155,13 @@ public class AppCacheLinker extends AbstractLinker {
 			e.printStackTrace();
 			logger.log(Type.ERROR, e.getMessage());
 		}
-		// toReturn.add(emitString(logger, sbM.toString(), MANIFEST));
 		toReturn.add(emitString(logger, sb.toString(), SWORKER));
-		toReturn.add(emitString(logger,
-				("{\n" + publicSourcesSb.toString()
-						+ staticResoucesSb.toString()).replaceAll("\\n", "\n  ")
-						+ "\n}",
-				"files.json"));
+		toReturn.add(emitString(logger, createFilesJsonFile(staticResoucesSb), FILES));
 	}
 
+	private String createFilesJsonFile(StringBuilder builder) {
+		String start = "{\n" + builder.toString();
+		String replaced = start.replaceAll("\\n", "\n  ");
+		return replaced + "\n}";
+	}
 }
