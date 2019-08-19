@@ -3980,11 +3980,11 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 		/** G3D-372 */
 		case G3D_AR_RATIO_SETTINGS:
-			return false;
+			return prerelease;
 
 		/** G3D-376 */
 		case G3D_AR_RATIO_SETTINGS_ROUNDING:
-			return false;
+			return prerelease;
 
 		// **********************************************************************
         // G3D END
