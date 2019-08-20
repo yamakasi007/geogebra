@@ -809,7 +809,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 		hideMenu();
 		if (isWhiteboardActive()
 				&& getGuiManager().browseGUIwasLoaded()
-				&& query == null
+				&& StringUtil.emptyTrim(query)
 				&& getGuiManager().getBrowseView() instanceof OpenFileView) {
 				((OpenFileView) getGuiManager().getBrowseView())
 						.updateMaterials();
