@@ -2,8 +2,6 @@ package org.geogebra.common.geogebra3D.io;
 
 import java.util.LinkedHashMap;
 
-import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
-import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.geogebra3D.kernel3D.geos.GeoPoint3D;
 import org.geogebra.common.geogebra3D.main.settings.EuclidianSettingsForPlane;
 import org.geogebra.common.io.MyXMLHandler;
@@ -112,8 +110,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 			break;
 		case "arRatio":
 			if (app.has(Feature.G3D_AR_RATIO_SETTINGS)) {
-				ok = handleARRatio(((EuclidianView3D) app.getActiveEuclidianView()).getRenderer(),
-						attrs);
+				ok = handleARRatio((EuclidianSettings3D) evSet, attrs);
 			}
 			break;
 		default:
@@ -427,7 +424,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 		}
 	}
 
-	private static boolean handleARRatio(Renderer renderer,
+	private static boolean handleARRatio(EuclidianSettings3D settings3D,
 										 LinkedHashMap<String, String> attrs) {
 		double arRatio;
 		try {
@@ -435,7 +432,7 @@ public class MyXMLHandler3D extends MyXMLHandler {
 		} catch (RuntimeException e) {
 			return false;
 		}
-		renderer.setARRatio(arRatio);
+		settings3D.setARRatio(arRatio);
 		return true;
 	}
 }
