@@ -3,15 +3,18 @@ package org.geogebra.arbase;
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Feature;
+import org.geogebra.common.main.settings.EuclidianSettings3D;
 import org.geogebra.common.util.DoubleUtil;
 
 public class RatioManager {
     private double mARRatioAtStart;
-    private double mARRatio;
+    private EuclidianSettings3D mSettings3D;
     private String units = "cm";        // current units used for Ratio snack bar and ratio settings
     private String arRatioText = "1";   // current ratio used for Ratio snack bar and ratio settings
-    private int ratioMetricSystem = EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
 
+    public RatioManager(EuclidianSettings3D settings3D) {
+        mSettings3D = settings3D;
+    }
 
     public String getUnits() {
         return units;
@@ -23,28 +26,18 @@ public class RatioManager {
 
     public void setARRatioAtStart(double arRatioAtStart) {
         mARRatioAtStart = arRatioAtStart;
-        mARRatio = arRatioAtStart;
+        mSettings3D.setARRatio(arRatioAtStart);
     }
 
     public float getARRatioAtStart() {
         return (float) mARRatioAtStart;
     }
 
-    public int getARRatioMetricSystem() {
-        return ratioMetricSystem;
-    }
-
-    public String getSnackBarText(ARGestureManager arGestureManager, App app) {
-        double ratio;
-        if (arGestureManager != null) {
-            ratio =
-                    mARRatio * arGestureManager.getScaleFactor() * getUnitConversion(app);
-        } else {
-            ratio = mARRatio;
-        }
+    public String getSnackBarText(App app) {
+        double ratio = mSettings3D.getARRatio() * getUnitConversion(app);
         String text;
         if (app.has(Feature.G3D_AR_RATIO_SETTINGS) &&
-                ratioMetricSystem == EuclidianView3D.RATIO_UNIT_INCHES) {
+                mSettings3D.getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
             ratio = (double) Math.round(ratio * 100d) / 100d;
             units = "inch";
         } else {
@@ -75,29 +68,12 @@ public class RatioManager {
         return String.format("1 : %s %s", arRatioText, units);
     }
 
-    public void setARRatioMetricSystem(int metricSystem) {
-        ratioMetricSystem = metricSystem;
-    }
-
     private float getUnitConversion(App app) {
         if (app.has(Feature.G3D_AR_RATIO_SETTINGS) &&
-                ratioMetricSystem == EuclidianView3D.RATIO_UNIT_INCHES) {
+                mSettings3D.getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
             return EuclidianView3D.FROM_CM_TO_INCH;
         } else {
             return 1;
         }
     }
-
-    public void setARRatio(double ratio) {
-        if (ratioMetricSystem == EuclidianView3D.RATIO_UNIT_INCHES) {
-            mARRatio = ((ratio * EuclidianView3D.FROM_INCH_TO_CM));
-        } else {
-            mARRatio = ratio;
-        }
-    }
-
-    public double getARRatio() {
-        return mARRatio;
-    }
-
 }

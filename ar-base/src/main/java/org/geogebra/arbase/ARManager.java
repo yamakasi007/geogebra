@@ -32,7 +32,7 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     private float arScale = 1;
 
     // Ratio
-    private RatioManager ratioManager = new RatioManager();
+    private RatioManager ratioManager;
 
     protected float rotateAngel = 0;
     protected Coords hittingFloor = Coords.createInhomCoorsInD3();
@@ -68,6 +68,10 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     private ARMotionEvent lastARMotionEvent;
 
     protected ARSnackBarManagerInterface mArSnackBarManagerInterface;
+
+    public ARManager(EuclidianSettings3D euclidianSettings3D) {
+        ratioManager = new RatioManager(euclidianSettings3D);
+    }
 
     abstract public void onSurfaceCreated();
 
@@ -460,7 +464,7 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
 
     private float getARScaleParameter() {
         return arGestureManager == null ? arScale :
-                arScale * arGestureManager.getScaleFactor() * (float) ratioManager.getARRatio()
+                arScale * (float) mView.getSettings().getARRatio()
                         / ratioManager.getARRatioAtStart();
     }
 
@@ -513,11 +517,7 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     }
 
     private void showSnackbar() {
-        mArSnackBarManagerInterface.showRatio(ratioManager.getSnackBarText(arGestureManager,
-                mView.getApplication()));
-        if (mView.getApplication().has(Feature.G3D_AR_RATIO_SETTINGS)) {
-            mView.setARRatioAtStart(ratioManager.getARRatio() * arGestureManager.getScaleFactor());
-        }
+        mArSnackBarManagerInterface.showRatio(ratioManager.getSnackBarText(mView.getApplication()));
     }
 
     public void fitThickness() {
@@ -526,8 +526,8 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
             float mDistance = (float) viewModelMatrix.getOrigin().calcNorm3();
             // 1 pixel thickness in ggb == 0.25 mm (for distance smaller than DESK_DISTANCE_MAX)
             double thicknessMin = getThicknessMin(mDistance);
-            arScale = (float) (thicknessMin / (arGestureManager.getScaleFactor())
-                    / (ratioManager.getARRatio() / ratioManager.getARRatioAtStart()));
+            arScale = (float) (thicknessMin / (mView.getSettings().getARRatio() // maybe get rid of
+                    / ratioManager.getARRatioAtStart()));
             arScaleFactor = arScaleAtStart / arScale;
             updateSettingsScale(previousARScale / arScale);
         }
@@ -559,25 +559,17 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     }
 
     public void setARRatio(double ratio) {
-        ratioManager.setARRatio(ratio); // ratio is always converted to cm
-        arGestureManager.resetScaleFactor();
+        mView.getSettings().setARRatio(ratio); // ratio is always converted to cm
         fitThickness();
         showSnackbar();
-        if (mView.getApplication().has(Feature.G3D_AR_RATIO_SETTINGS)) {
-            mView.setARRatioAtStart(ratioManager.getARRatio());
-        }
     }
 
     public String getUnits() {
         return ratioManager.getUnits();
     }
 
-    public int getARRatioMetricSystem() {
-        return ratioManager.getARRatioMetricSystem();
-    }
-
     public void setARRatioMetricSystem(int metricSystem) {
-        ratioManager.setARRatioMetricSystem(metricSystem);
+        mView.getSettings().setARRatioMetricSystem(metricSystem);
         showSnackbar();
     }
 

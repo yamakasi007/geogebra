@@ -3,6 +3,7 @@ package org.geogebra.common.main.settings;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
+import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.kernel.geos.XMLBuilder;
 import org.geogebra.common.main.App;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
@@ -59,6 +60,9 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	 * default value for eye distance to the screen for perspective
 	 */
 	public static final int PROJECTION_PERSPECTIVE_EYE_DISTANCE_DEFAULT = 2500;
+
+	private double mARRatio = 0;
+	private int mRatioMetricSystem = EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
 
 	/**
 	 * @param app
@@ -742,6 +746,36 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	 */
 	public boolean getHasColoredAxes() {
 		return hasColoredAxes;
+	}
+
+	/**
+	 *
+	 * @param arRatio
+	 *            ar ratio to set
+	 */
+	public void setARRatio(double arRatio) {
+			if (mRatioMetricSystem == EuclidianView3D.RATIO_UNIT_INCHES) {
+				mARRatio = (arRatio * EuclidianView3D.FROM_INCH_TO_CM);
+			} else {
+				mARRatio = (arRatio);
+			}
+	}
+
+
+	/**
+	 *
+	 * @return arRatio
+	 */
+	public double getARRatio() {
+		return mARRatio;
+	}
+
+	public int getARRatioMetricSystem() {
+		return mRatioMetricSystem;
+	}
+
+	public void setARRatioMetricSystem(int ratioMetricSystem) {
+		mRatioMetricSystem = ratioMetricSystem;
 	}
 
 }

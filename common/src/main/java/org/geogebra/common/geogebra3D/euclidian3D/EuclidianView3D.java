@@ -232,7 +232,6 @@ public abstract class EuclidianView3D extends EuclidianView
 	private double translationZzeroForAR = 0;
 	private double arFloorZ = 0;
 	private double arZZeroAtStart;
-	private double mARRatio = 0;
 
 	/**
 	 * direction of view
@@ -3117,7 +3116,7 @@ public abstract class EuclidianView3D extends EuclidianView
 		if (app.has(Feature.G3D_AR_RATIO_SETTINGS)) {
 			sb.append("\t<arRatio");
 			sb.append(" arRatio=\"");
-			sb.append(mARRatio);
+			sb.append(getSettings().getARRatio());
 			sb.append("\"/>\n");
 		}
 
@@ -4886,10 +4885,11 @@ public abstract class EuclidianView3D extends EuclidianView
                 }
 				if (app.has(Feature.G3D_AR_RATIO_SETTINGS)) {
 					// check if mARRatio was set before
-					if (mARRatio == 0) {
+					double arRatio = getSettings().getARRatio();
+					if (arRatio == 0) {
 						getRenderer().setARScaleAtStart();
 					} else {
-						getRenderer().setARRatioAtStart(mARRatio);
+						getRenderer().setARRatioAtStart(arRatio);
 					}
 				} else {
 					getRenderer().setARScaleAtStart();
@@ -5062,13 +5062,6 @@ public abstract class EuclidianView3D extends EuclidianView
         // reset rendering
         reset(true);
     }
-
-	/**
-	 * set ARRatioAtStart
-	 */
-	public void setARRatioAtStart(double arRatio) {
-		mARRatio = arRatio;
-	}
 
 	/**
 	 * set on touch listener

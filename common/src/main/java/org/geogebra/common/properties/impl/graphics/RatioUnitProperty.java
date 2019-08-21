@@ -37,7 +37,7 @@ public class RatioUnitProperty extends AbstractEnumerableProperty {
 
     @Override
     public int getIndex() {
-        switch (view3D.getRenderer().getARRatioMetricSystem()) {
+        switch (view3D.getSettings().getARRatioMetricSystem()) {
             case EuclidianView3D.RATIO_UNIT_INCHES:
                 return 1;
             case EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS:

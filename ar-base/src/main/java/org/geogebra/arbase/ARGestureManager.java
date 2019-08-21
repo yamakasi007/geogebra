@@ -8,8 +8,7 @@ import org.geogebra.common.main.Feature;
 
 abstract public class ARGestureManager{
 
-    private EuclidianView3D mView;
-    protected float mScaleFactor = 1.0f;
+    protected EuclidianView3D mView;
     private Coords mPos = new Coords(2);
     private boolean isTouched = false;
     private boolean mUpdateOriginIsWanted = false;
@@ -29,14 +28,6 @@ abstract public class ARGestureManager{
 
     protected void onRotation(double angle) {
         mView.setCoordSystemFromMouseMove((int) angle, 0, EuclidianController.MOVE_ROTATE_VIEW);
-    }
-
-    synchronized public float getScaleFactor() {
-        return mScaleFactor;
-    }
-
-    synchronized public void resetScaleFactor() {
-        mScaleFactor = 1;
     }
 
     synchronized public void copyXYPosition(Coords ret) {
