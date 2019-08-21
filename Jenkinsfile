@@ -10,10 +10,10 @@ def createChangelog = { fileName ->
     }
 }
 
-def s3uploadDefault { dir, pattern ->
+def s3uploadDefault = { dir, pattern ->
     withAWS(region:'eu-west-1', credentials:'aws-credentials') {
-        s3upload(bucket: 'apps-builds', workingDir: dir, path:"branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$dir", 
-            includePathPattern: pattern, acl:'PublicRead')
+        s3upload(bucket: 'apps-builds', workingDir: dir, path: "branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$dir", 
+            includePathPattern: pattern, acl: 'PublicRead')
     }
 }
 
