@@ -1,11 +1,11 @@
 package org.geogebra.common.properties.impl.graphics;
 
-import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
-import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
+ import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.main.error.ErrorHelper;
+import org.geogebra.common.main.settings.EuclidianSettings3D;
 import org.geogebra.common.properties.AbstractProperty;
 import org.geogebra.common.properties.RatioProperty;
 
@@ -37,8 +37,8 @@ public class ARRatioProperty extends AbstractProperty
     public void setValue(String value) {
         GeoNumberValue ratio = !value.trim().equals("") ? getNumberValue(value) : null;
         if (ratio != null && !Double.isNaN(ratio.getDouble())) {
-            if (renderer.getView().getSettings().getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
-                renderer.setARRatio(ratio.getDouble() * EuclidianView3D.FROM_INCH_TO_CM);
+            if (renderer.getView().getSettings().getARRatioMetricSystem() == EuclidianSettings3D.RATIO_UNIT_INCHES) {
+                renderer.setARRatio(ratio.getDouble() * EuclidianSettings3D.FROM_INCH_TO_CM);
             } else {
                 renderer.setARRatio(ratio.getDouble());
             }

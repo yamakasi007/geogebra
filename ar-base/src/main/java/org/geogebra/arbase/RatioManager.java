@@ -37,8 +37,8 @@ public class RatioManager {
         double ratio = mSettings3D.getARRatio();
         String text;
         if (app.has(Feature.G3D_AR_RATIO_SETTINGS) &&
-                mSettings3D.getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
-            ratio = (double) Math.round(ratio * EuclidianView3D.FROM_CM_TO_INCH * 100d) / 100d;
+                mSettings3D.getARRatioMetricSystem() == EuclidianSettings3D.RATIO_UNIT_INCHES) {
+            ratio = (double) Math.round(ratio * EuclidianSettings3D.FROM_CM_TO_INCH * 100d) / 100d;
             units = "inch";
         } else {
             if (ratio >= 100) {

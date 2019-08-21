@@ -3,7 +3,6 @@ package org.geogebra.common.main.settings;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
-import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.kernel.geos.XMLBuilder;
 import org.geogebra.common.main.App;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
@@ -61,8 +60,14 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	 */
 	public static final int PROJECTION_PERSPECTIVE_EYE_DISTANCE_DEFAULT = 2500;
 
+	// AR Ratio
+	final public static int RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS = 1;
+	final public static int RATIO_UNIT_INCHES = 2;
+	final public static float FROM_INCH_TO_CM = 2.54f;
+	final public static float FROM_CM_TO_INCH = 0.393700787f;
+
 	private double mARRatio = 0;
-	private int mRatioMetricSystem = EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
+	private int mRatioMetricSystem = RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
 
 	/**
 	 * @param app

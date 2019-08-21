@@ -2,6 +2,7 @@ package org.geogebra.common.properties.impl.graphics;
 
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.main.Localization;
+import org.geogebra.common.main.settings.EuclidianSettings3D;
 import org.geogebra.common.properties.AbstractEnumerableProperty;
 
 public class RatioUnitProperty extends AbstractEnumerableProperty {
@@ -25,11 +26,11 @@ public class RatioUnitProperty extends AbstractEnumerableProperty {
         int lenghtUnit;
         switch (index) {
             case 1:
-                lenghtUnit = EuclidianView3D.RATIO_UNIT_INCHES;
+                lenghtUnit = EuclidianSettings3D.RATIO_UNIT_INCHES;
                 break;
             case 0:
             default:
-                lenghtUnit = EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
+                lenghtUnit = EuclidianSettings3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
                 break;
         }
         view3D.getRenderer().setARRatioMetricSystem(lenghtUnit);
@@ -38,9 +39,9 @@ public class RatioUnitProperty extends AbstractEnumerableProperty {
     @Override
     public int getIndex() {
         switch (view3D.getSettings().getARRatioMetricSystem()) {
-            case EuclidianView3D.RATIO_UNIT_INCHES:
+            case EuclidianSettings3D.RATIO_UNIT_INCHES:
                 return 1;
-            case EuclidianView3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS:
+            case EuclidianSettings3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS:
             default:
                 return 0;
         }
