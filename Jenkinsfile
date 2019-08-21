@@ -1,3 +1,22 @@
+def createChangelog = { fileName ->
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) {
+        def entries = changeLogSets[i].items
+        def cchngelog = new File(fileName)
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            content << "${entry.commitId},${entry.author},${new Date(entry.timestamp)},${entry.msg}"
+        }
+    }
+}
+
+def s3uploadDefault { dir, pattern ->
+    withAWS(region:'eu-west-1', credentials:'aws-credentials') {
+        s3upload(bucket: 'apps-builds', workingDir: dir, path:"branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$dir", 
+            includePathPattern: pattern, acl:'PublicRead')
+    }
+}
+
 pipeline {
     agent any
     stages {
@@ -5,10 +24,10 @@ pipeline {
             steps {
                 sh label: 'clean', script: './gradlew clean'
                 sh label: 'build web', script: './gradlew :web:compileGwt :web:symlinkIntoWar :web:createDraftBundleZip :web:mergeDeploy'
-                sh label: 'test', script: './gradlew :common-jre:test :desktop:test :common-jre:jacocoTestReport :web:test'
+               /* sh label: 'test', script: './gradlew :common-jre:test :desktop:test :common-jre:jacocoTestReport :web:test'
                 sh label: 'static analysis', script: './gradlew checkPmd :editor-base:spotbugsMain :web:spotbugsMain :desktop:spotbugsMain :ggbjdk:spotbugsMain :common-jre:spotbugsMain --max-workers=1'
                 sh label: 'spotbugs common', script: './gradlew :common:spotbugsMain'
-                sh label: 'code style', script: './gradlew :web:cpdCheck checkAllStyles'
+                sh label: 'code style', script: './gradlew :web:cpdCheck checkAllStyles' */
             }
         }
         stage('reports') {
@@ -28,7 +47,13 @@ pipeline {
         }
         stage('archive') {
             steps {
-                archiveArtifacts 'web/war/web3d/**, web/war/webSimple/**, web/war/*.html'
+                script {
+                    createChangelog('changes.csv')
+                    s3uploadDefault("./", "changes.txt")
+                    s3uploadDefault("web/war", "web3d/*")
+                    s3uploadDefault("web/war", "webSimple/*")
+                    s3uploadDefault("web/war", "*.html")
+                }
             }
         }
     }
