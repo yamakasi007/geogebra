@@ -754,11 +754,7 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	 *            ar ratio to set
 	 */
 	public void setARRatio(double arRatio) {
-			if (mRatioMetricSystem == EuclidianView3D.RATIO_UNIT_INCHES) {
-				mARRatio = (arRatio * EuclidianView3D.FROM_INCH_TO_CM);
-			} else {
-				mARRatio = (arRatio);
-			}
+		mARRatio = arRatio;
 	}
 
 

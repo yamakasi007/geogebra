@@ -34,11 +34,11 @@ public class RatioManager {
     }
 
     public String getSnackBarText(App app) {
-        double ratio = mSettings3D.getARRatio() * getUnitConversion(app);
+        double ratio = mSettings3D.getARRatio();
         String text;
         if (app.has(Feature.G3D_AR_RATIO_SETTINGS) &&
                 mSettings3D.getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
-            ratio = (double) Math.round(ratio * 100d) / 100d;
+            ratio = (double) Math.round(ratio * EuclidianView3D.FROM_CM_TO_INCH * 100d) / 100d;
             units = "inch";
         } else {
             if (ratio >= 100) {
@@ -66,14 +66,5 @@ public class RatioManager {
             arRatioText = String.format("%.4s", ratio);
         }
         return String.format("1 : %s %s", arRatioText, units);
-    }
-
-    private float getUnitConversion(App app) {
-        if (app.has(Feature.G3D_AR_RATIO_SETTINGS) &&
-                mSettings3D.getARRatioMetricSystem() == EuclidianView3D.RATIO_UNIT_INCHES) {
-            return EuclidianView3D.FROM_CM_TO_INCH;
-        } else {
-            return 1;
-        }
     }
 }
