@@ -37,7 +37,8 @@ public class ARRatioProperty extends AbstractProperty
     public void setValue(String value) {
         GeoNumberValue ratio = !value.trim().equals("") ? getNumberValue(value) : null;
         if (ratio != null && !Double.isNaN(ratio.getDouble())) {
-            if (renderer.getView().getSettings().getARRatioMetricSystem() == EuclidianSettings3D.RATIO_UNIT_INCHES) {
+            if (renderer.getView().getSettings().getARRatioMetricSystem()
+                    == EuclidianSettings3D.RATIO_UNIT_INCHES) {
                 renderer.setARRatio(ratio.getDouble() * EuclidianSettings3D.FROM_INCH_TO_CM);
             } else {
                 renderer.setARRatio(ratio.getDouble());

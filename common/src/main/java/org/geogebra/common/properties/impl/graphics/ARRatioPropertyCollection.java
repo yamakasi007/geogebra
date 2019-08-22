@@ -39,8 +39,6 @@ public class ARRatioPropertyCollection extends AbstractProperty
             properties.add(new RatioRoundingProperty(((EuclidianView3D)
                     app.getActiveEuclidianView()).getRenderer(), localization));
         }
-
-
         collection = new PropertiesList(properties);
     }
 

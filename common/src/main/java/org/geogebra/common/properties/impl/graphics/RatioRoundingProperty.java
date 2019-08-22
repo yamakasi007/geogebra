@@ -19,9 +19,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
         super(localization, "RatioRounding");
         this.renderer = renderer;
         setValuesAndLocalize(getRatioClosestRounding());
-
     }
-
 
     @Override
     protected void setValueSafe(String value, int index) {
@@ -37,7 +35,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     private String[] getRatioClosestRounding() {
         double arRatio = Double.parseDouble(renderer.getARRatio());
-        double rounding = round(arRatio,1);
+        double rounding = round(arRatio, 1);
         double higherRounding;
         double lowerRounding;
 

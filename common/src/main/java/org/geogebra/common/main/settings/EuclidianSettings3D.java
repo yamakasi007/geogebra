@@ -762,7 +762,6 @@ public class EuclidianSettings3D extends EuclidianSettings {
 		mARRatio = arRatio;
 	}
 
-
 	/**
 	 *
 	 * @return arRatio
