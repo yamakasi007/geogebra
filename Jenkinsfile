@@ -13,7 +13,7 @@ def createChangelog = { fileName ->
 
 def s3uploadDefault = { dir, pattern ->
     withAWS(region:'eu-west-1', credentials:'aws-credentials') {
-        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$dir", 
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}",
             includePathPattern: pattern, acl: 'PublicRead')
     }
 }
