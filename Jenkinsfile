@@ -5,7 +5,7 @@ def createChangelog = { fileName ->
         def entries = changeLogSets[i].items
         for (int j = 0; j < entries.length; j++) {
             def entry = entries[j]
-            content << "${entry.commitId},${entry.author},${new Date(entry.timestamp)},${entry.msg}"
+            content << "${entry.commitId},${entry.author.toString()},${new Date(entry.timestamp)},${entry.msg}"
         }
     }
     writeFile file: fileName, text: content.join("\n")
