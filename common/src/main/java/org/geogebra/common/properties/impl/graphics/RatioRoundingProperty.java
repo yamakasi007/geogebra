@@ -17,7 +17,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
      * @param localization localization
      */
     public RatioRoundingProperty(Renderer renderer, Localization localization) {
-        super(localization, "RatioRounding");
+        super(localization, "Rounding");
         this.renderer = renderer;
         setValuesAndLocalize(getRatioClosestRounding());
     }
