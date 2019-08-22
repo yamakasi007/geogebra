@@ -21,7 +21,7 @@ def s3uploadDefault = { dir, pattern ->
 pipeline {
     agent any
     stages {
-        stage('build') {
+        /*stage('build') {
             steps {
                 sh label: 'clean', script: './gradlew clean'
                 sh label: 'build web', script: './gradlew :web:compileGwt :web:symlinkIntoWar :web:createDraftBundleZip :web:mergeDeploy'
@@ -45,7 +45,7 @@ pipeline {
                 publishCoverage adapters: [jacocoAdapter('**/build/reports/jacoco/test/*.xml')],
                     sourceFileResolver: sourceFiles('NEVER_STORE')
             }
-        } 
+        }*/
         stage('archive') {
             steps {
                 script {
