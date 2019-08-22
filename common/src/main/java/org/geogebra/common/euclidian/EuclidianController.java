@@ -947,7 +947,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				case EuclidianConstants.MODE_PDF:
 					getDialogManager().showPDFInputDialog();
 					break;
-					
+
+				case EuclidianConstants.MODE_GRASPABLE_MATH:
+					app.getEmbedManager().openGraspableMTool();
+					break;
+
 				case EuclidianConstants.MODE_EXTENSION:
 					getDialogManager().showEmbedDialog();
 					break;
@@ -957,23 +961,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}	
 			}
 
-			if (newMode == EuclidianConstants.MODE_GRAPHING) {
-				if (app.getEmbedManager() != null) {
-					GeoEmbed ge = new GeoEmbed(kernel.getConstruction());
-					ge.initPosition(view);
-					ge.setEmbedId(app.getEmbedManager().nextID());
-					ge.setLabel(null);
-					app.storeUndoInfo();
-					app.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							app.setMode(EuclidianConstants.MODE_SELECT_MOW,
-									ModeSetter.DOCK_PANEL);
-						}
-					});
-				}
+			if (app.getEmbedManager() != null
+					&& (newMode == EuclidianConstants.MODE_GRAPHING
+					|| newMode == EuclidianConstants.MODE_CAS)) {
+					setUpEmbedManager(newMode);
 			}
+
 			if (newMode == EuclidianConstants.MODE_IMAGE) {
 				image(view.getHits().getOtherHits(TestGeo.GEOIMAGE, tempArrayList),
 						false);
@@ -1011,6 +1004,25 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 
 		kernel.notifyRepaint();
+	}
+
+	private void setUpEmbedManager(int mode) {
+		GeoEmbed ge = new GeoEmbed(kernel.getConstruction());
+		if (mode == EuclidianConstants.MODE_CAS) {
+			ge.setAppName("cas");
+		}
+		ge.initPosition(view);
+		ge.setEmbedId(app.getEmbedManager().nextID());
+		ge.setLabel(null);
+		app.storeUndoInfo();
+		app.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				app.setMode(EuclidianConstants.MODE_SELECT_MOW,
+						ModeSetter.DOCK_PANEL);
+			}
+		});
 	}
 
 	/**
@@ -5105,6 +5117,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			// point in a region
 			if (mode != EuclidianConstants.MODE_POINT_ON_OBJECT) {
 				regionHits.removeHasFacesIfFacePresent();
+				hits.removeHasFacesIfFacePresent();
 			}
 			if (!regionHits.isEmpty()) {
 				if (inRegionPossible) {
@@ -6984,9 +6997,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return true;
 		}
 		if (movedGeoElement.hasChangeableParent3D()) {
-			if (!app.has(Feature.G3D_AR_EXTRUSION_TOOL)) {
-				movedGeoElement.getChangeableParent3D().record(view, null);
-			}
 			translateableGeos = new ArrayList<>();
 			translateableGeos.add(movedGeoElement);
 			return true;
@@ -9744,9 +9754,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				oldMode = mode; // remember current mode
 				if (mayPaste()) { // #5246 make sure we don't switch to
 					// translation if we have geos to paste
-					if (app.has(Feature.G3D_AR_ROTATE_3D_VIEW_TOOL) && view.isAREnabled()) {
-						// don't rotate
-					} else {
+					if (!view.isAREnabled()) {
 						view.setMode(getModeForShallMoveView(event));
 					}
 				}
@@ -11827,7 +11835,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		view.rememberOrigins();
 
-		if (app.has(Feature.G3D_AR_REGULAR_TOOLS) && view.isAREnabled()) {
+		if (view.isAREnabled()) {
 			return;
 		}
 
@@ -11953,7 +11961,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 
-		if (app.has(Feature.G3D_AR_REGULAR_TOOLS) && view.isAREnabled()) {
+		if (view.isAREnabled()) {
 			return;
 		}
 
