@@ -31,7 +31,11 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
     public int getIndex() {
         setValues(getRatioClosestRounding());
         setValuesAndLocalize(getRatioClosestRounding());
-        return 1;
+        if (roundingValues.length == 3) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     private String[] getRatioClosestRounding() {
@@ -73,8 +77,8 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
                     stringFromDouble(roundingValues[1])};
         } else {
             // when using unit inches, there can be the case when arRatio is very close to 0
-            if (arRatio > 0.05) {
-                roundingValues = new Double[]{0.5, 1.0};
+            if (arRatio < 1) {
+                roundingValues = new Double[]{1.0, 0.5};
                 return new String[]{stringFromDouble(roundingValues[0]),
                         stringFromDouble(roundingValues[1])};
             } else {
@@ -87,11 +91,9 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     private String stringFromDouble(Double value) {
         if(DoubleUtil.isInteger(value)) {
-//            return String.format(("%d", value.longValue());
-            return "";
+            return Integer.toString(value.intValue());
         } else {
-//            return String.format("%.3s", value);
-            return "";
+            return Double.toString(value);
         }
     }
 }
