@@ -5,7 +5,7 @@ def createChangelog = { fileName ->
         def entries = changeLogSets[i].items
         for (int j = 0; j < entries.length; j++) {
             def entry = entries[j]
-            lines << "${entry.commitId},${entry.author},${new Date(entry.timestamp)},${entry.msg}"
+            lines << "${entry.commitId},${entry.author.toString()},${new Date(entry.timestamp)},${entry.msg}"
         }
     }
     def content = lines.join("\n").toString()
@@ -24,6 +24,9 @@ pipeline {
     stages {
         stage('build') {
             steps {
+                script {
+                    createChangelog('changes.csv')
+                }
                 sh label: 'clean', script: './gradlew clean'
                 sh label: 'build web', script: './gradlew :web:compileGwt :web:symlinkIntoWar :web:createDraftBundleZip :web:mergeDeploy'
                 sh label: 'test', script: './gradlew :common-jre:test :desktop:test :common-jre:jacocoTestReport :web:test'
@@ -50,7 +53,6 @@ pipeline {
         stage('archive') {
             steps {
                 script {
-                    createChangelog('changes.csv')
                     s3uploadDefault(".", "changes.csv")
                     s3uploadDefault("web/war", "web3d/*")
                     s3uploadDefault("web/war", "webSimple/*")
