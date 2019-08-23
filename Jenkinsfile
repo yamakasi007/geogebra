@@ -9,8 +9,7 @@ def createChangelog(String fileName) {
             lines << "${entry.commitId},${entry.author.toString()},${new Date(entry.timestamp)},${entry.msg}"
         }
     }
-    def content = lines.join("\n")
-    writeFile file: fileName, text: content
+    return lines.join("\n").toString()
 }
 
 def s3uploadDefault = { dir, pattern ->
@@ -28,7 +27,7 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    createChangelog('changes.csv')
+                    writeFile file: fileName, text: createChangelog('changes.csv')
                 }
                 sh label: 'clean', script: './gradlew clean'
                 sh label: 'build web', script: './gradlew :web:compileGwt :web:symlinkIntoWar :web:createDraftBundleZip :web:mergeDeploy'
