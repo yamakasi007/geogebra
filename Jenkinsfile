@@ -1,5 +1,5 @@
 @NonCPS
-def createChangelog(String fileName) {
+def getChangelog() {
     def changeLogSets = currentBuild.changeSets
     def lines = []
     for (int i = 0; i < changeLogSets.size(); i++) {
@@ -26,9 +26,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                script {
-                    writeFile file: fileName, text: createChangelog('changes.csv')
-                }
+                writeFile file: 'changes.csv', text: getChangelog()
                 sh label: 'clean', script: './gradlew clean'
                 sh label: 'build web', script: './gradlew :web:compileGwt :web:symlinkIntoWar :web:createDraftBundleZip :web:mergeDeploy'
                 sh label: 'test', script: './gradlew :common-jre:test :desktop:test :common-jre:jacocoTestReport :web:test'
