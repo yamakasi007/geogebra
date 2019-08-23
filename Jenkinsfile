@@ -1,3 +1,4 @@
+@NonCPS
 def createChangelog = { fileName ->
     def changeLogSets = currentBuild.changeSets
     def lines = []
@@ -8,7 +9,7 @@ def createChangelog = { fileName ->
             lines << "${entry.commitId},${entry.author.toString()},${new Date(entry.timestamp)},${entry.msg}"
         }
     }
-    def content = lines.join("\n").toString()
+    def content = lines.join("\n")
     writeFile file: fileName, text: content
 }
 
