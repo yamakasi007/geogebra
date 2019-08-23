@@ -1,14 +1,15 @@
 def createChangelog = { fileName ->
     def changeLogSets = currentBuild.changeSets
-    def content = []
+    def lines = []
     for (int i = 0; i < changeLogSets.size(); i++) {
         def entries = changeLogSets[i].items
         for (int j = 0; j < entries.length; j++) {
             def entry = entries[j]
-            content << "${entry.commitId},${entry.author.toString()},${new Date(entry.timestamp)},${entry.msg}"
+            lines << "${entry.commitId},${entry.author},${new Date(entry.timestamp)},${entry.msg}"
         }
     }
-    writeFile file: fileName, text: content.join("\n")
+    def content = lines.join("\n").toString()
+    writeFile file: fileName, text: content
 }
 
 def s3uploadDefault = { dir, pattern ->
