@@ -87,7 +87,8 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     private String stringFromDouble(Double value) {
         if(DoubleUtil.isInteger(value)) {
-            return String.format("%d", value.longValue());
+//            return String.format(("%d", value.longValue());
+            return String.format("%.3s", value);
         } else {
             return String.format("%.3s", value);
         }
