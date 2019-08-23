@@ -4,6 +4,8 @@ import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.properties.AbstractEnumerableProperty;
 import org.geogebra.common.util.DoubleUtil;
+import org.geogebra.common.util.StringUtil;
+import org.geogebra.common.util.debug.Log;
 
 public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
@@ -40,53 +42,69 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     private String[] getRatioClosestRounding() {
         double arRatio = Double.parseDouble(renderer.getARRatio());
-        double higherRounding;
-        double lowerRounding;
-        double pot = DoubleUtil.getPowerOfTen(arRatio);
-        double potedRatio = arRatio / pot;
-        arRatio = potedRatio;
 
-        if (arRatio <= 1) {
-            higherRounding = DoubleUtil.isEqual(arRatio, 1) ? 2 : 1;
-            lowerRounding = 0.5;
-        } else if (arRatio <= 2f) {
-            higherRounding = DoubleUtil.isEqual(arRatio, 2) ? 5 : 2;
-            lowerRounding = 1;
-        } else if (arRatio <= 5f) {
-            higherRounding = DoubleUtil.isEqual(arRatio, 5) ? 10 : 5;
-            lowerRounding = 2;
+        int n = DoubleUtil.getExponentOfTen(arRatio);
+        double ratioSimple = arRatio / Math.pow(10, n);
+
+        int low, high;
+        if (ratioSimple < 2) {
+            low = 1;
+            high = 2;
+        } else if (ratioSimple < 5) {
+            low = 2;
+            high = 5;
         } else {
-            higherRounding = 10;
-            lowerRounding = 5;
-        }
-        if (pot < 1) {
-            arRatio = Math.round(arRatio);
-            arRatio *= pot;
-        } else {
-            arRatio *= pot;
-            arRatio = Math.round(arRatio);
+            low = 5;
+            high = 10;
         }
 
-        higherRounding = higherRounding * pot;
-        lowerRounding = lowerRounding * pot;
+        long rounded = Math.round(ratioSimple);
 
-        if (potedRatio == 1 || potedRatio == 2 || potedRatio == 5 || arRatio == higherRounding
-                || arRatio == lowerRounding) {
-            roundingValues = new double[]{higherRounding, lowerRounding};
-            return new String[]{stringFromDouble(higherRounding),
-                    stringFromDouble(lowerRounding)};
+        String[] ret;
+        if (low == rounded || high == rounded) {
+            ret = new String[2];
+            roundingValues = new double[2];
         } else {
-            roundingValues = new double[]{higherRounding, arRatio, lowerRounding};
-            return new String[]{stringFromDouble(higherRounding),
-                    stringFromDouble(arRatio), stringFromDouble(lowerRounding)};
+            ret = new String[3];
+            roundingValues = new double[3];
         }
+
+        int index = 0;
+        if (low != rounded) {
+            index = appendValue(low, n, index, ret);
+        }
+        index = appendValue(rounded, n, index, ret);
+        if (high != rounded) {
+            appendValue(high, n, index, ret);
+        }
+
+        return ret;
+
     }
 
-    private String stringFromDouble(Double value) {
-        if(DoubleUtil.isInteger(value)) {
-            return Integer.toString((int) Math.round(value));
-        } else {
-            return Double.toString(value);
+    private int appendValue(long rounded, int exp, int index, String[] ret) {
+        int n = exp;
+        if (rounded == 10) {
+            n++;
+            rounded = 1;
         }
+        StringBuilder sb = new StringBuilder();
+        if (n==0) {
+            sb.append(rounded);
+        } else if (n > 0) {
+            sb.append(rounded);
+            for (int i = 0; i < n; i++) {
+                sb.append("0");
+            }
+        } else {
+            sb.append("0.");
+            for (int i = 0; i < -n - 1; i++) {
+                sb.append("0");
+            }
+            sb.append(rounded);
+        }
+        ret[index] = sb.toString();
+        roundingValues[index] = rounded * Math.pow(10, n);
+        return index + 1;
     }
 }

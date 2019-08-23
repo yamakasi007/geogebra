@@ -497,6 +497,15 @@ public class DoubleUtil {
         return Math.pow(10, (int) Math.floor(Math.log(x) / Math.log(10)));
     }
 
+    /**
+     *
+     * @param x number
+     * @return n where x = v * 10^n with 1 <= v< 10
+     */
+    final public static int getExponentOfTen(double x) {
+        return (int) Math.floor(Math.log(x) / Math.log(10));
+    }
+
 	/**
 	 * Copy of Double.hashCode, used for Android 4.4 compatibility
 	 * 
