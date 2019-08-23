@@ -1,5 +1,5 @@
 @NonCPS
-def createChangelog = { fileName ->
+def createChangelog(String fileName) {
     def changeLogSets = currentBuild.changeSets
     def lines = []
     for (int i = 0; i < changeLogSets.size(); i++) {
@@ -14,8 +14,10 @@ def createChangelog = { fileName ->
 }
 
 def s3uploadDefault = { dir, pattern ->
-    withAWS(region:'eu-west-1', credentials:'aws-credentials') {
+    withAWS (region:'eu-west-1', credentials:'aws-credentials') {
         s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}",
+            includePathPattern: pattern, acl: 'PublicRead')
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest",
             includePathPattern: pattern, acl: 'PublicRead')
     }
 }
@@ -54,6 +56,9 @@ pipeline {
         stage('archive') {
             steps {
                 script {
+                    withAWS (region:'eu-west-1', credentials:'aws-credentials') {
+                       s3Delete(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest")
+                    }
                     s3uploadDefault(".", "changes.csv")
                     s3uploadDefault("web/war", "web3d/*")
                     s3uploadDefault("web/war", "webSimple/*")
