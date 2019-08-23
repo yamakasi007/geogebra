@@ -20,6 +20,7 @@ import org.geogebra.common.kernel.geos.AnimationExportSlider;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Feature;
+import org.geogebra.common.main.settings.EuclidianSettings3D;
 
 /**
  *
@@ -2223,7 +2224,12 @@ public abstract class Renderer {
 	public void setARRatio(double ratio) {
 		ARManagerInterface<?> arManager = getARManager();
 		if (arManager != null) {
-			arManager.setARRatio(ratio);
+			if (view3D.getSettings().getARRatioMetricSystem()
+					== EuclidianSettings3D.RATIO_UNIT_INCHES) {
+				arManager.setARRatio(ratio * EuclidianSettings3D.FROM_INCH_TO_CM);
+			} else {
+				arManager.setARRatio(ratio);
+			}
 		}
 	}
 

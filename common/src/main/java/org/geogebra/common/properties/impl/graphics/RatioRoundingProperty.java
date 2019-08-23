@@ -8,7 +8,7 @@ import org.geogebra.common.util.DoubleUtil;
 public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     private Renderer renderer;
-    private Double[] roundingValues;
+    private double[] roundingValues;
 
     /**
      * Constructs an ratio rounding property.
@@ -47,13 +47,13 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
         arRatio = potedRatio;
 
         if (arRatio <= 1) {
-            higherRounding = arRatio == 1 ? 2 : 1;
+            higherRounding = DoubleUtil.isEqual(arRatio, 1) ? 2 : 1;
             lowerRounding = 0.5;
         } else if (arRatio <= 2f) {
-            higherRounding = arRatio == 2 ? 5 : 2;
+            higherRounding = DoubleUtil.isEqual(arRatio, 2) ? 5 : 2;
             lowerRounding = 1;
         } else if (arRatio <= 5f) {
-            higherRounding = arRatio == 5 ? 10 : 5;
+            higherRounding = DoubleUtil.isEqual(arRatio, 5) ? 10 : 5;
             lowerRounding = 2;
         } else {
             higherRounding = 10;
@@ -70,28 +70,21 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
         higherRounding = higherRounding * pot;
         lowerRounding = lowerRounding * pot;
 
-        if (potedRatio == 1 || potedRatio == 2 || potedRatio == 5 ||
-                arRatio == higherRounding || arRatio == lowerRounding) {
-            roundingValues = new Double[]{higherRounding, lowerRounding};
-            return new String[]{stringFromDouble(roundingValues[0]),
-                    stringFromDouble(roundingValues[1])};
+        if (potedRatio == 1 || potedRatio == 2 || potedRatio == 5 || arRatio == higherRounding
+                || arRatio == lowerRounding) {
+            roundingValues = new double[]{higherRounding, lowerRounding};
+            return new String[]{stringFromDouble(higherRounding),
+                    stringFromDouble(lowerRounding)};
         } else {
-            // when using unit inches, there can be the case when arRatio is very close to 0
-            if (arRatio < 1) {
-                roundingValues = new Double[]{1.0, 0.5};
-                return new String[]{stringFromDouble(roundingValues[0]),
-                        stringFromDouble(roundingValues[1])};
-            } else {
-                roundingValues = new Double[]{higherRounding, arRatio, lowerRounding};
-                return new String[]{stringFromDouble(roundingValues[0]),
-                        stringFromDouble(roundingValues[1]), stringFromDouble(roundingValues[2])};
-            }
+            roundingValues = new double[]{higherRounding, arRatio, lowerRounding};
+            return new String[]{stringFromDouble(higherRounding),
+                    stringFromDouble(arRatio), stringFromDouble(lowerRounding)};
         }
     }
 
     private String stringFromDouble(Double value) {
         if(DoubleUtil.isInteger(value)) {
-            return Integer.toString(value.intValue());
+            return Integer.toString((int) Math.round(value));
         } else {
             return Double.toString(value);
         }

@@ -1,6 +1,5 @@
 package org.geogebra.arbase;
 
-import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.settings.EuclidianSettings3D;
@@ -61,7 +60,7 @@ public class RatioManager {
 
     private String getRatioMessage(double ratio) {
         if(DoubleUtil.isInteger(ratio)) {
-            arRatioText = String.format("%d", (long) ratio);
+            arRatioText = Integer.toString((int) Math.round(ratio));
         } else {
             arRatioText = String.format("%.4s", ratio);
         }
