@@ -37,7 +37,7 @@ public class ARRatioPropertyCollection extends AbstractProperty
                 localization));
         if (app.has(Feature.G3D_AR_RATIO_SETTINGS_ROUNDING)) {
             properties.add(new RatioRoundingProperty(((EuclidianView3D)
-                    app.getActiveEuclidianView()).getRenderer(), localization));
+                    app.getActiveEuclidianView()), localization));
         }
         collection = new PropertiesList(properties);
     }

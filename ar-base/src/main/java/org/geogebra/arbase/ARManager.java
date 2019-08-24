@@ -551,10 +551,6 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
         }
     }
 
-    public String getARRatioInString() {
-        return ratioManager.getARRatioInString();
-    }
-
     public String getUnits() {
         return ratioManager.getUnits();
     }

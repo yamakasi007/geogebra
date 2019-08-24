@@ -2203,18 +2203,6 @@ public abstract class Renderer {
         }
     }
 
-	/**
-	 *
-	 * @return ar ratio (can be null)
-	 */
-	public String getARRatio() {
-		ARManagerInterface<?> arManager = getARManager();
-		if (arManager != null) {
-			return arManager.getARRatioInString();
-		}
-		return null;
-	}
-
     /**
      *
      * @return ar ratio units (can be null)

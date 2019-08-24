@@ -69,8 +69,6 @@ public interface ARManagerInterface<T> {
 
     void resetScaleFromAR();
 
-    String getARRatioInString();
-
     String getUnits();
 
     void showARRatio();

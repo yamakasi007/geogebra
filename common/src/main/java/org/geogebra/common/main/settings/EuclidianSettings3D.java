@@ -69,6 +69,7 @@ public class EuclidianSettings3D extends EuclidianSettings {
 
 	private double mARRatio = 0;
 	private int mRatioMetricSystem = RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
+	private String mARRatioText = "1";
 
 	/**
 	 * @param app
@@ -794,14 +795,44 @@ public class EuclidianSettings3D extends EuclidianSettings {
 		return mARRatio;
 	}
 
+	/**
+	 *
+	 * @return arRatio metric system
+	 */
 	public int getARRatioMetricSystem() {
 		return mRatioMetricSystem;
 	}
 
+	/**
+	 *
+	 *  Set ar ratio metric system
+	 *
+	 * @param ratioMetricSystem
+	 *            ar ratio metric system to set
+	 */
 	public void setARRatioMetricSystem(int ratioMetricSystem) {
 		if (mRatioMetricSystem != ratioMetricSystem) {
 			mRatioMetricSystem = ratioMetricSystem;
 			settingChanged();
 		}
+	}
+
+	/**
+	 *
+	 *  Set ar ratio text value
+	 *
+	 * @param arRatioText
+	 *            ar ratio text to set
+	 */
+	public void setARRatioTextValue(String arRatioText) {
+		mARRatioText = arRatioText;
+	}
+
+	/**
+	 *
+	 * @return arRatio in String (rounded value to not be long)
+	 */
+	public String getARRatioText() {
+		return mARRatioText;
 	}
 }

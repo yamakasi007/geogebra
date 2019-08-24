@@ -29,7 +29,7 @@ public class ARRatioProperty extends AbstractProperty
 
     @Override
     public String getValue() {
-        return renderer.getARRatio();
+        return renderer.getView().getSettings().getARRatioText();
     }
 
     @Override

@@ -9,7 +9,6 @@ public class RatioManager {
     private double mARRatioAtStart;
     private EuclidianSettings3D mSettings3D;
     private String units = "cm";        // current units used for Ratio snack bar and ratio settings
-    private String arRatioText = "1";   // current ratio used for Ratio snack bar and ratio settings
 
     public RatioManager(EuclidianSettings3D settings3D) {
         mSettings3D = settings3D;
@@ -17,10 +16,6 @@ public class RatioManager {
 
     public String getUnits() {
         return units;
-    }
-
-    public String getARRatioInString() {
-        return arRatioText;
     }
 
     public void setARRatioAtStart(double arRatioAtStart) {
@@ -60,10 +55,10 @@ public class RatioManager {
 
     private String getRatioMessage(double ratio) {
         if(DoubleUtil.isInteger(ratio)) {
-            arRatioText = Integer.toString((int) Math.round(ratio));
+            mSettings3D.setARRatioTextValue(Integer.toString((int) Math.round(ratio)));
         } else {
-            arRatioText = String.format("%.4s", ratio);
+            mSettings3D.setARRatioTextValue(String.format("%.4s", ratio));
         }
-        return String.format("1 : %s %s", arRatioText, units);
+        return String.format("1 : %s %s", mSettings3D.getARRatioText(), units);
     }
 }

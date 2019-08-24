@@ -1,32 +1,30 @@
 package org.geogebra.common.properties.impl.graphics;
 
-import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
+import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.properties.AbstractEnumerableProperty;
 import org.geogebra.common.util.DoubleUtil;
-import org.geogebra.common.util.StringUtil;
-import org.geogebra.common.util.debug.Log;
 
 public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
-    private Renderer renderer;
+    private EuclidianView3D view3D;
     private double[] roundingValues;
 
     /**
      * Constructs an ratio rounding property.
      *
-     * @param renderer     renderer
+     * @param view3D        view3D
      * @param localization localization
      */
-    public RatioRoundingProperty(Renderer renderer, Localization localization) {
+    public RatioRoundingProperty(EuclidianView3D view3D, Localization localization) {
         super(localization, "Rounding");
-        this.renderer = renderer;
+        this.view3D = view3D;
         setValuesAndLocalize(getRatioClosestRounding());
     }
 
     @Override
     protected void setValueSafe(String value, int index) {
-        renderer.getView().getSettings().setARRatio(roundingValues[index]);
+        view3D.getSettings().setARRatio(roundingValues[index]);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
     }
 
     private String[] getRatioClosestRounding() {
-        double arRatio = Double.parseDouble(renderer.getARRatio());
+        double arRatio = Double.parseDouble(view3D.getSettings().getARRatioText());
 
         int n = DoubleUtil.getExponentOfTen(arRatio);
         double ratioSimple = arRatio / Math.pow(10, n);
