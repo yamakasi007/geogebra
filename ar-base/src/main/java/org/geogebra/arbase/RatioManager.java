@@ -25,7 +25,7 @@ public class RatioManager {
 
     public void setARRatioAtStart(double arRatioAtStart) {
         mARRatioAtStart = arRatioAtStart;
-        mSettings3D.setARRatio(arRatioAtStart);
+        mSettings3D.setARRatioValue(arRatioAtStart);
     }
 
     public float getARRatioAtStart() {

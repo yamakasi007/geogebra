@@ -26,7 +26,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
 
     @Override
     protected void setValueSafe(String value, int index) {
-        renderer.setARRatio(roundingValues[index]);
+        renderer.getView().getSettings().setARRatio(roundingValues[index]);
     }
 
     @Override

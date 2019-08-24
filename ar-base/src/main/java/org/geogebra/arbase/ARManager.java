@@ -463,9 +463,7 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
     }
 
     private float getARScaleParameter() {
-        return arGestureManager == null ? arScale :
-                arScale * (float) mView.getSettings().getARRatio()
-                        / ratioManager.getARRatioAtStart();
+        return arScale * (float) getRatioChangeFromStart();
     }
 
     public void fromARCoordsToGGBCoords(Coords coords, Coords ret) {
@@ -526,8 +524,7 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
             float mDistance = (float) viewModelMatrix.getOrigin().calcNorm3();
             // 1 pixel thickness in ggb == 0.25 mm (for distance smaller than DESK_DISTANCE_MAX)
             double thicknessMin = getThicknessMin(mDistance);
-            arScale = (float) (thicknessMin / (mView.getSettings().getARRatio() // maybe get rid of
-                    / ratioManager.getARRatioAtStart()));
+            arScale = (float) (thicknessMin / getRatioChangeFromStart());
             arScaleFactor = arScaleAtStart / arScale;
             updateSettingsScale(previousARScale / arScale);
         }
@@ -558,23 +555,20 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
         return ratioManager.getARRatioInString();
     }
 
-    public void setARRatio(double ratio) {
-        mView.getSettings().setARRatio(ratio); // ratio is always converted to cm
-        fitThickness();
-        showSnackbar();
-    }
-
     public String getUnits() {
         return ratioManager.getUnits();
     }
 
-    public void setARRatioMetricSystem(int metricSystem) {
-        mView.getSettings().setARRatioMetricSystem(metricSystem);
+    public void showARRatio() {
         showSnackbar();
     }
 
     public void setARRatioAtStart(double arRatioAtStart) {
         setARScaleAtStart();
-        setARRatio(arRatioAtStart);
+        showSnackbar();
+    }
+
+    private double getRatioChangeFromStart() {
+        return mView.getSettings().getARRatio() / ratioManager.getARRatioAtStart();
     }
 }

@@ -3,6 +3,7 @@ package org.geogebra.common.main.settings;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
+import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.kernel.geos.XMLBuilder;
 import org.geogebra.common.main.App;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
@@ -95,6 +96,10 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	@Override
 	protected void settingChanged() {
 		super.settingChanged();
+		EuclidianView3D view3D = (EuclidianView3D) app.getEuclidianView3D();
+		if (view3D != null) {
+			view3D.getRenderer().showARRatio();
+		}
 		hadSettingChanged = true;
 	}
 
@@ -755,10 +760,29 @@ public class EuclidianSettings3D extends EuclidianSettings {
 
 	/**
 	 *
+	 *  Set ar ratio and call settingsChanged
+	 *
 	 * @param arRatio
 	 *            ar ratio to set
 	 */
 	public void setARRatio(double arRatio) {
+		if (mRatioMetricSystem == RATIO_UNIT_INCHES) {
+			arRatio = arRatio * FROM_INCH_TO_CM;
+		}
+		if (mARRatio != arRatio) {
+			mARRatio = arRatio;
+			settingChanged();
+		}
+	}
+
+	/**
+	 *
+	 *  Set ar ratio value
+	 *
+	 * @param arRatio
+	 *            ar ratio to set
+	 */
+	public void setARRatioValue(double arRatio) {
 		mARRatio = arRatio;
 	}
 
@@ -775,7 +799,9 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	}
 
 	public void setARRatioMetricSystem(int ratioMetricSystem) {
-		mRatioMetricSystem = ratioMetricSystem;
+		if (mRatioMetricSystem != ratioMetricSystem) {
+			mRatioMetricSystem = ratioMetricSystem;
+			settingChanged();
+		}
 	}
-
 }

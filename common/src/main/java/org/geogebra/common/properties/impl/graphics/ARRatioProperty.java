@@ -36,7 +36,7 @@ public class ARRatioProperty extends AbstractProperty
     public void setValue(String value) {
         GeoNumberValue ratio = !value.trim().equals("") ? getNumberValue(value) : null;
         if (ratio != null && !Double.isNaN(ratio.getDouble())) {
-                renderer.setARRatio(ratio.getDouble());
+                renderer.getView().getSettings().setARRatio(ratio.getDouble());
         }
     }
 

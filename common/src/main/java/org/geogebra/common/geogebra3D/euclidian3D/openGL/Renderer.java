@@ -2215,24 +2215,6 @@ public abstract class Renderer {
 		return null;
 	}
 
-	/**
-	 * set AR ratio
-	 *
-	 * @param ratio
-	 *            new ratio for AR
-	 */
-	public void setARRatio(double ratio) {
-		ARManagerInterface<?> arManager = getARManager();
-		if (arManager != null) {
-			if (view3D.getSettings().getARRatioMetricSystem()
-					== EuclidianSettings3D.RATIO_UNIT_INCHES) {
-				arManager.setARRatio(ratio * EuclidianSettings3D.FROM_INCH_TO_CM);
-			} else {
-				arManager.setARRatio(ratio);
-			}
-		}
-	}
-
     /**
      *
      * @return ar ratio units (can be null)
@@ -2246,14 +2228,13 @@ public abstract class Renderer {
     }
 
 	/**
+	 * show ARRatio snackbar message
 	 *
-	 * @param metricSystem
-	 *                  ar ratio metric system (cm or inch)
 	 */
-	public void setARRatioMetricSystem(int metricSystem) {
+	public void showARRatio() {
 		ARManagerInterface<?> arManager = getARManager();
 		if (arManager != null) {
-			arManager.setARRatioMetricSystem(metricSystem);
+			arManager.showARRatio();
 		}
 	}
 }

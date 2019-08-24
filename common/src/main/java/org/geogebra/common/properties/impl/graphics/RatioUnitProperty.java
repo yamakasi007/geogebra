@@ -33,7 +33,7 @@ public class RatioUnitProperty extends AbstractEnumerableProperty {
                 lenghtUnit = EuclidianSettings3D.RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
                 break;
         }
-        view3D.getRenderer().setARRatioMetricSystem(lenghtUnit);
+        view3D.getRenderer().getView().getSettings().setARRatioMetricSystem(lenghtUnit);
     }
 
     @Override
