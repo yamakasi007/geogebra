@@ -87,7 +87,7 @@ public class RatioRoundingProperty extends AbstractEnumerableProperty {
             rounded = 1;
         }
         StringBuilder sb = new StringBuilder();
-        if (n==0) {
+        if (n == 0) {
             sb.append(rounded);
         } else if (n > 0) {
             sb.append(rounded);

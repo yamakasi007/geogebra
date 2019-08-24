@@ -770,7 +770,7 @@ public class EuclidianSettings3D extends EuclidianSettings {
 		if (mRatioMetricSystem == RATIO_UNIT_INCHES) {
 			arRatio = arRatio * FROM_INCH_TO_CM;
 		}
-		if (mARRatio != arRatio) {
+		if (!DoubleUtil.isEqual(mARRatio, arRatio)) {
 			mARRatio = arRatio;
 			settingChanged();
 		}
