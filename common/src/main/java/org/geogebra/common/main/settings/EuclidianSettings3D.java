@@ -835,4 +835,16 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	public String getARRatioText() {
 		return mARRatioText;
 	}
+
+	/**
+	 *  Clear ARRatio, restart AR session if in AR
+	 */
+	public void clearARRatio() {
+		mARRatio = 0;
+		mRatioMetricSystem = RATIO_UNIT_METERS_CENTIMETERS_MILLIMETERS;
+		EuclidianView3D view3D = (EuclidianView3D) app.getEuclidianView3D();
+		if (view3D != null && view3D.isAREnabled()) {
+			view3D.getRenderer().setARShouldRestart();
+		}
+	}
 }

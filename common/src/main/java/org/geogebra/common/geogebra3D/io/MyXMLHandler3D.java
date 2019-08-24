@@ -429,10 +429,10 @@ public class MyXMLHandler3D extends MyXMLHandler {
 		double arRatio;
 		try {
 			arRatio = Double.parseDouble(attrs.get("arRatio"));
+			settings3D.setARRatio(arRatio);
+			return true;
 		} catch (RuntimeException e) {
 			return false;
 		}
-		settings3D.setARRatio(arRatio);
-		return true;
 	}
 }

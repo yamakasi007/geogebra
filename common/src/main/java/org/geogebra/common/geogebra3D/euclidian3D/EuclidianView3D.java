@@ -1509,6 +1509,7 @@ public abstract class EuclidianView3D extends EuclidianView
 		geosToBeAdded.clear();
 		drawable3DListToBeAdded.clear();
 		drawable3DMap.clear();
+		getSettings().clearARRatio();
 		setRotContinueAnimation(0, 0);
 		initView(false);
 	}
