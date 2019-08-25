@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
-                       s3Delete(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest")
+                       s3Delete(bucket: 'apps-builds', path: "geogebra/branches/${env.GIT_BRANCH}/latest")
                     }
                     s3uploadDefault(".", "changes.csv")
                     s3uploadDefault("web/war", "web3d/*")
