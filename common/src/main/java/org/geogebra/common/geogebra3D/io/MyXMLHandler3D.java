@@ -426,10 +426,11 @@ public class MyXMLHandler3D extends MyXMLHandler {
 
 	private static boolean handleARRatio(EuclidianSettings3D settings3D,
 										 LinkedHashMap<String, String> attrs) {
-		double arRatio;
 		try {
-			arRatio = Double.parseDouble(attrs.get("arRatio"));
-			settings3D.setARRatio(arRatio);
+			int unitRatioMetric = Integer.parseInt(attrs.get("unit"));
+			double arRatio = Double.parseDouble(attrs.get("arRatio"));
+			settings3D.setARRatioValue(arRatio);
+			settings3D.setARRatioMetricSystem(unitRatioMetric);
 			return true;
 		} catch (RuntimeException e) {
 			return false;

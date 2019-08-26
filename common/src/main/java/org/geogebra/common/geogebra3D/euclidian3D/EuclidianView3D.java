@@ -3110,8 +3110,10 @@ public abstract class EuclidianView3D extends EuclidianView
 		// ar ratio
 		if (app.has(Feature.G3D_AR_RATIO_SETTINGS) && getSettings().getARRatio() != 0) {
 			sb.append("\t<arRatio");
-			sb.append(" arRatio=\"");
-			sb.append(getSettings().getARRatio());
+			sb.append(" unit=\"");
+			sb.append(getSettings().getARRatioMetricSystem());
+			sb.append("\" arRatio=\"");
+			sb.append(getSettings().getARRatio()); // always in cm
 			sb.append("\"/>\n");
 		}
 

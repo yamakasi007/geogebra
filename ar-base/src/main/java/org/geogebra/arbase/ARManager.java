@@ -561,7 +561,12 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
 
     public void setARRatioAtStart(double arRatioAtStart) {
         setARScaleAtStart();
-        mView.getSettings().setARRatio(arRatioAtStart);
+        EuclidianSettings3D settings3D = mView.getSettings();
+        if (settings3D.getARRatioMetricSystem() == EuclidianSettings3D.RATIO_UNIT_INCHES) {
+            mView.getSettings().setARRatio(arRatioAtStart * EuclidianSettings3D.FROM_CM_TO_INCH);
+        } else {
+            mView.getSettings().setARRatio(arRatioAtStart);
+        }
         showSnackbar();
     }
 
