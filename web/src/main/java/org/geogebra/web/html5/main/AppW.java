@@ -4034,7 +4034,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	}
 
 	@Override
-	protected EuclidianControllerW getEuclidianController() {
+	public EuclidianControllerW getEuclidianController() {
 		return (EuclidianControllerW) super.getEuclidianController();
 	}
 
