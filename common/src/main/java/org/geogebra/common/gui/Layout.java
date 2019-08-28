@@ -57,7 +57,7 @@ public abstract class Layout implements SettingListener {
 	 */
 	public static void initializeDefaultPerspectives(App app,
 			double AVpercent) {
-		final int n = 8;
+		final int n = 9;
 
 		defaultPerspectives = new Perspective[n];
 
@@ -380,6 +380,12 @@ public abstract class Layout implements SettingListener {
 
 		defaultPerspectives[7] = new Perspective(Perspective.SCIENTIFIC,
 				spData, dpData, defToolbar, true, true, true, true, true,
+				InputPosition.algebraView);
+
+		// Evaluator perspecitve is customized
+		defaultPerspectives[8] = new Perspective(Perspective.EVALUATOR,
+				new DockSplitPaneData[0], new DockPanelData[0], "", false, false,
+				false, true, false,
 				InputPosition.algebraView);
 
 	}
