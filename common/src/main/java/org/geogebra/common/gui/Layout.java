@@ -75,18 +75,14 @@ public abstract class Layout implements SettingListener {
 		Perspective spreadsheet = createSpreadsheetPerspective(defToolbar);
 		perspectives.add(spreadsheet);
 
-		Log.debug("CAS support: " + app.supportsView(App.VIEW_CAS));
-		if (app.supportsView(App.VIEW_CAS)) {
-			// CAS & Graphics - cas and euclidian view
-			Perspective cas = createCasPerspective(spData, defToolbar);
-			perspectives.add(cas);
-		}
+		boolean supportsCas = app.supportsView(App.VIEW_CAS);
+		Log.debug("CAS support: " + supportsCas);
+		Perspective cas = supportsCas ? createCasPerspective(spData, defToolbar) : null;
+		perspectives.add(cas);
 
-		if (app.supportsView(App.VIEW_EUCLIDIAN3D)) {
-			// algebra & 3D graphics
-			Perspective graphing3d = createGraphing3DPerspective(app, spData, defToolbar);
-			perspectives.add(graphing3d);
-		}
+		boolean supports3D = app.supportsView(App.VIEW_EUCLIDIAN3D);
+		Perspective graphing3D = supports3D ? createGraphing3DPerspective(app, spData, defToolbar) : null;
+		perspectives.add(graphing3D);
 
 		Perspective probability = createProbabilityPerspective(avPercent, defToolbar);
 		perspectives.add(probability);
