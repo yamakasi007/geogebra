@@ -60,6 +60,7 @@ pipeline {
                     s3uploadDefault("web/war", "web3d/*")
                     s3uploadDefault("web/war", "webSimple/*")
                     s3uploadDefault("web/war", "*.html")
+                    s3uploadDefault("web/war", "*.zip")
                 }
             }
         }
