@@ -2,6 +2,7 @@ package org.geogebra.web.html5.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.geogebra.common.kernel.commands.CommandDispatcher;
 import org.geogebra.common.kernel.commands.CommandNotLoadedError;
@@ -19,13 +20,9 @@ public class AsyncManager {
 	/**
 	 * Preload all but discrete and steps
 	 */
-	private static final String[] defaultPreload = {
-			"advanced",
-			"prover",
-			"scripting",
-			"stats",
-			"CAS",
-			"3D"
+	private static final AsyncModule[] defaultPreload = { AsyncModule.ADVANCED,
+			AsyncModule.PROVER, AsyncModule.SCRIPTING, AsyncModule.STATS, AsyncModule.CAS,
+			AsyncModule.SPATIAL
 	};
 
 	private AppW app;
@@ -79,35 +76,38 @@ public class AsyncManager {
 	public void ensureModulesLoaded(String[] modules) {
 		final CommandDispatcher cmdDispatcher = app.getKernel()
 				.getAlgebraProcessor().getCmdDispatcher();
-		final String[] preload = modules == null ? defaultPreload : modules;
-
+		final AsyncModule[] preload = modules == null ? defaultPreload
+				: parse(modules);
+		for (AsyncModule module : preload) {
+			module.prefetch();
+		}
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
-				for (String module : preload) {
+				for (AsyncModule module : preload) {
 					switch (module) {
-					case "discrete":
+					case DISCRETE:
 						cmdDispatcher.getDiscreteDispatcher();
 						break;
-					case "scripting":
+					case SCRIPTING:
 						cmdDispatcher.getScriptingDispatcher();
 						break;
-					case "advanced":
+					case ADVANCED:
 						cmdDispatcher.getAdvancedDispatcher();
 						break;
-					case "stats":
+					case STATS:
 						cmdDispatcher.getStatsDispatcher();
 						break;
-					case "steps":
+					case STEPS:
 						cmdDispatcher.getStepsDispatcher();
 						break;
-					case "prover":
+					case PROVER:
 						cmdDispatcher.getProverDispatcher();
 						break;
-					case "CAS":
+					case CAS:
 						cmdDispatcher.getCASDispatcher();
 						break;
-					case "3D":
+					case SPATIAL:
 						cmdDispatcher.get3DDispatcher();
 						break;
 					default:
@@ -120,20 +120,46 @@ public class AsyncManager {
 		callbacks.add(0, r);
 	}
 
+	private static AsyncModule[] parse(String[] modules) {
+		ArrayList<AsyncModule> parsed = new ArrayList<>();
+		for (String name : modules) {
+			parsed.add(AsyncModule.valueOf(name.toUpperCase(Locale.US)));
+		}
+		return parsed.toArray(new AsyncModule[0]);
+	}
+
 	/**
 	 * Asynchronously evaluate a command
 	 * @param command command to evaluate
 	 * @param onSuccess function to be called when the execution succeeds
 	 * @param onFailure function to be called when the execution fails
 	 */
-	public void asyncEvalCommand(final String command, final JavaScriptObject onSuccess,
+	public void asyncEvalCommand(final String command,
+			final JavaScriptObject onSuccess,
+			final JavaScriptObject onFailure) {
+		asyncEvalCommand(command, toRunnable(onSuccess), onFailure);
+	}
+
+	/**
+	 * Asynchronously evaluate a command
+	 * 
+	 * @param command
+	 *            command to evaluate
+	 * @param onSuccess
+	 *            function to be called when the execution succeeds
+	 * @param onFailure
+	 *            function to be called when the execution fails
+	 */
+	public void asyncEvalCommand(final String command, final Runnable onSuccess,
 			final JavaScriptObject onFailure) {
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
 				try {
 					getGgbApi().evalCommand(command);
-					call(onSuccess, null);
+					if (onSuccess != null) {
+						onSuccess.run();
+					}
 				} catch (Exception e) {
 					call(onFailure, e);
 				}
@@ -141,6 +167,15 @@ public class AsyncManager {
 		};
 
 		scheduleCallback(r);
+	}
+
+	private Runnable toRunnable(final JavaScriptObject onSuccess) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				call(onSuccess, null);
+			}
+		};
 	}
 
 	/**
@@ -201,4 +236,5 @@ public class AsyncManager {
 			}
 		}
 	}
+
 }

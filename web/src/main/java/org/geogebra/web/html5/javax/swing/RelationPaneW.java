@@ -3,15 +3,11 @@ package org.geogebra.web.html5.javax.swing;
 import org.geogebra.common.gui.util.RelationMore;
 import org.geogebra.common.javax.swing.RelationPane;
 import org.geogebra.common.main.App;
-import org.geogebra.common.util.Prover;
-import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.gui.GDialogBox;
 import org.geogebra.web.html5.gui.util.LayoutUtilW;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.debug.LoggerW;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -86,10 +82,9 @@ public class RelationPaneW extends GDialogBox
 				callbacks[i] = relations[i].getCallback();
 				btnCallbacks[i] = new Button();
 				btnCallbacks[i].setStyleName("moreBtn");
-				btnCallbacks[i]
-						.setText(app1.isUnbundledOrWhiteboard()
-								? app1.getLocalization().getMenu("More")
-								: app1.getLocalization().getMenu("More")
+				btnCallbacks[i].setText(app1.isUnbundledOrWhiteboard()
+						? app1.getLocalization().getMenu("More")
+						: app1.getLocalization().getMenu("More")
 								+ Unicode.ELLIPSIS);
 				btnCallbacks[i].addClickHandler(this);
 				buttons[i].add(btnCallbacks[i]);
@@ -134,22 +129,19 @@ public class RelationPaneW extends GDialogBox
 			hide();
 		}
 
-		GWT.runAsync(Prover.class, new RunAsyncCallback() {
-			@Override
-			public void onFailure(Throwable reason) {
-				Log.warn("prover not loaded");
-			}
+		((AppW) app).getAsyncManager().asyncEvalCommand("Prove(true)",
+				new Runnable() {
 
-			@Override
-			public void onSuccess() {
-				LoggerW.loaded("prover");
-				for (int i = 0; i < rels; ++i) {
-					if (source == btnCallbacks[i]) {
-						callbacks[i].action(RelationPaneW.this, i);
+					@Override
+					public void run() {
+						LoggerW.loaded("prover");
+						for (int i = 0; i < rels; ++i) {
+							if (source == btnCallbacks[i]) {
+								callbacks[i].action(RelationPaneW.this, i);
+							}
+						}
 					}
-				}
-			}
-		});
+				}, null);
 	}
 
 	@Override
