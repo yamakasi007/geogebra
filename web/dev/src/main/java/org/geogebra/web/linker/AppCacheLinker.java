@@ -15,18 +15,13 @@
  */
 package org.geogebra.web.linker;
 
-import java.io.InputStream;
-
 import org.geogebra.common.GeoGebraConstants;
 
 import com.google.gwt.core.ext.LinkerContext;
 import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.AbstractLinker;
-import com.google.gwt.core.ext.linker.Artifact;
 import com.google.gwt.core.ext.linker.ArtifactSet;
-import com.google.gwt.core.ext.linker.EmittedArtifact;
 import com.google.gwt.core.ext.linker.LinkerOrder;
 import com.google.gwt.core.ext.linker.LinkerOrder.Order;
 import com.google.gwt.core.ext.linker.Shardable;
@@ -77,6 +72,7 @@ import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 public class AppCacheLinker extends AbstractLinker {
 
 	private static final String SWORKER = "sworker.js";
+	private static final String SWORKER_LOCKED = "sworker-locked.js";
 	private static final String MANIFEST = "appcache.nocache.manifest";
 
 	@Override
@@ -90,7 +86,6 @@ public class AppCacheLinker extends AbstractLinker {
 			throws UnableToCompleteException {
 
 		ArtifactSet toReturn = new ArtifactSet(artifacts);
-
 		if (onePermutation) {
 			return toReturn;
 		}
@@ -122,106 +117,14 @@ public class AppCacheLinker extends AbstractLinker {
 			TreeLogger logger, ArtifactSet artifacts, ArtifactSet toReturn)
 			throws UnableToCompleteException {
 
-		StringBuilder allResoucesSb = new StringBuilder();
-		String moduleUrl = "https://www.geogebra.org/apps/latest/" + context.getModuleName() + "/";
-
-		if (artifacts != null) {
-			StringBuilder publicSourcesSb = getAllCacheableArtifactsAsPartialJSON(artifacts,
-					moduleUrl);
-
-			String[] cacheExtraFiles = AppCacheLinkerSettings
-					.otherCachedFiles();
-			allResoucesSb.append(publicSourcesSb);
-			for (String staticFile : cacheExtraFiles) {
-				allResoucesSb.append(",\n\"");
-				allResoucesSb.append(staticFile);
-				allResoucesSb.append("\"");
-			}
-			toReturn.add(emitString(logger,
-					createFilesJsonFile(publicSourcesSb), "files.json"));
-		}
-
-		buildManifest(allResoucesSb, logger, toReturn);
-	}
-
-	private void buildManifest(StringBuilder allResoucesSb, TreeLogger logger,
-			ArtifactSet toReturn) throws UnableToCompleteException {
-		// we have to generate this unique id because the resources can change
-		// but the hashed cache.html files can remain the same. build cache list
-		String id = GeoGebraConstants.VERSION_STRING + ":"
-				+ System.currentTimeMillis();
-		String template = readTemplateAsString(logger);
-		String sworkerContent = template
-				.replace("%URLS%", allResoucesSb.toString())
-				.replace("%ID%", id);
+		ServiceWorkerBuilder serviceWorkerBuilder = new ServiceWorkerBuilder(
+				context, artifacts, logger);
+		String sworkerContent = serviceWorkerBuilder.getWorkerCode("latest");
 		toReturn.add(emitString(logger, sworkerContent, SWORKER));
-	}
 
-	private static StringBuilder getAllCacheableArtifactsAsPartialJSON(
-			ArtifactSet artifacts,
-			String moduleUrl) {
-		StringBuilder publicSourcesSb = new StringBuilder();
-		for (Artifact<?> artifact : artifacts) {
-			if (artifact instanceof EmittedArtifact) {
-				EmittedArtifact ea = (EmittedArtifact) artifact;
-				String pathName = ea.getPartialPath();
-				if (!skipResource(pathName)) {
-					if (publicSourcesSb.length() > 0) {
-						publicSourcesSb.append(",\n");
-					}
-					publicSourcesSb.append("\"" + moduleUrl
-							+ pathName.replace("\\", "/") + "\"");
-				}
-			}
-		}
-		return publicSourcesSb;
-	}
-
-	private static String readTemplateAsString(TreeLogger logger) {
-		StringBuilder sb = new StringBuilder();
-
-		// Create the manifest as a new artifact and return it:
-		try {
-			InputStream s = AppCacheLinker.class.getResourceAsStream(
-					"/org/geogebra/web/worker_template.js");
-			byte[] contents = new byte[1024];
-			int bytesRead = 0;
-			while ((bytesRead = s.read(contents)) != -1) {
-				sb.append(new String(contents, 0, bytesRead));
-			}
-			// fbr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.log(Type.ERROR, e.getMessage());
-		}
-		return sb.toString();
-	}
-
-	private static boolean skipResource(String pathName) {
-		return pathName.endsWith("symbolMap")
-			|| pathName.endsWith(".xml.gz")
-			|| pathName.endsWith("rpc.log")
-			|| pathName.endsWith("gwt.rpc")
-			|| pathName.endsWith("manifest.txt")
-			|| pathName.startsWith("rpcPolicyManifest")
-			|| pathName.endsWith("cssmap")
-			|| pathName.endsWith("MANIFEST.MF")
-			|| pathName.endsWith(".txt")
-			|| pathName.endsWith(".php")
-			|| pathName.endsWith("README")
-			|| pathName.endsWith("COPYING")
-			|| pathName.endsWith("LICENSE")
-			|| pathName.endsWith("oauthWindow.html")
-			|| pathName.endsWith("windowslive.html")
-			|| pathName.endsWith("devmode.js")
-			|| pathName.startsWith("js/properties_")
-			|| pathName.endsWith("6.nocache.js");
-	}
-
-	private static String createFilesJsonFile(StringBuilder builder) {
-		String start = "[\n" + builder.toString();
-		String replaced = start.replaceAll("\\n", "\n  ");
-		return replaced + "\n]";
+		String sworkerContentLocked = serviceWorkerBuilder
+				.getWorkerCode(GeoGebraConstants.VERSION_STRING);
+		toReturn.add(emitString(logger, sworkerContentLocked, SWORKER_LOCKED));
 	}
 
 }
