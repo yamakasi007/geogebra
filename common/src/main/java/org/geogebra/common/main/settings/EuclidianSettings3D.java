@@ -97,10 +97,6 @@ public class EuclidianSettings3D extends EuclidianSettings {
 	@Override
 	protected void settingChanged() {
 		super.settingChanged();
-		EuclidianView3D view3D = (EuclidianView3D) app.getEuclidianView3D();
-		if (view3D != null) {
-			view3D.getRenderer().showARRatio();
-		}
 		hadSettingChanged = true;
 	}
 

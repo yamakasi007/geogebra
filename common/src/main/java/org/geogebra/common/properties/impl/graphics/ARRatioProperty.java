@@ -7,6 +7,7 @@ import org.geogebra.common.main.Localization;
 import org.geogebra.common.main.error.ErrorHelper;
 import org.geogebra.common.properties.AbstractProperty;
 import org.geogebra.common.properties.RatioProperty;
+ import org.geogebra.common.util.DoubleUtil;
 
 public class ARRatioProperty extends AbstractProperty
         implements RatioProperty {
@@ -35,7 +36,8 @@ public class ARRatioProperty extends AbstractProperty
     @Override
     public void setValue(String value) {
         GeoNumberValue ratio = !value.trim().equals("") ? getNumberValue(value) : null;
-        if (ratio != null && !Double.isNaN(ratio.getDouble())) {
+        if (ratio != null && !Double.isNaN(ratio.getDouble())
+                && DoubleUtil.isGreater(ratio.getDouble(), 0)) {
                 renderer.getView().getSettings().setARRatio(ratio.getDouble());
         }
     }

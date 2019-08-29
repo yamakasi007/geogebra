@@ -4260,6 +4260,10 @@ public abstract class EuclidianView3D extends EuclidianView
 		if (styleBar != null) {
 			styleBar.updateGUI();
 		}
+
+		if (isARDrawing()) {
+			renderer.showARRatio();
+		}
 	}
 
 	@Override

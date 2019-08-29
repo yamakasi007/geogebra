@@ -567,7 +567,6 @@ abstract public class ARManager<TouchEventType> implements ARManagerInterface<To
         } else {
             mView.getSettings().setARRatio(arRatioAtStart);
         }
-        showSnackbar();
     }
 
     private double getRatioChangeFromStart() {
