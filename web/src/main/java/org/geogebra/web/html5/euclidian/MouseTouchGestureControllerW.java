@@ -636,7 +636,6 @@ public class MouseTouchGestureControllerW extends MouseTouchGestureController
 	 *            mouse up event
 	 */
 	public void onMouseUp(MouseUpEvent event) {
-		app.getFpsProfiler().notifyTouchEnd();
 		Event.releaseCapture(event.getRelativeElement());
 		if (CancelEventTimer.cancelMouseEvent()) {
 			return;
@@ -654,6 +653,7 @@ public class MouseTouchGestureControllerW extends MouseTouchGestureController
 	 *            pointer up event
 	 */
 	public void onPointerEventEnd(AbstractEvent e) {
+		app.getFpsProfiler().notifyTouchEnd();
 		if (isRecording) {
 			drawingRecorder.recordTouchEnd();
 		}
@@ -708,6 +708,7 @@ public class MouseTouchGestureControllerW extends MouseTouchGestureController
 	 *            pointer start
 	 */
 	public void onPointerEventStart(AbstractEvent event) {
+		app.getFpsProfiler().notifyTouchStart();
 		if (isRecording) {
 			drawingRecorder
 					.recordCoordinate(event.getX(), event.getY(), System.currentTimeMillis());
