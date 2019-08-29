@@ -57,8 +57,8 @@ pipeline {
                        s3Delete(bucket: 'apps-builds', path: "geogebra/branches/${env.GIT_BRANCH}/latest")
                     }
                     s3uploadDefault(".", "", "changes.csv")
-                    s3uploadDefault("web/war/web3d", "web3d/", "*")
-                    s3uploadDefault("web/war/webSimple", "webSimple/", "*")
+                    s3uploadDefault("web/war", "", "webSimple/**")
+                    s3uploadDefault("web/war", "", "web3d/**")
                     s3uploadDefault("web/war", "", "*.html")
                     s3uploadDefault("web/war", "", "*.zip")
                 }
