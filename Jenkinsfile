@@ -12,12 +12,18 @@ def getChangelog() {
     return lines.join("\n").toString()
 }
 
-def s3uploadDefault = { dir, fileName ->
+def s3uploadDefault = { dir, filePattern ->
+    def fileName, pattern
+    if (filePattern.contains("*")) {
+        pattern = filePattern
+    } else {
+        file = filePattern
+    }
     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
         s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}",
-            file: fileName, acl: 'PublicRead')
+            file: fileName, includePathPattern : pattern, acl: 'PublicRead')
         s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest",
-            file: fileName, acl: 'PublicRead')
+            file: fileName, includePathPattern : pattern, acl: 'PublicRead')
     }
 }
 
