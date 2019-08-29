@@ -11,6 +11,11 @@ import com.google.gwt.core.ext.linker.Artifact;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.EmittedArtifact;
 
+/**
+ * Generates code of the service worker using worker_template.js
+ * 
+ * @author Zbynek
+ */
 public class ServiceWorkerBuilder {
 
 	private static final String CAS_CHUNK_FILENAME = "13.nocache.js";
