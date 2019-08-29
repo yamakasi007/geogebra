@@ -5063,8 +5063,8 @@ public abstract class EuclidianView3D extends EuclidianView
 		// reset rendering
         reset(true);
 
+        getSettings().clearARRatio();
         if (isAREnabled()) {
-        	getSettings().clearARRatio();
         	renderer.setARShouldRestart();
 		}
     }
