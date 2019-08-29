@@ -12,18 +12,12 @@ def getChangelog() {
     return lines.join("\n").toString()
 }
 
-def s3uploadDefault = { dir, filePattern ->
-    def fileName, pattern
-    if (filePattern.contains("*")) {
-        pattern = filePattern
-    } else {
-        file = filePattern
-    }
+def s3uploadDefault = { dir, remoteDir, pattern ->
     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
-        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}",
-            file: fileName, includePathPattern : pattern, acl: 'PublicRead')
-        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest",
-            file: fileName, includePathPattern : pattern, acl: 'PublicRead')
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$remoteDir",
+            includePathPattern: pattern, acl: 'PublicRead')
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest/$remoteDir",
+            includePathPattern: pattern, acl: 'PublicRead')
     }
 }
 
@@ -62,11 +56,11 @@ pipeline {
                     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
                        s3Delete(bucket: 'apps-builds', path: "geogebra/branches/${env.GIT_BRANCH}/latest")
                     }
-                    s3uploadDefault(".", "changes.csv")
-                    s3uploadDefault("web/war", "web3d")
-                    s3uploadDefault("web/war", "webSimple")
-                    s3uploadDefault("web/war", "*.html")
-                    s3uploadDefault("web/war", "*.zip")
+                    s3uploadDefault(".", "", "changes.csv")
+                    s3uploadDefault("web/war/web3d", "web3d/", "*")
+                    s3uploadDefault("web/war/webSimple", "webSimple/", "*")
+                    s3uploadDefault("web/war", "", "*.html")
+                    s3uploadDefault("web/war", "", "*.zip")
                 }
             }
         }
