@@ -5059,9 +5059,14 @@ public abstract class EuclidianView3D extends EuclidianView
 
 	@Override
     public void resetSettings() {
-        super.resetSettings();
-        // reset rendering
+		super.resetSettings();
+		// reset rendering
         reset(true);
+
+        if (isAREnabled()) {
+        	getSettings().clearARRatio();
+        	renderer.setARShouldRestart();
+		}
     }
 
 	/**
