@@ -1,4 +1,4 @@
-package org.geogebra.web.stub3d;
+package org.geogebra.web.simple;
 
 import org.geogebra.common.geogebra3D.kernel3D.commands.CommandDispatcher3D;
 
