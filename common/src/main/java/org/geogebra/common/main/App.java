@@ -684,7 +684,8 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		Collection<String> commandDictContent = commandDict.values();
 
 		// write them to the commandDictCAS
-		CommandDispatcher cf = getKernel().getAlgebraProcessor().getCommandDispatcher();
+		CommandDispatcher commandDispatcher =
+				getKernel().getAlgebraProcessor().getCommandDispatcher();
 
 		for (String cmd : commandDictContent) {
 			commandDictCAS.addEntry(cmd);
@@ -694,7 +695,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		// available, otherwise untranslated)
 		for (String cmd : cas.getAvailableCommandNames()) {
 			try {
-				if (!cf.isAllowedByNameFilter(Commands.valueOf(cmd))) {
+				if (!commandDispatcher.isAllowedByNameFilter(Commands.valueOf(cmd))) {
 					continue;
 				}
 			} catch (Exception e) {
@@ -3926,7 +3927,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case G3D_AR_SHOW_RATIO:
 			return prerelease;
 
-
 		/** G3D-343 */
 		case G3D_SELECT_META:
 			return false;
@@ -4230,7 +4230,8 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public void closePopups(int x, int y) {
 		closePopups();
-		getActiveEuclidianView().closeDropDowns(x, y);
+		EuclidianView view = getActiveEuclidianView();
+		view.closeDropDowns(x, y);
 	}
 
 	/**
