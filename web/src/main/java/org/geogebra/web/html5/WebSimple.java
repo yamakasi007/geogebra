@@ -6,6 +6,7 @@ import org.geogebra.common.util.debug.GeoGebraProfiler;
 import org.geogebra.common.util.debug.SilentProfiler;
 import org.geogebra.web.html5.gui.GeoGebraFrameSimple;
 import org.geogebra.web.html5.util.ArticleElement;
+import org.geogebra.web.stub3d.Stub3DFragment;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -49,6 +50,7 @@ public class WebSimple implements EntryPoint {
 		// instead, load it immediately
 		startGeoGebra(ArticleElement.getGeoGebraMobileTags());
 		WebSimple.registerSuperdevExceptionHandler();
+		Stub3DFragment.load();
 	}
 
 	/**
@@ -71,8 +73,8 @@ public class WebSimple implements EntryPoint {
 			}
 
 			public native void log(Object t) /*-{
-				console && console.log && console.log(t);
-			}-*/;
+		console && console.log && console.log(t);
+	}-*/;
 		});
 	}
 

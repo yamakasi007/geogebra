@@ -5,7 +5,7 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.geogebra.web.full.Web'/>
-  
+  <source path='stub3d'/>
   <replace-with class="org.geogebra.web.full.gui.applet.AppletFactory2D">
     <when-type-is class="org.geogebra.web.full.gui.applet.AppletFactory" />    
   </replace-with>

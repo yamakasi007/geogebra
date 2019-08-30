@@ -9,6 +9,7 @@ import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.debug.LoggerW;
 import org.geogebra.web.resources.StyleInjector;
 import org.geogebra.web.shared.SharedResources;
+import org.geogebra.web.stub3d.Stub3DFragment;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
@@ -52,6 +53,7 @@ public class StepsEntry implements EntryPoint {
 		RootPanel.get(articleElement.getId()).add(geogebraFrame);
 
 		switchMode(type);
+		Stub3DFragment.load();
 	}
 
 	/**

@@ -19,6 +19,7 @@ import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.WebSimple;
 import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.Dom;
+import org.geogebra.web.stub3d.Stub3DFragment;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -62,6 +63,7 @@ public class Web implements EntryPoint {
 
 		loadAppletAsync();
 		allowRerun();
+		Stub3DFragment.load();
 		// just debug for now
 	}
 
