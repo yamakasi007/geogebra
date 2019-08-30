@@ -12,11 +12,11 @@ def getChangelog() {
     return lines.join("\n").toString()
 }
 
-def s3uploadDefault = { dir, remoteDir, pattern ->
+def s3uploadDefault = { dir, pattern ->
     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
-        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/$remoteDir",
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/",
             includePathPattern: pattern, acl: 'PublicRead')
-        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest/$remoteDir",
+        s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest/",
             includePathPattern: pattern, acl: 'PublicRead')
     }
 }
@@ -39,12 +39,12 @@ pipeline {
             steps {
                 junit '**/build/test-results/test/*.xml'
                 recordIssues tools: [
-                    cpd(pattern: '**/build/reports/cpd/cpdCheck.xml'),
-                    checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
+                    cpd(pattern: '**/build/reports/cpd/cpdCheck.xml')
                 ]
                 recordIssues qualityGates: [[threshold: 1, type: 'TOTAL', unstable: true]], tools: [
                     spotBugs(pattern: '**/build/reports/spotbugs/*.xml', useRankAsPriority: true), 
-                    pmdParser(pattern: '**/build/reports/pmd/main.xml')
+                    pmdParser(pattern: '**/build/reports/pmd/main.xml'),
+                    checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
                 ]
                 publishCoverage adapters: [jacocoAdapter('**/build/reports/jacoco/test/*.xml')],
                     sourceFileResolver: sourceFiles('NEVER_STORE')
@@ -56,11 +56,11 @@ pipeline {
                     withAWS (region:'eu-west-1', credentials:'aws-credentials') {
                        s3Delete(bucket: 'apps-builds', path: "geogebra/branches/${env.GIT_BRANCH}/latest")
                     }
-                    s3uploadDefault(".", "", "changes.csv")
-                    s3uploadDefault("web/war", "", "webSimple/**")
-                    s3uploadDefault("web/war", "", "web3d/**")
-                    s3uploadDefault("web/war", "", "*.html")
-                    s3uploadDefault("web/war", "", "*.zip")
+                    s3uploadDefault(".", "changes.csv")
+                    s3uploadDefault("web/war", "webSimple/**")
+                    s3uploadDefault("web/war", "web3d/**")
+                    s3uploadDefault("web/war", "*.html")
+                    s3uploadDefault("web/war", "*.zip")
                 }
             }
         }
