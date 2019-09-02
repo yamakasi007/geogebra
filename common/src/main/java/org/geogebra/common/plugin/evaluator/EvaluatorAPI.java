@@ -1,6 +1,10 @@
 package org.geogebra.common.plugin.evaluator;
 
-import org.geogebra.common.gui.editor.MathFieldCommon;
+import com.himamis.retex.editor.share.editor.MathFieldInternal;
+import com.himamis.retex.editor.share.model.MathFormula;
+import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
+import com.himamis.retex.editor.share.serializer.Serializer;
+import com.himamis.retex.editor.share.serializer.TeXSerializer;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.SymbolicMode;
@@ -10,30 +14,38 @@ import org.geogebra.common.kernel.commands.EvalInfo;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.parser.ParseException;
 import org.geogebra.common.kernel.parser.Parser;
+import org.geogebra.common.move.ggtapi.models.json.JSONException;
+import org.geogebra.common.move.ggtapi.models.json.JSONObject;
 
 /**
  * API class for the Evaluator object.
  */
 public class EvaluatorAPI {
 
-	private MathFieldCommon mathFieldCommon;
+	private static final String LATEX_KEY = "latex";
+	private static final String FLAT_KEY = "flat";
+	private static final String EVAL_KEY = "eval";
+
+	private MathFieldInternal mathFieldInternal;
+	private Serializer flatSerializer;
+	private Serializer latexSerializer;
 	private AlgebraProcessor algebraProcessor;
 	private Parser parser;
 	private EvalInfo evalInfo;
-	private JSONBuilder builder;
 
 	/**
 	 * Create a new Evaluator API
 	 *
 	 * @param kernel kernel for processing
-	 * @param mathFieldCommon Math Field to create API for
+	 * @param mathFieldInternal Math Field to create API for
 	 */
-	public EvaluatorAPI(Kernel kernel, MathFieldCommon mathFieldCommon) {
-		this.mathFieldCommon = mathFieldCommon;
+	public EvaluatorAPI(Kernel kernel, MathFieldInternal mathFieldInternal) {
+		this.mathFieldInternal = mathFieldInternal;
 		this.algebraProcessor = kernel.getAlgebraProcessor();
 		this.parser = kernel.getParser();
+		this.flatSerializer = new GeoGebraSerializer();
+		this.latexSerializer = new TeXSerializer();
 		this.evalInfo = createEvalInfo();
-		this.builder = new JSONBuilder();
 	}
 
 	private EvalInfo createEvalInfo() {
@@ -47,18 +59,23 @@ public class EvaluatorAPI {
 	 * @return JSON string that contains values from the editor
 	 */
 	public String getEvaluatorValue() {
-		String flatString = mathFieldCommon.getText();
-		String latexString = mathFieldCommon.getLaTeX();
-		String result = getEvalString(flatString);
-		return builder.buildJSONString(flatString, latexString, result);
+		MathFormula formula = getMathFormula();
+		String flatString = getFlatString(formula);
+		String latexString = getLatexString(formula);
+		String evalString = getEvalString(flatString);
+		return buildJSONString(flatString, latexString, evalString);
 	}
 
-	private String getEvalString(String flatString) {
-		ValidExpression expression = parseString(flatString);
-		if (expression == null || !expression.isNumberValue()) {
-			return null;
-		}
-		return evaluateExpression(expression);
+	private MathFormula getMathFormula() {
+		return mathFieldInternal.getFormula();
+	}
+
+	private String getFlatString(MathFormula formula) {
+		return flatSerializer.serialize(formula);
+	}
+
+	private String getLatexString(MathFormula formula) {
+		return latexSerializer.serialize(formula);
 	}
 
 	private ValidExpression parseString(String flatString) {
@@ -67,6 +84,14 @@ public class EvaluatorAPI {
 		} catch (ParseException e) {
 			return null;
 		}
+	}
+
+	private String getEvalString(String formula) {
+		ValidExpression expression = parseString(formula);
+		if (expression == null || !expression.isNumberValue()) {
+			return null;
+		}
+		return evaluateExpression(expression);
 	}
 
 	private String evaluateExpression(ValidExpression expression) {
@@ -85,5 +110,16 @@ public class EvaluatorAPI {
 		}
 		GeoElementND element = elements[0];
 		return element.toValueString(StringTemplate.defaultTemplate);
+	}
+
+	private String buildJSONString(String flatString, String latexString, String evalString) {
+		JSONObject object = new JSONObject();
+		try {
+			object.put(LATEX_KEY, latexString).put(FLAT_KEY, flatString)
+					.put(EVAL_KEY, evalString);
+		} catch (JSONException exception) {
+			// Can throw exception for numbers, can be ignored for Strings
+		}
+		return object.toString();
 	}
 }
