@@ -14,8 +14,8 @@ import com.google.gwt.core.client.GWT;
  * Creates HTTP requests to fetch a fragment before it's needed. Prefetched
  * content can be consumed by OfflineLoadingStrategy
  */
-public class FragmentPrefetcher implements AjaxCallback {
-	private static Map<Integer, FragmentPrefetcher> idToCallback = new HashMap<>();
+public final class FragmentPrefetcher implements AjaxCallback {
+	private static Map<Integer, FragmentPrefetcher> idToPrefetcher = new HashMap<>();
 
 	private AsyncOperation<String> fetchCallback;
 	private String content;
@@ -27,12 +27,12 @@ public class FragmentPrefetcher implements AjaxCallback {
 	}
 
 	/**
-	 * @param fragment
-	 *            fragment number
+	 * @param splitPoint
+	 *            split point number
 	 * @return whether prefetch is currently in progress
 	 */
-	public static FragmentPrefetcher forFragment(int fragment) {
-		return idToCallback.get(fragment);
+	public static FragmentPrefetcher forSplitPoint(int splitPoint) {
+		return idToPrefetcher.get(splitPoint);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class FragmentPrefetcher implements AjaxCallback {
 
 	private void resolveCallbacks() {
 		if (content != null && fetchCallback != null) {
-			idToCallback.remove(splitPoint);
+			idToPrefetcher.remove(splitPoint);
 			fetchCallback.callback(content);
 		}
 	}
@@ -56,10 +56,12 @@ public class FragmentPrefetcher implements AjaxCallback {
 	 *            fragment ID
 	 */
 	public static void prefetch(int splitPoint) {
-		final FragmentPrefetcher fragmentPrefetch = new FragmentPrefetcher(
-				splitPoint);
-		idToCallback.put(splitPoint, fragmentPrefetch);
-		fragmentPrefetch.fetch();
+		if (forSplitPoint(splitPoint) == null) {
+			final FragmentPrefetcher fragmentPrefetcher = new FragmentPrefetcher(
+					splitPoint);
+			idToPrefetcher.put(splitPoint, fragmentPrefetcher);
+			fragmentPrefetcher.fetch();
+		}
 	}
 
 	private void fetch() {

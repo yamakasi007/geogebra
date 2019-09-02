@@ -49,9 +49,10 @@ public class OfflineLoadingStrategy extends LoadingStrategyBase {
 			@Override
 			public void callback(String code) {
 				request.tryInstall(code);
-			}};
+			}
+		};
 		FragmentPrefetcher prefetch = FragmentPrefetcher
-				.forFragment(fragment);
+				.forSplitPoint(fragment);
 		if (prefetch != null) {
 			prefetch.runAfterPrefetch(callback);
 			return true;
