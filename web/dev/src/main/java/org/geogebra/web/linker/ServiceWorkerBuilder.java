@@ -19,6 +19,12 @@ import com.google.gwt.core.ext.linker.EmittedArtifact;
 public class ServiceWorkerBuilder {
 
 	private static final String CAS_CHUNK_FILENAME = "13.nocache.js";
+	private static final String[] SKIP_RESOURCE_SUFFIXES = { "symbolMap",
+			".xml.gz", "rpc.log", "gwt.rpc", "manifest.txt",
+			"rpcPolicyManifest", "cssmap", "MANIFEST.MF", ".txt", ".php",
+			"README", "COPYING", "LICENSE", "oauthWindow.html",
+			"windowslive.html", "devmode.js", "js/properties_",
+			CAS_CHUNK_FILENAME };
 	private LinkerContext context;
 	private TreeLogger logger;
 	private ArtifactSet artifacts;
@@ -38,17 +44,29 @@ public class ServiceWorkerBuilder {
 		this.logger = logger;
 	}
 
-	private static String buildManifest(StringBuilder allResoucesSb,
-			TreeLogger logger) {
-		// we have to generate this unique id because the resources can change
-		// but the hashed cache.html files can remain the same. build cache list
-		String id = GeoGebraConstants.VERSION_STRING + ":"
-				+ System.currentTimeMillis();
-		String template = readTemplateAsString(logger);
-		String sworkerContent = template
-				.replace("%URLS%", allResoucesSb.toString())
-				.replace("%ID%", id);
-		return sworkerContent;
+	/**
+	 * @param version
+	 *            GeoGebra version in CDN (either "latest" or full version
+	 *            number)
+	 * @return service worker content
+	 */
+	public String getWorkerCode(String version) {
+		StringBuilder allResoucesSb = new StringBuilder();
+		if (artifacts != null) {
+			StringBuilder publicSourcesSb = getAllCacheableArtifactsAsPartialJSON(
+					artifacts, getModuleUrl(version));
+
+			String[] cacheExtraFiles = AppCacheLinkerSettings
+					.otherCachedFiles();
+			allResoucesSb.append(publicSourcesSb);
+			for (String staticFile : cacheExtraFiles) {
+				allResoucesSb.append(",\n    \"");
+				allResoucesSb.append(staticFile);
+				allResoucesSb.append("\"");
+			}
+		}
+
+		return buildManifest(allResoucesSb, logger);
 	}
 
 	private static StringBuilder getAllCacheableArtifactsAsPartialJSON(
@@ -60,14 +78,43 @@ public class ServiceWorkerBuilder {
 				String pathName = ea.getPartialPath();
 				if (!skipResource(pathName)) {
 					if (publicSourcesSb.length() > 0) {
-						publicSourcesSb.append(",\n");
+						publicSourcesSb.append(",\n    ");
 					}
-					publicSourcesSb.append("\"" + moduleUrl
-							+ pathName.replace("\\", "/") + "\"");
+					publicSourcesSb.append("\"");
+					publicSourcesSb.append(moduleUrl);
+					publicSourcesSb.append(pathName.replace("\\", "/"));
+					publicSourcesSb.append("\"");
 				}
 			}
 		}
 		return publicSourcesSb;
+	}
+
+	private static boolean skipResource(String pathName) {
+		for (String suffix : SKIP_RESOURCE_SUFFIXES) {
+			if (pathName.endsWith(suffix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String getModuleUrl(String version) {
+		return "https://www.geogebra.org/apps/" + version + "/"
+				+ context.getModuleName() + "/";
+	}
+
+	private static String buildManifest(StringBuilder allResoucesSb,
+			TreeLogger logger) {
+		// we have to generate this unique id because the resources can change
+		// but the hashed cache.html files can remain the same. build cache list
+		String id = GeoGebraConstants.VERSION_STRING + ":"
+				+ System.currentTimeMillis();
+		String template = readTemplateAsString(logger);
+		String sworkerContent = template
+				.replace("%URLS%", allResoucesSb.toString())
+				.replace("%ID%", id);
+		return sworkerContent;
 	}
 
 	private static String readTemplateAsString(TreeLogger logger) {
@@ -90,49 +137,4 @@ public class ServiceWorkerBuilder {
 		return sb.toString();
 	}
 
-	private static boolean skipResource(String pathName) {
-		return pathName.endsWith("symbolMap") || pathName.endsWith(".xml.gz")
-				|| pathName.endsWith("rpc.log") || pathName.endsWith("gwt.rpc")
-				|| pathName.endsWith("manifest.txt")
-				|| pathName.startsWith("rpcPolicyManifest")
-				|| pathName.endsWith("cssmap")
-				|| pathName.endsWith("MANIFEST.MF") || pathName.endsWith(".txt")
-				|| pathName.endsWith(".php") || pathName.endsWith("README")
-				|| pathName.endsWith("COPYING") || pathName.endsWith("LICENSE")
-				|| pathName.endsWith("oauthWindow.html")
-				|| pathName.endsWith("windowslive.html")
-				|| pathName.endsWith("devmode.js")
-				|| pathName.startsWith("js/properties_")
-				|| pathName.endsWith(CAS_CHUNK_FILENAME);
-	}
-
-	/**
-	 * @param version
-	 *            GeoGebra version in CDN (either "latest" or full version
-	 *            number)
-	 * @return service worker content
-	 */
-	public String getWorkerCode(String version) {
-		StringBuilder allResoucesSb = new StringBuilder();
-		if (artifacts != null) {
-			StringBuilder publicSourcesSb = getAllCacheableArtifactsAsPartialJSON(
-					artifacts, getModuleUrl(version));
-
-			String[] cacheExtraFiles = AppCacheLinkerSettings
-					.otherCachedFiles();
-			allResoucesSb.append(publicSourcesSb);
-			for (String staticFile : cacheExtraFiles) {
-				allResoucesSb.append(",\n      \"");
-				allResoucesSb.append(staticFile);
-				allResoucesSb.append("\"");
-			}
-		}
-
-		return buildManifest(allResoucesSb, logger);
-	}
-
-	private String getModuleUrl(String version) {
-		return "https://www.geogebra.org/apps/" + version + "/"
-				+ context.getModuleName() + "/";
-	}
 }
