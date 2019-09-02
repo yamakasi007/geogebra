@@ -122,7 +122,7 @@ public class ServiceWorkerBuilder {
 					.otherCachedFiles();
 			allResoucesSb.append(publicSourcesSb);
 			for (String staticFile : cacheExtraFiles) {
-				allResoucesSb.append(",\n\"");
+				allResoucesSb.append(",\n      \"");
 				allResoucesSb.append(staticFile);
 				allResoucesSb.append("\"");
 			}
