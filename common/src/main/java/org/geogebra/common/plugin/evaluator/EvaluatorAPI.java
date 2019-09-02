@@ -25,6 +25,7 @@ public class EvaluatorAPI {
 	private static final String LATEX_KEY = "latex";
 	private static final String FLAT_KEY = "flat";
 	private static final String EVAL_KEY = "eval";
+	private static final String NAN = "NaN";
 
 	private MathFieldInternal mathFieldInternal;
 	private Serializer flatSerializer;
@@ -89,7 +90,7 @@ public class EvaluatorAPI {
 	private String getEvalString(String formula) {
 		ValidExpression expression = parseString(formula);
 		if (expression == null || !expression.isNumberValue()) {
-			return null;
+			return NAN;
 		}
 		return evaluateExpression(expression);
 	}
@@ -100,13 +101,13 @@ public class EvaluatorAPI {
 					expression, false, null, null, evalInfo);
 			return processElements(elements);
 		} catch (Exception e) {
-			return null;
+			return NAN;
 		}
 	}
 
 	private String processElements(GeoElementND[] elements) {
 		if (elements == null || elements.length > 1) {
-			return null;
+			return NAN;
 		}
 		GeoElementND element = elements[0];
 		return element.toValueString(StringTemplate.defaultTemplate);

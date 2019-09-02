@@ -35,20 +35,22 @@ public class EvaluatorAPITest extends BaseUnitTest {
 	public void testGetEvaluatorValueNonNumeric() {
 		typer.type("GeoGebra");
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals("{\"latex\":\"GeoGebra\",\"flat\":\"GeoGebra\"}", value);
+		Assert.assertEquals("{\"latex\":\"GeoGebra\",\"flat\":\"GeoGebra\",\"eval\":\"NaN\"}",
+				value);
 	}
 
 	@Test
 	public void testEmptyInput() {
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals("{\"latex\":\"\\\\nbsp \",\"flat\":\"\"}", value);
+		Assert.assertEquals("{\"latex\":\"\\\\nbsp \",\"flat\":\"\",\"eval\":\"NaN\"}", value);
 	}
 
 	@Test
 	public void testInvalidInput() {
 		typer.type("1/");
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals("{\"latex\":\"{\\\\frac{1}{\\\\nbsp }}\",\"flat\":\"(1)\\/()\"}",
+		Assert.assertEquals(
+				"{\"latex\":\"{\\\\frac{1}{\\\\nbsp }}\",\"flat\":\"(1)\\/()\",\"eval\":\"NaN\"}",
 				value);
 	}
 }
