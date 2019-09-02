@@ -11,21 +11,18 @@ import org.geogebra.web.html5.gui.voiceInput.questResErr.QuestResErrInterface;
 
 /**
  * @author Csilla
- * 
+ *
  *         handle different tasks
  *
  */
 public class VoiceInputDispatcher {
-	private VoiceInputOutputController controller;
 	private ArrayList<QuestResErrInterface> questList;
 	private VoiceInputCommandInterface currentCommand;
 
 	/**
-	 * @param controller
-	 *            input output controller
+	 * command dispatcher
 	 */
-	public VoiceInputDispatcher(VoiceInputOutputController controller) {
-		this.controller = controller;
+	public VoiceInputDispatcher() {
 		questList = new ArrayList<>();
 	}
 
@@ -51,29 +48,49 @@ public class VoiceInputDispatcher {
 	public void processCommand(int commandID) {
 		questList.clear();
 		switch (commandID) {
-		case QuestResErrConstants.CREATE_POINT:
-			setCurrentCommand(new VoiceInputPoint());
-			break;
-		case QuestResErrConstants.CREATE_SEGMENT:
-			setCurrentCommand(new VoiceInputSegment());
-			break;
-		case QuestResErrConstants.CREATE_CIRCLE:
-			setCurrentCommand(new VoiceInputCircle());
-			break;
-		default:
-			break;
+			case QuestResErrConstants.CREATE_POINT:
+				setCurrentCommand(new VoiceInputPoint());
+				break;
+			case QuestResErrConstants.CREATE_SEGMENT:
+				setCurrentCommand(new VoiceInputSegment());
+				break;
+			case QuestResErrConstants.CREATE_CIRCLE:
+				setCurrentCommand(new VoiceInputCircle());
+				break;
+			default:
+				break;
 		}
 		questList = currentCommand.getQuestResList();
-		controller.collectInput();
 	}
 
 	/**
 	 * @return list of questions for current task
-	 * 
+	 *
 	 *         e.g. for point we need an x coordinate and y coordinate
 	 */
 	public ArrayList<QuestResErrInterface> getQuestList() {
 		return questList;
 	}
 
+	/**
+	 * @param command
+	 *            tool name
+	 * @return tool id
+	 */
+	public int getCommandID(String command) {
+		switch (command) {
+			case "Point":
+			case "point":
+				return QuestResErrConstants.CREATE_POINT;
+			case "Segment":
+			case "segment":
+				return QuestResErrConstants.CREATE_SEGMENT;
+			case "Circle":
+			case "circle":
+				return QuestResErrConstants.CREATE_CIRCLE;
+
+			default:
+				return QuestResErrConstants.NOT_SUPPORTED;
+		}
+	}
 }

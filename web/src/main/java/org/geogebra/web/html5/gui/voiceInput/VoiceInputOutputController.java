@@ -3,7 +3,6 @@ package org.geogebra.web.html5.gui.voiceInput;
 import java.util.ArrayList;
 
 import org.geogebra.common.util.ExternalAccess;
-import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.voiceInput.questResErr.QuestResErrConstants;
 import org.geogebra.web.html5.gui.voiceInput.questResErr.QuestResErrInterface;
@@ -15,51 +14,63 @@ import org.geogebra.web.html5.main.AppW;
  */
 public class VoiceInputOutputController {
 
-	private AppW appW;
-	private VoiceInputDispatcher dispatcher;
-	@ExternalAccess
-	private String gotResult = "false";
-	@ExternalAccess
-	private int action = -1;
-	private ArrayList<Double> results = new ArrayList<>();
+    private AppW appW;
+    private VoiceInputDispatcher dispatcher;
+    private NaturalLanguageProcessor nlp;
+    @ExternalAccess
+    private String gotResult = "false";
+    @ExternalAccess
+    private int action = -1;
+    private ArrayList<Double> results = new ArrayList<>();
 
-	/**
-	 * @param appW
-	 *            see {@link AppW}
-	 */
-	public VoiceInputOutputController(AppW appW) {
-		this.appW = appW;
-		dispatcher = new VoiceInputDispatcher(this);
-	}
-	
-	public AppW getAppW() {
-		return appW;
-	}
+    /**
+     * @param appW
+     *            see {@link AppW}
+     */
+    public VoiceInputOutputController(AppW appW) {
+        this.appW = appW;
+        dispatcher = new VoiceInputDispatcher();
+        nlp = new NaturalLanguageProcessor(this);
+    }
 
-	/**
-	 * @param isResult
-	 *            false if speech recognition stopped unexpectedly
-	 */
-	public void setGotResult(String isResult) {
-		this.gotResult = isResult;
-	}
+    /**
+     * @return see {@link AppW}
+     */
+    public AppW getAppW() {
+        return appW;
+    }
 
-	/**
-	 * @param action
-	 *            id of the action
-	 */
-	public void setAction(int action) {
-		this.action = action;
-	}
+    /**
+     * @return dispatcher
+     */
+    public VoiceInputDispatcher getDispatcher() {
+        return dispatcher;
+    }
 
-	/**
-	 * @param toSay
-	 *            what to say
-	 * @param outputType
-	 *            type of the waited answer
-	 */
-	public native void initSpeechSynth(String toSay,
-			int outputType) /*-{
+    /**
+     * @param isResult
+     *            false if speech recognition stopped unexpectedly
+     */
+    public void setGotResult(String isResult) {
+        this.gotResult = isResult;
+    }
+
+    /**
+     * @param action
+     *            id of the action
+     */
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    /**
+     * @param toSay
+     *            what to say
+     * @param outputType
+     *            type of the waited answer
+     */
+    public native void initSpeechSynth(String toSay,
+                                       int outputType) /*-{
 		var synth = window.speechSynthesis;
 		var that = this;
 		if (!('webkitSpeechRecognition' in window)) {
@@ -92,22 +103,22 @@ public class VoiceInputOutputController {
 		synth.speak(utterThis);
 	}-*/;
 
-	/**
-	 * play a beep if user can start speaking
-	 */
-	public native void playBeep() /*-{
+    /**
+     * play a beep if user can start speaking
+     */
+    public native void playBeep() /*-{
 		var snd = new Audio();
 		snd.src = "https://soundbible.com/mp3/Electronic_Chime-KevanGC-495939803.mp3";
 		snd.play();
 	}-*/;
 
-	/**
-	 * init speech recognition
-	 * 
-	 * @param actionID
-	 *            action
-	 */
-	public native void initSpeechRec(int actionID) /*-{
+    /**
+     * init speech recognition
+     *
+     * @param actionID
+     *            action
+     */
+    public native void initSpeechRec(int actionID) /*-{
 		var that = this;
 		var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 		var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
@@ -168,93 +179,67 @@ public class VoiceInputOutputController {
 		}
 	}-*/;
 
-	/**
-	 * @param actionType
-	 *            action
-	 * @param result
-	 *            from speech recognition
-	 */
-	public void onResponse(int actionType, String result) {
-		if (actionType == QuestResErrConstants.COMMAND) {
-		
-			// this.speechRecResultTxt = result;
-			Log.debug("SPEECH REC: Result: " + result);
-			if (result.contains("create")) {
-				processCommandInput(result);
-			} else {
-				initSpeechSynth(
-						"I couldn't interpret "
-								+ ("".equals(result) ? "it" : result)
-								+ ". Please repeat command. Must contain create.",
-						QuestResErrConstants.COMMAND);
-			}
+    /**
+     * @param actionType
+     *            action
+     * @param result
+     *            from speech recognition
+     */
+    public void onResponse(int actionType, String result) {
+        if (actionType == QuestResErrConstants.COMMAND) {
+            nlp.processInput(result);
+        } else {
+            validateResponse(result);
+        }
+    }
 
-		} else {
-			validateResponse(result);
-		}
-	}
-	
-	private void validateResponse(String result) {
-		QuestResErrInterface currQuest = dispatcher.getQuestList().get(0);
-		currQuest.setResponse(result);
-		String validityMsg = currQuest.checkValidity();
-		if ("OK".equals(validityMsg)) {
-			results.add(currQuest.getResponseAsNumber());
-			dispatcher.getQuestList().remove(0);
-			collectInput();
-		} else {
-			initSpeechSynth(validityMsg + currQuest.getQuestion(), currQuest.getID());
-		}
-	}
+    /**
+     * @param result
+     *            parameter input from the user (e.g. 10 for radius)
+     */
+    public void validateResponse(String result) {
+        QuestResErrInterface currQuest = dispatcher.getQuestList().get(0);
+        currQuest.setResponse(result);
+        String validityMsg = currQuest.checkValidity();
+        if ("OK".equals(validityMsg)) {
+            results.add(currQuest.getResponseAsNumber());
+            dispatcher.getQuestList().remove(0);
+            collectInput();
+        } else {
+            initSpeechSynth((!"".equals(currQuest.getResponse())
+                    ? "You said " + currQuest.getResponse() + ". "
+                    : "I didn't understood. ")
+                    + validityMsg + currQuest.getQuestion(), currQuest.getID());
+        }
+    }
 
-	private void processCommandInput(String result) {
-		String[] txtArray = result.split("create ");
-		int commandID = getCommandID(txtArray[1]);
-		if (txtArray.length == 2
-				&& "".equals(txtArray[0])
-				&& commandID != QuestResErrConstants.NOT_SUPPORTED) {
-			dispatcher.processCommand(commandID);
-		} else {
-			initSpeechSynth(
-					"I couldn't interpret " + result
-							+ ". Please repeat command. Must contain create and tool name.",
-					QuestResErrConstants.COMMAND);
-		}
-	}
+    @ExternalAccess
+    private void showMessage(String msg) {
+        ToolTipManagerW.sharedInstance().showBottomMessage(msg, true, appW);
+    }
 
-	private static int getCommandID(String command) {
-		switch (command) {
-		case "Point":
-		case "point":
-			return QuestResErrConstants.CREATE_POINT;
-		case "Segment":
-		case "segment":
-			return QuestResErrConstants.CREATE_SEGMENT;
-		case "Circle":
-		case "circle":
-			return QuestResErrConstants.CREATE_CIRCLE;
-
-		default:
-			return QuestResErrConstants.NOT_SUPPORTED;
-		}
-	}
-
-	@ExternalAccess
-	private void showMessage(String msg) {
-		ToolTipManagerW.sharedInstance().showBottomMessage(msg, true, appW);
-	}
-
-	/**
-	 * collect necessary input from the user by processing the question list
-	 */
-	public void collectInput() {
-		if (dispatcher.getQuestList().isEmpty()) {
-			initSpeechSynth("Object created.", -1);
-			dispatcher.getCurrentCommand().createGeo(appW, results);
-			results.clear();
-		} else {
-			QuestResErrInterface currQuest = dispatcher.getQuestList().get(0);
-			initSpeechSynth(currQuest.getQuestion(), currQuest.getID());
-		}
-	}
+    /**
+     * collect necessary input from the user by processing the question list
+     */
+    public void collectInput() {
+        // nothing to process -> make output object
+        if (dispatcher.getQuestList().isEmpty()) {
+            initSpeechSynth("Object created.", -1);
+            dispatcher.getCurrentCommand().createGeo(appW, results);
+            results.clear();
+        }
+        // still something to process
+        else {
+            // get first parameter
+            QuestResErrInterface currQuest = dispatcher.getQuestList().get(0);
+            // no input from user -> ask it
+            if (currQuest.getResponse() == "") {
+                initSpeechSynth(currQuest.getQuestion(), currQuest.getID());
+            }
+            // input from user -> validate it
+            else {
+                validateResponse(currQuest.getResponse());
+            }
+        }
+    }
 }

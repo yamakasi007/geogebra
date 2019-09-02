@@ -3947,7 +3947,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		 * Csilla Master (do not dare to change this :)
 		 */
 		case SPEECH_RECOGNITION:
-			return false;
+			return true;
 
 		case SURFACE_OF_REVOLUTION_TOOL:
 			return prerelease;
