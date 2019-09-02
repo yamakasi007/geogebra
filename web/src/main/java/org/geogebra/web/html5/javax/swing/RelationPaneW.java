@@ -1,7 +1,7 @@
 package org.geogebra.web.html5.javax.swing;
 
-import org.geogebra.common.gui.util.RelationMore;
 import org.geogebra.common.javax.swing.RelationPane;
+import org.geogebra.common.kernel.Relation;
 import org.geogebra.common.main.App;
 import org.geogebra.web.html5.gui.GDialogBox;
 import org.geogebra.web.html5.gui.util.LayoutUtilW;
@@ -30,7 +30,7 @@ public class RelationPaneW extends GDialogBox
 
 	private Button btnOK;
 	private Button[] btnCallbacks;
-	private RelationMore[] callbacks;
+	private Relation[] callbacks;
 	private int rels;
 	private FlowPanel[] texts;
 	private FlowPanel[] buttons;
@@ -68,7 +68,7 @@ public class RelationPaneW extends GDialogBox
 		rels = relations.length;
 
 		btnCallbacks = new Button[rels];
-		callbacks = new RelationMore[rels];
+		callbacks = new Relation[rels];
 		texts = new FlowPanel[rels];
 		buttons = new FlowPanel[rels];
 
@@ -137,15 +137,21 @@ public class RelationPaneW extends GDialogBox
 						LoggerW.loaded("prover");
 						for (int i = 0; i < rels; ++i) {
 							if (source == btnCallbacks[i]) {
-								callbacks[i].action(RelationPaneW.this, i);
+								expandRow(i);
 							}
 						}
 					}
 				}, null);
 	}
 
-	@Override
-	public void updateRow(int row, RelationRow relation) {
+	/**
+	 * Update UI after More button clicked
+	 * 
+	 * @param row
+	 *            row number
+	 */
+	protected void expandRow(int row) {
+		RelationRow relation = callbacks[row].getExpandedRow(row);
 		texts[row].clear();
 		HTML text = new HTML(relation.getInfo());
 		texts[row].add(text);
