@@ -2,7 +2,6 @@ package org.geogebra.web.html5.main;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.geogebra.common.kernel.commands.CommandDispatcher;
 import org.geogebra.common.kernel.commands.CommandNotLoadedError;
@@ -123,7 +122,10 @@ public class AsyncManager {
 	private static AsyncModule[] parse(String[] modules) {
 		ArrayList<AsyncModule> parsed = new ArrayList<>();
 		for (String name : modules) {
-			parsed.add(AsyncModule.valueOf(name.toUpperCase(Locale.US)));
+			AsyncModule module = AsyncModule.parseOrNull(name);
+			if (module != null) {
+				parsed.add(module);
+			}
 		}
 		return parsed.toArray(new AsyncModule[0]);
 	}

@@ -129,7 +129,7 @@ public class RelationPaneW extends GDialogBox
 			hide();
 		}
 
-		((AppW) app).getAsyncManager().asyncEvalCommand("Prove(true)",
+		((AppW) app).getAsyncManager().asyncEvalCommand("Delete(Prove(true))",
 				new Runnable() {
 
 					@Override
