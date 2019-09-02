@@ -774,6 +774,7 @@
 	z-index: 9999;
 }
 
-.inputBoxWillChange {
+.gbox {
     will-change: transform;
+    z-index: 50;
 }

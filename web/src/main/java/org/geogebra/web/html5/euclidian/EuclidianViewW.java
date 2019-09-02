@@ -1320,7 +1320,6 @@ public class EuclidianViewW extends EuclidianView implements
 	@Override
 	public void add(GBox box) {
 		if (evPanel != null) {
-			GBoxW.getImpl(box).addStyleName("inputBoxWillChange");
 			evPanel.getAbsolutePanel().add(GBoxW.getImpl(box),
 			        (int) box.getBounds().getX(), (int) box.getBounds().getY());
 		}
