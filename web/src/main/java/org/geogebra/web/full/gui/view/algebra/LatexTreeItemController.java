@@ -1,7 +1,10 @@
 package org.geogebra.web.full.gui.view.algebra;
 
+import java.util.HashMap;
+
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
+import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.StringUtil;
@@ -129,7 +132,15 @@ public class LatexTreeItemController extends RadioTreeItemController
 			app.getSelectionManager().clearSelectedGeos();
 		}
 		item.onKeyTyped();
-		this.dispatchEditEvent(EventType.EDITOR_KEY_TYPED);
+		HashMap<String, String> details = new HashMap<>();
+		Event event =
+				new Event(
+						EventType.EDITOR_KEY_TYPED,
+						item.getGeo(),
+						null,
+						null,
+						details);
+		app.dispatchEvent(event);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package org.geogebra.common.plugin;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 
@@ -18,6 +19,8 @@ public class Event {
 	public final String argument;
 	/** secondary target */
 	public final ArrayList<GeoElement> targets;
+	/** details */
+	public final Map<String, String> details;
 	private boolean alwaysDispatched;
 
 	public Event(EventType type) {
@@ -43,11 +46,7 @@ public class Event {
 	 *            extra info
 	 */
 	public Event(EventType type, GeoElement target, String argument) {
-		// this( type, target, argument);
-		this.type = type;
-		this.target = target;
-		this.argument = argument;
-		this.targets = null;
+		this( type, target, argument, null);
 	}
 
 	/**
@@ -60,12 +59,22 @@ public class Event {
 	 * @param targets
 	 *            extra targets
 	 */
-	public Event(EventType type, GeoElement target, String argument,
-			ArrayList<GeoElement> targets) {
+	public Event(
+			EventType type, GeoElement target, String argument, ArrayList<GeoElement> targets) {
+		this(type, target, argument, targets, null);
+	}
+
+	public Event(
+			EventType type,
+			GeoElement target,
+			String argument,
+			ArrayList<GeoElement> targets,
+			Map<String, String> details) {
 		this.type = type;
 		this.target = target;
 		this.argument = argument;
 		this.targets = targets;
+		this.details = details;
 	}
 
 	/**
