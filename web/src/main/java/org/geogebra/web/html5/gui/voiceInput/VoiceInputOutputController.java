@@ -233,7 +233,7 @@ public class VoiceInputOutputController {
             // get first parameter
             QuestResErrInterface currQuest = dispatcher.getQuestList().get(0);
             // no input from user -> ask it
-            if (currQuest.getResponse() == "") {
+            if ("".equals(currQuest.getResponse())) {
                 initSpeechSynth(currQuest.getQuestion(), currQuest.getID());
             }
             // input from user -> validate it

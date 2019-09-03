@@ -48,7 +48,7 @@ public class NaturalLanguageProcessor {
 		act = "";
 		xCoordSet = false;
 		parameterWord = "";
-		String pointTest1 = "I would like to create a point with coordinates 1 and 2.";
+		/**String pointTest1 = "I would like to create a point with coordinates 1 and 2.";
 		String pointTest2 = "I might want to draw a point with coordinates 1.";
 		String pointTest3 = "I would prefer to construct a point with coordinates.";
 		String pointTest4 = "Please build a point.";
@@ -63,21 +63,23 @@ public class NaturalLanguageProcessor {
 		String segmentTest3 = "I would prefer to construct a segment with coordinates 1 and 2.";
 		String segmentTest4 = "I would like to create a segment with coordinates 1.";
 		String segmentTest5 = "I might want to draw a segment with coordinates 10 and coordinates 12.";
-		String segmentTest6 = "Please build a segment.";
+		String segmentTest6 = "Please build a segment.";**/
 		String text = cleanText(input);
-		if (text != "") {
+		if (!"".equals(text)) {
 			tokenize(text);
 			// act and tool was recognized
 			if (!"".equals(act) && !"".equals(tool)) {
 				controller.collectInput();
 			} else {
 				controller.initSpeechSynth(
-						"I couldn't interpret it. Please repeat command. Must contain create and tool name.",
+						"I couldn't interpret it. Please repeat" +
+								" command. Must contain create and tool name.",
 						QuestResErrConstants.COMMAND);
 			}
 		} else {
 			controller.initSpeechSynth(
-					"I couldn't interpret it. Please repeat command. Must contain create and tool name.",
+					"I couldn't interpret it. Please repeat command. " +
+							"Must contain create and tool name.",
 					QuestResErrConstants.COMMAND);
 		}
 	}
@@ -88,7 +90,7 @@ public class NaturalLanguageProcessor {
 		// turn upper case letters to lower case
 		cleanedText = cleanedText.toLowerCase();
 		// remove unnecessary tabs
-		cleanedText.replace("\t", " ");
+		cleanedText = cleanedText.replace("\t", " ");
 		// remove double spaces
 		while (cleanedText.contains("  ")) {
 			cleanedText = cleanedText.replace("  ", " ");
