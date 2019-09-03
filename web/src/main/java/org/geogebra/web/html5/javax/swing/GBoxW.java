@@ -30,7 +30,7 @@ public class GBoxW extends GBox {
 		this.ec = ec;
 		impl = new SimplePanel();
 		// impl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		impl.getElement().addClassName("gbox");
+		impl.addStyleName("gbox");
 	}
 
 	/**
