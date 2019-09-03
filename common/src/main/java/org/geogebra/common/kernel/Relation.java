@@ -1,6 +1,5 @@
 package org.geogebra.common.kernel;
 
-import java.util.Iterator;
 import java.util.SortedSet;
 
 import org.geogebra.common.cas.GeoGebraCAS;
@@ -41,6 +40,7 @@ public class Relation {
 	private App app;
 	private String[] relInfos;
 	private RelationCommand[] relAlgos;
+	private Kernel kernel;
 
 	/**
 	 * @param app
@@ -59,6 +59,7 @@ public class Relation {
 	public Relation(final App app, final GeoElement ra,
 			final GeoElement rb, final GeoElement rc, final GeoElement rd) {
 		this.app = app;
+		this.kernel = app.getKernel();
 		this.ra = ra;
 		this.rb = rb;
 		this.rc = rc;
@@ -79,8 +80,7 @@ public class Relation {
 	public RelationRow[] getRows() {
 		// Forcing CAS to load. This will be essential for the web version
 		// to run the Prove[Are...] commands with getting no "undefined":
-		Kernel k = app.getKernel();
-		GeoGebraCAS cas = (GeoGebraCAS) k.getGeoGebraCAS();
+		GeoGebraCAS cas = (GeoGebraCAS) kernel.getGeoGebraCAS();
 		try {
 			cas.getCurrentCAS().evaluateRaw("1");
 		} catch (Throwable e) {
@@ -88,24 +88,18 @@ public class Relation {
 		}
 		// Computing numerical results and collecting them alphabetically:
 		SortedSet<Report> relInfosAll = RelationNumerical.sortAlphabetically(
-				new RelationNumerical(k).relation(ra, rb, rc, rd));
+				new RelationNumerical(kernel).relation(ra, rb, rc, rd));
 		// Collecting information for showing them in the popup window:
-		Iterator<Report> it = relInfosAll.iterator();
 		int rels = relInfosAll.size();
 
 		relInfos = new String[rels];
 		relAlgos = new RelationCommand[rels];
-		Boolean[] relBools = new Boolean[rels];
+		final RelationRow[] rr = new RelationRow[rels];
 		int i = 0;
-		while (it.hasNext()) {
-			Report r = it.next();
+		for (Report r : relInfosAll) {
 			relInfos[i] = r.stringResult.replace("\n", "<br>");
 			relAlgos[i] = r.symbolicCheck;
-			relBools[i] = r.boolResult;
-			i++;
-		}
-		final RelationRow[] rr = new RelationRow[rels];
-		for (i = 0; i < rels; i++) {
+			Boolean result = r.boolResult;
 			rr[i] = new RelationRow();
 			final String relInfo = relInfos[i];
 			// First information shown (result of numerical checks):
@@ -115,9 +109,10 @@ public class Relation {
 									"CheckedNumerically",
 									"(checked numerically)")
 							+ "</html>");
-			if (relBools[i] != null && relBools[i] && relAlgos[i] != null) {
+			if (result != null && result && relAlgos[i] != null) {
 				rr[i].setCallback(this);
 			}
+			i++;
 		}
 
 		// just send first row to event
@@ -229,7 +224,7 @@ public class Relation {
 	final public String[] getNDGConditions(RelationCommand command) {
 		Construction cons = ra.getConstruction();
 
-		Command ae = new Command(cons.getKernel(), command.name(), false);
+		Command ae = new Command(kernel, command.name(), false);
 		String[] ret;
 		try {
 			switch (command) {
@@ -271,9 +266,9 @@ public class Relation {
 			ret[0] = ""; // undefined (UNKNOWN)
 			return ret;
 		}
-		Command proveCommand = new Command(cons.getKernel(), Commands.ProveDetails.name(), false);
+		Command proveCommand = new Command(kernel, Commands.ProveDetails.name(), false);
 		addArguments(proveCommand, ae, new GeoBoolean(cons, true));
-		GeoElement[] proveResult = cons.getKernel().getAlgebraProcessor().processCommand(proveCommand,
+		GeoElement[] proveResult = kernel.getAlgebraProcessor().processCommand(proveCommand,
 				new EvalInfo(false));
 
 		GeoList list = (GeoList) proveResult[0];
