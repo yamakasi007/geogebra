@@ -1,11 +1,10 @@
 package org.geogebra.web.full.gui.view.algebra;
 
-import java.util.HashMap;
-
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
+import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.full.gui.GuiManagerW;
@@ -29,6 +28,7 @@ public class LatexTreeItemController extends RadioTreeItemController
 	private InputSuggestions sug;
 	private RetexKeyboardListener retexListener;
 	private EvaluateInput evalInput;
+	private EvaluatorAPI evaluatorAPI;
 
 	/**
 	 * @param item
@@ -38,6 +38,7 @@ public class LatexTreeItemController extends RadioTreeItemController
 		super(item);
 		evalInput = new EvaluateInput(item, this);
 		evalInput.setUsingValidInput(app.getActivity().useValidInput());
+		evaluatorAPI = new EvaluatorAPI(app.getKernel(), getMathField().getInternal());
 	}
 
 	@Override
@@ -132,14 +133,13 @@ public class LatexTreeItemController extends RadioTreeItemController
 			app.getSelectionManager().clearSelectedGeos();
 		}
 		item.onKeyTyped();
-		HashMap<String, String> details = new HashMap<>();
 		Event event =
 				new Event(
 						EventType.EDITOR_KEY_TYPED,
 						item.getGeo(),
 						null,
 						null,
-						details);
+						evaluatorAPI.getEvaluatorValue());
 		app.dispatchEvent(event);
 	}
 
