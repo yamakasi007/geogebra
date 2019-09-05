@@ -63,6 +63,13 @@ public class Event {
 		this(type, target, argument, targets, null);
 	}
 
+	/**
+	 * @param type     event type
+	 * @param target   target
+	 * @param argument extra info
+	 * @param targets  extra targets
+	 * @param details  details
+	 */
 	public Event(
 			EventType type,
 			GeoElement target,
