@@ -128,12 +128,20 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 	}
 
 	/**
-	 * @return the editor component
+	 * @return mathFieldW
 	 */
-	public EvaluatorAPI getAPI() {
-		if (api == null) {
-			api = new EvaluatorAPI(app.getKernel(), mathField.getInternal());
-		}
-		return api;
+	public MathFieldW getMathField() {
+		return mathField;
 	}
+
+
+    /**
+     * @return the editor component
+     */
+    public EvaluatorAPI getAPI() {
+        if (api == null) {
+            api = new EvaluatorAPI(app.getKernel(), mathField.getInternal());
+        }
+        return api;
+    }
 }
