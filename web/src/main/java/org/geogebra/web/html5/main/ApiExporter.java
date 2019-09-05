@@ -813,6 +813,18 @@ public class ApiExporter {
 		api.disableFpsMeasurement = function() {
 			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::disableFpsMeasurement()();
 		};
+		
+		api.testDraw = function() {
+			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::testDraw()();
+		};
+
+		api.startDrawRecording = function() {
+			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::startDrawRecording()();
+		};
+
+		api.endDrawRecordingAndLogResults = function() {
+			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::endDrawRecordingAndLogResults()();
+		};
 	}-*/;
 
 	/**
