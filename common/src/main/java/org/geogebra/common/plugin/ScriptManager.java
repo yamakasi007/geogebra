@@ -156,7 +156,7 @@ public abstract class ScriptManager implements EventListener {
 			args.add(evt.argument);
 		}
 		if (evt.details != null) {
-			args.add(evt.details.toString());
+			args.add(evt.details);
 		}
 
 		for (JsScript listener : listeners) {
