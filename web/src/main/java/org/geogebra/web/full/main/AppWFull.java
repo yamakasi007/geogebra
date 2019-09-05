@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.geogebra.common.GeoGebraConstants;
-import org.geogebra.common.GeoGebraConstants.Versions;
 import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.EuclidianController;
@@ -87,6 +86,7 @@ import org.geogebra.web.full.gui.view.dataCollection.DataCollection;
 import org.geogebra.web.full.helper.ResourcesInjectorFull;
 import org.geogebra.web.full.main.activity.CASActivity;
 import org.geogebra.web.full.main.activity.ClassicActivity;
+import org.geogebra.web.full.main.activity.EvaluatorActivity;
 import org.geogebra.web.full.main.activity.GeoGebraActivity;
 import org.geogebra.web.full.main.activity.GeometryActivity;
 import org.geogebra.web.full.main.activity.Graphing3DActivity;
@@ -325,6 +325,9 @@ public class AppWFull extends AppW implements HasKeyboard {
 				break;
 			case "notes":
 				activity = isMebis() ? new MebisNotesActivity() : new NotesActivity();
+				break;
+			case "evaluator":
+				activity = new EvaluatorActivity();
 				break;
 			default:
 				activity = new ClassicActivity(new AppConfigDefault());
@@ -2007,24 +2010,13 @@ public class AppWFull extends AppW implements HasKeyboard {
 				&& "auto".equals(getArticleElement().getDataParamAppName())) {
 			getArticleElement().attr("appName",
 					appName == null ? "" : appName);
-			Versions v = getVersion();
-			if ("graphing".equals(appName)) {
-				v = Versions.WEB_GRAPHING;
-			} else if ("geometry".equals(appName)) {
-				v = Versions.WEB_GEOMETRY;
-			} else if ("3d".equalsIgnoreCase(appName)) {
-				v = Versions.WEB_3D_GRAPHING;
-			} else if ("classic".equals(appName) || StringUtil.empty(appName)) {
-				v = Versions.WEB_FOR_BROWSER_3D;
+			String appCode = getConfig().getAppCode();
+
+			if ("classic".equals(appName) || StringUtil.empty(appName)) {
 				removeHeader();
-			} else if ("cas".equalsIgnoreCase(appName)) {
- 				v = Versions.WEB_CAS;
-			} else if ("notes".equals(appName)) {
-				v = Versions.WEB_NOTES;
 			}
 
-			if (v != getVersion()) {
-				setVersion(v);
+			if (!appCode.equals(appName)) {
 				this.activity = null;
 				initActivity();
 				getGuiManager().resetPanels();
