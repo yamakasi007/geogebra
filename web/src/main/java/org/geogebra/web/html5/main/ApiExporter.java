@@ -18,7 +18,7 @@ public class ApiExporter {
 	protected void addListenerFunctions(JavaScriptObject api, GgbAPIW ggbAPI,
 			JavaScriptObject listenerMappingFunction) {
 		addClientListener(api, ggbAPI, listenerMappingFunction);
-		addListenerFunctionsNative(api, ggbAPI, listenerMappingFunction);
+		addSpecificListenerFunctionsNative(api, ggbAPI, listenerMappingFunction);
 	}
 
 	/**
@@ -815,7 +815,6 @@ public class ApiExporter {
 		};
 	}-*/;
 
-
 	/**
 	 * @param api
 	 *            exported object
@@ -831,7 +830,10 @@ public class ApiExporter {
 		};
 	}-*/;
 
-	private native void addListenerFunctionsNative(JavaScriptObject api,
+	/**
+	 * Adds client listeners for specific events (add, update, click, ...)
+	 */
+	private native void addSpecificListenerFunctionsNative(JavaScriptObject api,
 			GgbAPIW ggbAPI, JavaScriptObject listenerMappingFunction) /*-{
 		var getId = listenerMappingFunction;
 

@@ -127,6 +127,7 @@ public class BaseActivity implements GeoGebraActivity {
 		return false;
 	}
 
+	@Override
 	public ApiExporter getApiExporter() {
 		return new ApiExporter();
 	}

@@ -1,14 +1,22 @@
 package org.geogebra.web.full.main.activity;
 
+import org.geogebra.common.util.ExternalAccess;
 import org.geogebra.web.html5.main.ApiExporter;
 import org.geogebra.web.html5.main.GgbAPIW;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+/**
+ * API exporter for evaluator app
+ */
 public class EvaluatorApiExporter extends ApiExporter {
 
 	private EvaluatorActivity evaluatorActivity;
 
+	/**
+	 * @param evaluatorActivity
+	 *            evaluator activity
+	 */
 	public EvaluatorApiExporter(EvaluatorActivity evaluatorActivity) {
 		this.evaluatorActivity = evaluatorActivity;
 	}
@@ -18,6 +26,7 @@ public class EvaluatorApiExporter extends ApiExporter {
 		addEditorState(api);
 	}
 
+	@ExternalAccess
 	private String getEditorState() {
 		return evaluatorActivity.getEditorAPI().getEvaluatorValue();
 	}
