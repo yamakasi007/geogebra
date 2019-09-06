@@ -34,7 +34,6 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 	private FlowPanel main;
 	private MathFieldW mathField;
 	private MathFieldScroller scroller;
-	private EvaluatorAPI api;
 
 	/**
 	 * Constructor
@@ -125,16 +124,6 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 	 */
 	public void addStyleName(String style) {
 		main.addStyleName(style);
-	}
-
-	/**
-	 * @return the editor component
-	 */
-	public EvaluatorAPI getAPI() {
-		if (api == null) {
-			api = new EvaluatorAPI(app.getKernel(), mathField.getInternal());
-		}
-		return api;
 	}
 
 	/**

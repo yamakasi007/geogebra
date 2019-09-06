@@ -99,7 +99,10 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 		mathFieldEditor.requestFocus();
 	}
 
+	/**
+	 * @return evaluator API
+	 */
 	public EvaluatorAPI getAPI() {
-		return mathFieldEditor.getAPI();
+		return evaluatorAPI;
 	}
 }
