@@ -114,9 +114,22 @@ public class ScriptManagerW extends ScriptManager {
 			}
 			app.callAppletJavaScript(jsFunction, args);
 		} catch (Throwable t) {
-			// Log.printStacktrace("");
 			Log.warn("Error in user script: " + jsFunction + " : "
 					+ t.getMessage());
+		}
+	}
+
+	@Override
+	public void callJavaScript(String jsFunction, String[] args, String jsonArgument) {
+		if (jsonArgument == null) {
+			callJavaScript(jsFunction, args);
+		} else {
+			try {
+				callListenerNativeJson(listeners.get(jsFunction), jsonArgument, args);
+			} catch (Throwable t) {
+				Log.warn("Error in user script: " + jsFunction + " : "
+						+ t.getMessage());
+			}
 		}
 	}
 
@@ -130,7 +143,6 @@ public class ScriptManagerW extends ScriptManager {
 			}
 			JsEval.callAppletJavaScript(jsFunction, arg0, arg1);
 		} catch (Throwable t) {
-			// Log.printStacktrace("");
 			Log.warn("Error in user script: " + jsFunction + " : "
 					+ t.getMessage());
 		}
@@ -144,6 +156,11 @@ public class ScriptManagerW extends ScriptManager {
 	private native void callListenerNativeArray(JavaScriptObject listener,
 			String... args) /*-{
 		listener(args);
+	}-*/;
+
+	private native void callListenerNativeJson(JavaScriptObject listener,
+		   String jsonArgument, String... args) /*-{
+		listener(Object.assign(args, JSON.parse(jsonArgument)));
 	}-*/;
 
 	private JavaScriptObject initAppletFunctions(GgbAPIW ggbAPI,
