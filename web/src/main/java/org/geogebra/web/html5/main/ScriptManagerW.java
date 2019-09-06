@@ -160,7 +160,15 @@ public class ScriptManagerW extends ScriptManager {
 
 	private native void callListenerNativeJson(JavaScriptObject listener,
 		   String jsonArgument, String... args) /*-{
-		listener(Object.assign(args, JSON.parse(jsonArgument)));
+        var parsed = JSON.parse(jsonArgument);
+
+        for (key in parsed) {
+            if (parsed.hasOwnProperty(key)) {
+                args[key] = parsed[key];
+            }
+        }
+
+		listener(args);
 	}-*/;
 
 	private JavaScriptObject initAppletFunctions(GgbAPIW ggbAPI,
