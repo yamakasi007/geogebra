@@ -186,9 +186,9 @@ public class PerspectiveDecoder {
 		if (code.length() == 0 || code.startsWith("search:")) {
 			return null;
 		}
-		for (int i = 1; i <= Layout.getDefaultPerspectivesLength(); i++) {
-			Perspective defaultPerspective = Layout.getDefaultPerspectives(i - 1);
-			if (code.equals(defaultPerspective.getDefaultID() + "")) {
+		for (int i = 0; i < Layout.getDefaultPerspectivesLength(); i++) {
+			Perspective defaultPerspective = Layout.getDefaultPerspectives(i);
+			if (defaultPerspective != null && code.equals(defaultPerspective.getDefaultID() + "")) {
 				return defaultPerspective;
 			}
 		}
@@ -290,7 +290,8 @@ public class PerspectiveDecoder {
 	}
 
 	/**
-	 * 
+	 * @param app
+	 *            application
 	 * @param code
 	 *            eg "+A" to open Algebra View
 	 */
