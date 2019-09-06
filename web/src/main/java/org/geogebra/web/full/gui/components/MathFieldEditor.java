@@ -4,6 +4,7 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Feature;
+import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.common.util.FormatConverterImpl;
 import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.gui.HasKeyboardPopup;
@@ -33,6 +34,7 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 	private FlowPanel main;
 	private MathFieldW mathField;
 	private MathFieldScroller scroller;
+	private EvaluatorAPI api;
 
 	/**
 	 * Constructor
@@ -123,5 +125,15 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 	 */
 	public void addStyleName(String style) {
 		main.addStyleName(style);
+	}
+
+	/**
+	 * @return the editor component
+	 */
+	public EvaluatorAPI getAPI() {
+		if (api == null) {
+			api = new EvaluatorAPI(app.getKernel(), mathField.getInternal());
+		}
+		return api;
 	}
 }

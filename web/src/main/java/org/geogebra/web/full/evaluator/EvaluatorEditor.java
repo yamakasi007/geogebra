@@ -1,6 +1,7 @@
 package org.geogebra.web.full.evaluator;
 
 import org.geogebra.common.main.App;
+import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -85,5 +86,9 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 
 	public void requestFocus() {
 		mathFieldEditor.requestFocus();
+	}
+
+	public EvaluatorAPI getAPI() {
+		return mathFieldEditor.getAPI();
 	}
 }

@@ -187,8 +187,9 @@ public class PerspectiveDecoder {
 			return null;
 		}
 		for (int i = 1; i <= Layout.getDefaultPerspectivesLength(); i++) {
-			if (code.equals(i + "")) {
-				return Layout.getDefaultPerspectives(i - 1);
+			Perspective defaultPerspective = Layout.getDefaultPerspectives(i - 1);
+			if (code.equals(defaultPerspective.getDefaultID() + "")) {
+				return defaultPerspective;
 			}
 		}
 		StringBuilder longCode = new StringBuilder();
