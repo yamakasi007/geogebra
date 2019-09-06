@@ -45,12 +45,8 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 	@Override
 	public void onKeyTyped() {
 		scrollContentIfNeeded();
-		Event event =
-				new Event(
-						EventType.EDITOR_KEY_TYPED,
-						null,
-						evaluatorAPI.getEvaluatorValue(),
-						null);
+		Event event = new Event(EventType.EDITOR_KEY_TYPED)
+				.setJsonArgument(evaluatorAPI.getEvaluatorValue());
 		app.dispatchEvent(event);
 	}
 

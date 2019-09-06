@@ -10,14 +10,20 @@ import org.geogebra.common.kernel.geos.GeoElement;
  * @author Arnaud
  */
 public class Event {
+
 	/** event type */
 	public final EventType type;
-	/** primary target */
-	public final GeoElement target;
-	/** generic argument, e.g. macro name */
-	public final String argument;
-	/** secondary target */
-	public final ArrayList<GeoElement> targets;
+
+    /** generic argument, e.g. macro name */
+	public String argument;
+	/** argument formatted as a JSON string */
+	public String jsonArgument;
+
+    /** primary target */
+    public GeoElement target;
+    /** secondary target */
+	public ArrayList<GeoElement> targets;
+
 	private boolean alwaysDispatched;
 
 	public Event(EventType type) {
@@ -64,21 +70,17 @@ public class Event {
 		this.targets = targets;
 	}
 
-	/**
-	 * @param type
-	 *            event type
-	 * @param target
-	 *            target
-	 * @param alwaysDispatch
-	 *            whether to override scripting block
-	 */
-	public Event(EventType type, GeoElement target,
-			boolean alwaysDispatch) {
-		this(type, target);
-		this.alwaysDispatched = alwaysDispatch;
-	}
+    public Event setJsonArgument(String jsonArgument) {
+        this.jsonArgument = jsonArgument;
+        return this;
+    }
 
-	/**
+    public Event setAlwaysDispatched(boolean alwaysDispatched) {
+        this.alwaysDispatched = alwaysDispatched;
+        return this;
+    }
+
+    /**
 	 * @return whether to override blocked scripting
 	 */
 	boolean isAlwaysDispatched() {
