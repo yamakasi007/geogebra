@@ -1,11 +1,14 @@
 package org.geogebra.web.full.evaluator;
 
 import org.geogebra.common.main.App;
+import org.geogebra.common.plugin.Event;
+import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.himamis.retex.editor.share.editor.MathFieldInternal;
 import com.himamis.retex.editor.share.event.MathFieldListener;
 import com.himamis.retex.editor.share.model.MathSequence;
 
@@ -16,7 +19,9 @@ import com.himamis.retex.editor.share.model.MathSequence;
  */
 public class EvaluatorEditor implements IsWidget, MathFieldListener {
 
+	private App app;
 	private MathFieldEditor mathFieldEditor;
+	private EvaluatorAPI evaluatorAPI;
 
 	/**
 	 * Constructor
@@ -25,8 +30,11 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 	 *            The application.
 	 */
 	public EvaluatorEditor(App app) {
+		this.app = app;
 		mathFieldEditor = new MathFieldEditor(app, this);
 		mathFieldEditor.addStyleName("evaluatorEditor");
+		MathFieldInternal mathFieldInternal = mathFieldEditor.getMathField().getInternal();
+		evaluatorAPI = new EvaluatorAPI(app.getKernel(), mathFieldInternal);
 	}
 
 	@Override
@@ -37,6 +45,9 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 	@Override
 	public void onKeyTyped() {
 		scrollContentIfNeeded();
+		Event event = new Event(EventType.EDITOR_KEY_TYPED)
+				.setJsonArgument(evaluatorAPI.getEvaluatorValue());
+		app.dispatchEvent(event);
 	}
 
 	@Override

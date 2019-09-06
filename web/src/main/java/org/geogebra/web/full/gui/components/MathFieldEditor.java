@@ -136,4 +136,11 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup {
 		}
 		return api;
 	}
+
+	/**
+	 * @return mathFieldW
+	 */
+	public MathFieldW getMathField() {
+		return mathField;
+	}
 }
