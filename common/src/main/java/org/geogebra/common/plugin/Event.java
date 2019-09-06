@@ -19,7 +19,6 @@ public class Event {
 	/** secondary target */
 	public final ArrayList<GeoElement> targets;
 	/** details */
-	public final String details;
 	private boolean alwaysDispatched;
 
 	public Event(EventType type) {
@@ -60,27 +59,10 @@ public class Event {
 	 */
 	public Event(
 			EventType type, GeoElement target, String argument, ArrayList<GeoElement> targets) {
-		this(type, target, argument, targets, null);
-	}
-
-	/**
-	 * @param type     event type
-	 * @param target   target
-	 * @param argument extra info
-	 * @param targets  extra targets
-	 * @param details  details
-	 */
-	public Event(
-			EventType type,
-			GeoElement target,
-			String argument,
-			ArrayList<GeoElement> targets,
-			String details) {
 		this.type = type;
 		this.target = target;
 		this.argument = argument;
 		this.targets = targets;
-		this.details = details;
 	}
 
 	/**

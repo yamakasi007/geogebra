@@ -136,9 +136,8 @@ public class LatexTreeItemController extends RadioTreeItemController
 				new Event(
 						EventType.EDITOR_KEY_TYPED,
 						item.getGeo(),
-						null,
-						null,
-						getEvaluatorAPI().getEvaluatorValue());
+						getEvaluatorAPI().getEvaluatorValue(),
+						null);
 		app.dispatchEvent(event);
 	}
 

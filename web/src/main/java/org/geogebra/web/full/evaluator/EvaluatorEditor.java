@@ -49,9 +49,8 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 				new Event(
 						EventType.EDITOR_KEY_TYPED,
 						null,
-						null,
-						null,
-						evaluatorAPI.getEvaluatorValue());
+						evaluatorAPI.getEvaluatorValue(),
+						null);
 		app.dispatchEvent(event);
 	}
 
