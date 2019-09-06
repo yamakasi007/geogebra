@@ -38,7 +38,6 @@ public class LatexTreeItemController extends RadioTreeItemController
 		super(item);
 		evalInput = new EvaluateInput(item, this);
 		evalInput.setUsingValidInput(app.getActivity().useValidInput());
-		evaluatorAPI = new EvaluatorAPI(app.getKernel(), getMathField().getInternal());
 	}
 
 	@Override
@@ -139,7 +138,7 @@ public class LatexTreeItemController extends RadioTreeItemController
 						item.getGeo(),
 						null,
 						null,
-						evaluatorAPI.getEvaluatorValue());
+						getEvaluatorAPI().getEvaluatorValue());
 		app.dispatchEvent(event);
 	}
 
@@ -260,6 +259,14 @@ public class LatexTreeItemController extends RadioTreeItemController
 
 	private MathFieldW getMathField() {
 		return item.getMathField();
+	}
+
+	private EvaluatorAPI getEvaluatorAPI() {
+		if (evaluatorAPI == null) {
+			evaluatorAPI = new EvaluatorAPI(app.getKernel(), getMathField().getInternal());
+		}
+
+		return evaluatorAPI;
 	}
 
 	/**
