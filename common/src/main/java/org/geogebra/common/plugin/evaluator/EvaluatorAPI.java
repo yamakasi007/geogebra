@@ -1,10 +1,5 @@
 package org.geogebra.common.plugin.evaluator;
 
-import com.himamis.retex.editor.share.editor.MathFieldInternal;
-import com.himamis.retex.editor.share.model.MathFormula;
-import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
-import com.himamis.retex.editor.share.serializer.Serializer;
-import com.himamis.retex.editor.share.serializer.TeXSerializer;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.SymbolicMode;
@@ -17,13 +12,19 @@ import org.geogebra.common.kernel.parser.Parser;
 import org.geogebra.common.move.ggtapi.models.json.JSONException;
 import org.geogebra.common.move.ggtapi.models.json.JSONObject;
 
+import com.himamis.retex.editor.share.editor.MathFieldInternal;
+import com.himamis.retex.editor.share.model.MathFormula;
+import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
+import com.himamis.retex.editor.share.serializer.Serializer;
+import com.himamis.retex.editor.share.serializer.TeXSerializer;
+
 /**
  * API class for the Evaluator object.
  */
 public class EvaluatorAPI {
 
 	private static final String LATEX_KEY = "latex";
-	private static final String FLAT_KEY = "flat";
+	private static final String ASCII_CONTENT_KEY = "content";
 	private static final String EVAL_KEY = "eval";
 	private static final String NAN = "NaN";
 
@@ -116,7 +117,7 @@ public class EvaluatorAPI {
 	private String buildJSONString(String flatString, String latexString, String evalString) {
 		JSONObject object = new JSONObject();
 		try {
-			object.put(LATEX_KEY, latexString).put(FLAT_KEY, flatString)
+			object.put(LATEX_KEY, latexString).put(ASCII_CONTENT_KEY, flatString)
 					.put(EVAL_KEY, evalString);
 		} catch (JSONException exception) {
 			// Can throw exception for numbers, can be ignored for Strings

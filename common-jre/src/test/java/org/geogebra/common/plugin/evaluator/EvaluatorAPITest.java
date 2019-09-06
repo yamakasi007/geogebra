@@ -1,9 +1,10 @@
 package org.geogebra.common.plugin.evaluator;
 
+import static org.junit.Assert.assertEquals;
+
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.io.EditorTyper;
 import org.geogebra.common.io.MathFieldCommon;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +27,8 @@ public class EvaluatorAPITest extends BaseUnitTest {
 	public void testGetEvaluatorValue() {
 		typer.type("1/2");
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals(
-				"{\"latex\":\"{\\\\frac{1}{2}}\",\"flat\":\"(1)\\/(2)\",\"eval\":\"0.5\"}",
+		assertEquals(
+				"{\"latex\":\"{\\\\frac{1}{2}}\",\"content\":\"(1)\\/(2)\",\"eval\":\"0.5\"}",
 				value);
 	}
 
@@ -35,22 +36,25 @@ public class EvaluatorAPITest extends BaseUnitTest {
 	public void testGetEvaluatorValueNonNumeric() {
 		typer.type("GeoGebra");
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals("{\"latex\":\"GeoGebra\",\"flat\":\"GeoGebra\",\"eval\":\"NaN\"}",
+		assertEquals(
+				"{\"latex\":\"GeoGebra\",\"content\":\"GeoGebra\",\"eval\":\"NaN\"}",
 				value);
 	}
 
 	@Test
 	public void testEmptyInput() {
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals("{\"latex\":\"\\\\nbsp \",\"flat\":\"\",\"eval\":\"NaN\"}", value);
+		assertEquals(
+				"{\"latex\":\"\\\\nbsp \",\"content\":\"\",\"eval\":\"NaN\"}",
+				value);
 	}
 
 	@Test
 	public void testInvalidInput() {
 		typer.type("1/");
 		String value = api.getEvaluatorValue();
-		Assert.assertEquals(
-				"{\"latex\":\"{\\\\frac{1}{\\\\nbsp }}\",\"flat\":\"(1)\\/()\",\"eval\":\"NaN\"}",
+		assertEquals(
+				"{\"latex\":\"{\\\\frac{1}{\\\\nbsp }}\",\"content\":\"(1)\\/()\",\"eval\":\"NaN\"}",
 				value);
 	}
 }
