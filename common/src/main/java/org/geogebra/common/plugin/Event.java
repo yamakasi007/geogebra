@@ -18,7 +18,6 @@ public class Event {
 	public final String argument;
 	/** secondary target */
 	public final ArrayList<GeoElement> targets;
-	/** details */
 	private boolean alwaysDispatched;
 
 	public Event(EventType type) {
@@ -57,8 +56,8 @@ public class Event {
 	 * @param targets
 	 *            extra targets
 	 */
-	public Event(
-			EventType type, GeoElement target, String argument, ArrayList<GeoElement> targets) {
+	public Event(EventType type, GeoElement target,
+			 String argument, ArrayList<GeoElement> targets) {
 		this.type = type;
 		this.target = target;
 		this.argument = argument;
