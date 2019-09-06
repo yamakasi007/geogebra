@@ -14,18 +14,22 @@ public class Event {
 	/** event type */
 	public final EventType type;
 
-    /** generic argument, e.g. macro name */
+	/** generic argument, e.g. macro name */
 	public String argument;
 	/** argument formatted as a JSON string */
 	public String jsonArgument;
 
-    /** primary target */
-    public GeoElement target;
-    /** secondary target */
+	/** primary target */
+	public GeoElement target;
+	/** secondary target */
 	public ArrayList<GeoElement> targets;
 
 	private boolean alwaysDispatched;
 
+	/**
+	 * @param type
+	 *            event type
+	 */
 	public Event(EventType type) {
 		this(type, null);
 	}
@@ -49,7 +53,7 @@ public class Event {
 	 *            extra info
 	 */
 	public Event(EventType type, GeoElement target, String argument) {
-		this( type, target, argument, null);
+		this(type, target, argument, null);
 	}
 
 	/**
@@ -70,17 +74,27 @@ public class Event {
 		this.targets = targets;
 	}
 
-    public Event setJsonArgument(String jsonArgument) {
-        this.jsonArgument = jsonArgument;
-        return this;
-    }
+	/**
+	 * @param jsonArgument
+	 *            JSON encoded additional properties
+	 * @return this
+	 */
+	public Event setJsonArgument(String jsonArgument) {
+		this.jsonArgument = jsonArgument;
+		return this;
+	}
 
-    public Event setAlwaysDispatched(boolean alwaysDispatched) {
-        this.alwaysDispatched = alwaysDispatched;
-        return this;
-    }
+	/**
+	 * @param alwaysDispatched
+	 *            whether to force dispatching while an update is running
+	 * @return this
+	 */
+	public Event setAlwaysDispatched(boolean alwaysDispatched) {
+		this.alwaysDispatched = alwaysDispatched;
+		return this;
+	}
 
-    /**
+	/**
 	 * @return whether to override blocked scripting
 	 */
 	boolean isAlwaysDispatched() {
