@@ -160,13 +160,13 @@ public class ScriptManagerW extends ScriptManager {
 
 	private native void callListenerNativeJson(JavaScriptObject listener,
 		   String jsonArgument, String... args) /*-{
-        var parsed = JSON.parse(jsonArgument);
+		var parsed = JSON.parse(jsonArgument);
 
-        for (key in parsed) {
-            if (parsed.hasOwnProperty(key)) {
-                args[key] = parsed[key];
-            }
-        }
+		for (key in parsed) {
+			if (parsed.hasOwnProperty(key)) {
+				args[key] = parsed[key];
+			}
+		}
 
 		listener(args);
 	}-*/;
@@ -177,7 +177,7 @@ public class ScriptManagerW extends ScriptManager {
 		exporter.addFunctions(api, ggbAPI);
 		exporter.addListenerFunctions(api, ggbAPI,
 				getListenerMappingFunction());
-		export(api, globalName);
+		export(api, ggbAPI, globalName);
 		return api;
 	}
 
@@ -204,7 +204,7 @@ public class ScriptManagerW extends ScriptManager {
 		}
 	}-*/;
 
-	private native void export(JavaScriptObject api, String globalName) /*-{
+	private native void export(JavaScriptObject api, GgbAPIW ggbAPI, String globalName) /*-{
 		api.remove = function() {
 			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::removeApplet()();
 			$doc[globalName] = $wnd[globalName] = api = null;
