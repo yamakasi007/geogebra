@@ -83,7 +83,7 @@ public class EvaluatorAPI {
 	private ValidExpression parseString(String flatString) {
 		try {
 			return parser.parseGeoGebraExpression(flatString);
-		} catch (ParseException e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
@@ -101,7 +101,7 @@ public class EvaluatorAPI {
 			GeoElementND[] elements = algebraProcessor.processAlgebraCommandNoExceptionHandling(
 					expression, false, null, null, evalInfo);
 			return processElements(elements);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			return NAN;
 		}
 	}

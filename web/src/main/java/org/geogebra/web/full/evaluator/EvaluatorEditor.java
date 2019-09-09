@@ -6,6 +6,8 @@ import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.himamis.retex.editor.share.editor.MathFieldInternal;
@@ -17,7 +19,7 @@ import com.himamis.retex.editor.share.model.MathSequence;
  *
  * @author Laszlo
  */
-public class EvaluatorEditor implements IsWidget, MathFieldListener {
+public class EvaluatorEditor implements IsWidget, MathFieldListener, BlurHandler {
 
 	private App app;
 	private MathFieldEditor mathFieldEditor;
@@ -33,13 +35,15 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 		this.app = app;
 		mathFieldEditor = new MathFieldEditor(app, this);
 		mathFieldEditor.addStyleName("evaluatorEditor");
+		mathFieldEditor.addBlurHandler(this);
+
 		MathFieldInternal mathFieldInternal = mathFieldEditor.getMathField().getInternal();
 		evaluatorAPI = new EvaluatorAPI(app.getKernel(), mathFieldInternal);
 	}
 
 	@Override
 	public void onEnter() {
-		// TODO: implement this
+		mathFieldEditor.reset();
 	}
 
 	@Override
@@ -104,5 +108,10 @@ public class EvaluatorEditor implements IsWidget, MathFieldListener {
 	 */
 	public EvaluatorAPI getAPI() {
 		return evaluatorAPI;
+	}
+
+	@Override
+	public void onBlur(BlurEvent event) {
+		mathFieldEditor.setKeyboardVisibility(false);
 	}
 }
