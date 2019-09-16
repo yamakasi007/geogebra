@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.google.gwt.user.client.ui.Widget;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.event.KeyEvent;
@@ -30,6 +31,7 @@ import org.geogebra.common.gui.dialog.options.model.ITextFieldListener;
 import org.geogebra.common.gui.dialog.options.model.ImageCornerModel;
 import org.geogebra.common.gui.dialog.options.model.IneqStyleModel;
 import org.geogebra.common.gui.dialog.options.model.IneqStyleModel.IIneqStyleListener;
+import org.geogebra.common.gui.dialog.options.model.InputTextAlignModel;
 import org.geogebra.common.gui.dialog.options.model.InterpolateImageModel;
 import org.geogebra.common.gui.dialog.options.model.LineEqnModel;
 import org.geogebra.common.gui.dialog.options.model.LineStyleModel;
@@ -344,6 +346,10 @@ public class OptionsTab extends FlowPanel {
 		if (m instanceof AnimationStepModel) {
 			return new AnimationStepPanelW((AnimationStepModel) m, app);
 		}
+		if (m instanceof InputTextAlignModel) {
+			return new InputTextAlignPanel((InputTextAlignModel) m, app);
+		}
+
 		return null;
 	}
 
@@ -605,9 +611,19 @@ public class OptionsTab extends FlowPanel {
 		}
 	}
 
+	private static class InputTextAlignPanel extends ListBoxPanel
+			implements IOptionPanel{
+
+		InputTextAlignModel model;
+		public InputTextAlignPanel(InputTextAlignModel model, AppW app) {
+			super(app.getLocalization(), "Alignment");
+			setModel(model);
+		}
+	}
+
 	private static class DecoAnglePanel extends DecoOptionPanel
 			implements IDecoAngleListener {
-		
+
 		DecoAngleModel model;
 
 		public DecoAnglePanel(DecoAngleModel model0, AppW app) {

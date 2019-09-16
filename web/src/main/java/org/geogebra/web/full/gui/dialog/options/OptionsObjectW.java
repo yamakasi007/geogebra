@@ -30,6 +30,7 @@ import org.geogebra.common.gui.dialog.options.model.FixCheckboxModel;
 import org.geogebra.common.gui.dialog.options.model.FixObjectModel;
 import org.geogebra.common.gui.dialog.options.model.GroupModel;
 import org.geogebra.common.gui.dialog.options.model.IneqStyleModel;
+import org.geogebra.common.gui.dialog.options.model.InputTextAlignModel;
 import org.geogebra.common.gui.dialog.options.model.InterpolateImageModel;
 import org.geogebra.common.gui.dialog.options.model.LayerModel;
 import org.geogebra.common.gui.dialog.options.model.LineEqnModel;
@@ -1023,11 +1024,13 @@ public class OptionsObjectW extends OptionsObject implements OptionPanelW {
 		InterpolateImageModel interpol = new InterpolateImageModel(app);
 		DecoAngleModel decoAngle = new DecoAngleModel(app);
 		DecoSegmentModel decoSegment = new DecoSegmentModel(app);
+		InputTextAlignModel alignModel = new InputTextAlignModel(app);
 
 		tab.addModel(ptSize).addModel(ptStyle).addModel(lod).addModel(lineStyle)
 				.addModel(arcSize).addModel(slopeSize).addModel(ineqStyle)
 				.addModel(tfSize).addModel(buttonSize).addModel(filling)
-				.addModel(interpol).addModel(decoAngle).addModel(decoSegment);
+				.addModel(interpol).addModel(decoAngle).addModel(decoSegment)
+				.addModel(alignModel);
 		return tab;
 	}
 
