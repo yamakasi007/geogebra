@@ -270,6 +270,18 @@ task createSolverHtml {
     }
 }
 
+task prepareS3Upload(dependsOn: 'compileGwt') {
+    doLast {
+        def dir = file("build/gwt/out/web3d");
+        fileTree(dir).each { f->
+            println "$f -> $f"
+            def outFile = file("$f".replace(dir.absolutePath, "build/s3/web3d/"))
+            file(outFile.parent).mkdirs();
+            ant.gzip(src: f, zipfile: outFile)
+        }
+    }
+}
+
 task deployIntoWar(type: Copy, dependsOn: ['cleanWar','copyHtml', 'createSolverHtml']) {
     description 'Copies/updates the GWT production compilation directory (web3d, ...) to the war directory.'
     from compileGwt
