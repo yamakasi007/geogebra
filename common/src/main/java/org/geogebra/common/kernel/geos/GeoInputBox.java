@@ -278,7 +278,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode {
 					+ defineText;
 		}
 
-		if ("".equals(defineText.trim())) {
+		if ("".equals(defineText.trim()) || "".equals(inputText.trim())) {
 			defineText = "?";
 		}
 
@@ -469,17 +469,20 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode {
 			textFieldToUpdate.setText(text);
 		}
 
-		if (!linkedGeo.isDefined()) {
-			setText(getTextForUndefinedGeo());
-		} else {
-			if (isSymbolicMode()) {
-				setText(getLinkedGeoText());
-			} else if (isLinkedNumberValueNotChanged(text)) {
-				setText(getNonSymbolicNumberValue(linkedGeo));
-			} else {
-				setText(textFieldToUpdate.getText());
-			}
+		String textForGeo = textFieldToUpdate.getText();
+
+		if (isSymbolicMode()) {
+			textForGeo = getLinkedGeoText();
+		} else if (isLinkedNumberValueNotChanged(text)) {
+			textForGeo = getNonSymbolicNumberValue(linkedGeo);
 		}
+
+		if (!linkedGeo.isGeoText() && (textForGeo.equals("") || textForGeo.equals("?"))) {
+			textFieldToUpdate.setText("");
+			textForGeo = "";
+		}
+
+		setText(textForGeo);
 	}
 
 	/**
@@ -685,10 +688,12 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode {
 	}
 
 	private String getLinkedGeoTextForEditor() {
+		String textForGeo = linkedGeo.getValueForInputBar();
 		if (isSymbolicMode()) {
-			return linkedGeo.getRedefineString(true, true);
+			textForGeo = linkedGeo.getRedefineString(true, true);
 		}
-		return linkedGeo.getValueForInputBar();
+
+		return "?".equals(textForGeo) ? "" : textForGeo;
 	}
 
 	/**
@@ -711,10 +716,8 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode {
 	}
 
 	private String getTextForUndefinedGeo() {
-		if (getLinkedGeoTextForEditor().equals("?")) {
-			return "";
-		}
+		String text = isSymbolicMode() ? getLinkedGeoTextForEditor() : getText();
 
-		return getLinkedGeoTextForEditor();
+		return text == null || "?".equals(text.trim()) ? "" : text;
 	}
 }
