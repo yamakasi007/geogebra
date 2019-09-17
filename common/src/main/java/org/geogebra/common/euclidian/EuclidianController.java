@@ -9727,15 +9727,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			processRightPressFor3D(event);
 			return;
 		}
-		setViewHits(event.getType());
 
+		setViewHits(event.getType());
 		dispatchMouseDownEvent(event);
 
-		if (app.isWhiteboardActive()
-				&& mode == EuclidianConstants.MODE_TRANSLATEVIEW
-				&& !getView().getHits().isEmpty()) {
-			app.setMode(EuclidianConstants.MODE_SELECT_MOW);
-		}
 		if (shallMoveView(event)) {
 			// Michael Borcherds 2007-12-08 BEGIN
 			// bugfix: couldn't select multiple objects with Ctrl
