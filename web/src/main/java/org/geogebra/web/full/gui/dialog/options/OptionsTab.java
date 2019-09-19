@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.google.gwt.user.client.ui.Widget;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.event.KeyEvent;
@@ -31,7 +30,6 @@ import org.geogebra.common.gui.dialog.options.model.ITextFieldListener;
 import org.geogebra.common.gui.dialog.options.model.ImageCornerModel;
 import org.geogebra.common.gui.dialog.options.model.IneqStyleModel;
 import org.geogebra.common.gui.dialog.options.model.IneqStyleModel.IIneqStyleListener;
-import org.geogebra.common.gui.dialog.options.model.InputTextAlignModel;
 import org.geogebra.common.gui.dialog.options.model.InterpolateImageModel;
 import org.geogebra.common.gui.dialog.options.model.LineEqnModel;
 import org.geogebra.common.gui.dialog.options.model.LineStyleModel;
@@ -44,6 +42,7 @@ import org.geogebra.common.gui.dialog.options.model.PointStyleModel;
 import org.geogebra.common.gui.dialog.options.model.SlopeTriangleSizeModel;
 import org.geogebra.common.gui.dialog.options.model.StartPointModel;
 import org.geogebra.common.gui.dialog.options.model.SymbolicModel;
+import org.geogebra.common.gui.dialog.options.model.TextFieldAlignmentModel;
 import org.geogebra.common.gui.dialog.options.model.TextFieldSizeModel;
 import org.geogebra.common.gui.dialog.options.model.TextOptionsModel;
 import org.geogebra.common.kernel.Kernel;
@@ -346,8 +345,8 @@ public class OptionsTab extends FlowPanel {
 		if (m instanceof AnimationStepModel) {
 			return new AnimationStepPanelW((AnimationStepModel) m, app);
 		}
-		if (m instanceof InputTextAlignModel) {
-			return new InputTextAlignPanel((InputTextAlignModel) m, app);
+		if (m instanceof TextFieldAlignmentModel) {
+			return new TextFieldAlignmentPanel((TextFieldAlignmentModel) m, app);
 		}
 
 		return null;
@@ -611,12 +610,11 @@ public class OptionsTab extends FlowPanel {
 		}
 	}
 
-	private static class InputTextAlignPanel extends ListBoxPanel
-			implements IOptionPanel{
+	private static class TextFieldAlignmentPanel extends ListBoxPanel {
 
-		InputTextAlignModel model;
-		public InputTextAlignPanel(InputTextAlignModel model, AppW app) {
+		TextFieldAlignmentPanel(TextFieldAlignmentModel model, AppW app) {
 			super(app.getLocalization(), "Alignment");
+			model.setListener(this);
 			setModel(model);
 		}
 	}

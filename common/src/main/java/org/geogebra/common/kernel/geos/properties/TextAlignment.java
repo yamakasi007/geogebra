@@ -16,26 +16,4 @@ public enum TextAlignment {
             	return null;
         }
     }
-
-    public static int alignmentToNumber(TextAlignment alignment) {
-		switch (alignment) {
-			case LEFT:
-				return 0;
-			case CENTER:
-				return 1;
-			default:
-				return 2;
-		}
-	}
-
-	public static TextAlignment numberToAlignment(int index) {
-    	switch (index) {
-			case 0:
-				return LEFT;
-			case 1:
-				return CENTER;
-			default:
-				return RIGHT;
-		}
-	}
 }
