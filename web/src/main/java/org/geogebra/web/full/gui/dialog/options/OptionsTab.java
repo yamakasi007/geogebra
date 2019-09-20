@@ -613,7 +613,7 @@ public class OptionsTab extends FlowPanel {
 	private static class TextFieldAlignmentPanel extends ListBoxPanel {
 
 		TextFieldAlignmentPanel(TextFieldAlignmentModel model, AppW app) {
-			super(app.getLocalization(), "Alignment");
+			super(app.getLocalization(), "stylebar.Align");
 			model.setListener(this);
 			setModel(model);
 		}
