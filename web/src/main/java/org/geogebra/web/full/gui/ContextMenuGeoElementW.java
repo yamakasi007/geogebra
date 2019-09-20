@@ -16,6 +16,7 @@ import org.geogebra.common.kernel.arithmetic.TextValue;
 import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoSegment;
@@ -170,7 +171,10 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addRename();
 			addEditItems();
 			addObjectPropertiesMenu();
-			addPinAndFixObject();
+			if (!app.isWhiteboardActive()) {
+				addPinForUnbundled();
+			}
+			addFixForUnbundledOrNotes();
 		}
 
 		// SHOW, HIDE
@@ -190,7 +194,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 			if (!app.isUnbundledOrWhiteboard()) {
 				addLock();
-				addPin();
+				addPinForClassic();
 			}
 			if (!app.isWhiteboardActive()) {
 				wrappedPopup.addSeparator();
@@ -599,19 +603,10 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 	}
 
-	private void addPinAndFixObject() {
-		if (!app.isUnbundledOrWhiteboard() || app.isWhiteboardActive()) {
-			return;
-		}
-
+	private void addPinForUnbundled() {
 		final GeoElement geo = getGeo();
-		boolean pinnable = geo.isPinnable();
-		boolean fixable = geo.isFixable();
-		if (!(pinnable || fixable)) {
-			return;
-		}
 
-		if (pinnable) {
+		if (geo.isPinnable()) {
 			final boolean pinned = geo.isPinned();
 
 			String img = MaterialDesignResources.INSTANCE.pin_black().getSafeUri()
@@ -634,22 +629,14 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			cmItem.setCommand(cmdPin);
 			wrappedPopup.addItem(cmItem);
 		}
+	}
 
+	private void addFixForUnbundledOrNotes() {
+		final GeoElement geo = getGeo();
 		// change back to old name-> Fix instead of Lock
-		String label = loc.getMenu("FixObject");
-		if (fixable
+		if (geo.isFixable()
 				&& app.getSelectionManager().getSelectedGeos().size() <= 1
 				&& !app.isExam()) {
-			Command cmd = new Command() {
-
-				@Override
-				public void execute() {
-					ArrayList<GeoElement> geoArray = new ArrayList<>();
-					geoArray.add(geo);
-					EuclidianStyleBarStatic.applyFixObject(geoArray,
-							!geo.isLocked(), app.getActiveEuclidianView());
-				}
-			};
 
 			String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
 					.asString();
@@ -670,15 +657,11 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			};
 			cmItem.setCommand(cmdLock);
 			wrappedPopup.addItem(cmItem);
-
-			if (!app.isUnbundledOrWhiteboard()) {
-				addAction(cmd, MainMenu.getMenuBarHtmlClassic(img, label), label);
-			}
 		}
 	}
 
 	private void addEditItems() {
-		if (app.isUnbundledOrWhiteboard()) {
+		if (app.isUnbundledOrWhiteboard() && !(getGeo() instanceof GeoEmbed)) {
 			SVGResource img = MaterialDesignResources.INSTANCE
 					.duplicate_black();
 			addAction(new Command() {
@@ -740,35 +723,12 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		// overridden in subclass
 	}
 
-	private void addPin() {
+	private void addPinForClassic() {
 		if (getGeo().isPinnable()) {
-
-			String img;
 			final boolean pinned = getGeo().isPinned();
-
-			if (app.isUnbundledOrWhiteboard()) {
-				img = MaterialDesignResources.INSTANCE.pin_black()
-								.getSafeUri().asString();
-			} else {
-				img = AppResources.INSTANCE.pin().getSafeUri().asString();
-			}
-
+			String img = AppResources.INSTANCE.pin().getSafeUri().asString();
 			GCheckBoxMenuItem cbItem;
-			
-			if (app.isUnbundledOrWhiteboard()) {
-				cbItem = new GCheckBoxMenuItem(
-						MainMenu.getMenuBarHtmlClassic(img, ""),
-						loc.getMenu("UnpinFromScreen"),
-						loc.getMenu("PinToScreen"),
-						new Command() {
-
-							@Override
-							public void execute() {
-								pinCmd(pinned);
-							}
-						}, true, app);				
-			} else {
-				cbItem = new GCheckBoxMenuItem(
+			cbItem = new GCheckBoxMenuItem(
 						MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("PinToScreen")),
 						new Command() {
 
@@ -777,12 +737,10 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 								pinCmd(pinned);
 							}
 						}, true, app);
-			}
 
 			cbItem.setSelected(pinned, wrappedPopup.getPopupMenu());
 
 			wrappedPopup.addItem(cbItem);
-
 		}
 	}
 
