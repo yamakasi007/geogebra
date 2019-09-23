@@ -5,7 +5,9 @@ import com.google.gwt.user.client.ui.UIObject;
 public class TestHarness {
 
 	public static void setAttr(UIObject widget, String value) {
-		widget.getElement().setAttribute("data-test", value);
+		if (widget != null) {
+			widget.getElement().setAttribute("data-test", value);
+		}
 	}
 
 }
