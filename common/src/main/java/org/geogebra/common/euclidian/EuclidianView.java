@@ -186,6 +186,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	protected GRectangle shapeRectangle;
 	/**
+	 * preview rectangle for mask tool
+	 */
+	private GRectangle mask;
+	/**
 	 * preview shape for ellipse
 	 */
 	protected GEllipse2DDouble shapeEllipse;
@@ -2955,6 +2959,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	/**
+	 * @param mask
+	 *            - preview of rectangle for mask tool
+	 */
+	public void setMask(GRectangle mask) {
+		this.mask = mask;
+	}
+
+	/**
 	 * @param shapeEllipse
 	 *            - preview of ellipse for ShapeEllipse
 	 */
@@ -4481,6 +4493,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public GRectangle getShapeRectangle() {
 		return shapeRectangle;
+	}
+
+	/**
+	 *
+	 * @return mask
+	 */
+	public GRectangle getMask() {
+		return mask;
 	}
 
 	/**

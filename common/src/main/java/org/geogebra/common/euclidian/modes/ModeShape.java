@@ -66,6 +66,11 @@ public class ModeShape {
 	private ArrayList<GPoint> pointListFreePoly = new ArrayList<>();
 
 	/**
+	 * Rectangle for mask tool
+	 */
+	private GRectangle mask;
+
+	/**
 	 * @param view
 	 *            - euclidianView
 	 */
@@ -135,50 +140,56 @@ public class ModeShape {
 		if (!ec.isDraggingBeyondThreshold()) {
 			return;
 		}
+
+		int mode = ec.getMode();
 		wasDragged = true;
-		if (ec.getMode() != EuclidianConstants.MODE_SHAPE_FREEFORM) {
+		if (mode != EuclidianConstants.MODE_SHAPE_FREEFORM) {
 			dragPointSet = false;
 		}
-		if (ec.getMode() == EuclidianConstants.MODE_SHAPE_RECTANGLE || ec
+		if (mode == EuclidianConstants.MODE_SHAPE_RECTANGLE || ec
 				.getMode() == EuclidianConstants.MODE_SHAPE_RECTANGLE_ROUND_EDGES) {
 			updateRectangle(event, false);
-			if (ec.getMode() == EuclidianConstants.MODE_SHAPE_RECTANGLE_ROUND_EDGES) {
+			if (mode == EuclidianConstants.MODE_SHAPE_RECTANGLE_ROUND_EDGES) {
 				view.setRounded(true);
 			} else {
 				view.setRounded(false);
 			}
 			view.setShapeRectangle(rectangle);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_SQUARE) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_SQUARE) {
 			updateRectangle(event, true);
 			view.setRounded(false);
 			view.setShapeRectangle(rectangle);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_ELLIPSE
-				|| ec.getMode() == EuclidianConstants.MODE_SHAPE_CIRCLE) {
-			if (ec.getMode() == EuclidianConstants.MODE_SHAPE_ELLIPSE) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_ELLIPSE
+				|| mode == EuclidianConstants.MODE_SHAPE_CIRCLE) {
+			if (mode == EuclidianConstants.MODE_SHAPE_ELLIPSE) {
 				updateEllipse(event, false);
 			} else {
 				updateEllipse(event, true);
 			}
 			view.setShapeEllipse(ellipse);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_LINE) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_LINE) {
 			GPoint2D snap = snapPoint(dragStartPoint.getX(), dragStartPoint.getY(), event.getX(),
 					event.getY());
 			line.setLine(dragStartPoint.getX(), dragStartPoint.getY(),
 					snap.getX(), snap.getY());
 			view.setShapeLine(line);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_TRIANGLE) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_TRIANGLE) {
 			updateTriangle(event);
 			view.setShapePolygon(polygon);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_POLYGON) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_POLYGON) {
 			updateRegularPolygon(event);
 			view.setShapePolygon(polygon);
 			view.repaintView();
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_FREEFORM) {
+		} else if (mode == EuclidianConstants.MODE_MASK) {
+			updateMask(event);
+			view.setMask(mask);
+			view.repaintView();
+		} else if (mode == EuclidianConstants.MODE_SHAPE_FREEFORM) {
 			updateFreeFormPolygon(event, wasDragged);
 		}
 	}
@@ -672,6 +683,36 @@ public class ModeShape {
 						dragStartPoint.y + height);
 				rectangle.setSize(-width, -height);
 				}
+			}
+		}
+	}
+
+	private void updateMask(AbstractEvent event) {
+		if (mask == null) {
+			mask = AwtFactory.getPrototype().newRectangle();
+		}
+
+		int width = event.getX() - dragStartPoint.x;
+		int height = event.getY() - dragStartPoint.y;
+
+		if (height >= 0) {
+			if (width >= 0) {
+				mask.setLocation(dragStartPoint.x, dragStartPoint.y);
+				mask.setSize(width, height);
+			} else { // width < 0
+				mask.setLocation(dragStartPoint.x + width,
+						dragStartPoint.y);
+				mask.setSize(-width, height);
+			}
+		} else { // height < 0
+			if (width >= 0) {
+				mask.setLocation(dragStartPoint.x,
+						dragStartPoint.y + height);
+				mask.setSize(width, -height);
+			} else { // width < 0
+				mask.setLocation(dragStartPoint.x + width,
+						dragStartPoint.y + height);
+				mask.setSize(-width, -height);
 			}
 		}
 	}

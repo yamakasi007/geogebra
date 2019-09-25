@@ -22,6 +22,7 @@ import org.geogebra.common.kernel.kernelND.GeoDirectionND;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoPlaneND;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
+import org.geogebra.common.main.GeoGebraColorConstants;
 import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.common.main.settings.EuclidianSettings;
 
@@ -397,6 +398,13 @@ public class EuclidianViewCompanion {
 			view.drawShape(g2, view.getShapeFillCol(), view.getShapeObjCol(),
 					view.getShapeStroke(),
 					view.getShapeRectangle());
+		}
+
+		if (view.getMask() != null) {
+			view.drawShape(g2, GeoGebraColorConstants.MEBIS_MASK,
+					GeoGebraColorConstants.MEBIS_MASK,
+					null,
+					view.getMask());
 		}
 
 		if (view.getShapeEllipse() != null) {
