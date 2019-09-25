@@ -24,6 +24,7 @@ import org.geogebra.common.kernel.geos.GeoPolygon;
 import org.geogebra.common.kernel.geos.GeoSegment;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
 import org.geogebra.common.kernel.kernelND.GeoSegmentND;
+import org.geogebra.common.main.GeoGebraColorConstants;
 
 /**
  * @author csilla
@@ -187,7 +188,7 @@ public class ModeShape {
 			view.repaintView();
 		} else if (mode == EuclidianConstants.MODE_MASK) {
 			updateMask(event);
-			view.setMask(mask);
+			view.setMaskPreview(mask);
 			view.repaintView();
 		} else if (mode == EuclidianConstants.MODE_SHAPE_FREEFORM) {
 			updateFreeFormPolygon(event, wasDragged);
@@ -325,17 +326,17 @@ public class ModeShape {
 	 */
 	public GeoElement handleMouseReleasedForShapeMode(AbstractEvent event) {
 		view.setRounded(false);
+		int mode = ec.getMode();
 		// make sure we set new start point after ignoring simple click
-		if (ec.getMode() != EuclidianConstants.MODE_SHAPE_FREEFORM && !wasDragged) {
+		if (mode != EuclidianConstants.MODE_SHAPE_FREEFORM && !wasDragged) {
 			dragPointSet = false;
 			dragStartPoint = new GPoint();
 			return null;
 		}
-		if (ec.getMode() == EuclidianConstants.MODE_SHAPE_RECTANGLE || ec
+		if (mode == EuclidianConstants.MODE_SHAPE_RECTANGLE || ec
 				.getMode() == EuclidianConstants.MODE_SHAPE_RECTANGLE_ROUND_EDGES
-				|| ec.getMode() == EuclidianConstants.MODE_SHAPE_SQUARE) {
-			boolean square = ec
-					.getMode() == EuclidianConstants.MODE_SHAPE_SQUARE;
+				|| mode == EuclidianConstants.MODE_SHAPE_SQUARE) {
+			boolean square = mode == EuclidianConstants.MODE_SHAPE_SQUARE;
 			algo = getPolyAlgo(getPointArray(event, square));
 
 			createPolygon(algo);
@@ -344,10 +345,19 @@ public class ModeShape {
 			view.repaintView();
 			wasDragged = false;
 			return algo.getOutput(0);
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_ELLIPSE
-				|| ec.getMode() == EuclidianConstants.MODE_SHAPE_CIRCLE) {
+		} else if (mode == EuclidianConstants.MODE_MASK) {
+			algo = getPolyAlgo(getPointArray(event, false));
+
+			createMask(algo);
+
+			view.setMaskPreview(null);
+			view.repaintView();
+			wasDragged = false;
+			return algo.getOutput(0);
+		} else if (mode == EuclidianConstants.MODE_SHAPE_ELLIPSE
+				|| mode == EuclidianConstants.MODE_SHAPE_CIRCLE) {
 			double[] conicEqu;
-			if (ec.getMode() == EuclidianConstants.MODE_SHAPE_ELLIPSE) {
+			if (mode == EuclidianConstants.MODE_SHAPE_ELLIPSE) {
 				conicEqu = getEquationOfConic(event, false);
 			} else {
 				conicEqu = getEquationOfConic(event, true);
@@ -361,7 +371,7 @@ public class ModeShape {
 			view.repaintView();
 			wasDragged = false;
 			return conic;
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_LINE) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_LINE) {
 			GeoPoint[] points = getRealPointsOfLine(event);
 			algo = new AlgoJoinPointsSegment(view.getKernel().getConstruction(),
 					null, points[0], points[1]);
@@ -373,10 +383,10 @@ public class ModeShape {
 			view.repaintView();
 			wasDragged = false;
 			return segment;
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_TRIANGLE
-				|| ec.getMode() == EuclidianConstants.MODE_SHAPE_POLYGON) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_TRIANGLE
+				|| mode == EuclidianConstants.MODE_SHAPE_POLYGON) {
 			GeoPoint[] points = null;
-			if (ec.getMode() == EuclidianConstants.MODE_SHAPE_TRIANGLE) {
+			if (mode == EuclidianConstants.MODE_SHAPE_TRIANGLE) {
 				points = getRealPointsOfTriangle(event);
 			} else {
 				points = getRealPointsOfPolygon(event);
@@ -392,7 +402,7 @@ public class ModeShape {
 			view.repaintView();
 			wasDragged = false;
 			return algo.getOutput(0);
-		} else if (ec.getMode() == EuclidianConstants.MODE_SHAPE_FREEFORM) {
+		} else if (mode == EuclidianConstants.MODE_SHAPE_FREEFORM) {
 			if (wasDragged) {
 				if (pointListFreePoly.size() > 1
 						&& pointListFreePoly.get(0).distance(
@@ -443,6 +453,18 @@ public class ModeShape {
 		poly.setAlphaValue(0);
 		poly.setBackgroundColor(GColor.WHITE);
 		poly.setObjColor(GColor.BLACK);
+		((AlgoPolygon) algo).getPoly().initLabels(null);
+	}
+
+	private static void createMask(AlgoElement algo) {
+		GeoPolygon mask = (GeoPolygon) algo.getOutput(0);
+		hideSegments(mask);
+		mask.setIsShape(true);
+		mask.setLabelVisible(false);
+		mask.setAlphaValue(1);
+		mask.setBackgroundColor(GeoGebraColorConstants.MEBIS_MASK);
+		mask.setObjColor(GeoGebraColorConstants.MEBIS_MASK);
+		mask.setLineThickness(1);
 		((AlgoPolygon) algo).getPoly().initLabels(null);
 	}
 

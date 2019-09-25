@@ -8,10 +8,10 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.draw.DrawAngle;
 import org.geogebra.common.euclidian.draw.DrawParametricCurve;
 import org.geogebra.common.euclidian.event.PointerEventType;
-import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.Matrix.CoordMatrix;
 import org.geogebra.common.kernel.Matrix.CoordSys;
 import org.geogebra.common.kernel.Matrix.Coords;
+import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -22,7 +22,6 @@ import org.geogebra.common.kernel.kernelND.GeoDirectionND;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoPlaneND;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
-import org.geogebra.common.main.GeoGebraColorConstants;
 import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.common.main.settings.EuclidianSettings;
 
@@ -400,12 +399,7 @@ public class EuclidianViewCompanion {
 					view.getShapeRectangle());
 		}
 
-		if (view.getMask() != null) {
-			view.drawShape(g2, GeoGebraColorConstants.MEBIS_MASK,
-					GeoGebraColorConstants.MEBIS_MASK,
-					null,
-					view.getMask());
-		}
+		view.drawMaskPreview(g2);
 
 		if (view.getShapeEllipse() != null) {
 			view.drawShape(g2, view.getShapeFillCol(), view.getShapeObjCol(),
