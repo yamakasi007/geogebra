@@ -471,7 +471,6 @@ public final class EuclidianConstants {
 	 */
 	public static final int MAX_PEN_HIGHLIGHTER_SIZE = 30;
 
-
 	/**
 	 * @param mode
 	 *            mode ID
