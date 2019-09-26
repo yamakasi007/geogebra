@@ -43,6 +43,7 @@ public class ResourceAvailability {
 	@Test
 	public void checkToolIcons() {
 		StringUtil.setPrototypeIfNull(new StringUtilD());
+		StringUtil.setPrototypeIfNull(new StringUtilD());
 		ImageManagerD man = new ImageManagerD(new JPanel());
 		StringBuilder missing = new StringBuilder();
 		HashMap<Integer, String> hm = new HashMap<>();
@@ -88,6 +89,7 @@ public class ResourceAvailability {
 			case EuclidianConstants.MODE_GRASPABLE_MATH:
 			case EuclidianConstants.MODE_CAS:
 			case EuclidianConstants.MODE_SURFACE_OF_REVOLUTION:
+			case EuclidianConstants.MODE_MASK:
 				continue;
 			default:
 				ImageResourceD res = man.getToolImageResource(modeText);
