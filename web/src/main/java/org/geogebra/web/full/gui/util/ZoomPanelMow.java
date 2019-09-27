@@ -89,8 +89,6 @@ public class ZoomPanelMow extends FlowPanel
 
 			@Override
 			public void onClick(Widget source) {
-				getAppW().getActiveEuclidianView().getEuclidianController()
-						.widgetsToBackground();
 				getAppW().setMode(EuclidianConstants.MODE_TRANSLATEVIEW);
 				getDragPadBtn().addStyleName("selected");
 				if (getAppW().isMenuShowing()) {
