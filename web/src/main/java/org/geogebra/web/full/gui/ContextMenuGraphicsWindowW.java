@@ -3,7 +3,6 @@ package org.geogebra.web.full.gui;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewInterfaceCommon;
-import org.geogebra.common.euclidian.background.BackgroundType;
 import org.geogebra.common.gui.dialog.handler.ColorChangeHandler;
 import org.geogebra.common.gui.menubar.MyActionListener;
 import org.geogebra.common.gui.menubar.RadioButtonMenuBar;
@@ -16,6 +15,7 @@ import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.images.StyleBarResources;
 import org.geogebra.web.full.gui.menubar.MainMenu;
 import org.geogebra.web.full.gui.menubar.RadioButtonMenuBarW;
+import org.geogebra.web.full.gui.properties.PropertiesViewW;
 import org.geogebra.web.full.javax.swing.CheckMarkSubMenu;
 import org.geogebra.web.full.javax.swing.GCheckBoxMenuItem;
 import org.geogebra.web.full.javax.swing.GCheckmarkMenuItem;
@@ -121,6 +121,9 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 			@Override
 			public void execute() {
 				app.getDialogManager().showPropertiesDialog(OptionType.EUCLIDIAN, null);
+				((PropertiesViewW) app.getGuiManager().getPropertiesView())
+						.getOptionPanel(OptionType.EUCLIDIAN, -1)
+						.getTabPanel().selectTab(3);
 			}
 		});
 
