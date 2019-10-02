@@ -108,24 +108,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		this.setGeos(geos);
 		setGeo(geos.get(0));
 
-		String title;
-		if (geos.size() == 1) {
-			title = getGeoTitle();
-		} else {
-			title = loc.getMenu("Selection");
-		}
-		setTitle(title);
-
 		if (app.isUnbundledOrWhiteboard()) {
 			wrappedPopup.getPopupPanel().addStyleName("matMenu");
 		}
-	}
-
-	private String getGeoTitle() {
-		if (noLabel()) {
-			return getGeo().getTypeString();
-		}
-		return getDescription(getGeo(), false);
 	}
 
 	private boolean noLabel() {
@@ -1108,34 +1093,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		wrappedPopup.addItem(mi);
-	}
-
-	/**
-	 * @param str
-	 *            title of menu (first menu item)
-	 */
-	protected void setTitle(String str) {
-		AriaMenuItem title = new AriaMenuItem(MainMenu.getMenuBarHtmlClassic(
-				AppResources.INSTANCE.empty().getSafeUri().asString(), str),
-				true, new Command() {
-
-					@Override
-					public void execute() {
-						if (app.isUnbundledOrWhiteboard()) {
-							wrappedPopup.setVisible(true);
-							wrappedPopup.setMenuShown(false);
-						} else {
-							wrappedPopup.setVisible(false);
-						}
-					}
-				});
-		wrappedPopup.addItem(title);
-		if (app.isUnbundledOrWhiteboard()) {
-			title.addStyleName("no-hover");
-		} else {
-			title.addStyleName("menuTitle");
-			wrappedPopup.addSeparator();
-		}
 	}
 
 	/**

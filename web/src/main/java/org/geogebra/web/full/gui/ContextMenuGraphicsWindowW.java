@@ -43,7 +43,6 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 	 */
 	protected double py;
 	private GCollapseMenuItem gridCollapseItem;
-	private GCollapseMenuItem rulingCollapseItem;
 
 	/**
 	 * @param app
@@ -68,14 +67,11 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		this(app);
 		this.px = px;
 		this.py = py;
+
 		EuclidianViewInterfaceCommon ev = app.getActiveEuclidianView();
-		OptionType ot = OptionType.EUCLIDIAN;
-		if (ev.getEuclidianViewNo() == 2) {
-			ot = OptionType.EUCLIDIAN2;
-			setTitle(loc.getMenu("DrawingPad2"));
-		} else {
-			setTitle(loc.getMenu("DrawingPad"));
-		}
+		OptionType ot = ev.getEuclidianViewNo() == 1 ?
+				OptionType.EUCLIDIAN : OptionType.EUCLIDIAN2;
+
 		if (!app.isWhiteboardActive()) {
 			if (app.isUnbundled()) {
 				addAxesMenuItem(1);
@@ -115,22 +111,20 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 	}
 
 	private void addRulingMenuItem() {
-		String htmlString = MainMenu
-				.getMenuBarHtmlClassic(
+		AriaMenuItem rulingMenuItem = new AriaMenuItem(
+				MainMenu.getMenuBarHtmlClassic(
 						MaterialDesignResources.INSTANCE.grid_black()
 								.getSafeUri().asString(),
-						loc.getMenu("Ruling"));
-		rulingCollapseItem = new GCollapseMenuItem(htmlString,
-				loc.getMenu("Ruling"),
-				MaterialDesignResources.INSTANCE.expand_black().getSafeUri()
-						.asString(),
-				MaterialDesignResources.INSTANCE.collapse_black().getSafeUri()
-						.asString(),
-				false, wrappedPopup);
-		wrappedPopup.addItem(rulingCollapseItem);
-		RulingSubmenu rulingSubMenu = new RulingSubmenu(rulingCollapseItem);
-		rulingSubMenu.update();
-		rulingCollapseItem.attachToParent();
+						loc.getMenu("Ruling")),
+				true, new Command() {
+
+			@Override
+			public void execute() {
+				app.getDialogManager().showPropertiesDialog(OptionType.EUCLIDIAN, null);
+			}
+		});
+
+		wrappedPopup.addItem(rulingMenuItem);
 	}
 
 	private void addBackgroundMenuItem() {
@@ -673,66 +667,6 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 				@Override
 				public void execute() {
 					setGridType(EuclidianView.GRID_NOT_SHOWN);
-				}
-			}, false);
-		}
-
-		@Override
-		public void update() {
-			// do nothing now
-		}
-	}
-
-	/**
-	 * expand/collapse menu item with ruling types
-	 * 
-	 * @author csilla
-	 *
-	 */
-	public class RulingSubmenu extends CheckMarkSubMenu {
-		/**
-		 * @param parentMenu
-		 *            - parent menu item
-		 */
-		public RulingSubmenu(GCollapseMenuItem parentMenu) {
-			super(parentMenu);
-		}
-
-		@Override
-		protected void initActions() {
-			addRulingItem("NoRuling", BackgroundType.NONE);
-			addRulingItem("Ruled", BackgroundType.RULER);
-			addRulingItem("Squared5", BackgroundType.SQUARE_SMALL);
-			addRulingItem("Squared1", BackgroundType.SQUARE_BIG);
-			addRulingItem("Elementary12", BackgroundType.ELEMENTARY12);
-			addRulingItem("Elementary12WithHouse",
-					BackgroundType.ELEMENTARY12_HOUSE);
-			addRulingItem("Elementary34", BackgroundType.ELEMENTARY34);
-			addRulingItem("Music", BackgroundType.MUSIC);
-		}
-
-		/**
-		 * @param rulingType
-		 *            new ruling type (see BackgroundType)
-		 */
-		protected void setRulingType(BackgroundType rulingType) {
-			app.getSettings().getEuclidian(1).setRulerType(rulingType.value());
-			// app.getActiveEuclidianView().setGridType(gridType);
-			app.getActiveEuclidianView().repaintView();
-			app.storeUndoInfo();
-			wrappedPopup.hideMenu();
-		}
-
-		private void addRulingItem(String key,
-				final BackgroundType rulingType) {
-			String text = app.getLocalization().getMenu(key);
-			boolean isSelected = app.getSettings().getEuclidian(1)
-					.getBackgroundType() == rulingType;
-			addItem(text, isSelected, new Command() {
-
-				@Override
-				public void execute() {
-					setRulingType(rulingType);
 				}
 			}, false);
 		}
