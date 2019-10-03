@@ -69,8 +69,8 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		this.py = py;
 
 		EuclidianViewInterfaceCommon ev = app.getActiveEuclidianView();
-		OptionType ot = ev.getEuclidianViewNo() == 1 ?
-				OptionType.EUCLIDIAN : OptionType.EUCLIDIAN2;
+		OptionType ot = ev.getEuclidianViewNo() == 1
+				? OptionType.EUCLIDIAN : OptionType.EUCLIDIAN2;
 
 		if (!app.isWhiteboardActive()) {
 			if (app.isUnbundled()) {

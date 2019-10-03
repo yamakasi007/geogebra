@@ -6,7 +6,6 @@ import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.gui.ContextMenuGeoElement;
 import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
 import org.geogebra.common.gui.dialog.options.model.ConicEqnModel;
-import org.geogebra.common.gui.dialog.options.model.ObjectNameModel;
 import org.geogebra.common.gui.dialog.options.model.ReflexAngleModel;
 import org.geogebra.common.gui.dialog.options.model.ShowLabelModel;
 import org.geogebra.common.kernel.Kernel;
@@ -28,7 +27,6 @@ import org.geogebra.common.kernel.kernelND.ViewCreator;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.plugin.EventType;
-import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.css.MaterialDesignResources;
@@ -68,7 +66,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 */
 	protected Localization loc;
 	private AriaMenuItem mnuPaste;
-	private LabelController labelController;
 
 	/**
 	 * Creates new context menu
@@ -100,7 +97,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param geos
 	 *            list of geos
 	 */
-	public void initPopup(ArrayList<GeoElement> geos) {
+	private void initPopup(ArrayList<GeoElement> geos) {
 		wrappedPopup.clearItems();
 		if (geos == null || geos.size() == 0 || !geos.get(0).isLabelSet()) {
 			return;
@@ -111,14 +108,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		if (app.isUnbundledOrWhiteboard()) {
 			wrappedPopup.getPopupPanel().addStyleName("matMenu");
 		}
-	}
-
-	private boolean noLabel() {
-		if (labelController == null) {
-			labelController = new LabelController();
-		}
-		return ObjectNameModel.isAutoLabelNeeded(app)
-				&& !labelController.hasLabel(getGeo());
 	}
 
 	/**
@@ -1055,7 +1044,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 *            text of menu item
 	 * @return new menu item
 	 */
-	protected AriaMenuItem addAction(Command action, String html, String text) {
+	private AriaMenuItem addAction(Command action, String html, String text) {
 		AriaMenuItem mi;
 		if (html != null) {
 			mi = new AriaMenuItem(html, true, action);
@@ -1079,7 +1068,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param subMenu
 	 *            sub menu
 	 */
-	protected void addSubmenuAction(String html, String text,
+	private void addSubmenuAction(String html, String text,
 			AriaMenuBar subMenu) {
 		AriaMenuItem mi;
 		if (html != null) {
