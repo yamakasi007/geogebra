@@ -66,7 +66,13 @@ public class ScriptManagerD extends ScriptManager {
 
 	@Override
 	protected void callListener(String jsFunction, String arg0, String arg1) {
-		callListener(jsFunction, new String[] {arg0, arg1});
+		if (arg0 == null) {
+			callListener(jsFunction, new String[] {});
+		} else if (arg1 == null) {
+			callListener(jsFunction, new String[] {arg0});
+		} else {
+			callListener(jsFunction, new String[] {arg0, arg1});
+		}
 	}
 
 	private void callListener(String jsFunction, String[] args) {
@@ -75,7 +81,7 @@ public class ScriptManagerD extends ScriptManager {
 		sb.append("(");
 		for (int i = 0; i < args.length; i++) {
 			sb.append('"');
-			sb.append(args[i].toString());
+			sb.append(args[i]);
 			sb.append('"');
 			if (i < args.length - 1) {
 				sb.append(",");
