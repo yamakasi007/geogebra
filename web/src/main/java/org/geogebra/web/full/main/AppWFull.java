@@ -23,6 +23,7 @@ import org.geogebra.common.io.layout.Perspective;
 import org.geogebra.common.io.layout.PerspectiveDecoder;
 import org.geogebra.common.javax.swing.SwingConstants;
 import org.geogebra.common.kernel.AppState;
+import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.View;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -44,6 +45,7 @@ import org.geogebra.common.move.ggtapi.models.Material;
 import org.geogebra.common.move.views.EventRenderable;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.ScriptManager;
+import org.geogebra.common.plugin.script.Script;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
@@ -1333,7 +1335,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	@Override
 	public void buildApplicationPanel() {
 		if (!isUsingFullGui()) {
-			if (showConsProtNavigation() || !isJustEuclidianVisible()) {
+			if (showConsProtNavigation() || !isJustEuclidianVisible() || hasSetPerspectiveScript()) {
 				useFullGui = true;
 			}
 		}
@@ -1515,7 +1517,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 		String perspective = getArticleElement().getDataParamPerspective();
 		if (!isUsingFullGui()) {
 			if (showConsProtNavigation() || !isJustEuclidianVisible()
-					|| perspective.length() > 0) {
+					|| perspective.length() > 0 || hasSetPerspectiveScript()) {
 				useFullGui = true;
 			}
 		}
@@ -1710,6 +1712,26 @@ public class AppWFull extends AppW implements HasKeyboard {
 		}
 
 		return true;
+	}
+
+	private boolean hasSetPerspectiveScript() {
+		Construction cons = getKernel().getConstruction();
+		for (GeoElement geo: cons.getGeoSetConstructionOrder()) {
+			Script[] scripts = geo.getScripts();
+			if (scripts != null && hasSetPerspectiveScript(scripts)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean hasSetPerspectiveScript(Script[] scripts) {
+		for (Script script: scripts) {
+			if (script != null) {
+				return script.getText().toLowerCase().contains("setperspective");
+			}
+		}
+		return false;
 	}
 
 	@Override

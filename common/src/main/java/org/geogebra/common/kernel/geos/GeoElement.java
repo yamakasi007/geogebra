@@ -6327,6 +6327,16 @@ public abstract class GeoElement extends ConstructionElement
 	}
 
 	/**
+	 * Returns the list of scripts that are added to this GeoElement.
+	 * Every entry of the list corresponds to an EventType.
+	 *
+	 * @return array of scripts if there any, otherwise null.
+	 */
+	public Script[] getScripts() {
+		return scripts;
+	}
+
+	/**
 	 * Runs the click script of this object
 	 * 
 	 * @param arg
