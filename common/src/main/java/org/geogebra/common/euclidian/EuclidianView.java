@@ -3,6 +3,7 @@ package org.geogebra.common.euclidian;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.geogebra.common.awt.GAffineTransform;
@@ -44,7 +45,6 @@ import org.geogebra.common.factories.FormatFactory;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.gui.dialog.options.OptionsEuclidian;
 import org.geogebra.common.gui.inputfield.AutoCompleteTextField;
-import org.geogebra.common.javax.swing.GBox;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.StringTemplate;
@@ -82,6 +82,8 @@ import org.geogebra.common.main.SelectionManager;
 import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
+import org.geogebra.common.plugin.Event;
+import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.DoubleUtil;
@@ -874,6 +876,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			if (isLockedAxesRatio()) {
 				this.updateBoundObjects();
 			}
+
+			app.dispatchEvent(new Event(EventType.VIEW_CHANGED_2D)
+					.setJsonArgument(getCoordinates()));
 		}
 		// tell kernel
 		if (evNo != EVNO_GENERAL) {
@@ -1287,7 +1292,17 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			settings.setCoordSystem(xZero, yZero, xscale, yscale, false);
 		}
 		setCoordSystem(xZero, yZero, xscale, yscale, true);
+	}
 
+	protected Map<String, Object> getCoordinates() {
+		Map<String, Object> coordinates = new HashMap<>();
+		coordinates.put("xZero", getXZero());
+		coordinates.put("yZero", getYZero());
+		coordinates.put("scale", getXscale());
+		coordinates.put("yscale", getYscale());
+		coordinates.put("viewNo", getEuclidianViewNo());
+
+		return coordinates;
 	}
 
 	/** Sets coord system from mouse move */
@@ -5708,18 +5723,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	/**
-	 * @param box
-	 *            box to be added
-	 */
-	public abstract void add(GBox box);
-
-	/**
-	 * @param box
-	 *            box to be removed
-	 */
-	public abstract void remove(GBox box);
-
-	/**
 	 * Initializes basic properties of this view
 	 * 
 	 * @param repaint
@@ -6380,8 +6383,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            input box
 	 */
 	public void focusTextField(GeoInputBox inputBox) {
-		if (viewTextField != null) {
-			viewTextField.focusTo(inputBox);
+		DrawableND d = getDrawableFor(inputBox);
+		if (d != null) {
+			DrawInputBox drawInputBox = (DrawInputBox) d;
+			if (inputBox.isSymbolicMode()) {
+				drawInputBox.attachMathField();
+			} else if (viewTextField != null) {
+				viewTextField.focusTo(drawInputBox);
+			}
 		}
 	}
 
@@ -6408,8 +6417,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		getTextField().setSelection(0, getTextField().getText().length());
 	}
 
-	public GBox getBoxForTextField() {
-		return viewTextField == null ? null : viewTextField.getBox();
+	public ViewTextField getViewTextField() {
+		return viewTextField;
 	}
 
 	/**
