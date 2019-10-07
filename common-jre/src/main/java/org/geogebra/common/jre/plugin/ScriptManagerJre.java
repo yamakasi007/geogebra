@@ -55,34 +55,24 @@ public abstract class ScriptManagerJre extends ScriptManager {
         }
 
         for (JsScript listener : listeners) {
-            evalJavaScript(listener.getText(), args.toArray(new String[0]));
+            callListener(listener.getText(), args.toArray(new String[0]));
         }
     }
 
     @Override
-    protected void callListener(String jsFunction, String arg0, String arg1) {
-        if (arg0 == null) {
-            evalJavaScript(jsFunction, new String[] {});
-        } else if (arg1 == null) {
-            evalJavaScript(jsFunction, new String[] {arg0});
-        } else {
-            evalJavaScript(jsFunction, new String[] {arg0, arg1});
-        }
-    }
-
-    private void evalJavaScript(String jsFunction, String[] args) {
+    protected void callListener(String jsFunction, String... args) {
         evalJavaScript(createJavascriptFunction(jsFunction, args));
     }
 
     protected abstract void evalJavaScript(String jsFunction);
 
-    private String createJavascriptFunction(String jsFunction, Object[] args) {
+    private String createJavascriptFunction(String jsFunction, String[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append(jsFunction);
         sb.append("(");
         for (int i = 0; i < args.length; i++) {
             sb.append('"');
-            sb.append(args[i].toString());
+            sb.append(args[i]);
             sb.append('"');
             if (i < args.length - 1) {
                 sb.append(",");
