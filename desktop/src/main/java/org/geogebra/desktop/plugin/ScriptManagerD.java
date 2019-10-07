@@ -21,7 +21,7 @@ public class ScriptManagerD extends ScriptManagerJre {
 	}
 
 	@Override
-	protected void evalJavaScriptNative(String jsFunction) {
+	protected void evalJavaScript(String jsFunction) {
 		evalJavaScript(app, jsFunction, null);
 	}
 

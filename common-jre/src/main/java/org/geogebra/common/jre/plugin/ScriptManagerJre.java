@@ -26,7 +26,7 @@ public abstract class ScriptManagerJre extends ScriptManager {
             // call only if libraryJavaScript is not the default (ie do nothing)
             if (!app.getKernel().getLibraryJavaScript()
                     .equals(Kernel.defaultLibraryJavaScript)) {
-                evalJavaScriptNative("ggbOnInit();");
+                evalJavaScript("ggbOnInit();");
             }
         } catch (Exception e) {
             Log.debug("Error calling ggbOnInit(): " + e.getMessage());
@@ -71,10 +71,10 @@ public abstract class ScriptManagerJre extends ScriptManager {
     }
 
     private void evalJavaScript(String jsFunction, String[] args) {
-        evalJavaScriptNative(createJavascriptFunction(jsFunction, args));
+        evalJavaScript(createJavascriptFunction(jsFunction, args));
     }
 
-    protected abstract void evalJavaScriptNative(String jsFunction);
+    protected abstract void evalJavaScript(String jsFunction);
 
     private String createJavascriptFunction(String jsFunction, Object[] args) {
         StringBuilder sb = new StringBuilder();
