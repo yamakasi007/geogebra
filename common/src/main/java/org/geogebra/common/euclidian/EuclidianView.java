@@ -3868,6 +3868,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 
 		drawBg.draw(g2);
+		repaint();
 	}
 
 	/**
