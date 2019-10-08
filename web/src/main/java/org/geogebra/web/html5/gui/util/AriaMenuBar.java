@@ -16,11 +16,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 /** Accessible alternative to MenuBar */
 public class AriaMenuBar extends Widget {
+
 	private AriaMenuItem selectedItem;
 	private ArrayList<AriaMenuItem> allItems = new ArrayList<>();
 	private ArrayList<AriaMenuBar> submenus = new ArrayList<>();
 	private boolean autoOpen;
-	private boolean focusOnHover;
 	private boolean handleArrows = true;
 
 	/**
@@ -407,21 +407,6 @@ public class AriaMenuBar extends Widget {
 	 */
 	public void removeSubPopup() {
 		// needs override
-	}
-
-	/**
-	 * @param focusOnHover
-	 *            whether mouseover should select items
-	 */
-	public void setFocusOnHoverEnabled(boolean focusOnHover) {
-		this.focusOnHover = focusOnHover;
-	}
-
-	/**
-	 * @return whether mouseover should select items
-	 */
-	public boolean isFocusOnHover() {
-		return focusOnHover;
 	}
 
 	/**

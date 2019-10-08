@@ -6,6 +6,7 @@ import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.gui.ContextMenuGeoElement;
 import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
 import org.geogebra.common.gui.dialog.options.model.ConicEqnModel;
+import org.geogebra.common.gui.dialog.options.model.ObjectNameModel;
 import org.geogebra.common.gui.dialog.options.model.ReflexAngleModel;
 import org.geogebra.common.gui.dialog.options.model.ShowLabelModel;
 import org.geogebra.common.kernel.Kernel;
@@ -27,6 +28,7 @@ import org.geogebra.common.kernel.kernelND.ViewCreator;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.plugin.EventType;
+import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.css.MaterialDesignResources;
@@ -66,6 +68,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 */
 	protected Localization loc;
 	private AriaMenuItem mnuPaste;
+	private LabelController labelController;
 
 	/**
 	 * Creates new context menu
@@ -97,7 +100,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param geos
 	 *            list of geos
 	 */
-	private void initPopup(ArrayList<GeoElement> geos) {
+	public void initPopup(ArrayList<GeoElement> geos) {
 		wrappedPopup.clearItems();
 		if (geos == null || geos.size() == 0 || !geos.get(0).isLabelSet()) {
 			return;
@@ -107,7 +110,30 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 		if (app.isUnbundledOrWhiteboard()) {
 			wrappedPopup.getPopupPanel().addStyleName("matMenu");
+		} else {
+			String title;
+			if (geos.size() == 1) {
+				title = getGeoTitle();
+			} else {
+				title = loc.getMenu("Selection");
+			}
+			setTitle(title);
 		}
+	}
+
+	private String getGeoTitle() {
+		if (noLabel()) {
+			return getGeo().getTypeString();
+		}
+		return getDescription(getGeo(), false);
+	}
+
+	private boolean noLabel() {
+		if (labelController == null) {
+			labelController = new LabelController();
+		}
+		return ObjectNameModel.isAutoLabelNeeded(app)
+				&& !labelController.hasLabel(getGeo());
 	}
 
 	/**
@@ -1044,7 +1070,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 *            text of menu item
 	 * @return new menu item
 	 */
-	private AriaMenuItem addAction(Command action, String html, String text) {
+	protected AriaMenuItem addAction(Command action, String html, String text) {
 		AriaMenuItem mi;
 		if (html != null) {
 			mi = new AriaMenuItem(html, true, action);
@@ -1068,7 +1094,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param subMenu
 	 *            sub menu
 	 */
-	private void addSubmenuAction(String html, String text,
+	protected void addSubmenuAction(String html, String text,
 			AriaMenuBar subMenu) {
 		AriaMenuItem mi;
 		if (html != null) {
@@ -1082,6 +1108,26 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		wrappedPopup.addItem(mi);
+	}
+
+	/**
+	 * @param str
+	 *            title of menu (first menu item)
+	 */
+	protected void setTitle(String str) {
+		AriaMenuItem title = new AriaMenuItem(MainMenu.getMenuBarHtmlClassic(
+				AppResources.INSTANCE.empty().getSafeUri().asString(), str),
+				true, new Command() {
+
+					@Override
+					public void execute() {
+						wrappedPopup.setVisible(false);
+					}
+				});
+		title.addStyleName("menuTitle");
+
+		wrappedPopup.addItem(title);
+		wrappedPopup.addSeparator();
 	}
 
 	/**
