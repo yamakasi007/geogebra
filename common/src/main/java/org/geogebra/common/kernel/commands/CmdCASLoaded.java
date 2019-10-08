@@ -24,7 +24,8 @@ public class CmdCASLoaded extends CommandProcessor {
 	@Override
 	public GeoElement[] process(Command c) throws MyError {
 		int n = c.getArgumentNumber();
-		GeoElement[] result = {new GeoBoolean(kernel.getConstruction(), true)};
+		GeoElement[] result = {new GeoBoolean(kernel.getConstruction(),
+				kernel.isGeoGebraCASready())};
 		switch (n) {
 		case 0:
 			return result;
