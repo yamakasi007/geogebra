@@ -241,6 +241,18 @@ public class CommandsUsingCASTest extends AlgebraTest {
 		runSolveTests();
 	}
 
+	@Test
+	public void cmdCASLoaded() {
+		t("CASLoaded[]", "false");
+		app.getKernel().getAlgebraProcessor().processAlgebraCommandNoExceptionHandling(
+				"ss=Solve[ x^2=3 ]",
+				false,
+				TestErrorHandler.INSTANCE,
+				false,
+				null);
+		t("CASLoaded[]", "true");
+	}
+
 	private static void runSolveTests() {
 		t("ss=Solve[ x^2=3 ]", "{x = (-sqrt(3)), x = sqrt(3)}");
 		Assert.assertTrue(AlgebraItem.isSymbolicDiffers(get("ss")));

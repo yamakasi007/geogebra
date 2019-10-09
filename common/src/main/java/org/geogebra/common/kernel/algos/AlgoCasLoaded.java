@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.algos;
 
 import org.geogebra.common.kernel.Construction;
+import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.cas.UsesCAS;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoBoolean;
@@ -19,6 +20,12 @@ public class AlgoCasLoaded extends AlgoElement implements UsesCAS {
 		setOutputLength(1);
 		setOutput(0, output);
 	}
+
+	@Override
+	final public String toString(StringTemplate tpl) {
+		return getLoc().getPlain("CASLoaded", "");
+	}
+
 
 	@Override
 	public void compute() {
