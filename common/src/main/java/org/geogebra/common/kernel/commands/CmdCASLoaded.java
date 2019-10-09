@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.commands;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.algos.AlgoCasLoaded;
 import org.geogebra.common.kernel.arithmetic.Command;
+import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.main.MyError;
 
@@ -27,14 +28,16 @@ public class CmdCASLoaded extends CommandProcessor {
 		int n = c.getArgumentNumber();
 
 		if (n == 0) {
-			return isCasLoaded();
+			return isCasLoaded(c);
 		}
 		throw argNumErr(c);
 	}
 
-	private GeoElement[] isCasLoaded() {
+	private GeoElement[] isCasLoaded(Command c) {
 		AlgoCasLoaded algo = new AlgoCasLoaded(cons);
-		return new GeoElement[]{algo.getResult()};
+		GeoBoolean result = algo.getResult();
+		result.setLabel(c.getLabel());
+		return new GeoElement[]{result};
 	}
 
 }
