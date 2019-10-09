@@ -83,7 +83,7 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 			}
 			addShowAllObjAndStandView();
 		} else {
-			addRulingMenuItem();
+			addRulingMenuItem(ot);
 			addBackgroundMenuItem();
 		}
 		addMiProperties("DrawingPad", ot);
@@ -110,7 +110,7 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		}
 	}
 
-	private void addRulingMenuItem() {
+	private void addRulingMenuItem(final OptionType optionType) {
 		AriaMenuItem rulingMenuItem = new AriaMenuItem(
 				MainMenu.getMenuBarHtmlClassic(
 						MaterialDesignResources.INSTANCE.grid_black()
@@ -120,9 +120,9 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 
 			@Override
 			public void execute() {
-				app.getDialogManager().showPropertiesDialog(OptionType.EUCLIDIAN, null);
+				showOptionsDialog(optionType);
 				((PropertiesViewW) app.getGuiManager().getPropertiesView())
-						.getOptionPanel(OptionType.EUCLIDIAN, -1)
+						.getOptionPanel(optionType, -1)
 						.getTabPanel().selectTab(3);
 			}
 		});
