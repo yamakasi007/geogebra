@@ -54,6 +54,7 @@ import org.geogebra.common.kernel.kernelND.HasSegments;
 import org.geogebra.common.kernel.prover.NoSymbolicParametersException;
 import org.geogebra.common.kernel.prover.polynomial.PPolynomial;
 import org.geogebra.common.kernel.prover.polynomial.PVariable;
+import org.geogebra.common.main.GeoGebraColorConstants;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.ExtendedBoolean;
@@ -123,6 +124,11 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 	private TreeSet<GeoElement> metas;
 	private boolean reverseNormalForDrawing = false;
 	private PolygonTriangulation pt;
+	private boolean isMask = false;
+
+	private boolean showLineProperties = true;
+	private boolean fillable = true;
+	private boolean traceable = true;
 
 	/**
 	 * common constructor for 2D.
@@ -854,7 +860,16 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 
 	@Override
 	public boolean isFillable() {
-		return true;
+		return fillable;
+	}
+
+	/**
+	 * Set whether this object is fillable.
+	 *
+	 * @param fillable true to set object to fillable, false otherwise.
+	 */
+	public void setFillable(boolean fillable) {
+		this.fillable = fillable;
 	}
 
 	@Override
@@ -2011,6 +2026,15 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 		getAuxiliaryXML(sb);
 		getBreakpointXML(sb);
 		getScriptTags(sb);
+		getMaskXML(sb);
+	}
+
+	private void getMaskXML(final StringBuilder sb) {
+		if (!isMask) {
+			return;
+		}
+
+		sb.append("\t<isMask val=\"true\"/>\n");
 	}
 
 	/**
@@ -2024,7 +2048,16 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 
 	@Override
 	public boolean isTraceable() {
-		return true;
+		return traceable;
+	}
+
+	/**
+	 * Set whether this object is traceable.
+	 *
+	 * @param traceable true to set object to traceable, false otherwise.
+	 */
+	public void setTraceable(boolean traceable) {
+		this.traceable = traceable;
 	}
 
 	@Override
@@ -2705,6 +2738,11 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 		return isShape;
 	}
 
+	@Override
+	public boolean isMask() {
+		return isMask;
+	}
+
 	/**
 	 * @param isShape
 	 *            - true, if geo was created with shape tool
@@ -2712,6 +2750,26 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 	@Override
 	public void setIsShape(boolean isShape) {
 		this.isShape = isShape;
+	}
+
+	@Override
+	public void setIsMask(boolean isMask) {
+		this.isMask = true;
+		if (isMask) {
+			setMaskPreferences();
+		}
+	}
+
+	private void setMaskPreferences() {
+		this.isShape = true;
+		setLabelVisible(false);
+		setAlphaValue(1);
+		setBackgroundColor(GeoGebraColorConstants.MEBIS_MASK);
+		setObjColor(GeoGebraColorConstants.MEBIS_MASK);
+		setLineThickness(1);
+		setShowLineProperties(false);
+		setFillable(false);
+		setTraceable(false);
 	}
 
 	/**
@@ -2791,5 +2849,19 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean showLineProperties() {
+		return showLineProperties && super.showLineProperties();
+	}
+
+	/**
+	 * Set whether this object should show line properties.
+	 *
+	 * @param showLineProperties true if it should show line properties
+	 */
+	public void setShowLineProperties(boolean showLineProperties) {
+		this.showLineProperties = showLineProperties;
 	}
 }
