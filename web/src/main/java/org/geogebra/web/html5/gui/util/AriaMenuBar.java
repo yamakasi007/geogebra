@@ -200,6 +200,9 @@ public class AriaMenuBar extends Widget {
 	 */
 	public boolean moveSelectionDown() {
 		int next = allItems.indexOf(selectedItem) + 1;
+		if (next >= allItems.size()) {
+			next = 0;
+		}
 		if (next < allItems.size()) {
 			selectItem(allItems.get(next));
 			return true;
@@ -368,11 +371,11 @@ public class AriaMenuBar extends Widget {
 	protected void itemOver(AriaMenuItem item) {
 		if (item != null) {
 			removeSubPopup();
+			selectItem(item);
 		}
 		if (item != null
 				&& "true".equals(item.getElement().getAttribute("hasPopup"))
 				&& autoOpen) {
-			selectItem(item);
 			doItemAction(item);
 		}
 	}
