@@ -1,5 +1,6 @@
 package org.geogebra.web.full.gui.dialog.options;
 
+import com.google.gwt.resources.client.DataResource;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewInterfaceCommon;
@@ -13,6 +14,8 @@ import org.geogebra.common.main.Localization;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
+import org.geogebra.web.full.css.GuiResources;
+import org.geogebra.web.full.gui.components.dropdown.grid.GridDropdown;
 import org.geogebra.web.full.gui.dialog.DialogManagerW;
 import org.geogebra.web.full.gui.util.ComboBoxW;
 import org.geogebra.web.full.gui.util.LineStylePopup;
@@ -21,6 +24,7 @@ import org.geogebra.web.full.gui.util.NumberListBox;
 import org.geogebra.web.full.gui.util.PopupMenuButtonW;
 import org.geogebra.web.full.gui.util.PopupMenuHandler;
 import org.geogebra.web.full.gui.view.algebra.InputPanelW;
+import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.inputfield.AutoCompleteTextFieldW;
 import org.geogebra.web.html5.gui.util.FormLabel;
 import org.geogebra.web.html5.gui.util.ImageOrText;
@@ -101,7 +105,7 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 		private FormLabel lbPointCapturing;
 		private ListBox pointCapturingStyleList;
 		ListBox lbGridType;
-		ListBox lbRulerType = null;
+		GridDropdown lbRulerType = null;
 		CheckBox cbGridManualTick;
 		NumberListBox ncbGridTickX;
 		NumberListBox ncbGridTickY;
@@ -363,14 +367,13 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 				return;
 			}
 
-			lbRulerType = new ListBox();
+			lbRulerType = new GridDropdown(app);
 			lblRulerType = new FormLabel(loc.getMenu("Ruling"))
 					.setFor(lbRulerType);
-			lbRulerType.addChangeHandler(new ChangeHandler() {
-
+			lbRulerType.setListener(new GridDropdown.GridDropdownListener() {
 				@Override
-				public void onChange(ChangeEvent event) {
-					model.applyRulerType(lbRulerType.getSelectedIndex());
+				public void itemSelected(GridDropdown dropdown, int index) {
+					model.applyRulerType(index);
 					updateView();
 					app.storeUndoInfo();
 				}
@@ -627,11 +630,29 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 		 * @param item
 		 *            add drop-down menu item with text
 		 */
-		public void addRulerTypeItem(String item) {
+		public void addRulerTypeItem(String item, BackgroundType type) {
 			if (gridOptions) {
 				return;
 			}
-			lbRulerType.addItem(item);
+			DataResource background = getResourceForBackgroundType(type);
+			lbRulerType.addItem(item, background);
+		}
+
+		private DataResource getResourceForBackgroundType(BackgroundType type) {
+			switch (type) {
+				case NONE:
+					return null;
+				case ELEMENTARY12:
+					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary12();
+				case ELEMENTARY12_HOUSE:
+					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary12house();
+				case ELEMENTARY34:
+					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary34();
+				case MUSIC:
+					return GuiResourcesSimple.INSTANCE.mow_ruling_music();
+				default:
+					return null;
+			}
 		}
 
 		/**
@@ -980,12 +1001,12 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 	}
 
 	@Override
-	public void addRulerTypeItem(String item) {
+	public void addRulerTypeItem(String item, BackgroundType type) {
 		if (gridTab == null) {
 			return;
 		}
 
-		gridTab.addRulerTypeItem(item);
+		gridTab.addRulerTypeItem(item, type);
 	}
 
 	@Override
