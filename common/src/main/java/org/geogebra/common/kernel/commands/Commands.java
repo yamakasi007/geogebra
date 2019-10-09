@@ -1198,7 +1198,7 @@ public enum Commands implements CommandsConstants,
 
 	nPr(TABLE_ENGLISH),
 
-	CASLoaded(TABLE_ALGEBRA),
+	CASLoaded(TABLE_CAS),
 
 	ShowSteps(TABLE_ALGEBRA);
 

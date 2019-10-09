@@ -674,7 +674,7 @@ public abstract class CommandDispatcher {
 			case Textfield:
 			case Normalize:
 			case ExportImage:
-			case CASLoaded:
+//			case CASLoaded:
 				return getBasicDispatcher().dispatch(command, kernel);
 
 			case CFactor:
@@ -858,6 +858,7 @@ public abstract class CommandDispatcher {
 			case Solve:
 			case Solutions:
 			case NSolutions:
+			case CASLoaded:
 				return getCASDispatcher().dispatch(command, kernel);
 			case Expand:
 			case Factor:

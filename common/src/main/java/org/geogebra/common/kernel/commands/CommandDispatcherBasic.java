@@ -285,8 +285,6 @@ public class CommandDispatcherBasic implements CommandDispatcherInterface {
 		case InputBox:
 		case Textfield:
 			return new CmdTextfield(kernel);
-		case CASLoaded:
-			return new CmdCASLoaded(kernel);
 		default:
 			break;
 		}
