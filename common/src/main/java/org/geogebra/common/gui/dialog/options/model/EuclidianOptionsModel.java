@@ -427,7 +427,8 @@ public class EuclidianOptionsModel {
 				loc.getMenuDefault("Elementary12", "Elementary 1/2"),
 				loc.getMenuDefault("Elementary12WithHouse", "Elementary 1/2 with house"),
 				loc.getMenuDefault("Elementary34", "Elementary 3/4"),
-				loc.getMenuDefault("Music", "Music") };
+				loc.getMenuDefault("Music", "Music"),
+				loc.getMenuDefault("Elementary12colored", "Elementary 1/2 colored")};
 
 		for (String item : rulerTypes) {
 			listener.addRulerTypeItem(item);
@@ -630,6 +631,9 @@ public class EuclidianOptionsModel {
 			break;
 		case 7:
 			settings.setBackgroundType(BackgroundType.MUSIC);
+			break;
+		case 8:
+			settings.setBackgroundType(BackgroundType.ELEMENTARY12_COLORED);
 			break;
 		default:
 			settings.setBackgroundType(BackgroundType.NONE);

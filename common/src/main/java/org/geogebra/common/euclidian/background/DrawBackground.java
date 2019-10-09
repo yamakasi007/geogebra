@@ -67,6 +67,7 @@ public class DrawBackground {
 		case SVG:
 		case ELEMENTARY12:
 		case ELEMENTARY12_HOUSE:
+		case ELEMENTARY12_COLORED:
 		case ELEMENTARY34:
 		case MUSIC:
 			drawSVG(g2);

@@ -32,7 +32,10 @@ public enum BackgroundType {
 	MUSIC(7),
 
 	/** General SVG as background */
-	SVG(8);
+	SVG(8),
+
+	/** Elementary 1/2 with colored background */
+	ELEMENTARY12_COLORED(9);
 
 	private int value;
 
