@@ -1,6 +1,7 @@
 package org.geogebra.web.full.gui.dialog.options;
 
 import com.google.gwt.resources.client.DataResource;
+import com.google.gwt.resources.client.ImageResource;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewInterfaceCommon;
@@ -17,6 +18,8 @@ import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.gui.components.dropdown.grid.GridDropdown;
 import org.geogebra.web.full.gui.dialog.DialogManagerW;
+import org.geogebra.web.full.gui.images.AppResources;
+import org.geogebra.web.full.gui.images.PropertiesResources;
 import org.geogebra.web.full.gui.util.ComboBoxW;
 import org.geogebra.web.full.gui.util.LineStylePopup;
 import org.geogebra.web.full.gui.util.MyCJButton;
@@ -634,24 +637,28 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 			if (gridOptions) {
 				return;
 			}
-			DataResource background = getResourceForBackgroundType(type);
+			ImageResource background = getResourceForBackgroundType(type);
 			lbRulerType.addItem(item, background);
 		}
 
-		private DataResource getResourceForBackgroundType(BackgroundType type) {
+		private ImageResource getResourceForBackgroundType(BackgroundType type) {
 			switch (type) {
-				case NONE:
-					return null;
+				case RULER:
+					return PropertiesResources.INSTANCE.linedRuling();
+				case SQUARE_SMALL:
+					return PropertiesResources.INSTANCE.squared5Ruling();
+				case SQUARE_BIG:
+					return PropertiesResources.INSTANCE.squared1Ruling();
 				case ELEMENTARY12:
-					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary12();
+					return PropertiesResources.INSTANCE.elementary12Ruling();
 				case ELEMENTARY12_HOUSE:
-					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary12house();
+					return PropertiesResources.INSTANCE.houseRuling();
 				case ELEMENTARY34:
-					return GuiResourcesSimple.INSTANCE.mow_ruling_elementary34();
+					return PropertiesResources.INSTANCE.elementary34Ruling();
 				case MUSIC:
-					return GuiResourcesSimple.INSTANCE.mow_ruling_music();
+					return PropertiesResources.INSTANCE.musicRuling();
 				default:
-					return null;
+					return AppResources.INSTANCE.empty();
 			}
 		}
 
