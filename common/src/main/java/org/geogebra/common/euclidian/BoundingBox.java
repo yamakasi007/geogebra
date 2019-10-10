@@ -59,7 +59,6 @@ public class BoundingBox {
 			this.isImage = isImage;
 			setCropHandlers(new ArrayList<GGeneralPath>());
 		}
-		setColor(GColor.GEOGEBRA_BLUE);
 	}
 
 	/**
