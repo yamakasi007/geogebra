@@ -718,7 +718,7 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		protected void setRulingType(BackgroundType rulingType) {
 			app.getSettings().getEuclidian(1).setRulerType(rulingType.value());
 			// app.getActiveEuclidianView().setGridType(gridType);
-			app.getActiveEuclidianView().repaintView();
+			app.getActiveEuclidianView().updateBackground();
 			app.storeUndoInfo();
 			wrappedPopup.hideMenu();
 		}
