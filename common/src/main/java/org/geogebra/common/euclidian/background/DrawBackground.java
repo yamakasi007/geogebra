@@ -19,6 +19,8 @@ public class DrawBackground {
 	 * background
 	 */
 	private static final double SVG_SCALE = 2;
+	private static final double SVG_BASE_WIDTH = 539;
+	private static final double RULING_BASE_WIDTH = 10.5;
 	private EuclidianView view;
 	private EuclidianSettings settings;
 	private double gap;
@@ -50,7 +52,7 @@ public class DrawBackground {
 		g2.setStroke(rulerStroke);
 		updateRulerGap();
 		gap = settings.getBackgroundRulerGap();
-		width = 10.5;
+		width = RULING_BASE_WIDTH;
 		switch (settings.getBackgroundType()) {
 		case RULER:
 			drawRuledBackground(g2);
@@ -85,6 +87,8 @@ public class DrawBackground {
 		if (y > 0) {
 			y -= h;
 		}
+
+		width = svg.getWidth() / SVG_BASE_WIDTH * RULING_BASE_WIDTH;
 
 		int x = (int) getStartX();
 		g2.saveTransform();
