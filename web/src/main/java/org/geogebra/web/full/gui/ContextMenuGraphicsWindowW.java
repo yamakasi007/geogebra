@@ -79,6 +79,12 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 				addSnapToGridMenuItem();
 				addClearTraceMenuItem();
 			} else {
+				if (ev.getEuclidianViewNo() == 1) {
+					setTitle(loc.getMenu("DrawingPad"));
+				} else {
+					setTitle(loc.getMenu("DrawingPad2"));
+				}
+
 				addCheckboxes();
 			}
 			addShowAllObjAndStandView();
@@ -86,6 +92,7 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 			addRulingMenuItem(ot);
 			addBackgroundMenuItem();
 		}
+
 		addMiProperties("DrawingPad", ot);
 	}
 
