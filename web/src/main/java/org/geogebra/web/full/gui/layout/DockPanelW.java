@@ -652,7 +652,7 @@ public abstract class DockPanelW extends ResizeComposite
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
 				popup.setPopupPosition((int) app.getWidth() - offsetWidth, y);
-				contextMenu.focusDeferred();
+				contextMenu.getWrappedPopup().getPopupMenu().focusDeferred();
 			}
 		});
 		popup.addCloseHandler(new CloseHandler<GPopupPanel>() {

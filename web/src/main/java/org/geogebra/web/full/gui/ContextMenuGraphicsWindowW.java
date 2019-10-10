@@ -24,8 +24,6 @@ import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 
 /**
@@ -685,17 +683,5 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		public void update() {
 			// do nothing now
 		}
-	}
-
-	/**
-	 * focus menu in a deferred way.
-	 */
-	public void focusDeferred() {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-				wrappedPopup.getPopupMenu().getElement().focus();
-			}
-		});
 	}
 }
