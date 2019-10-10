@@ -12,14 +12,14 @@ def getChangelog() {
     return lines.join("\n").toString()
 }
 
-def s3uploadDefault = { dir, pattern ->
+def s3uploadDefault = { dir, pattern, encoding ->
     withAWS (region:'eu-central-1', credentials:'aws-credentials') {
         if (!pattern.contains(".zip")) {
             s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/",
-               includePathPattern: pattern, acl: 'PublicRead')
+               includePathPattern: pattern, acl: 'PublicRead', contentEncoding: encoding)
         }
         s3Upload(bucket: 'apps-builds', workingDir: dir, path: "geogebra/branches/${env.GIT_BRANCH}/latest/",
-            includePathPattern: pattern, acl: 'PublicRead')
+            includePathPattern: pattern, acl: 'PublicRead', contentEncoding: encoding)
     }
 }
 
@@ -59,11 +59,11 @@ pipeline {
                     withAWS (region:'eu-central-1', credentials:'aws-credentials') {
                        s3Delete(bucket: 'apps-builds', path: "geogebra/branches/${env.GIT_BRANCH}/latest")
                     }
-                    s3uploadDefault(".", "changes.csv")
-                    s3uploadDefault("web/build/s3", "webSimple/**")
-                    s3uploadDefault("web/build/s3", "web3d/**")
-                    s3uploadDefault("web/war", "*.html")
-                    s3uploadDefault("web/war", "*.zip")
+                    s3uploadDefault(".", "changes.csv", "")
+                    s3uploadDefault("web/build/s3", "webSimple/**", "gzip")
+                    s3uploadDefault("web/build/s3", "web3d/**", "gzip")
+                    s3uploadDefault("web/war", "*.html", "")
+                    s3uploadDefault("web/war", "*.zip", "")
                 }
             }
         }
