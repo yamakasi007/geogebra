@@ -136,13 +136,11 @@ public class DrawBackground {
 
 	private void drawHorizontalLines(GGraphics2D g2, boolean subgrid, boolean infinite) {
 		double start = view.getYZero() % gap;
-		if (infinite) {
-			doDrawHorizontalLines(g2, subgrid, start - gap, view.getWidth(), start - gap,
-					view.getHeight());
-		} else {
-			doDrawHorizontalLines(g2, subgrid, getStartX(), getEndX(), start - gap,
-					view.getHeight());
-		}
+		double startX = infinite ? start - gap : getStartX();
+		double endX = infinite ? view.getWidth() : getEndX();
+
+		doDrawHorizontalLines(g2, subgrid, startX, endX, start - gap,
+				view.getHeight());
 	}
 
 	private void doDrawHorizontalLines(GGraphics2D g2, boolean subgrid, double x, double xEnd,
@@ -173,13 +171,11 @@ public class DrawBackground {
 
 	private void drawVerticalLines(GGraphics2D g2, boolean subgrid, boolean infinite) {
 		double start = view.getYZero() % gap;
-		if (infinite) {
-			doDrawVerticalLines(g2, subgrid, start - gap, view.getWidth(), start - gap,
-					view.getHeight() + 2 * gap);
-		} else {
-			doDrawVerticalLines(g2, subgrid, getStartX(), getEndX(), start - gap,
-					view.getHeight() + 2 * gap);
-		}
+		double startX = infinite ? start - gap : getStartX();
+		double endX = infinite ? view.getWidth() : getEndX();
+
+		doDrawVerticalLines(g2, subgrid, startX, endX, start - gap,
+				view.getHeight() + 2 * gap);
 	}
 
 	private void doDrawVerticalLines(GGraphics2D g2, boolean subgrid, double x, double xEnd,
