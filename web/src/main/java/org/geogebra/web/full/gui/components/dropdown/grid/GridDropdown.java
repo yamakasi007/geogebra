@@ -18,19 +18,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Dropdown which opens a grid of images and text.
  */
 public class GridDropdown extends SimplePanel implements ClickHandler {
 
+	/**
+	 * Listens for changes in GridDrodown.
+	 */
 	public interface GridDropdownListener {
 
+		/**
+		 * Called when an item has been selected in the dropdown.
+		 *
+		 * @param dropdown the dropdown
+		 * @param index index of the item
+		 */
 		void itemSelected(GridDropdown dropdown, int index);
 	}
 
+	/**
+	 * Data holder describing the state of a grid item.
+	 */
 	static class GridItem {
 		ImageResource resource;
 		String title;
 
+		/**
+		 * Creates a new GridItem.
+		 *
+		 * @param resource image
+		 * @param title title
+		 */
 		GridItem(ImageResource resource, String title) {
 			this.resource = resource;
 			this.title = title;
@@ -51,6 +69,11 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 	private List<GridItem> items = new ArrayList<>();
 	private int selectedIndex = UNSELECTED_INDEX;
 
+	/**
+	 * Create a new GridDropdown.
+	 *
+	 * @param app app
+	 */
 	public GridDropdown(AppW app) {
 		this.app = app;
 		createButton();
@@ -63,10 +86,20 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 		add(button);
 	}
 
+	/**
+	 * Enable or disable the dropdown button.
+	 *
+	 * @param enabled true to enable
+	 */
 	public void setEnabled(boolean enabled) {
 		button.setEnabled(enabled);
 	}
 
+	/**
+	 * Set the selected index of the dropdown.
+	 *
+	 * @param index index of the dropdown.
+	 */
 	public void setSelectedIndex(int index) {
 		if (index < UNSELECTED_INDEX || index >= items.size()) {
 			throw new IndexOutOfBoundsException("Index out of bounds");
@@ -75,6 +108,11 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 		updateSelectedIndex();
 	}
 
+	/**
+	 * Returns the selected index of the dropdown.
+	 *
+	 * @return the selected index
+	 */
 	public int getSelectedIndex() {
 		return selectedIndex;
 	}
@@ -87,8 +125,14 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 		button.setText(title);
 	}
 
-	public void addItem(String item, ImageResource resource) {
-		items.add(new GridItem(resource, item));
+	/**
+	 * Adds an item to the dropdown.
+	 *
+	 * @param title title of the cell
+	 * @param resource image to display
+	 */
+	public void addItem(String title, ImageResource resource) {
+		items.add(new GridItem(resource, title));
 		if (items.size() == 1) {
 			setSelectedIndex(0);
 		}
@@ -181,6 +225,11 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 		popup.hide();
 	}
 
+	/**
+	 * Set the listener of this GridDropdown.
+	 *
+	 * @param listener the listener
+	 */
 	public void setListener(GridDropdownListener listener) {
 		this.listener = listener;
 	}
