@@ -8,6 +8,11 @@ import org.geogebra.common.kernel.geos.GeoBoolean;
 
 public class AlgoCasLoaded extends AlgoElement implements UsesCAS {
 	private GeoBoolean output;
+
+	/**
+	 *
+	 * @param c the construction
+	 */
 	public AlgoCasLoaded(Construction c) {
 		super(c);
 		setInputOutput();

@@ -696,6 +696,10 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		// iterate through all available CAS commands, add them (translated if
 		// available, otherwise untranslated)
 		for (String cmd : cas.getAvailableCommandNames()) {
+			if ("CASLoaded".equals(cmd)) {
+				Log.debug("fortherecord");
+			}
+
 			try {
 				if (!commandDispatcher.isAllowedByNameFilter(Commands.valueOf(cmd))) {
 					continue;
@@ -705,6 +709,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 			}
 			try {
 				String local = getLocalization().getCommand(cmd);
+
 				putInTranslateCommandTable(Commands.valueOf(cmd), local);
 				if (local != null) {
 					commandDictCAS.addEntry(local);
@@ -812,11 +817,11 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		HashMap<String, String> translateCommandTable = getLocalization()
 				.getTranslateCommandTable();
 
+
 		for (Commands comm : Commands.values()) {
 			if (!cf.isAllowedByNameFilter(comm)) {
 				continue;
 			}
-
 			if (!companion.tableVisible(comm.getTable())
 					|| !kernel.getAlgebraProcessor().isCommandsEnabled()) {
 				if (comm.getTable() == CommandsConstants.TABLE_ENGLISH) {
