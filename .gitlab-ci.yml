@@ -1,4 +1,4 @@
-image: bmsdevops/openjdk8-nanoserver-gradle-node-curl
+image: openjdk
 
 stages:
   - build
