@@ -674,7 +674,6 @@ public abstract class CommandDispatcher {
 			case Textfield:
 			case Normalize:
 			case ExportImage:
-//			case CASLoaded:
 				return getBasicDispatcher().dispatch(command, kernel);
 
 			case CFactor:

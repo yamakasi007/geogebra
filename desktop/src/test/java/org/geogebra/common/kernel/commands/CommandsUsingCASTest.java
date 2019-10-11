@@ -249,12 +249,7 @@ public class CommandsUsingCASTest extends AlgebraTest {
 	}
 
 	private void useCASCommand() {
-		app.getKernel().getAlgebraProcessor().processAlgebraCommandNoExceptionHandling(
-				"ss=Solve[ x^2=3 ]",
-				false,
-				TestErrorHandler.INSTANCE,
-				false,
-				null);
+		ap.processAlgebraCommand("ss=Solve[ x^2=3 ]", false);
 	}
 
 	private static void runSolveTests() {
