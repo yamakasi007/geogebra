@@ -62,7 +62,6 @@ public class GraphingToolCollectionFactory extends AbstractToolCollectionFactory
                 EuclidianConstants.MODE_VECTOR,
                 EuclidianConstants.MODE_VECTOR_FROM_POINT);
 
-
         List<Integer> others = new ArrayList<>(Arrays.asList(
                 EuclidianConstants.MODE_PEN,
                 EuclidianConstants.MODE_FREEHAND_SHAPE));
