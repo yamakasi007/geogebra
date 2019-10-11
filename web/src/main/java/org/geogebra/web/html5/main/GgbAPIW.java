@@ -1363,7 +1363,7 @@ public class GgbAPIW extends GgbAPI {
 			((AppW) app).afterLocalizationLoaded(new Runnable() {
 				@Override
 				public void run() {
-					JsEval.runCallback(callback, loc.getMenu(key));
+					JsEval.callNativeJavaScript(callback, loc.getMenu(key));
 				}
 			});
 		}
@@ -1376,7 +1376,7 @@ public class GgbAPIW extends GgbAPI {
 
 			@Override
 			public void callback(String obj) {
-				JsEval.runCallback(callback, obj);
+				JsEval.callNativeJavaScript(callback, obj);
 			}
 		};
 	}
@@ -1401,10 +1401,11 @@ public class GgbAPIW extends GgbAPI {
 	 *            whether to show UI when token is invalid
 	 */
 	public void login(String token, boolean showUI) {
-		if (showUI && (StringUtil.empty(token) || StringUtil.isNaN(token))) {
+		String normalizedToken = StringUtil.isNaN(token) ? "" : token;
+		if (showUI && StringUtil.empty(normalizedToken)) {
 			app.getLoginOperation().showLoginDialog();
 		} else {
-			login(token);
+			login(normalizedToken);
 		}
 	}
 

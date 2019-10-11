@@ -488,6 +488,10 @@ public class GPopupMenuW implements AttachedToDOM {
 	 * hide popup menu
 	 */
 	public final void hide() {
+		if (!popupPanel.isShowing()) {
+			return;
+		}
+
 		AccessibilityManagerInterface am = getApp()
 				.getAccessibilityManager();
 		Object anchor = am.getAnchor();
@@ -657,7 +661,7 @@ public class GPopupMenuW implements AttachedToDOM {
 		}
 
 		private GCollapseMenuItem getCollapseMenuAt(int idx) {
-			if (idx < 0 && idx > getItems().size()) {
+			if (idx < 0 || idx >= getItems().size()) {
 				return null;
 			}
 			return expandItems.get(getItemAt(idx));

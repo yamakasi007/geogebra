@@ -65,6 +65,7 @@ public class AppCommon extends App {
 	private DefaultSettings defaultSettings;
 	private SpreadsheetTableModel tableModel;
 	private AppConfig config = new AppConfigDefault();
+	private CASFactory casFactory = new CASFactoryDummy();
 
     /**
 	 * Construct an AppCommon.
@@ -544,7 +545,7 @@ public class AppCommon extends App {
     }
 
     @Override
-    public void callAppletJavaScript(String string, String... args) {
+    public void callAppletJavaScript(String string, String args) {
 		// TODO delegate to ScriptManager
     }
 
@@ -640,7 +641,7 @@ public class AppCommon extends App {
 
     @Override
     public CASFactory getCASFactory() {
-		return new CASFactoryDummy();
+		return casFactory;
     }
 
     @Override
@@ -650,7 +651,7 @@ public class AppCommon extends App {
 
     @Override
     public NormalizerMinimal getNormalizer() {
-        return null;
+		return new NormalizerMinimal();
     }
 
     @Override
@@ -706,11 +707,6 @@ public class AppCommon extends App {
 			public void ggbOnInit() {
 				// no JS
 			}
-
-			@Override
-			public void callJavaScript(String jsFunction, String[] args) {
-				// no JS
-			}
 		};
     }
 
@@ -731,5 +727,9 @@ public class AppCommon extends App {
 
 	public void setConfig(AppConfig config) {
 		this.config = config;
+	}
+
+	public void setCASFactory(CASFactory casFactory) {
+		this.casFactory = casFactory;
 	}
 }

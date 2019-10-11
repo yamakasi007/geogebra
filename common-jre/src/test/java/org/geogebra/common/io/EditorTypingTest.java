@@ -1,7 +1,6 @@
 package org.geogebra.common.io;
 
 import org.geogebra.common.BaseUnitTest;
-import org.geogebra.common.jre.headless.AppCommon;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
 import org.geogebra.common.kernel.parser.ParseException;
@@ -12,8 +11,6 @@ import org.junit.Test;
 
 import com.himamis.retex.editor.share.controller.EditorState;
 import com.himamis.retex.editor.share.editor.MathFieldInternal;
-import com.himamis.retex.editor.share.event.KeyEvent;
-import com.himamis.retex.editor.share.input.KeyboardInputAdapter;
 import com.himamis.retex.editor.share.model.Korean;
 import com.himamis.retex.editor.share.model.MathSequence;
 import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
@@ -21,16 +18,13 @@ import com.himamis.retex.editor.share.util.JavaKeyCodes;
 import com.himamis.retex.editor.share.util.Unicode;
 import com.himamis.retex.renderer.share.platform.FactoryProvider;
 
-public class EditorTypingTest {
-
-	private static AppCommon appC;
+public class EditorTypingTest extends BaseUnitTest {
 
 	@BeforeClass
 	public static void prepare() {
 		if (FactoryProvider.getInstance() == null) {
 			FactoryProvider.setInstance(new FactoryProviderCommon());
 		}
-		appC = BaseUnitTest.createAppCommon();
 	}
 
 	private void checkEditorInsert(String input, String output) {
@@ -40,9 +34,11 @@ public class EditorTypingTest {
 
 	private class EditorChecker {
 		private MathFieldCommon mathField = new MathFieldCommon();
+		private EditorTyper typer;
 
+		// avoid synthetic access: can't be private
 		protected EditorChecker() {
-			// avoid synthetic access: can't be private
+			typer = new EditorTyper(mathField);
 		}
 
 		public void checkAsciiMath(String output) {
@@ -56,30 +52,14 @@ public class EditorTypingTest {
 
 			String exp = GeoGebraSerializer.serialize(rootComponent);
 
-			ExpressionNode en;
 			try {
-				en = appC.getKernel().getParser().parseExpression(exp);
+				ExpressionNode en = parse(exp);
 				Assert.assertEquals(output, en.toString(StringTemplate.defaultTemplate));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				Assert.assertEquals(output, "Exception: " + e.toString());
 			}
 
-		}
-
-		public EditorChecker type(String input) {
-			KeyboardInputAdapter.emulateInput(mathField.getInternal(), input);
-			return this;
-		}
-
-		public EditorChecker insert(String input) {
-			mathField.insertString(input);
-			return this;
-		}
-
-		public EditorChecker typeKey(int key) {
-			mathField.getInternal().onKeyPressed(new KeyEvent(key, 0, '\0'));
-			return this;
 		}
 
 		public void checkRaw(String output) {
@@ -92,6 +72,21 @@ public class EditorTypingTest {
 			EditorState editorState = mathFieldInternal.getEditorState();
 			return editorState.getRootComponent();
 		}
+
+		public EditorChecker type(String input) {
+			typer.type(input);
+			return this;
+		}
+
+		public EditorChecker typeKey(int key) {
+			typer.typeKey(key);
+			return this;
+		}
+
+		public EditorChecker insert(String input) {
+			typer.insert(input);
+			return this;
+		}
 	}
 
 	@Test
@@ -102,6 +97,10 @@ public class EditorTypingTest {
 				"x/(" + Unicode.EULER_STRING + "^x+1)");
 
 		checkEditorInsert("3*x", "3*x");
+	}
+
+	public ExpressionNode parse(String exp) throws ParseException {
+		return getApp().getKernel().getParser().parseExpression(exp);
 	}
 
 	@Test

@@ -1,6 +1,7 @@
 package org.geogebra.common.plugin;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 
@@ -10,16 +11,26 @@ import org.geogebra.common.kernel.geos.GeoElement;
  * @author Arnaud
  */
 public class Event {
+
 	/** event type */
 	public final EventType type;
-	/** primary target */
-	public final GeoElement target;
+
 	/** generic argument, e.g. macro name */
-	public final String argument;
+	public String argument;
+	/** argument formatted as a JSON string */
+	public Map<String, Object> jsonArgument;
+
+	/** primary target */
+	public GeoElement target;
 	/** secondary target */
-	public final ArrayList<GeoElement> targets;
+	public ArrayList<GeoElement> targets;
+
 	private boolean alwaysDispatched;
 
+	/**
+	 * @param type
+	 *            event type
+	 */
 	public Event(EventType type) {
 		this(type, null);
 	}
@@ -43,11 +54,7 @@ public class Event {
 	 *            extra info
 	 */
 	public Event(EventType type, GeoElement target, String argument) {
-		// this( type, target, argument);
-		this.type = type;
-		this.target = target;
-		this.argument = argument;
-		this.targets = null;
+		this(type, target, argument, null);
 	}
 
 	/**
@@ -60,8 +67,8 @@ public class Event {
 	 * @param targets
 	 *            extra targets
 	 */
-	public Event(EventType type, GeoElement target, String argument,
-			ArrayList<GeoElement> targets) {
+	public Event(EventType type, GeoElement target,
+			 String argument, ArrayList<GeoElement> targets) {
 		this.type = type;
 		this.target = target;
 		this.argument = argument;
@@ -69,17 +76,23 @@ public class Event {
 	}
 
 	/**
-	 * @param type
-	 *            event type
-	 * @param target
-	 *            target
-	 * @param alwaysDispatch
-	 *            whether to override scripting block
+	 * @param jsonArgument
+	 *            JSON encoded additional properties
+	 * @return this
 	 */
-	public Event(EventType type, GeoElement target,
-			boolean alwaysDispatch) {
-		this(type, target);
-		this.alwaysDispatched = alwaysDispatch;
+	public Event setJsonArgument(Map<String, Object> jsonArgument) {
+		this.jsonArgument = jsonArgument;
+		return this;
+	}
+
+	/**
+	 * @param alwaysDispatched
+	 *            whether to force dispatching while an update is running
+	 * @return this
+	 */
+	public Event setAlwaysDispatched(boolean alwaysDispatched) {
+		this.alwaysDispatched = alwaysDispatched;
+		return this;
 	}
 
 	/**
@@ -118,5 +131,9 @@ public class Event {
 	 */
 	public String getArgument() {
 		return argument;
+	}
+
+	public Map<String, Object> getJsonArgument() {
+		return jsonArgument;
 	}
 }

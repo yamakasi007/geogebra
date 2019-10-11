@@ -48,7 +48,7 @@ import org.geogebra.web.full.gui.inputbar.HasHelpButton;
 import org.geogebra.web.full.gui.inputbar.InputBarHelpPanelW;
 import org.geogebra.web.full.gui.inputbar.InputBarHelpPopup;
 import org.geogebra.web.full.gui.inputbar.WarningErrorHandler;
-import org.geogebra.web.full.gui.inputfield.InputSuggestions;
+import org.geogebra.web.full.gui.inputfield.MathFieldInputSuggestions;
 import org.geogebra.web.full.gui.layout.GUITabs;
 import org.geogebra.web.full.gui.layout.panels.AlgebraPanelInterface;
 import org.geogebra.web.full.gui.util.Resizer;
@@ -86,6 +86,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.himamis.retex.editor.share.serializer.TeXSerializer;
 import com.himamis.retex.editor.share.util.Unicode;
+import com.himamis.retex.editor.web.MathFieldScroller;
 import com.himamis.retex.editor.web.MathFieldW;
 import com.himamis.retex.renderer.share.platform.FactoryProvider;
 import com.himamis.retex.renderer.web.FactoryProviderGWT;
@@ -174,6 +175,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	private String ariaPreview;
 	private Label ariaLabel = null;
 	InputItemControl inputControl;
+	private MathFieldScroller scroller;
 
 	public void updateOnNextRepaint() {
 		needsUpdate = true;
@@ -1353,7 +1355,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 					helpPopup.removeStyleName("helpPopupAV");
 					helpPopup.addStyleName("helpPopupAVBottom");
 				}
-				helpPanel.updateGUI(maxOffsetHeight, 1);
+				helpPanel.updateGUI(maxOffsetHeight);
 				helpPopup.show();
 			}
 		});
@@ -1457,11 +1459,6 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	@Override
 	public void updatePosition(AbstractSuggestionDisplay sug) {
 		sug.setPositionRelativeTo(content);
-	}
-
-	@Override
-	public boolean isForCAS() {
-		return false;
 	}
 
 	@Override
@@ -1638,7 +1635,9 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 			latexItem = new FlowPanel();
 		}
 		latexItem.clear();
-		latexItem.add(canvas);
+		if (canvas != null) {
+			latexItem.add(canvas);
+		}
 		content.add(latexItem);
 	}
 
@@ -1695,7 +1694,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	}
 
 	@Override
-	public void setFocus(boolean focus, boolean sv) {
+	public void setFocus(boolean focus, boolean scheduled) {
 		if (focus) {
 			if (app.isUnbundled() && app.isMenuShowing()) {
 				app.toggleMenu();
@@ -1752,11 +1751,6 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 			return "";
 		}
 		return mf.getText();
-	}
-
-	@Override
-	public void onEnter(final boolean keepFocus) {
-		getLatexController().onEnter(keepFocus, false);
 	}
 
 	@Override
@@ -1820,7 +1814,10 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	 * Cursor listener
 	 */
 	public void onCursorMove() {
-		MathFieldW.scrollParent(latexItem, 20);
+		if (scroller == null) {
+			scroller = new MathFieldScroller(latexItem);
+		}
+		scroller.scrollHorizontallyToCursor(20);
 	}
 
 	/**
@@ -1838,7 +1835,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	/**
 	 * @return suggestions model
 	 */
-	InputSuggestions getInputSuggestions() {
+	MathFieldInputSuggestions getInputSuggestions() {
 		return getLatexController().getInputSuggestions();
 	}
 

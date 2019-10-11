@@ -12,7 +12,6 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewCompanion;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.geogebra3D.euclidianFor3D.EuclidianViewFor3DCompanion;
-import org.geogebra.common.javax.swing.GBox;
 import org.geogebra.common.main.settings.EuclidianSettings;
 
 /** no GUI implementation of EV */
@@ -48,12 +47,13 @@ public class EuclidianViewNoGui extends EuclidianView {
 		g2Dtemp = AwtFactory.getPrototype().newBufferedImage(5, 5, 1)
 				.createGraphics();
 		ec.getApplication().getKernel().attach(this);
+		settingsChanged(settings);
 	}
 
 	@Override
 	public void repaint() {
-		// TODO Auto-generated method stub
-
+		this.updateBackgroundIfNecessary();
+		paint(getGraphicsForPen(), getBackgroundGraphics());
 	}
 
 	@Override
@@ -213,16 +213,6 @@ public class EuclidianViewNoGui extends EuclidianView {
 	}
 
 	@Override
-	public void add(GBox box) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void remove(GBox box) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public GGraphics2D getGraphicsForPen() {
 		return g2;
 	}
@@ -254,5 +244,4 @@ public class EuclidianViewNoGui extends EuclidianView {
 	protected EuclidianViewCompanion newEuclidianViewCompanion() {
 		return new EuclidianViewFor3DCompanion(this);
 	}
-
 }

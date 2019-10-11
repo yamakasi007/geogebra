@@ -1002,7 +1002,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 * tells the application that a view coord system has changed
 	 */
 	public void setCoordSystemOccured() {
-
 		if (storeUndoInfoForSetCoordSystem == CoordSystemStateForUndo.MAY_SET_COORD_SYSTEM) {
 			storeUndoInfoForSetCoordSystem = CoordSystemStateForUndo.SET_COORD_SYSTEM_OCCURED;
 		}
@@ -2702,11 +2701,10 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	/**
-	 * @param sl
-	 *            selection listener
+	 * Reset selection listener
 	 */
-	public void setCurrentSelectionListener(GeoElementSelectionListener sl) {
-		currentSelectionListener = sl;
+	public void resetCurrentSelectionListener() {
+		currentSelectionListener = null;
 	}
 
 	/**
@@ -2782,6 +2780,13 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		if (getGuiManager() != null) {
 			getGuiManager().doAfterRedefine(geo);
 		}
+	}
+
+	/**
+	 * Enable the full user interface.
+	 */
+	public void enableUseFullGui() {
+		useFullGui = true;
 	}
 
 	public boolean getUseFullGui() {
@@ -3180,7 +3185,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public void showRelation(final GeoElement ra, final GeoElement rb,
 			final GeoElement rc, final GeoElement rd) {
-		Relation.showRelation(this, ra, rb, rc, rd);
+		new Relation(this, ra, rb, rc, rd).showDialog();
 	}
 
 	public GeoElement getGeoForCopyStyle() {
@@ -3900,25 +3905,13 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case GEOMETRIC_DISCOVERY:
 			return prerelease;
 
-		/** APPS-284 */
-		case COMMAND_FILTERING:
-			return true;
-
-		/** APPS-634 */
-		case BUTTON_HIGHLIGHTING:
-			return true;
-
 		/** APPS-890 */
 		case AUTOLABEL_CAS_SETTINGS:
-			return prerelease;
-
-		/** APPS-1000 */
-		case COMMAND_COMPLETION_FALLBACK:
 			return true;
 
 		/** APPS-1035 */
 		case SYMBOLIC_INPUTFIELDS:
-			return prerelease;
+			return true;
 		// **********************************************************************
        // G3D START
        //
@@ -5155,5 +5148,28 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public FpsProfiler getFpsProfiler() {
 		return null;
+	}
+
+	/**
+	 * Autonomously draws from the coords.json file.
+	 */
+	public void testDraw() {
+		// no-op
+	}
+
+	/**
+	 * Records the drawing.
+	 */
+	public void startDrawRecording() {
+		// no-op
+	}
+
+	/**
+	 * Ends the recording of the drawing and logs the results.
+	 *
+	 * For autonomous drawing, the logged result has to be copied into the coords.json file.
+	 */
+	public void endDrawRecordingAndLogResults() {
+		// no-op
 	}
 }

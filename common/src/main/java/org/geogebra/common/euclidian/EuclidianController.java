@@ -14,8 +14,10 @@ package org.geogebra.common.euclidian;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.geogebra.common.awt.GPoint;
@@ -82,7 +84,6 @@ import org.geogebra.common.kernel.arithmetic.PolyFunction;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.commands.EvalInfo;
 import org.geogebra.common.kernel.geos.AbsoluteScreenLocateable;
-import org.geogebra.common.kernel.geos.Furniture;
 import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoAudio;
 import org.geogebra.common.kernel.geos.GeoAxis;
@@ -150,6 +151,7 @@ import org.geogebra.common.main.SpecialPointsManager;
 import org.geogebra.common.main.error.ErrorHelper;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
+import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.plugin.Operation;
@@ -255,7 +257,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected GeoFunction movedGeoFunction;
 	protected GeoNumeric movedGeoNumeric;
 	protected GeoBoolean movedGeoBoolean;
-	protected Furniture movedGeoButton;
+	protected AbsoluteScreenLocateable movedGeoButton;
 	protected GeoWidget movedGeoMedia;
 	protected GeoElement movedLabelGeoElement;
 	protected GeoElement movedGeoElement;
@@ -415,6 +417,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private boolean videoMoved;
 	private boolean popupJustClosed = false;
 	private ModeMacro modeMacro;
+	private int numOfTargets = 0;
 
 	private SnapController snapController = new SnapController();
 
@@ -749,11 +752,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 								view.toRealWorldCoordY(((GeoBoolean) geo)
 										.getAbsoluteScreenLocY() + 20));
 						firstMoveable = false;
-					} else if (geo instanceof Furniture) {
+					} else if (geo instanceof AbsoluteScreenLocateable
+							&& ((AbsoluteScreenLocateable) geo).isFurniture()) {
 						setStartPointLocation(
-								view.toRealWorldCoordX(((Furniture) geo)
+								view.toRealWorldCoordX(((AbsoluteScreenLocateable) geo)
 										.getAbsoluteScreenLocX() - 5),
-								view.toRealWorldCoordY(((Furniture) geo)
+								view.toRealWorldCoordY(((AbsoluteScreenLocateable) geo)
 										.getAbsoluteScreenLocY() + 30));
 						firstMoveable = false;
 					} else if (geo instanceof GeoConic) {
@@ -7537,8 +7541,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			setDragCursor();
 		}
 		// button
-		else if (movedGeoElement instanceof Furniture
-				&& ((Furniture) movedGeoElement).isFurniture()
+		else if (movedGeoElement instanceof AbsoluteScreenLocateable
+				&& ((AbsoluteScreenLocateable) movedGeoElement).isFurniture()
 				&& !(movedGeoElement instanceof GeoEmbed)) {
 			// for applets:
 			// allow buttons to be dragged only if the button tool is selected
@@ -7558,7 +7562,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}
 
 				// ie Button Mode is really selected
-				movedGeoButton = (Furniture) movedGeoElement;
+				movedGeoButton = (AbsoluteScreenLocateable) movedGeoElement;
 				// move button
 				moveAbsoluteLocatable(movedGeoButton, MOVE_BUTTON);
 
@@ -7709,8 +7713,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return false;
 		}
 		GeoInputBox textField = (GeoInputBox) geo;
-		return (textField.isTextField() && ((tempRightClick() || !textField.isLocked()
-				|| app.getMode() == EuclidianConstants.MODE_TEXTFIELD_ACTION)));
+		return tempRightClick() || !textField.isLocked()
+				|| app.getMode() == EuclidianConstants.MODE_TEXTFIELD_ACTION;
 	}
 
 	protected void setStartPointLocation(double x, double y) {
@@ -8400,12 +8404,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		// object selection mode
 		case EuclidianConstants.MODE_SELECTION_LISTENER:
-			if (app.getCurrentSelectionListener() == null) {
-				return false;
-			}
-
-			return !app.isUsingFullGui() || app.getGuiManager() == null
-					|| !app.getGuiManager().isInputFieldSelectionListener();
+			return app.getCurrentSelectionListener() != null;
 
 		// transformations
 		case EuclidianConstants.MODE_TRANSLATE_BY_VECTOR:
@@ -8685,10 +8684,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (getTextController() != null && getTextController().isEditing()) {
 			return;
 		}
-		if (view.hasDynamicStyleBar()
-				&& ((mode == EuclidianConstants.MODE_SELECT_MOW
-						&& !event.isRightClick())
-						|| mode != EuclidianConstants.MODE_SELECT_MOW)) {
+		if (shouldHideDynamicStyleBar(event)) {
 			this.hideDynamicStylebar();
 		}
 
@@ -9532,10 +9528,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            pointer event
 	 */
 	public void wrapMousePressed(AbstractEvent event) {
-		if (view.hasDynamicStyleBar()
-				&& ((mode == EuclidianConstants.MODE_SELECT_MOW
-						&& !event.isRightClick())
-						|| mode != EuclidianConstants.MODE_SELECT_MOW)) {
+		if (shouldHideDynamicStyleBar(event)) {
 			this.hideDynamicStylebar();
 		}
 
@@ -9700,7 +9693,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 		}
 
-		this.pressedButton = view.getHitButton(mouseLoc, event.getType());
+		this.pressedButton = view.getHitButton();
 		if (pressedButton != null) {
 			if (!app.showView(App.VIEW_PROPERTIES)) {
 				pressedButton.setPressed(true);
@@ -9735,6 +9728,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 		setViewHits(event.getType());
+
+		dispatchMouseDownEvent(event);
+
 		if (app.isWhiteboardActive()
 				&& mode == EuclidianConstants.MODE_TRANSLATEVIEW
 				&& !getView().getHits().isEmpty()) {
@@ -9765,6 +9761,35 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		}
 		switchModeForMousePressed(event);
+	}
+
+	private boolean shouldHideDynamicStyleBar(AbstractEvent event) {
+		return view.hasDynamicStyleBar()
+				&& (mode != EuclidianConstants.MODE_SELECT_MOW || !event.isRightClick());
+	}
+
+	protected Map<String, Object> createMouseDownEventArgument() {
+		Hits hits = view.getHits().getTopHits();
+
+		String[] serializedHits = new String[hits.size()];
+		for (int i = 0; i < hits.size(); i++) {
+			serializedHits[i] = hits.get(i).getLabelSimple();
+		}
+
+		Map<String, Object> jsonArgument = new HashMap<>();
+		jsonArgument.put("viewNo", view.getEuclidianViewNo());
+		jsonArgument.put("hits", serializedHits);
+
+		return jsonArgument;
+	}
+
+	protected void dispatchMouseDownEvent(AbstractEvent event) {
+		Map<String, Object> jsonArgument = createMouseDownEventArgument();
+
+		jsonArgument.put("x", view.toRealWorldCoordX(event.getX()));
+		jsonArgument.put("y", view.toRealWorldCoordY(event.getY()));
+
+		app.dispatchEvent(new Event(EventType.MOUSE_DOWN).setJsonArgument(jsonArgument));
 	}
 
 	private void resetSelectionFlags() {
@@ -10515,6 +10540,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			runPointerCallback(pointerUpCallback);
 			this.pointerUpCallback = null;
 		}
+
+		decreaseTargets();
 	}
 
 	/**
@@ -10675,7 +10702,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			getPen().startTimer();
 		}
 		if (penMode(mode)) {
-			boolean geoCreated = getPen().handleMouseReleasedForPenMode(right, x, y);
+			boolean geoCreated = getPen().handleMouseReleasedForPenMode(right, x, y,
+					(numOfTargets > 0));
 			if (geoCreated) {
 				storeUndoInfo();
 			}
@@ -10701,6 +10729,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			changedKernel0 = true;
 			app.getKernel().getConstruction().getUndoManager()
 					.storeUndoInfoAfterPasteOrAdd();
+		}
+
+		if (draggingOccured && movedGeoElement != null) {
+			app.getEventDispatcher().dispatchEvent(
+					new Event(EventType.DRAG_END, movedGeoElement)
+			);
 		}
 
 		if (getMovedGeoPoint() != null) {
@@ -11717,6 +11751,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		zoomInOut(scaleFactor,
 				scaleFactor < EuclidianView.MOUSE_WHEEL_ZOOM_FACTOR ? 1 : 2, x,
 				y);
+		numOfTargets = 2;
 	}
 
 	public void twoTouchStart(double x1, double y1, double x2, double y2) {
@@ -12800,6 +12835,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				maxX = Double.NEGATIVE_INFINITY,
 				maxY = Double.NEGATIVE_INFINITY;
 		boolean hasRotationHandler = true;
+		boolean fixed = false;
 		// calc min/max from geos
 		for (GeoElement geo : geos) {
 			Drawable dr = ((Drawable) view.getDrawableFor(geo));
@@ -12825,12 +12861,18 @@ public abstract class EuclidianController implements SpecialPointsListener {
 					}
 				}
 			}
+			if (geo.isLocked()) {
+				fixed = true;
+			}
 		}
 		// create union bounding box
 		GRectangle rect = AwtFactory.getPrototype().newRectangle((int) minX,
 				(int) minY, (int) (maxX - minX), (int) (maxY - minY));
-		view.setBoundingBox(new BoundingBox(rect, false,
-				hasRotationHandler));
+		BoundingBox boundingBox = new BoundingBox(rect, false,
+				hasRotationHandler);
+		boundingBox.setFixed(fixed);
+		boundingBox.setColor(app.getPrimaryColor());
+		view.setBoundingBox(boundingBox);
 	}
 
 	/**
@@ -12874,4 +12916,18 @@ public abstract class EuclidianController implements SpecialPointsListener {
     public long getElapsedTimeFromLastMousePressed() {
         return System.currentTimeMillis() - lastMousePressedTime;
     }
+
+	/**
+	 * Resets the state after pinch zooming is finished and both fingers are released
+	 */
+	public void resetPinchZoomOccured() {
+		numOfTargets = 0;
+	}
+
+	/**
+	 * Decreasing the current number of touches when a finger is released after pinch
+	 */
+	private void decreaseTargets() {
+		numOfTargets = numOfTargets == 0 ? 0 : numOfTargets - 1;
+	}
 }

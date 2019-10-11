@@ -145,7 +145,6 @@ import org.geogebra.web.plugin.WebsocketLogger;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -598,7 +597,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public ScriptManager newScriptManager() {
-		return new ScriptManagerW(this);
+		return new ScriptManagerW(this, new ApiExporter());
 	}
 
 	// ================================================
@@ -606,20 +605,9 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	// ================================================
 
 	@Override
-	public void callAppletJavaScript(String fun, String... args) {
-		if (args == null || args.length == 0) {
-			JsEval.callNativeJavaScript(fun);
-		} else if (args.length == 1) {
-			Log.debug("calling function: " + fun + "(" + args[0] + ")");
-			JsEval.callNativeJavaScript(fun, args[0]);
-		} else {
-			JsArrayString jsStrings = (JsArrayString) JavaScriptObject
-					.createArray();
-			for (Object obj : args) {
-				jsStrings.push(obj.toString());
-			}
-			JsEval.callNativeJavaScriptMultiArg(fun, jsStrings);
-		}
+	public void callAppletJavaScript(String fun, String arg) {
+		Log.debug("calling function: " + fun + "(" + arg + ")");
+		JsEval.callNativeJavaScript(fun, arg);
 	}
 
 	@Override
@@ -4030,7 +4018,22 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	}
 
 	@Override
-	public EuclidianController getEuclidianController() {
-		return super.getEuclidianController();
+	public void testDraw() {
+		getEuclidianController().getMouseTouchGestureController().getDrawingEmulator().draw();
+	}
+
+	@Override
+	protected EuclidianControllerW getEuclidianController() {
+		return (EuclidianControllerW) super.getEuclidianController();
+	}
+
+	@Override
+	public void startDrawRecording() {
+		getEuclidianController().getMouseTouchGestureController().startDrawRecording();
+	}
+
+	@Override
+	public void endDrawRecordingAndLogResults() {
+		getEuclidianController().getMouseTouchGestureController().endDrawRecordingAndLogResult();
 	}
 }

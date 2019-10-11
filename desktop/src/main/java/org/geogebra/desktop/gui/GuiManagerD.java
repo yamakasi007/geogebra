@@ -315,11 +315,6 @@ public class GuiManagerD extends GuiManager implements GuiManagerInterfaceD {
 		return new Euclidian2DockPanel(getApp(), null, idx);
 	}
 
-	@Override
-	public boolean isInputFieldSelectionListener() {
-		return getApp().getCurrentSelectionListener() == algebraInput.getTextField();
-	}
-
 	public void clearPreferences() {
 		if ((getApp()).isSaved() || getApp().saveCurrentFile()) {
 			getApp().setWaitCursor();
@@ -802,7 +797,7 @@ public class GuiManagerD extends GuiManager implements GuiManagerInterfaceD {
 
 		toolbarPanel.validate();
 		toolbarPanel.updateHelpText();
-		getApp().dispatchEvent(new Event(EventType.PERSPECTIVE_CHANGE, null));
+		getApp().dispatchEvent(new Event(EventType.PERSPECTIVE_CHANGE));
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public abstract class CanvasDrawable extends Drawable {
 	 * @return whether text starts and ends with $
 	 */
 	public static boolean isLatexString(String text) {
-		return text.length() > 1 && text.startsWith("$")
+		return text != null && text.length() > 1 && text.startsWith("$")
 				&& text.trim().endsWith("$");
 	}
 
@@ -168,6 +168,9 @@ public abstract class CanvasDrawable extends Drawable {
 	 *            whether the caption is latex
 	 */
 	protected void calculateBoxBounds(boolean latex) {
+		if (labelSize == null) {
+			return;
+		}
 		boxLeft = xLabel + labelSize.x + 2;
 		boxTop = latex
 				? yLabel + (labelSize.y - getPreferredHeight()) / 2
@@ -194,9 +197,7 @@ public abstract class CanvasDrawable extends Drawable {
 	 */
 	protected void highlightLabel(GGraphics2D g2, boolean latex) {
 		if (geo.isLabelVisible() && isHighlighted()) {
-			if (!view.getApplication().isDesktop()) {
-				g2.setPaint(GColor.LIGHT_GRAY);
-			}
+			g2.setPaint(GColor.LIGHT_GRAY);
 			if (latex) {
 				g2.fillRect(xLabel, yLabel, labelSize.x, labelSize.y);
 			} else {
@@ -221,16 +222,8 @@ public abstract class CanvasDrawable extends Drawable {
 	/**
 	 * @param g2
 	 *            graphics
-	 * @param text
-	 *            text
 	 */
-	protected void drawOnCanvas(GGraphics2D g2, String text) {
-		App app = view.getApplication();
-
-		GFont vFont = view.getFont();
-		setLabelFont(app.getFontCanDisplay(text, false, vFont.getStyle(),
-				getLabelFontSize()));
-
+	protected void drawOnCanvas(GGraphics2D g2) {
 		g2.setFont(getLabelFont());
 		g2.setStroke(EuclidianStatic.getDefaultStroke());
 
@@ -295,13 +288,19 @@ public abstract class CanvasDrawable extends Drawable {
 	/**
 	 * @return font for label
 	 */
-	public GFont getLabelFont() {
+	protected GFont getLabelFont() {
 		// deriveFont() as quick fix for GGB-2094
 		return labelFont.deriveFont(GFont.PLAIN);
 	}
 
-	private void setLabelFont(GFont labelFont) {
-		this.labelFont = labelFont;
+	/**
+	 * @param text
+	 *            label text
+	 */
+	protected void setLabelFont(String text) {
+		GFont vFont = view.getFont();
+		this.labelFont = view.getApplication().getFontCanDisplay(text, false, vFont.getStyle(),
+				getLabelFontSize());
 	}
 
 	private void setLabelSize(GPoint labelSize) {

@@ -127,6 +127,7 @@ import org.geogebra.web.html5.gui.util.NoDragImage;
 import org.geogebra.web.html5.gui.view.browser.BrowseViewI;
 import org.geogebra.web.html5.javax.swing.GOptionPaneW;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.util.ArticleElementInterface;
 import org.geogebra.web.html5.util.Visibility;
 import org.geogebra.web.shared.GlobalHeader;
 
@@ -483,11 +484,6 @@ public class GuiManagerW extends GuiManager
 	}
 
 	@Override
-	public boolean isInputFieldSelectionListener() {
-		return false;
-	}
-
-	@Override
 	public void showDrawingPadPopup(final EuclidianViewInterfaceCommon view,
 			final GPoint mouseLoc) {
 		showDrawingPadPopup(((EuclidianViewW) view).getG2P().getElement(),
@@ -544,7 +540,7 @@ public class GuiManagerW extends GuiManager
 			} else {
 				hideViewWith(viewId, isPermanent);
 			}
-			getApp().dispatchEvent(new Event(EventType.PERSPECTIVE_CHANGE, null));
+			getApp().dispatchEvent(new Event(EventType.PERSPECTIVE_CHANGE));
 		}
 
 		layout.getDockManager().updateVoiceover();
@@ -2175,8 +2171,7 @@ public class GuiManagerW extends GuiManager
 			boolean showMoreButton = app.getConfig().showKeyboardHelpButton()
 					&& !getApp().getKeyboardManager().shouldDetach();
 			onScreenKeyboard = new OnscreenTabbedKeyboard(getApp(),
-					app.getConfig().hasScientificKeyboard(),
-					showMoreButton);
+					keyboardIsScientific(), showMoreButton);
 		}
 
 		if (textField != null) {
@@ -2185,6 +2180,16 @@ public class GuiManagerW extends GuiManager
 
 		onScreenKeyboard.setListener(listener);
 		return onScreenKeyboard;
+	}
+
+	private boolean keyboardIsScientific() {
+		ArticleElementInterface articleElement = ((AppW) app).getArticleElement();
+
+		if ("evaluator".equals(articleElement.getDataParamAppName())) {
+			return "scientific".equals(articleElement.getParamKeyboardType("normal"));
+		}
+
+		return app.getConfig().hasScientificKeyboard();
 	}
 
 	@Override

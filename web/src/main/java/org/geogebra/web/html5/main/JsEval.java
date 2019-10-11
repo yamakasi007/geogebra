@@ -24,64 +24,29 @@ public class JsEval {
 		}
 	}-*/;
 
-	public static native void callNativeJavaScript(String funcname) /*-{
+	public static native void callNativeJavaScript(String funcname, String... args) /*-{
 		if ($wnd[funcname]) {
-			$wnd[funcname]();
+			$wnd[funcname].apply(null, args);
 		}
 	}-*/;
 
-	public static native void callNativeJavaScript(String funcname,
-			String arg) /*-{
+	public static native void callNativeJavaScript(JavaScriptObject funcObject,
+			String... args) /*-{
+		if (typeof funcObject === "function") {
+			funcObject.apply(null, args);
+		}
+	}-*/;
+
+	public static native void callNativeJavaScript(String funcname, JavaScriptObject arg) /*-{
 		if ($wnd[funcname]) {
 			$wnd[funcname](arg);
 		}
 	}-*/;
 
-	public static native void callNativeJavaScriptMultiArg(String funcname,
-			JavaScriptObject arg) /*-{
-		if ($wnd[funcname]) {
-			$wnd[funcname](arg);
+	public static native void callNativeJavaScript(JavaScriptObject funcObject,
+			JavaScriptObject param) /*-{
+		if (typeof funcObject === "function") {
+			funcObject(param);
 		}
 	}-*/;
-
-	public static native void callNativeJavaScriptMultiArg(String funcname,
-			String arg0, String arg1) /*-{
-		if ($wnd[funcname]) {
-			$wnd[funcname](arg0, arg1);
-		}
-	}-*/;
-
-	public static native void runCallback(JavaScriptObject onLoadCallback,
-			JavaScriptObject ref) /*-{
-		if (typeof onLoadCallback === "function") {
-			onLoadCallback(ref);
-		}
-	}-*/;
-
-	public static native void runCallback(JavaScriptObject onLoadCallback,
-			String ref) /*-{
-		if (typeof onLoadCallback === "function") {
-			onLoadCallback(ref);
-		}
-	}-*/;
-
-	/**
-	 * @param fun
-	 *            JS function name
-	 * @param arg0
-	 *            first argument
-	 * @param arg1
-	 *            second argument
-	 */
-	public static void callAppletJavaScript(String fun, String arg0,
-			String arg1) {
-		if (arg0 == null && arg1 == null) {
-			JsEval.callNativeJavaScript(fun);
-		} else if (arg0 != null && arg1 == null) {
-			JsEval.callNativeJavaScript(fun, arg0);
-		} else if (arg0 != null && arg1 != null) {
-			JsEval.callNativeJavaScriptMultiArg(fun, arg0, arg1);
-		}
-
-	}
 }
