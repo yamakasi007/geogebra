@@ -1,5 +1,3 @@
-image: openjdk
-
 stages:
   - build
 
