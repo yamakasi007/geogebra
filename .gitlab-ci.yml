@@ -1,16 +1,28 @@
 stages:
-  - user
-  - testj
   - build
-
-user:
-  stage: user
-  script: whoami
-
-testj:
-  stage: testj
-  script: java -version
+  - test
+  - static
 
 build:
   stage: build
   script: ./gradlew :web:prepareS3Upload :web:createDraftBundleZip :web:mergeDeploy -Pgdraft=true
+  
+common-jre-test:
+  stage: test
+  script: ./gradlew :common-jre:test :common-jre:jacocoTestReport
+  
+desktop-test:
+  stage: test
+  script: ./gradlew :desktop:test
+  
+static-pmd:
+  stage: static
+  script: ./gradlew checkPmd
+  
+static-spotbugs:
+  stage: static
+  script: ./gradlew :editor-base:spotbugsMain :web:spotbugsMain :desktop:spotbugsMain :ggbjdk:spotbugsMain :common-jre:spotbugsMain :common:spotbugsMain
+  
+static-codestyle:
+  stage: static
+  script: ./gradlew :web:cpdCheck checkAllStyles
