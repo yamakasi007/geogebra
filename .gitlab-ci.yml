@@ -1,6 +1,11 @@
 stages:
+  - user
   - testj
   - build
+
+user:
+  stage: user
+  script: whoami
 
 testj:
   stage: testj
