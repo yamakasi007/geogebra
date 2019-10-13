@@ -1,7 +1,11 @@
 stages:
+  - testj
   - build
+
+testj:
+  stage: testj
+  script: java -version
 
 build:
   stage: build
-  script: java -version
   script: ./gradlew :web:prepareS3Upload :web:createDraftBundleZip :web:mergeDeploy -Pgdraft=true
