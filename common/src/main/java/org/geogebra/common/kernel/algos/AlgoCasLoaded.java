@@ -9,11 +9,6 @@ import org.geogebra.common.kernel.geos.GeoElement;
 public class AlgoCasLoaded extends AlgoElement implements UsesCAS {
 	private final boolean casEnabled;
 	private GeoBoolean output;
-
-	/**
-	 *
-	 * @param c the construction
-	 */
 	public AlgoCasLoaded(Construction c) {
 		super(c);
 		casEnabled = kernel.getApplication().getConfig().isCASEnabled();
