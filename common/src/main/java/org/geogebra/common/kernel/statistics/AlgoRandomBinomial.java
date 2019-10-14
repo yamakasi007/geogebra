@@ -51,23 +51,16 @@ public class AlgoRandomBinomial extends AlgoTwoNumFunction
 	}
 
 	@Override
-	public final void compute() {
-		if (input[0].isDefined() && input[1].isDefined()) {
-			if (b.getDouble() < 0) {
-				num.setUndefined();
-			} else {
-				// disabled randomBinomialTRS() as it doesn't work well
-				// eg when p is near 0.5
-				// http://www.geogebra.org/forum/viewtopic.php?f=8&t=18685
-				// num.setValue(randomBinomialTRS((int)a.getDouble(),
-				// b.getDouble()));
-				num.setValue(
-						randomBinomial((int) a.getDouble(), b.getDouble()));
-			}
-
-		} else {
-			num.setUndefined();
+	public final double computeValue(double aVal, double bVal) {
+		if (bVal < 0) {
+			return Double.NaN;
 		}
+		// disabled randomBinomialTRS() as it doesn't work well
+		// eg when p is near 0.5
+		// http://www.geogebra.org/forum/viewtopic.php?f=8&t=18685
+		// num.setValue(randomBinomialTRS((int)a.getDouble(),
+		// b.getDouble()));
+		return randomBinomial((int) a.getDouble(), b.getDouble());
 	}
 
 	@Override
