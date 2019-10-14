@@ -19,8 +19,6 @@ import org.geogebra.web.html5.gui.BaseWidgetFactory;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.sliderPanel.SliderW;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -46,7 +44,6 @@ public class AccessibilityView implements View {
 		this.controls = sliderFactory.newPanel();
 		controls.addStyleName("accessibilityView");
 		this.sliderFactory = sliderFactory;
-		hideUIElement(controls);
 		widgets = new HashMap<>();
 		app.getKernel().attach(this);
 		new Timer() {
@@ -279,14 +276,4 @@ public class AccessibilityView implements View {
 		range.getElement().setAttribute("aria-valuetext",
 				app.getKernel().format(value, StringTemplate.screenReader) + " " + unit);
 	}
-
-	/** For buttons we need to make sure click handler still works */
-	private static void hideUIElement(Widget widget) {
-		Style style = widget.getElement().getStyle();
-		style.setOpacity(.01);
-		style.setPosition(Position.FIXED);
-		style.setHeight(0, Style.Unit.PX);
-		style.setWidth(0, Style.Unit.PX);
-	}
-
 }
