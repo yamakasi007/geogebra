@@ -609,7 +609,7 @@ public class GPopupMenuW implements AttachedToDOM {
 					}
 					AriaMenuBar.eatEvent(event);
 					return;
-			}
+			    }
 			}
 			super.onBrowserEvent(event);
 		}
