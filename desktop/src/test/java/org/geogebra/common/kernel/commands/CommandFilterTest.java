@@ -35,8 +35,6 @@ public class CommandFilterTest extends AlgebraTest {
 					AlgebraTestHelper.shouldFail(cmd + "()", "number of arg",
 							"only",
 							app);
-				} else if (signature == null) {
-					System.out.println(""+cmd.name());
 				}
 			} else {
 				AlgebraTestHelper.shouldFail(cmd + "()", "Unknown command",
