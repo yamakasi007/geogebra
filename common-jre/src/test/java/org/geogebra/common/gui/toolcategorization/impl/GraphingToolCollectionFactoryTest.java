@@ -81,7 +81,6 @@ public class GraphingToolCollectionFactoryTest extends BaseUnitTest {
                 Assert.assertFalse(isInToolSet(toolCollection.getTools(i).get(j)));
             }
         }
-        toolCollection.getTools(EuclidianConstants.MODE_MOVE);
     }
 
     private boolean isInToolSet(int tool) {
