@@ -1389,8 +1389,8 @@ public class AlgebraProcessor {
 		return bool;
 	}
 
-	private boolean isBoolean(Variable unwrap) {
-		return kernel.lookupLabel(unwrap.getName()) instanceof GeoBoolean;
+	private boolean isBoolean(Variable variable) {
+		return kernel.lookupLabel(variable.getName()) instanceof GeoBoolean;
 	}
 
 	/**
