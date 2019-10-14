@@ -1668,8 +1668,8 @@ public abstract class AlgoElement extends ConstructionElement
 		}
 
 		if (this instanceof AlgoShuffle) {
-			sb.append("randomResult=\"");
-			sb.append(getOutput(0).toOutputValueString(tpl));
+			sb.append(" randomResult=\"");
+			sb.append(StringUtil.encodeXML(getOutput(0).toOutputValueString(tpl)));
 			sb.append("\"");
 		}
 
