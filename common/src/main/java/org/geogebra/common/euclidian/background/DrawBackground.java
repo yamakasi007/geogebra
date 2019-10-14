@@ -171,7 +171,7 @@ public class DrawBackground {
 
 	private void drawVerticalLines(GGraphics2D g2, boolean subgrid, boolean infinite) {
 		double start = view.getYZero() % gap;
-		double startX = infinite ? start - gap : getStartX();
+		double startX = infinite ? (view.getXZero() % gap) - gap : getStartX();
 		double endX = infinite ? view.getWidth() : getEndX();
 
 		doDrawVerticalLines(g2, subgrid, startX, endX, start - gap,
