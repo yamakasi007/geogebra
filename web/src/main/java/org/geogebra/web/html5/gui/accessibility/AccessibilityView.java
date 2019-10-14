@@ -19,6 +19,7 @@ import org.geogebra.web.html5.gui.BaseWidgetFactory;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.sliderPanel.SliderW;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -280,9 +281,12 @@ public class AccessibilityView implements View {
 	}
 
 	/** For buttons we need to make sure click handler still works */
-	private static void hideUIElement(Widget range) {
-		range.getElement().getStyle().setOpacity(.01);
-		range.getElement().getStyle().setPosition(Position.FIXED);
+	private static void hideUIElement(Widget widget) {
+		Style style = widget.getElement().getStyle();
+		style.setOpacity(.01);
+		style.setPosition(Position.FIXED);
+		style.setHeight(0, Style.Unit.PX);
+		style.setWidth(0, Style.Unit.PX);
 	}
 
 }
