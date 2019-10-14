@@ -577,13 +577,14 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
                 text-align: center;
                 font-size: 87%;
                 width: 104px;
+                min-height: 40px;
             }
             &-active {
                 .image {
-                    border: 1px solid $teal-default;
+                    border: 1px solid $mow_primary;
                 }
                 .title {
-                    color: $teal-default;
+                    color: $mow_primary;
                 }
             }
         }
