@@ -489,6 +489,10 @@ public class GPopupMenuW implements AttachedToDOM {
 	 * hide popup menu
 	 */
 	public final void hide() {
+		if (!popupPanel.isShowing()) {
+			return;
+		}
+
 		AccessibilityManagerInterface am = getApp()
 				.getAccessibilityManager();
 		Object anchor = am.getAnchor();
@@ -610,7 +614,7 @@ public class GPopupMenuW implements AttachedToDOM {
 					}
 					AriaMenuBar.eatEvent(event);
 					return;
-			}
+			    }
 			}
 			super.onBrowserEvent(event);
 		}
