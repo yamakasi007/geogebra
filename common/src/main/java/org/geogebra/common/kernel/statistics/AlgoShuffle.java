@@ -115,28 +115,14 @@ public class AlgoShuffle extends AlgoElement implements SetRandomValue {
 
 	@Override
 	public boolean setRandomValue(GeoElementND d) {
-		if (d instanceof GeoList && ((GeoList) d).size() == inputList.size()) {
-			GeoList lv = (GeoList) d;
-			outputList.clear();
-			ArrayList<GeoElement> list = copyInput();
-			for (int i = 0; i < lv.size(); i++) {
-				if (removeFromList(lv.get(i), list)) {
-					outputList.add(lv.get(i));
-				}
+		if (d instanceof GeoList) {
+			if (d != outputList) {
+				outputList.set(d);
 			}
-			fill(list);
+
 			return true;
 		}
-		return false;
-	}
 
-	private static boolean removeFromList(GeoElement geoElement, ArrayList<GeoElement> inputCopy) {
-		for (int i = 0; i < inputCopy.size(); i++) {
-			if (inputCopy.get(i).isEqual(geoElement)) {
-				inputCopy.remove(i);
-				return true;
-			}
-		}
 		return false;
 	}
 }
