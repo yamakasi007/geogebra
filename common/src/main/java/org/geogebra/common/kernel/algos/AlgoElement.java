@@ -40,6 +40,7 @@ import org.geogebra.common.kernel.geos.GeoScriptAction;
 import org.geogebra.common.kernel.geos.LabelManager;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
+import org.geogebra.common.kernel.statistics.AlgoShuffle;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
 
@@ -1663,6 +1664,12 @@ public abstract class AlgoElement extends ConstructionElement
 			if (geo.isLabelSet()) {
 				StringUtil.encodeXML(sb, geo.getLabel(tpl));
 			}
+			sb.append("\"");
+		}
+
+		if (this instanceof AlgoShuffle) {
+			sb.append("randomResult=\"");
+			sb.append(getOutput(0).toOutputValueString(tpl));
 			sb.append("\"");
 		}
 
