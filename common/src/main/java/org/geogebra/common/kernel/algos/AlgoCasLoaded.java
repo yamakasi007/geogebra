@@ -32,8 +32,8 @@ public class AlgoCasLoaded extends AlgoElement implements UsesCAS {
 
 	@Override
 	public void compute() {
-		output.setValue(casEnabled &&
-				kernel.getGeoGebraCAS().getCurrentCAS().isLoaded());
+		output.setValue(casEnabled
+				&& kernel.getGeoGebraCAS().getCurrentCAS().isLoaded());
 	}
 
 	@Override

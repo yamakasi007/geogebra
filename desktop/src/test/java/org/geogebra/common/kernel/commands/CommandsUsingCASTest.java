@@ -243,13 +243,7 @@ public class CommandsUsingCASTest extends AlgebraTest {
 
 	@Test
 	public void cmdCASLoaded() {
-		t("CASLoaded[]", "false");
-		useCASCommand();
 		t("CASLoaded[]", "true");
-	}
-
-	private void useCASCommand() {
-		ap.processAlgebraCommand("ss=Solve[ x^2=3 ]", false);
 	}
 
 	private static void runSolveTests() {
