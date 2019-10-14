@@ -42,7 +42,6 @@ public class GraphingToolCollectionFactory extends AbstractToolCollectionFactory
 
         if (!isPhoneApp) {
             impl.extendCategory(CATEGORY_MEDIA,
-                    EuclidianConstants.MODE_IMAGE,
                     EuclidianConstants.MODE_TEXT);
         }
 
