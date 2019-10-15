@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class GraphingToolSet {
 
-    public static List<Integer> notAllowedToolsGraphingCalc = Arrays.asList(
+    private static List<Integer> notAllowedToolsGraphingCalc = Arrays.asList(
         EuclidianConstants.MODE_SEGMENT,
         EuclidianConstants.MODE_IMAGE,
         EuclidianConstants.MODE_ANGLE,
