@@ -60,7 +60,7 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 	private GridTab gridTab;
 	private boolean isIniting;
 	protected Localization loc;
-	
+
 	protected static abstract class EuclidianTab extends FlowPanel
 			implements SetLabels {
 		
@@ -375,7 +375,7 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 			lbRulerType.setListener(new GridDropdown.GridDropdownListener() {
 				@Override
 				public void itemSelected(GridDropdown dropdown, int index) {
-					model.applyRulerType(index);
+					model.applyRulerType(BackgroundType.rulingOptions.get(index));
 					updateView();
 					app.storeUndoInfo();
 				}
@@ -648,6 +648,8 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 					return PropertiesResources.INSTANCE.squared5Ruling();
 				case SQUARE_BIG:
 					return PropertiesResources.INSTANCE.squared1Ruling();
+				case ELEMENTARY12_COLORED:
+					return PropertiesResources.INSTANCE.coloredRuling();
 				case ELEMENTARY12:
 					return PropertiesResources.INSTANCE.elementary12Ruling();
 				case ELEMENTARY12_HOUSE:
@@ -685,8 +687,8 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 		 *            true if the lines should be bold.
 		 */
 		public void updateRuler(int typeIdx, GColor color, int lineStyle, boolean bold) {
-			setRulerType(typeIdx);
 			BackgroundType bgType = BackgroundType.fromInt(typeIdx);
+			setRulerType(BackgroundType.rulingOptions.indexOf(bgType));
 			if (!gridOptions
 					&& (bgType == BackgroundType.NONE || bgType.isSVG())) {
 				stylePanel.setVisible(false);

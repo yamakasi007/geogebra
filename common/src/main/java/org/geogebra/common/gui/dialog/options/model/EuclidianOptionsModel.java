@@ -419,29 +419,8 @@ public class EuclidianOptionsModel {
 	}
 
 	public void fillRulingCombo() {
-		Localization loc = app.getLocalization();
-
-		String[] rulerTypes = new String[BackgroundType.MUSIC.value()];
-		rulerTypes[BackgroundType.NONE.value()] = loc.getMenuDefault("NoRuling",
-				"No ruling");
-		rulerTypes[BackgroundType.RULER.value()] = loc.getMenuDefault("Ruled",
-				"Ruled");
-		rulerTypes[BackgroundType.SQUARE_SMALL.value()] = loc.getMenuDefault("Squared5",
-				"Squared (5 mm)");
-		rulerTypes[BackgroundType.SQUARE_BIG.value()] = loc.getMenuDefault("Squared1",
-				"Squared (1 mm)");
-		rulerTypes[BackgroundType.ELEMENTARY12.value()] = loc.getMenuDefault("Elementary12",
-				"Elementary 1/2");
-		rulerTypes[BackgroundType.ELEMENTARY12_HOUSE.value()] = loc.getMenuDefault("Elementary12WithHouse",
-				"Elementary 1/2 with house");
-		rulerTypes[BackgroundType.ELEMENTARY34.value()] = loc.getMenuDefault("Elementary34",
-				"Elementary 3/4");
-		rulerTypes[BackgroundType.MUSIC.value()] = loc.getMenuDefault("Music",
-				"Music");
-
-		for (int i = 0; i < rulerTypes.length; i++) {
-			String item = rulerTypes[i];
-			listener.addRulerTypeItem(item, BackgroundType.fromInt(i));
+		for (BackgroundType type : BackgroundType.rulingOptions) {
+			listener.addRulerTypeItem(getTitleForRulingType(type), type);
 		}
 	}
 
@@ -615,40 +594,36 @@ public class EuclidianOptionsModel {
 	/**
 	 * Set ruler type from dropdown.
 	 * 
-	 * @param index
+	 * @param type
 	 *            the selected index
 	 */
-	public void applyRulerType(int index) {
+	public void applyRulerType(BackgroundType type) {
 		EuclidianSettings settings = view.getSettings();
-		switch (index) {
-		case 1:
-			settings.setBackgroundType(BackgroundType.RULER);
-			break;
-		case 2:
-			settings.setBackgroundType(BackgroundType.SQUARE_SMALL);
-			break;
-		case 3:
-			settings.setBackgroundType(BackgroundType.SQUARE_BIG);
-			break;
-		case 4:
-			settings.setBackgroundType(BackgroundType.ELEMENTARY12);
-			break;
-		case 5:
-			settings.setBackgroundType(BackgroundType.ELEMENTARY12_HOUSE);
-			break;
-		case 6:
-			settings.setBackgroundType(BackgroundType.ELEMENTARY34);
-			break;
-		case 7:
-			settings.setBackgroundType(BackgroundType.MUSIC);
-			break;
-		case 8:
-			settings.setBackgroundType(BackgroundType.ELEMENTARY12_COLORED);
-			break;
-		default:
-			settings.setBackgroundType(BackgroundType.NONE);
-			break;
-		}
+		settings.setBackgroundType(type);
 	}
 
+	private String getTitleForRulingType(BackgroundType rulingType) {
+		Localization loc = app.getLocalization();
+
+		switch (rulingType) {
+			case RULER:
+				return loc.getMenuDefault("Ruled", "Ruled");
+			case SQUARE_SMALL:
+				return loc.getMenuDefault("Squared5", "Squared (5 mm)");
+			case SQUARE_BIG:
+				return loc.getMenuDefault("Squared1", "Squared (1 mm)");
+			case ELEMENTARY12:
+				return loc.getMenuDefault("Elementary12", "Elementary 1/2");
+			case ELEMENTARY12_COLORED:
+				return loc.getMenuDefault("Elementary12Colored", "Elementary 1/2 colored");
+			case ELEMENTARY12_HOUSE:
+				return loc.getMenuDefault("Elementary12WithHouse", "Elementary 1/2 with house");
+			case ELEMENTARY34:
+				return loc.getMenuDefault("Elementary34", "Elementary 3/4");
+			case MUSIC:
+				return loc.getMenuDefault("Music", "Music");
+			default:
+				return loc.getMenuDefault("NoRuling", "No ruling");
+		}
+	}
 }
