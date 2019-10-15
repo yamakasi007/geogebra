@@ -30,6 +30,7 @@ import org.geogebra.web.html5.gui.util.FormLabel;
 import org.geogebra.web.html5.gui.util.ImageOrText;
 import org.geogebra.web.html5.gui.util.LayoutUtilW;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.util.TestHarness;
 import org.geogebra.web.html5.util.tabpanel.MultiRowsTabBar;
 import org.geogebra.web.html5.util.tabpanel.MultiRowsTabPanel;
 
@@ -368,6 +369,7 @@ public class OptionsEuclidianW extends OptionsEuclidian implements OptionPanelW,
 			}
 
 			lbRulerType = new GridDropdown(app);
+			TestHarness.setAttr(lbRulerType, "rulingDropdown");
 			lblRulerType = new FormLabel(loc.getMenu("Ruling"))
 					.setFor(lbRulerType);
 			lbRulerType.setListener(new GridDropdown.GridDropdownListener() {
