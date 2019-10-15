@@ -443,7 +443,14 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	 */
 	public boolean canBeSymbolic() {
 		return canBeSymbolicNumber() || canBeSymbolicFunction()
-				|| linkedGeo.isGeoPoint() || linkedGeo.isGeoVector();
+				|| linkedGeo.isGeoPoint() || linkedGeo.isGeoVector()
+				|| canBeMatrix();
+	}
+
+	private boolean canBeMatrix() {
+		return linkedGeo.isIndependent()
+				&& linkedGeo.isGeoList()
+				&& ((GeoList)linkedGeo).isMatrix();
 	}
 
 	private boolean canBeSymbolicFunction() {
