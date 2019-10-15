@@ -3347,8 +3347,8 @@ public class MyXMLHandler implements DocHandler {
 
 			String randomVal = attrs.remove("randomResult");
 
-			for (String key : attrs.keySet()) {
-				label = attrs.get(key);
+			for (String value : attrs.values()) {
+				label = value;
 				if ("".equals(label)) {
 					label = null;
 				} else {
@@ -3406,8 +3406,8 @@ public class MyXMLHandler implements DocHandler {
 			// (important for invisible objects like intersection points)
 
 			int i = 0;
-			for (String key : attrs.keySet()) {
-				label = attrs.get(key);
+			for (String value : attrs.values()) {
+				label = value;
 				if ("".equals(label)) {
 					label = null;
 				}
