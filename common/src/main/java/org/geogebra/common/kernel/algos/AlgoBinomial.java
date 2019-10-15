@@ -82,13 +82,8 @@ public class AlgoBinomial extends AlgoTwoNumFunction {
 	}
 
 	@Override
-	public final void compute() {
-		if (input[0].isDefined() && input[1].isDefined()) {
-			double nCr = MyMath.binomial(a.getDouble(), b.getDouble());
-			num.setValue(nCr);
-		} else {
-			num.setUndefined();
-		}
+	public final double computeValue(double aVal, double bVal) {
+		return MyMath.binomial(aVal, bVal);
 	}
 
 }

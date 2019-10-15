@@ -50,20 +50,12 @@ public class AlgoRandom extends AlgoTwoNumFunction implements SetRandomValue {
 	}
 
 	@Override
-	public final void compute() {
-
-		double aNum = a.getDouble();
-		double bNum = b.getDouble();
-
-		if (input[0].isDefined() && input[1].isDefined()
-				&& !Double.isInfinite(aNum) && !Double.isInfinite(bNum)
+	public final double computeValue(double aNum, double bNum) {
+		if (!Double.isInfinite(aNum) && !Double.isInfinite(bNum)
 				&& !Double.isNaN(aNum) && !Double.isNaN(bNum)) {
-			num.setValue(
-					cons.getApplication().getRandomIntegerBetween(aNum, bNum));
-		} else {
-			num.setUndefined();
+			return cons.getApplication().getRandomIntegerBetween(aNum, bNum);
 		}
-
+		return Double.NaN;
 	}
 
 	@Override
