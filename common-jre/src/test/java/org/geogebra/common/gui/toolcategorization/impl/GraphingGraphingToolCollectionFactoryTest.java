@@ -1,6 +1,6 @@
 package org.geogebra.common.gui.toolcategorization.impl;
 
-import org.geogebra.common.gui.toolcategorization.ToolCategorizationTestBase;
+import org.geogebra.common.gui.toolcategorization.GraphingToolSet;
 import org.geogebra.common.gui.toolcategorization.ToolCollection;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import java.util.List;
  * Test class for GraphingTools.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GraphingToolCollectionFactoryTest extends ToolCategorizationTestBase {
+public class GraphingGraphingToolCollectionFactoryTest {
 
     private ToolCollection toolCollection;
 
@@ -29,7 +29,7 @@ public class GraphingToolCollectionFactoryTest extends ToolCategorizationTestBas
         for (int i = 0; i < categories.size(); i++) {
             for (int tool : toolCollection.getTools(i)) {
                 Assert.assertFalse("Should not be available" + tool,
-                        isInGraphingToolSet(tool));
+                        GraphingToolSet.isInGraphingToolSet(tool));
             }
         }
     }

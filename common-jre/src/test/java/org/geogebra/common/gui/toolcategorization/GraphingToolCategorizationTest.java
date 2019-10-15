@@ -1,10 +1,10 @@
 package org.geogebra.common.gui.toolcategorization;
 
+import org.geogebra.common.BaseUnitTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
@@ -13,10 +13,9 @@ import java.util.ArrayList;
  * Test class for ToolCategorization.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ToolCategorizationTest extends ToolCategorizationTestBase {
+public class GraphingToolCategorizationTest extends BaseUnitTest {
 
-    @Mock
-    protected ToolCategorization toolCategorization;
+    private ToolCategorization toolCategorization;
 
     @Before
     public void setupTest() {
@@ -30,7 +29,7 @@ public class ToolCategorizationTest extends ToolCategorizationTestBase {
         ArrayList<ToolCategorization.Category> categories = toolCategorization.getCategories();
         for (int i = 0; i < categories.size(); i++) {
             for (int j = 0; j < toolCategorization.getTools(i).size(); j++) {
-                Assert.assertFalse(isInGraphingToolSet(toolCategorization.getTools(i).get(j)));
+                Assert.assertFalse(GraphingToolSet.isInGraphingToolSet(toolCategorization.getTools(i).get(j)));
             }
         }
     }
