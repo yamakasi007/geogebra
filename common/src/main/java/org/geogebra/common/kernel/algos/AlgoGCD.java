@@ -44,8 +44,8 @@ public class AlgoGCD extends AlgoTwoNumFunction {
 		}
 
 		if (DoubleUtil.isInteger(aVal) && DoubleUtil.isInteger(bVal)) {
-			BigInteger i1 = BigInteger.valueOf((long) DoubleUtil.checkInteger(aVal));
-			BigInteger i2 = BigInteger.valueOf((long) DoubleUtil.checkInteger(bVal));
+			BigInteger i1 = BigInteger.valueOf(Math.round(aVal));
+			BigInteger i2 = BigInteger.valueOf(Math.round(bVal));
 
 			i1 = i1.gcd(i2);
 
@@ -58,5 +58,4 @@ public class AlgoGCD extends AlgoTwoNumFunction {
 		}
 		return Double.NaN;
 	}
-
 }

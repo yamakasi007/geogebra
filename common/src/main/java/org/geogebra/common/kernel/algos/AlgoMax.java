@@ -52,5 +52,4 @@ public class AlgoMax extends AlgoTwoNumFunction {
 	public final double computeValue(double aVal, double bVal) {
 		return Math.max(aVal, bVal);
 	}
-
 }

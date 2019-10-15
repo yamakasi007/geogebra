@@ -17,7 +17,6 @@ import org.geogebra.common.kernel.SetRandomValue;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
-import org.geogebra.common.util.DoubleUtil;
 
 /**
  * Computes RandomNormal[a, b]
@@ -55,18 +54,19 @@ public class AlgoRandom extends AlgoTwoNumFunction implements SetRandomValue {
 				&& !Double.isNaN(aNum) && !Double.isNaN(bNum)) {
 			return cons.getApplication().getRandomIntegerBetween(aNum, bNum);
 		}
+
 		return Double.NaN;
 	}
 
 	@Override
 	public boolean setRandomValue(GeoElementND d0) {
-		double d = Math.round(DoubleUtil.checkInteger(d0.evaluateDouble()));
+		double d = Math.round(d0.evaluateDouble());
 
 		if (d >= a.getDouble() && d <= b.getDouble()) {
 			num.setValue(d);
 			return true;
 		}
+
 		return false;
 	}
-
 }

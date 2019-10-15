@@ -47,10 +47,8 @@ public class AlgoMin extends AlgoTwoNumFunction {
 		return Commands.Min;
 	}
 
-	// calc minimum of a,b
 	@Override
 	public final double computeValue(double aVal, double bVal) {
 		return Math.min(aVal, bVal);
 	}
-
 }

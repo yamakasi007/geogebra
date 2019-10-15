@@ -40,7 +40,6 @@ public class AlgoDiv extends AlgoTwoNumFunction {
 		return Commands.Div;
 	}
 
-	// calc area of conic c
 	@Override
 	public final double computeValue(double aVal, double bVal) {
 		double numerator = DoubleUtil.checkInteger(aVal);
@@ -61,5 +60,4 @@ public class AlgoDiv extends AlgoTwoNumFunction {
 			return Math.ceil(fraction);
 		}
 	}
-
 }

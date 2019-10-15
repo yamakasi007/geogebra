@@ -54,10 +54,6 @@ public class AlgoMod extends AlgoTwoNumFunction {
 
 	@Override
 	public final double computeValue(double aValRaw, double bVal) {
-		// removed as causes problems with old files
-		// double mod = Math.round(a.getDouble());
-		// double bInt = Math.abs(Math.round(b.getDouble()));
-
 		double aVal = DoubleUtil.checkInteger(aValRaw);
 		double bAbs = DoubleUtil.checkInteger(Math.abs(bVal));
 
@@ -77,5 +73,4 @@ public class AlgoMod extends AlgoTwoNumFunction {
 
 		return mod;
 	}
-
 }

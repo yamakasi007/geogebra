@@ -77,5 +77,4 @@ public class AlgoRandomNormal extends AlgoTwoNumFunction
 		num.setValue(d.evaluateDouble());
 		return true;
 	}
-
 }

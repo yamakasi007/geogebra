@@ -38,18 +38,18 @@ public class AlgoLCM extends AlgoTwoNumFunction {
 
 	@Override
 	public final double computeValue(double aVal, double bVal) {
-
 		if (aVal > Long.MAX_VALUE || bVal > Long.MAX_VALUE || aVal < -Long.MAX_VALUE
 				|| bVal < -Long.MAX_VALUE) {
 			return Double.NaN;
 		}
-		// this is the only case whwn gcd == zero
-		if (DoubleUtil.isZero(aVal) && DoubleUtil.isZero(bVal)) {
+
+		if (DoubleUtil.isZero(aVal) || DoubleUtil.isZero(bVal)) {
 			return 0;
 		}
-		if (aVal == Math.floor(aVal) && bVal == Math.floor(bVal)) {
-			BigInteger i1 = BigInteger.valueOf((long) aVal);
-			BigInteger i2 = BigInteger.valueOf((long) bVal);
+
+		if (DoubleUtil.isInteger(aVal) && DoubleUtil.isInteger(bVal)) {
+			BigInteger i1 = BigInteger.valueOf(Math.round(aVal));
+			BigInteger i2 = BigInteger.valueOf(Math.round(bVal));
 
 			BigInteger gcd = i1.gcd(i2);
 
@@ -64,5 +64,4 @@ public class AlgoLCM extends AlgoTwoNumFunction {
 		}
 		return Double.NaN;
 	}
-
 }

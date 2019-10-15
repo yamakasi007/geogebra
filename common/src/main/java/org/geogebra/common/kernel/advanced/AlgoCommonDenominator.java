@@ -51,7 +51,6 @@ public class AlgoCommonDenominator extends AlgoTwoNumFunction {
 		return Commands.CommonDenominator;
 	}
 
-	// calc area of conic c
 	@Override
 	public final double computeValue(double aVal, double bVal) {
 		double[] afrac = AlgoFractionText.decimalToFraction(aVal, Kernel.STANDARD_PRECISION);
@@ -63,5 +62,4 @@ public class AlgoCommonDenominator extends AlgoTwoNumFunction {
 		}
 		return afrac[1] * bfrac[1] / Kernel.gcd(Math.round(afrac[1]), Math.round(bfrac[1]));
 	}
-
 }

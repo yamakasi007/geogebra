@@ -17,49 +17,12 @@ import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.util.MyMath;
 
-//import org.apache.commons.math3.special.Gamma;
-
-//from http://www.javajungle.de/math/primes/PrimeNumberSieve.html
-//import de.luschny.math.primes.PrimeSieve;
-//import de.luschny.math.primes.IPrimeIteration;
-
 /**
  * Computes Binomial[a, b]
  * 
  * @author Michael Borcherds 2007-10-09
  */
 public class AlgoBinomial extends AlgoTwoNumFunction {
-
-	/*
-	 * public static BigInteger binomial(int n, int k) { if (0 > k || k > n) {
-	 * throw new ArithmeticException(
-	 * "Binomial: 0 <= k and k <= n required, but n was " + n + " and k was " +
-	 * k ); }
-	 * 
-	 * if(k > n / 2) { k = n - k ; }
-	 * 
-	 * int rootN = (int) Math.floor(Math.sqrt(n)); BigInteger binom =
-	 * BigInteger.ONE ;
-	 * 
-	 * IPrimeIteration pIter = new PrimeSieve(n).getIteration();
-	 * 
-	 * for (int prime : pIter) // equivalent to a nextPrime() function. { //
-	 * prime runs through the prime numbers 1 < prime <= n if(prime > n - k) {
-	 * binom = binom.multiply(BigInteger.valueOf(prime)); continue; }
-	 * 
-	 * if(prime > n / 2) { continue; }
-	 * 
-	 * if(prime > rootN) { if(n % prime < k % prime) { binom =
-	 * binom.multiply(BigInteger.valueOf(prime)); } continue; }
-	 * 
-	 * int exp = 0, r = 0, N = n, K = k;
-	 * 
-	 * while (N > 0) { r = (N % prime) < (K % prime + r) ? 1 : 0; exp += r; N /=
-	 * prime; K /= prime; }
-	 * 
-	 * if (exp > 0) { binom =
-	 * binom.multiply(BigInteger.valueOf(prime).pow(exp)); } } return binom; }
-	 */
 
 	/**
 	 * @param cons
@@ -85,5 +48,4 @@ public class AlgoBinomial extends AlgoTwoNumFunction {
 	public final double computeValue(double aVal, double bVal) {
 		return MyMath.binomial(aVal, bVal);
 	}
-
 }
