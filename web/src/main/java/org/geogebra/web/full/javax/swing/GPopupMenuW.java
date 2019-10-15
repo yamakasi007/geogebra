@@ -102,7 +102,8 @@ public class GPopupMenuW implements AttachedToDOM {
 	 * @param app
 	 *            application
 	 */
-	public GPopupMenuW(AriaMenuBar mb, AppW app) {
+	public GPopupMenuW(Widget mb, AppW app) {
+		this.app = app;
 		popupPanel = new GPopupPanel(app.getPanel(), app);
 		popupPanel.add(mb);
 		if (app.isUnbundledOrWhiteboard()) {
@@ -488,6 +489,10 @@ public class GPopupMenuW implements AttachedToDOM {
 	 * hide popup menu
 	 */
 	public final void hide() {
+		if (!popupPanel.isShowing()) {
+			return;
+		}
+
 		AccessibilityManagerInterface am = getApp()
 				.getAccessibilityManager();
 		Object anchor = am.getAnchor();
@@ -609,7 +614,7 @@ public class GPopupMenuW implements AttachedToDOM {
 					}
 					AriaMenuBar.eatEvent(event);
 					return;
-			}
+			    }
 			}
 			super.onBrowserEvent(event);
 		}

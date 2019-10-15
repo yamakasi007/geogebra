@@ -420,18 +420,28 @@ public class EuclidianOptionsModel {
 
 	public void fillRulingCombo() {
 		Localization loc = app.getLocalization();
-		String[] rulerTypes = { loc.getMenuDefault("NoRuling", "No ruling"),
-				loc.getMenuDefault("Ruled", "Ruled"),
-				loc.getMenuDefault("Squared5", "Squared (5 mm)"),
-				loc.getMenuDefault("Squared1", "Squared (1 mm)"),
-				loc.getMenuDefault("Elementary12", "Elementary 1/2"),
-				loc.getMenuDefault("Elementary12WithHouse", "Elementary 1/2 with house"),
-				loc.getMenuDefault("Elementary34", "Elementary 3/4"),
-				loc.getMenuDefault("Music", "Music"),
-				loc.getMenuDefault("Elementary12colored", "Elementary 1/2 colored")};
 
-		for (String item : rulerTypes) {
-			listener.addRulerTypeItem(item);
+		String[] rulerTypes = new String[BackgroundType.MUSIC.value()];
+		rulerTypes[BackgroundType.NONE.value()] = loc.getMenuDefault("NoRuling",
+				"No ruling");
+		rulerTypes[BackgroundType.RULER.value()] = loc.getMenuDefault("Ruled",
+				"Ruled");
+		rulerTypes[BackgroundType.SQUARE_SMALL.value()] = loc.getMenuDefault("Squared5",
+				"Squared (5 mm)");
+		rulerTypes[BackgroundType.SQUARE_BIG.value()] = loc.getMenuDefault("Squared1",
+				"Squared (1 mm)");
+		rulerTypes[BackgroundType.ELEMENTARY12.value()] = loc.getMenuDefault("Elementary12",
+				"Elementary 1/2");
+		rulerTypes[BackgroundType.ELEMENTARY12_HOUSE.value()] = loc.getMenuDefault("Elementary12WithHouse",
+				"Elementary 1/2 with house");
+		rulerTypes[BackgroundType.ELEMENTARY34.value()] = loc.getMenuDefault("Elementary34",
+				"Elementary 3/4");
+		rulerTypes[BackgroundType.MUSIC.value()] = loc.getMenuDefault("Music",
+				"Music");
+
+		for (int i = 0; i < rulerTypes.length; i++) {
+			String item = rulerTypes[i];
+			listener.addRulerTypeItem(item, BackgroundType.fromInt(i));
 		}
 	}
 
@@ -562,7 +572,7 @@ public class EuclidianOptionsModel {
 
 		GColor getEuclidianBackground(int viewNumber);
 
-		void addRulerTypeItem(String item);
+		void addRulerTypeItem(String item, BackgroundType type);
 
 		void enableAxesRatio(boolean value);
 
