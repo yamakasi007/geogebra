@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Base class for Graphing ToolSet tests.
+ * Utility class for Graphing ToolSet tests.
  */
 public class GraphingToolSet {
 
