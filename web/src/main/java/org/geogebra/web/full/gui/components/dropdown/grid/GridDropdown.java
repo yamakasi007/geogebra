@@ -22,6 +22,20 @@ import java.util.List;
  */
 public class GridDropdown extends SimplePanel implements ClickHandler {
 
+	private static final int COLUMNS = 3;
+	private static final int UNSELECTED_INDEX = -1;
+
+	private GridDropdownListener listener;
+
+	private AppW app;
+
+	private Button button;
+	private Grid view;
+	private GPopupPanel popup;
+
+	private List<GridItem> items = new ArrayList<>();
+	private int selectedIndex = UNSELECTED_INDEX;
+
 	/**
 	 * Listens for changes in GridDrodown.
 	 */
@@ -54,20 +68,6 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 			this.title = title;
 		}
 	}
-
-	private static final int COLUMNS = 3;
-	private static final int UNSELECTED_INDEX = -1;
-
-	private GridDropdownListener listener;
-
-	private AppW app;
-
-	private Button button;
-	private Grid view;
-	private GPopupPanel popup;
-
-	private List<GridItem> items = new ArrayList<>();
-	private int selectedIndex = UNSELECTED_INDEX;
 
 	/**
 	 * Create a new GridDropdown.
@@ -179,7 +179,7 @@ public class GridDropdown extends SimplePanel implements ClickHandler {
 		for (int i = 0; i < items.size(); i++) {
 			GridItem item = items.get(i);
 			Widget cell = createGridItemView(item);
-			int row = (int) Math.floor(i / COLUMNS);
+			int row = i / COLUMNS;
 			int column = i % COLUMNS;
 			grid.setWidget(row, column, cell);
 
