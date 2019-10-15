@@ -3,12 +3,15 @@ package org.geogebra.common.gui.toolcategorization;
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.euclidian.EuclidianConstants;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Base class for tool categorization tests.
  */
 public class ToolCategorizationTestBase extends BaseUnitTest {
 
-    private int[] notAllowedToolsGraphingCalc = new int[] {
+    List<Integer> notAllowedToolsGraphingCalc = Arrays.asList(
         EuclidianConstants.MODE_SEGMENT,
         EuclidianConstants.MODE_IMAGE,
         EuclidianConstants.MODE_ANGLE,
@@ -49,15 +52,9 @@ public class ToolCategorizationTestBase extends BaseUnitTest {
         EuclidianConstants.MODE_TRANSLATE_BY_VECTOR,
         EuclidianConstants.MODE_DILATE_FROM_POINT,
         EuclidianConstants.MODE_MIRROR_AT_CIRCLE,
-        EuclidianConstants.MODE_RELATION
-    };
+        EuclidianConstants.MODE_RELATION);
 
     protected boolean isInGraphingToolSet(int tool) {
-        for (int i : notAllowedToolsGraphingCalc) {
-            if (i == tool) {
-                return true;
-            }
-        }
-        return false;
+        return notAllowedToolsGraphingCalc.contains(tool);
     }
 }

@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class GraphingToolCollectionFactoryTest extends ToolCategorizationTestBase {
 
-    @Mock
     private ToolCollection toolCollection;
 
     @Before
@@ -29,8 +27,9 @@ public class GraphingToolCollectionFactoryTest extends ToolCategorizationTestBas
     public void testGraphingTools() {
         List<String> categories = toolCollection.getCategories();
         for (int i = 0; i < categories.size(); i++) {
-            for (int j = 0; j < toolCollection.getTools(i).size(); j++) {
-                Assert.assertFalse(isInGraphingToolSet(toolCollection.getTools(i).get(j)));
+            for (int tool : toolCollection.getTools(i)) {
+                Assert.assertFalse("Should not be available" + tool,
+                        isInGraphingToolSet(tool));
             }
         }
     }
