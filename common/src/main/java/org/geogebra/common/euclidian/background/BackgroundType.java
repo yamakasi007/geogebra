@@ -1,5 +1,8 @@
 package org.geogebra.common.euclidian.background;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Types of MOW backgrounds. *
  * 
@@ -32,7 +35,10 @@ public enum BackgroundType {
 	MUSIC(7),
 
 	/** General SVG as background */
-	SVG(8);
+	SVG(8),
+
+	/** Elementary 1/2 with colored background */
+	ELEMENTARY12_COLORED(9);
 
 	private int value;
 
@@ -54,6 +60,21 @@ public enum BackgroundType {
 	public boolean isSVG() {
 		return value() >= ELEMENTARY12.value();
 	}
+
+	/**
+	 * Ordered list of ruling options used for the settings
+	 */
+	final public static List<BackgroundType> rulingOptions = Arrays.asList(
+			BackgroundType.NONE,
+			BackgroundType.RULER,
+			BackgroundType.SQUARE_SMALL,
+			BackgroundType.SQUARE_BIG,
+			BackgroundType.ELEMENTARY12,
+			BackgroundType.ELEMENTARY12_COLORED,
+			BackgroundType.ELEMENTARY12_HOUSE,
+			BackgroundType.ELEMENTARY34,
+			BackgroundType.MUSIC
+	);
 
 	/**
 	 * Converts int to enum
