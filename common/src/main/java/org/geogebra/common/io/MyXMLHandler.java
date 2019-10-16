@@ -3342,13 +3342,12 @@ public class MyXMLHandler implements DocHandler {
 	private boolean handleCmdOutput(LinkedHashMap<String, String> attrs) {
 		try {
 			// set labels for command processing
-			String label;
 			int countLabels = 0;
 
 			String randomVal = attrs.remove("randomResult");
 
 			for (String value : attrs.values()) {
-				label = value;
+				String label = value;
 				if ("".equals(label)) {
 					label = null;
 				} else {
@@ -3406,17 +3405,13 @@ public class MyXMLHandler implements DocHandler {
 			// (important for invisible objects like intersection points)
 
 			int i = 0;
-			for (String value : attrs.values()) {
-				label = value;
-				if ("".equals(label)) {
-					label = null;
-				}
-
-				if (label != null && cmdOutput[i] != null) {
+			for (String label : attrs.values()) {
+				if (!StringUtil.empty(label) && cmdOutput[i] != null) {
 					cmdOutput[i].setLoadedLabel(label);
 				}
 				i++;
 			}
+
 			return true;
 		} catch (CommandNotLoadedError e) {
 			throw e;
