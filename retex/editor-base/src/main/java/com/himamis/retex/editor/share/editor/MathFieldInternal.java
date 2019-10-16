@@ -29,6 +29,7 @@
 package com.himamis.retex.editor.share.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import com.google.j2objc.annotations.Weak;
@@ -42,6 +43,7 @@ import com.himamis.retex.editor.share.event.FocusListener;
 import com.himamis.retex.editor.share.event.KeyEvent;
 import com.himamis.retex.editor.share.event.KeyListener;
 import com.himamis.retex.editor.share.event.MathFieldListener;
+import com.himamis.retex.editor.share.model.MathArray;
 import com.himamis.retex.editor.share.model.MathCharacter;
 import com.himamis.retex.editor.share.model.MathComponent;
 import com.himamis.retex.editor.share.model.MathContainer;
@@ -90,6 +92,8 @@ public class MathFieldInternal
 
 	private boolean selectionMode = false;
 
+	private static ArrayList<Integer> matrixLeftTopCaret = new ArrayList<>();
+
 	/**
 	 * @param mathField
 	 *            editor component
@@ -116,6 +120,7 @@ public class MathFieldInternal
 				directFormulaBuilder);
 		inputController.setMathField(mathField);
 		setupMathField();
+		matrixLeftTopCaret.addAll(Arrays.asList(0,0,0));
 	}
 
 	private void setupMathField() {
@@ -158,7 +163,26 @@ public class MathFieldInternal
 		editorState.setCurrentField(formula.getRootComponent());
 		editorState.setCurrentOffset(editorState.getCurrentField().size());
 		mathFieldController.update(formula, editorState, false);
+		ensureInMatrixIfAny(formula.getRootComponent().wrap());
 	}
+
+
+	private void ensureInMatrixIfAny(MathComponent component) {
+		if (!(component instanceof MathSequence)) {
+			return;
+		}
+		MathSequence sequence = (MathSequence)component;
+
+		if (sequence.size() != 1) {
+			return;
+		}
+
+		MathComponent argument = sequence.getArgument(0);
+		if (MathArray.isMatrix(argument)) {
+			setCaretPath(matrixLeftTopCaret);
+		}
+	}
+
 
 	/**
 	 * @param formula

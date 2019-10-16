@@ -180,16 +180,11 @@ public class CursorController {
 			firstField(editorState, component1);
 			return true;
 			// try to delve down the tree
-		} else if (isMatrix(container)) {
+		} else if (MathArray.isMatrix(container)) {
 			return false;
 		} else {
 			return nextField(editorState, container);
 		}
-	}
-
-	private static boolean isMatrix(MathContainer container) {
-		return container instanceof MathArray
-				&& ((MathArray)container).isMatrix();
 	}
 
 	/**
@@ -226,9 +221,7 @@ public class CursorController {
 			lastField(editorState, component1);
 
 			// delve down the tree
-		} else if (isMatrix(container)) {
-			return;
-		} else {
+		} else if (!MathArray.isMatrix(container)) {
 			prevField(editorState, container);
 		}
 	}
