@@ -602,28 +602,31 @@ public class EuclidianOptionsModel {
 		settings.setBackgroundType(type);
 	}
 
-	private String getTitleForRulingType(BackgroundType rulingType) {
-		Localization loc = app.getLocalization();
-
+	private String getTransKeyForRulingType(BackgroundType rulingType) {
 		switch (rulingType) {
 			case RULER:
-				return loc.getMenuDefault("Ruled", "Ruled");
+				return "Ruled";
 			case SQUARE_SMALL:
-				return loc.getMenuDefault("Squared5", "Squared (5 mm)");
+				return "Squared5";
 			case SQUARE_BIG:
-				return loc.getMenuDefault("Squared1", "Squared (1 mm)");
+				return "Squared1";
 			case ELEMENTARY12:
-				return loc.getMenuDefault("Elementary12", "Elementary 1/2");
+				return "Elementary12";
 			case ELEMENTARY12_COLORED:
-				return loc.getMenuDefault("Elementary12Colored", "Elementary 1/2 colored");
+				return "Elementary12Colored";
 			case ELEMENTARY12_HOUSE:
-				return loc.getMenuDefault("Elementary12WithHouse", "Elementary 1/2 with house");
+				return "Elementary12WithHouse";
 			case ELEMENTARY34:
-				return loc.getMenuDefault("Elementary34", "Elementary 3/4");
+				return "Elementary34";
 			case MUSIC:
-				return loc.getMenuDefault("Music", "Music");
+				return "Music";
 			default:
-				return loc.getMenuDefault("NoRuling", "No ruling");
+				return "NoRuling";
 		}
+	}
+
+	private String getTitleForRulingType(BackgroundType rulingType) {
+		Localization loc = app.getLocalization();
+		return loc.getMenu(getTransKeyForRulingType(rulingType));
 	}
 }
