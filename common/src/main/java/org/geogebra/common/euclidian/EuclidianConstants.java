@@ -769,6 +769,9 @@ public final class EuclidianConstants {
 		case EuclidianConstants.MODE_FREEHAND_SHAPE:
 			return "FreehandShape";
 
+		case EuclidianConstants.MODE_FREEHAND_FUNCTION:
+			return "FreehandFunction";
+
 		// case EuclidianConstants.MODE_VISUAL_STYLE:
 		// return "VisualStyle";
 

@@ -477,7 +477,7 @@ public class ToolCategorization {
         category = Category.OTHERS;
 		tools = new ArrayList<>();
 		addToList(tools, EuclidianConstants.MODE_PEN);
-        addToList(tools, EuclidianConstants.MODE_FREEHAND_SHAPE);
+        addToList(tools, EuclidianConstants.MODE_FREEHAND_FUNCTION);
         addToList(tools, EuclidianConstants.MODE_RELATION);
         if (!isPhoneApp) {
 			// addToList(tools, EuclidianConstants.MODE_FUNCTION_INSPECTOR);
