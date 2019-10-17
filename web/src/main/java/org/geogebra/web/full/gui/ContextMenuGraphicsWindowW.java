@@ -118,7 +118,7 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 	private void addRulingMenuItem(final OptionType optionType) {
 		AriaMenuItem rulingMenuItem = new AriaMenuItem(
 				MainMenu.getMenuBarHtmlClassic(
-						MaterialDesignResources.INSTANCE.grid_black()
+						MaterialDesignResources.INSTANCE.minor_gridlines()
 								.getSafeUri().asString(),
 						loc.getMenu("Ruling")),
 				true, new Command() {
