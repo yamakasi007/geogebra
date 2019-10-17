@@ -308,7 +308,7 @@ public class CursorController {
 			if (function.rows() > 1) {
 				int downIndex = component.getParentIndex()
 						+ function.columns() * rowChange;
-				if (downIndex < function.size()) {
+				if (downIndex >= 0 && downIndex < function.size()) {
 					editorState
 							.setCurrentField(function.getArgument(downIndex));
 					editorState.setCurrentOffset(0);
