@@ -148,26 +148,27 @@ public class DrawBackground {
 				view.getHeight());
 	}
 
-	private void doDrawHorizontalLines(GGraphics2D g2, boolean subgrid, double x, double xEnd,
-									   double y, double yEnd) {
+	private void doDrawHorizontalLines(GGraphics2D g2, boolean subgrid, double xStart, double xEnd,
+									   double yStart, double yEnd) {
 		// draw main grid
 		g2.setColor(subgrid ? settings.getBgSubLineColor()
 				: settings.getBgRulerColor());
 		g2.startGeneralPath();
 
+		double y = yStart;
 		if (subgrid) {
 			double subGap = gap / 10;
 			int lineCount = 0;
 			while (y <= yEnd) {
 				if (lineCount % 10 != 0) {
-					addStraightLineToGeneralPath(g2, x, y, xEnd, y);
+					addStraightLineToGeneralPath(g2, xStart, y, xEnd, y);
 				}
 				y += subGap;
 				lineCount++;
 			}
 		} else {
 			while (y <= yEnd) {
-				addStraightLineToGeneralPath(g2, x, y, xEnd, y);
+				addStraightLineToGeneralPath(g2, xStart, y, xEnd, y);
 				y += gap;
 			}
 		}
@@ -183,30 +184,31 @@ public class DrawBackground {
 				view.getHeight() + 2 * gap);
 	}
 
-	private void doDrawVerticalLines(GGraphics2D g2, boolean subgrid, double x, double xEnd,
-									 double y, double height) {
+	private void doDrawVerticalLines(GGraphics2D g2, boolean subgrid, double xStart, double xEnd,
+									 double yStart, double height) {
 		// draw main grid
 		g2.setColor(subgrid ? settings.getBgSubLineColor()
 				: settings.getBgRulerColor());
 		g2.startGeneralPath();
 
+		double x = xStart;
 		if (subgrid) {
 			double subGap = gap / 10;
 			int lineCount = 0;
 			while (x <= xEnd) {
 				if (lineCount % 10 != 0) {
-					addStraightLineToGeneralPath(g2, x, y, x, y + height);
+					addStraightLineToGeneralPath(g2, x, yStart, x, yStart + height);
 				}
 				x += subGap;
 				lineCount++;
 			}
 		} else {
 			while (x <= xEnd) {
-				addStraightLineToGeneralPath(g2, x, y, x, y + height);
+				addStraightLineToGeneralPath(g2, x, yStart, x, yStart + height);
 				x += gap;
 			}
 			// make sure last line is drawn despite of rounding errors
-			addStraightLineToGeneralPath(g2, xEnd, y, xEnd, y + height);
+			addStraightLineToGeneralPath(g2, xEnd, yStart, xEnd, yStart + height);
 		}
 		g2.endAndDrawGeneralPath();
 	}
