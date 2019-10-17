@@ -167,12 +167,7 @@ public class MathFieldInternal
 
 
 	private void ensureInMatrixIfAny(MathComponent component) {
-		if (!(component instanceof MathSequence)) {
-			return;
-		}
-
-		MathContainer matrix  = MathSequence.extractMatrix(component);
-		if (matrix != null) {
+		if (MathSequence.extractMatrix(component) != component) {
 			setCaretPath(matrixLeftTopCaret);
 		}
 	}

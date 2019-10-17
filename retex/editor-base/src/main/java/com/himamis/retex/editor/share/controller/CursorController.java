@@ -87,9 +87,10 @@ public class CursorController {
 	 *            current state
 	 */
 	public static void firstField(EditorState editorState) {
-		MathSequence root = editorState.getRootComponent();
-		MathContainer matrix = MathSequence.extractMatrix(root);
-		firstField(editorState, matrix != null ? matrix : root);
+		MathComponent root = editorState.getRootComponent();
+
+		firstField(editorState,
+				(MathContainer) MathSequence.extractMatrix(root));
 	}
 
 	/**
