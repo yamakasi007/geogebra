@@ -43,7 +43,6 @@ import com.himamis.retex.editor.share.event.FocusListener;
 import com.himamis.retex.editor.share.event.KeyEvent;
 import com.himamis.retex.editor.share.event.KeyListener;
 import com.himamis.retex.editor.share.event.MathFieldListener;
-import com.himamis.retex.editor.share.model.MathArray;
 import com.himamis.retex.editor.share.model.MathCharacter;
 import com.himamis.retex.editor.share.model.MathComponent;
 import com.himamis.retex.editor.share.model.MathContainer;
@@ -171,14 +170,9 @@ public class MathFieldInternal
 		if (!(component instanceof MathSequence)) {
 			return;
 		}
-		MathSequence sequence = (MathSequence)component;
 
-		if (sequence.size() != 1) {
-			return;
-		}
-
-		MathComponent argument = sequence.getArgument(0);
-		if (MathArray.isMatrix(argument)) {
+		MathContainer matrix  = MathSequence.extractMatrix(component);
+		if (matrix != null) {
 			setCaretPath(matrixLeftTopCaret);
 		}
 	}
