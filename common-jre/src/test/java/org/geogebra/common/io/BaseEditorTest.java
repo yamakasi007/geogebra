@@ -1,5 +1,8 @@
 package org.geogebra.common.io;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
@@ -7,6 +10,7 @@ import org.geogebra.common.kernel.parser.ParseException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
+import com.himamis.retex.editor.share.controller.CursorController;
 import com.himamis.retex.editor.share.controller.EditorState;
 import com.himamis.retex.editor.share.editor.MathFieldInternal;
 import com.himamis.retex.editor.share.model.MathSequence;
@@ -14,6 +18,7 @@ import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
 import com.himamis.retex.renderer.share.platform.FactoryProvider;
 
 public class BaseEditorTest extends BaseUnitTest {
+	private EditorChecker editorChecker = new EditorChecker();
 	protected class EditorChecker {
 		private MathFieldCommon mathField = new MathFieldCommon();
 		private EditorTyper typer;
@@ -69,6 +74,18 @@ public class BaseEditorTest extends BaseUnitTest {
 			typer.insert(input);
 			return this;
 		}
+
+
+		public EditorChecker checkPath(Integer i, Integer j, Integer k) {
+			MathFieldInternal mathFieldInternal = mathField.getInternal();
+			mathField.requestViewFocus();
+			mathFieldInternal.update();
+			ArrayList<Integer> actual = CursorController.getPath(mathFieldInternal
+					.getEditorState());
+			Assert.assertArrayEquals(Arrays.asList(i, j, k).toArray(),
+					actual.toArray());
+			return this;
+		}
 	}
 
 	@BeforeClass
@@ -91,4 +108,5 @@ public class BaseEditorTest extends BaseUnitTest {
 	protected EditorChecker type(String input) {
 		return new EditorChecker().type(input);
 	}
+
 }

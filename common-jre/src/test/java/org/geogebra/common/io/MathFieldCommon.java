@@ -62,7 +62,7 @@ public class MathFieldCommon implements MathField {
 
 	public boolean hasFocus() {
 		// stub
-		return false;
+		return true;
 	}
 
 	public MetaModel getMetaModel() {

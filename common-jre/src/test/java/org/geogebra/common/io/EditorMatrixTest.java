@@ -13,4 +13,9 @@ public class EditorMatrixTest extends BaseEditorTest {
 						"MathArray[MathSequence[4, ,,  , 5, ,,  , 6]], ,,  , " +
 						"MathArray[MathSequence[7, ,,  , 8, ,,  , 9]]]]]");
 	}
+
+	@Test
+	public void testCaretInitialPosition() {
+		type(matix3x3).checkPath(0,0,0);
+	}
 }
