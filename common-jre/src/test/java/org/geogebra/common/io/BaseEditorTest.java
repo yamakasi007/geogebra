@@ -13,6 +13,8 @@ import org.junit.BeforeClass;
 import com.himamis.retex.editor.share.controller.CursorController;
 import com.himamis.retex.editor.share.controller.EditorState;
 import com.himamis.retex.editor.share.editor.MathFieldInternal;
+import com.himamis.retex.editor.share.io.latex.Parser;
+import com.himamis.retex.editor.share.model.MathFormula;
 import com.himamis.retex.editor.share.model.MathSequence;
 import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
 import com.himamis.retex.renderer.share.platform.FactoryProvider;
@@ -70,11 +72,27 @@ public class BaseEditorTest extends BaseUnitTest {
 			return this;
 		}
 
+		public EditorChecker repeatKey(int key, int count) {
+			typer.repeatKey(key, count);
+			return this;
+		}
+
 		public EditorChecker insert(String input) {
 			typer.insert(input);
 			return this;
 		}
 
+		public EditorChecker fromParser(String input) {
+			Parser parser = new Parser(mathField.getMetaModel());
+			MathFormula formula;
+			try {
+				formula = parser.parse(input);
+				mathField.getInternal().setFormula(formula);
+			} catch (Exception e) {
+				Assert.fail("Problem parsing: " + input);
+			}
+			return this;
+		}
 
 		public EditorChecker checkPath(Integer i, Integer j, Integer k) {
 			MathFieldInternal mathFieldInternal = mathField.getInternal();
@@ -107,6 +125,9 @@ public class BaseEditorTest extends BaseUnitTest {
 
 	protected EditorChecker type(String input) {
 		return new EditorChecker().type(input);
+	}
+	protected EditorChecker fromParser(String input) {
+		return new EditorChecker().fromParser(input);
 	}
 
 }
