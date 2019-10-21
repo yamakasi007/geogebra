@@ -1,7 +1,6 @@
 package org.geogebra.common.io;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.kernel.StringTemplate;
@@ -94,14 +93,13 @@ public class BaseEditorTest extends BaseUnitTest {
 			return this;
 		}
 
-		public EditorChecker checkPath(Integer i, Integer j, Integer k) {
+		public EditorChecker checkPath(Integer... indexes) {
 			MathFieldInternal mathFieldInternal = mathField.getInternal();
 			mathField.requestViewFocus();
 			mathFieldInternal.update();
 			ArrayList<Integer> actual = CursorController.getPath(mathFieldInternal
 					.getEditorState());
-			Assert.assertArrayEquals(Arrays.asList(i, j, k).toArray(),
-					actual.toArray());
+			Assert.assertArrayEquals(indexes, actual.toArray());
 			return this;
 		}
 	}

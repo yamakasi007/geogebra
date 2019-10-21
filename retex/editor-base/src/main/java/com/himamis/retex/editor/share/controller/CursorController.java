@@ -120,7 +120,10 @@ public class CursorController {
 	 *            current state
 	 */
 	public static void lastField(EditorState editorState) {
-		lastField(editorState, editorState.getRootComponent());
+		MathComponent root = editorState.getRootComponent();
+
+		lastField(editorState,
+				(MathContainer) MathSequence.extractMatrix(root));
 	}
 
 	/**
