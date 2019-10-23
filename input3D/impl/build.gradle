@@ -9,7 +9,7 @@ targetCompatibility = 1.7
 dependencies {
 	compile project(':common'),
 		project(':common-jre'),
-		'org.eclipse.jetty:jetty-io:9.3.0.M2',
+		'org.eclipse.jetty:jetty-io:10.0.0-alpha0',
 		'org.eclipse.jetty:jetty-util:9.3.0.M2',
 		'org.eclipse.jetty.websocket:websocket-api:9.0.5.v20130815',
 		'org.eclipse.jetty.websocket:websocket-client:9.0.5.v20130815',

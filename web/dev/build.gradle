@@ -16,7 +16,7 @@ configurations.all {
    resolutionStrategy {
        failOnVersionConflict()
        force 'org.eclipse.jetty:jetty-util:9.2.25.v20180606'
-       force 'org.eclipse.jetty:jetty-io:9.2.25.v20180606'
+       force 'org.eclipse.jetty:jetty-io:10.0.0-alpha0'
        force 'commons-io:commons-io:2.5'
        force 'commons-collections:commons-collections:3.2.2'
        force 'org.apache.commons:commons-lang3:3.5'
