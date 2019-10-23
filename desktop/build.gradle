@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.spotbugs' version '1.6.9'
+    id 'com.github.spotbugs' version '2.0.0'
 }
 
 project.setDescription('Parts of GeoGebra related to desktop platforms')
