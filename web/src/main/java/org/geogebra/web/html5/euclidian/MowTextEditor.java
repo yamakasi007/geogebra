@@ -18,6 +18,10 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
 
 /**
  * Class for editing in-place text on whiteboard.
@@ -26,7 +30,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
  *
  */
 public class MowTextEditor extends AdvancedFlowPanel implements Persistable,
-		MouseUpHandler, MouseDownHandler, MouseMoveHandler {
+		MouseUpHandler, MouseDownHandler, MouseMoveHandler, TouchEndHandler, TouchStartHandler {
 	private GRectangle bounds;
 
 	/**
@@ -40,6 +44,8 @@ public class MowTextEditor extends AdvancedFlowPanel implements Persistable,
 		addMouseDownHandler(this);
 		addMouseUpHandler(this);
 		addMouseMoveHandler(this);
+		addTouchStartHandler(this);
+		addTouchEndHandler(this);
 	}
 
 	/**
@@ -178,6 +184,16 @@ public class MowTextEditor extends AdvancedFlowPanel implements Persistable,
 
 	@Override
 	public void onMouseUp(MouseUpEvent event) {
+		event.stopPropagation();
+	}
+
+	@Override
+	public void onTouchEnd(TouchEndEvent event) {
+		event.stopPropagation();
+	}
+
+	@Override
+	public void onTouchStart(TouchStartEvent event) {
 		event.stopPropagation();
 	}
 

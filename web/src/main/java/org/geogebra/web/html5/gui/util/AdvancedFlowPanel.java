@@ -6,6 +6,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasTouchEndHandlers;
+import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -15,6 +17,8 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -26,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  * Focusable flowpanel.
  */
 public class AdvancedFlowPanel extends Composite implements HasWidgets,
-		HasAllKeyHandlers, HasAllMouseHandlers {
+		HasAllKeyHandlers, HasAllMouseHandlers, HasTouchStartHandlers, HasTouchEndHandlers {
 	protected FlowPanel mainPanel;
 	protected FocusPanel focusPanel;
 
@@ -83,6 +87,16 @@ public class AdvancedFlowPanel extends Composite implements HasWidgets,
 	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
 		return focusPanel.addMouseWheelHandler(handler);
 
+	}
+
+	@Override
+	public HandlerRegistration addTouchEndHandler(TouchEndHandler handler) {
+		return focusPanel.addTouchEndHandler(handler);
+	}
+
+	@Override
+	public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
+		return focusPanel.addTouchStartHandler(handler);
 	}
 
 	/**
