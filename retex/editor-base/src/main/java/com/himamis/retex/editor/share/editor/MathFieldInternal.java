@@ -165,12 +165,11 @@ public class MathFieldInternal
 		editorState.setCurrentField(formula.getRootComponent());
 		editorState.setCurrentOffset(editorState.getCurrentField().size());
 		mathFieldController.update(formula, editorState, false);
-		ensureInMatrixIfAny(formula.getRootComponent().wrap());
+		setCaretPathIfMatrix(formula.getRootComponent().wrap());
 	}
 
-
-	private void ensureInMatrixIfAny(MathComponent component) {
-		if (MathSequence.extractMatrix(component) != component) {
+	private void setCaretPathIfMatrix(MathComponent component) {
+		if (MathSequence.extractMatrix(component) != null) {
 			setCaretPath(matrixLeftTopCaret);
 		}
 	}

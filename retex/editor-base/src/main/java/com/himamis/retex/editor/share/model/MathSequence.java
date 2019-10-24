@@ -176,17 +176,17 @@ public class MathSequence extends MathContainer {
 	 * @return the matrix if any, the component unchanged
 	 * 		   otherwise.
 	 */
-	public static MathComponent extractMatrix(MathComponent component) {
+	public static MathContainer extractMatrix(MathComponent component) {
 		if (component instanceof MathSequence) {
 			MathSequence sequence = (MathSequence)component;
 			if (sequence.size() == 1) {
 				MathComponent argument = sequence.getArgument(0);
 				if (MathArray.isMatrix(argument)) {
-					return argument;
+					return (MathContainer) argument;
 				}
 			}
 		}
 
-		return component;
+		return null;
 	}
 }

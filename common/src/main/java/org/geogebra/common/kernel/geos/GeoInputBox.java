@@ -171,7 +171,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	private String toLaTex(GeoElementND geo) {
-		boolean matrix = canBeMatrix();
+		boolean matrix = hasMatrix();
 		boolean singleList = (!matrix && linkedGeo.isGeoList());
 		boolean dependentMatrix = (matrix && !linkedGeo.isIndependent());
 
@@ -452,18 +452,18 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	 * @return if linked object can be a symbolic one.
 	 */
 	public boolean canBeSymbolic() {
-		return canBeSymbolicNumber() || canBeSymbolicFunction()
+		return hasSymbolicNumber() || hasSymbolicFunction()
 				|| linkedGeo.isGeoPoint() || linkedGeo.isGeoVector()
 				|| linkedGeo.isGeoList();
 	}
 
-	private boolean canBeMatrix() {
+	private boolean hasMatrix() {
 		return linkedGeo.isIndependent()
 				&& linkedGeo.isGeoList()
 				&& ((GeoList)linkedGeo).isMatrix();
 	}
 
-	private boolean canBeSymbolicFunction() {
+	private boolean hasSymbolicFunction() {
 		if (linkedGeo instanceof GeoFunction) {
 			GeoFunction function = (GeoFunction) linkedGeo;
 			return function.isGeoFunction() || function.isBooleanFunction();
@@ -471,7 +471,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		return linkedGeo instanceof GeoFunctionNVar;
 	}
 
-	private boolean canBeSymbolicNumber() {
+	private boolean hasSymbolicNumber() {
 		if (!linkedGeo.isGeoNumeric()) {
 			return false;
 		}
