@@ -129,6 +129,8 @@ public class AppWsimple extends AppW {
 		checkScaleContainer();
 		frame.useDataParamBorder();
 		setAltText();
+		getEuclidianView1().updateBounds(true, true);
+
 	}
 
 	@Override
