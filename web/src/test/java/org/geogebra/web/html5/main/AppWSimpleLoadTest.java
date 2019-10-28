@@ -1,7 +1,6 @@
 package org.geogebra.web.html5.main;
 
 import org.geogebra.web.html5.euclidian.EuclidianSimplePanelW;
-import org.geogebra.web.html5.util.ViewW;
 import org.geogebra.web.test.AppMocker;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,14 +13,14 @@ import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({TextAreaElement.class, EuclidianSimplePanelW.class
-	, JLMContext2d.class, ViewW.class})
+	, JLMContext2d.class})
 public class AppWSimpleLoadTest {
 	@Test
 	public void testLoadApp() {
 		TestArticleElement articleElement = new TestArticleElement("prerelease", "simple");
 		articleElement.attr("jsonFile", json); // not working
 		AppWsimple app = AppMocker.mockAppletSimple(articleElement);
-		Assert.assertEquals("A = (8.18, -0.5)", app.getGgbApi().getValueString("A"));
+		Assert.assertEquals("A = (8.18, -0.5)", app.getKernel().lookupLabel("A"));
 	}
 
 	private static final String json="[\n"+

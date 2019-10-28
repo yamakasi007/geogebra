@@ -1,7 +1,5 @@
 package org.geogebra.web.test;
 
-import java.util.Iterator;
-
 import org.geogebra.common.move.ggtapi.models.json.JSONArray;
 import org.geogebra.common.move.ggtapi.models.json.JSONException;
 import org.geogebra.common.move.ggtapi.models.json.JSONObject;
@@ -20,11 +18,11 @@ public class ViewWMock extends ViewW {
 	public void processJSON(String encoded) {
 		try {
 			JSONArray array = new JSONArray(encoded);
-			JSONObject content = array.getJSONObject(0);
-			prepare(content.length());
-			for (Iterator<String> it = content.keys(); it.hasNext(); ) {
-				String key = it.next();
-				putIntoArchiveContent(key, content.getString(key));
+			prepare(array.length());
+			for (int i = 0; i < array.length(); i++ ) {
+				JSONObject content = array.getJSONObject(i);
+				putIntoArchiveContent(content.getString("fileName"),
+						content.getString("fileContent"));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
