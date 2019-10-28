@@ -3,6 +3,7 @@ package org.geogebra.web.html5.main;
 import org.geogebra.web.html5.euclidian.EuclidianSimplePanelW;
 import org.geogebra.web.html5.util.ViewW;
 import org.geogebra.web.test.AppMocker;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,7 +21,7 @@ public class AppWSimpleLoadTest {
 		TestArticleElement articleElement = new TestArticleElement("prerelease", "simple");
 		articleElement.attr("jsonFile", json); // not working
 		AppWsimple app = AppMocker.mockAppletSimple(articleElement);
-		app.afterLoadFileAppOrNot(false);
+		Assert.assertEquals("A = (8.18, -0.5)", app.getGgbApi().getValueString("A"));
 	}
 
 	private static final String json="[\n"+
