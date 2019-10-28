@@ -13,7 +13,6 @@ import org.geogebra.web.html5.main.HasAppletProperties;
 import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.ArticleElementInterface;
 import org.geogebra.web.html5.util.Dom;
-import org.geogebra.web.html5.util.LoadFilePresenter;
 import org.geogebra.web.html5.util.ViewW;
 import org.geogebra.web.html5.util.Visibility;
 import org.geogebra.web.html5.util.debug.LoggerW;
@@ -574,7 +573,7 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 	public static void handleLoadFile(ArticleElementInterface articleElement,
 			AppW app) {
 		ViewW view = app.getViewW();
-		new LoadFilePresenter().onPageLoad(articleElement, app, view);
+		app.createLoadFilePresenter().onPageLoad(articleElement, app, view);
 	}
 
 	/**

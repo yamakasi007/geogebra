@@ -70,7 +70,9 @@ dependencies {
 
     testCompile 'junit:junit:4.+', 
         'com.google.gwt.gwtmockito:gwtmockito:1.1.8',
-        "com.google.gwt:gwt-user:$gwtCompilerVersion"
+        "com.google.gwt:gwt-user:$gwtCompilerVersion",
+            'org.json:json:20171018'
+
 }
 
 def devModule = project.findProperty("gmodule") ?: 'org.geogebra.web.SuperWeb'
