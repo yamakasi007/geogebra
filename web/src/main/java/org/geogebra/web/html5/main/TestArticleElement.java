@@ -48,7 +48,7 @@ public class TestArticleElement implements ArticleElementInterface {
 
 	@Override
 	public String getDataParamJSON() {
-		return attributes.get("jsonFile");
+		return attributes.getOrDefault("jsonFile", "");
 	}
 
 	@Override

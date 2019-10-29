@@ -135,7 +135,6 @@ import org.geogebra.web.html5.util.Dom;
 import org.geogebra.web.html5.util.ImageLoadCallback;
 import org.geogebra.web.html5.util.ImageManagerW;
 import org.geogebra.web.html5.util.ImageWrapper;
-import org.geogebra.web.html5.util.LoadFilePresenter;
 import org.geogebra.web.html5.util.NetworkW;
 import org.geogebra.web.html5.util.UUIDW;
 import org.geogebra.web.html5.util.ViewW;
@@ -4040,9 +4039,5 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	public void endDrawRecordingAndLogResults() {
 		getEuclidianController().getMouseTouchGestureController().endDrawRecordingAndLogResult();
-	}
-
-	public LoadFilePresenter createLoadFilePresenter() {
-		return new LoadFilePresenter();
 	}
 }

@@ -53,23 +53,7 @@ public class AppMocker {
 	}
 
 	public static AppWFull mockApplet(ArticleElementInterface ae) {
-		GwtMockito.useProviderForType(PopupImpl.class,
-				new FakeProvider<PopupImpl>() {
-
-					@Override
-					public PopupImpl getFake(Class<?> type) {
-						return new PopupImpl() {
-
-							@Override
-							public Element getStyleElement(Element popup) {
-								return DomMocker.getElement();
-							}
-						};
-					}
-				});
-		GwtMockito.useProviderForType(ClientBundle.class, new CustomFakeClientBundleProvider());
-		Browser.mockWebGL();
-		FactoryProvider.setInstance(new MockFactoryProviderGWT());
+		useCommonFakeProviders();
 		GeoGebraFrameFull fr = new GeoGebraFrameFull(new AppletFactory3D() {
 			@Override
 			public AppWFull getApplet(ArticleElementInterface params,
@@ -78,7 +62,6 @@ public class AppMocker {
 			}
 		},
 				new GLookAndFeel(), new BrowserDevice(), ae);
-		setTestLogger();
 		fr.runAsyncAfterSplash();
 		AppWFull app = fr.getApp();
 		setAppDefaults(app);
@@ -96,6 +79,22 @@ public class AppMocker {
 	}
 
 	public static AppWsimple mockAppletSimple(ArticleElementInterface ae) {
+		useCommonFakeProviders();
+		GwtMockito.useProviderForType(SchedulerImpl.class,
+				new FakeProvider<SchedulerImpl>() {
+
+					@Override
+					public SchedulerImpl getFake(Class<?> type) {
+						return new QueueScheduler();
+					}
+				});
+		GeoGebraFrameSimple frame = new GeoGebraFrameSimple(ae);
+		AppWsimple app = new AppWSimpleMock(ae, frame, false);
+		setAppDefaults(app);
+		return app;
+	}
+
+	private static void useCommonFakeProviders() {
 		GwtMockito.useProviderForType(PopupImpl.class,
 				new FakeProvider<PopupImpl>() {
 
@@ -110,23 +109,9 @@ public class AppMocker {
 						};
 					}
 				});
-		GwtMockito.useProviderForType(SchedulerImpl.class,
-				new FakeProvider<SchedulerImpl>() {
-
-					@Override
-					public SchedulerImpl getFake(Class<?> type) {
-						return new QueueScheduler();
-					}
-				});
-
 		GwtMockito.useProviderForType(ClientBundle.class, new CustomFakeClientBundleProvider());
 		Browser.mockWebGL();
 		FactoryProvider.setInstance(new MockFactoryProviderGWT());
 		setTestLogger();
-		GeoGebraFrameSimple frame = new GeoGebraFrameSimple(ae);
-		AppWsimple app = new AppWSimpleMock(ae, frame, false);
-		setAppDefaults(app);
-		return app;
 	}
-
 }
