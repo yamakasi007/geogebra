@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.geogebra.common.kernel.geos.GeoBoolean;
-import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.web.html5.euclidian.EuclidianSimplePanelW;
 import org.geogebra.web.test.AppMocker;
 import org.junit.Test;
@@ -22,7 +21,7 @@ import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({TextAreaElement.class, EuclidianSimplePanelW.class
-	, JLMContext2d.class, RootPanel.class, AbstractSettings.class})
+	, JLMContext2d.class, RootPanel.class})
 public class AppWSimpleLoadTest {
 	private static final String jsonPath =
 			"\\src\\test\\java\\org\\geogebra\\web\\html5\\main\\inRegion.json";
