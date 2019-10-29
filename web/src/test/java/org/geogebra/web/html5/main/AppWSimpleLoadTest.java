@@ -1,13 +1,15 @@
 package org.geogebra.web.html5.main;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.web.html5.euclidian.EuclidianSimplePanelW;
 import org.geogebra.web.test.AppMocker;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +25,8 @@ import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 public class AppWSimpleLoadTest {
 	private static final String jsonPath =
 			"\\src\\test\\java\\org\\geogebra\\web\\html5\\main\\inRegion.json";
+	private AppWsimple app;
+
 	@Test
 	public void testLoadApp() {
 
@@ -36,8 +40,8 @@ public class AppWSimpleLoadTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		AppWsimple app = AppMocker.mockAppletSimple(articleElement);
-		Assert.assertEquals("B = (0, -0)", app.getKernel().lookupLabel("B").getAlgebraDescriptionDefault());
-
+		app = AppMocker.mockAppletSimple(articleElement);
+		assertTrue(((GeoBoolean)app.getKernel().lookupLabel("visible")).getBoolean());
 	}
+
 }
