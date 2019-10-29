@@ -70,11 +70,13 @@ pipeline {
     }
     post {
         always {
-           try {
-               cleanWs()
-           } catch(Exception e) {
-               throw e.getCause().getCause();
-           } 
+           script {
+              try {
+                  cleanWs()
+              } catch(Exception e) {
+                  throw e.getCause().getCause();
+              }
+           }
         }
         failure {
             slackSend(color: 'danger', tokenCredentialId: 'slack.token', username: 'jenkins',
