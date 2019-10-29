@@ -131,7 +131,7 @@ public class AppWsimple extends AppW {
 		checkScaleContainer();
 		frame.useDataParamBorder();
 		setAltText();
-		updateEuclidianView(getEuclidianView1());
+		updateEuclidianView(view);
 	}
 
 	private void updateEuclidianView(EuclidianViewW view) {
