@@ -110,7 +110,6 @@ public class AppWsimple extends AppW {
 			}
 		}
 
-
 		buildApplicationPanel();
 
 		getScriptManager().ggbOnInit(); // put this here from Application

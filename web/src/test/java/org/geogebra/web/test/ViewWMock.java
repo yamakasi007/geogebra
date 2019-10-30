@@ -7,6 +7,7 @@ import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.ViewW;
 
 public class ViewWMock extends ViewW {
+
 	/**
 	 * @param app application
 	 */
@@ -19,7 +20,7 @@ public class ViewWMock extends ViewW {
 		try {
 			JSONArray array = new JSONArray(encoded);
 			prepare(array.length());
-			for (int i = 0; i < array.length(); i++ ) {
+			for (int i = 0; i < array.length(); i++) {
 				JSONObject content = array.getJSONObject(i);
 				putIntoArchiveContent(content.getString("fileName"),
 						content.getString("fileContent"));

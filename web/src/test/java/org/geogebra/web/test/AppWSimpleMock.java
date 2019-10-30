@@ -12,9 +12,7 @@ import org.geogebra.web.html5.util.ViewW;
  *
  */
 public class AppWSimpleMock extends AppWsimple {
-
 	private ViewW view;
-
 
 	/**
 	 * @param article
@@ -24,7 +22,8 @@ public class AppWSimpleMock extends AppWsimple {
 	 * @param undoActive
 	 *            if true you can undo by CTRL+Z and redo by CTRL+Y
 	 */
-	public AppWSimpleMock(ArticleElementInterface article, GeoGebraFrameW frame, boolean undoActive) {
+	public AppWSimpleMock(ArticleElementInterface article, GeoGebraFrameW frame,
+						  boolean undoActive) {
 		super(article, frame, undoActive);
 	}
 
@@ -39,8 +38,5 @@ public class AppWSimpleMock extends AppWsimple {
 	@Override
 	public CommandDispatcherW newCommandDispatcher(Kernel cmdKernel) {
 		return new CommandDispatcherWSync(cmdKernel);
-
-
 	}
-
 }
