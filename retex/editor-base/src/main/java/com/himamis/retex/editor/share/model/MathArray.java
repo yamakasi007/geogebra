@@ -315,6 +315,6 @@ public class MathArray extends MathContainer {
 	 */
 	public static boolean isMatrix(MathComponent container) {
 		return container instanceof MathArray
-				&& ((MathArray)container).isMatrix();
+				&& ((MathArray) container).isMatrix();
 	}
 }

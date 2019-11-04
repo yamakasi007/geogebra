@@ -162,14 +162,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		return linkedGeo.getRedefineString(true, true);
 	}
 
-	private String getStringForNumeric(GeoNumeric numeric) {
-		if (linkedGeo.isDefined()) {
-			return numeric.toValueString(tpl);
-		} else {
-			return numeric.getRedefineString(true, true);
-		}
-	}
-
 	private String toLaTex(GeoElementND geo) {
 		boolean matrix = hasMatrix();
 		boolean singleList = (!matrix && linkedGeo.isGeoList());

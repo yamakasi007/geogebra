@@ -122,7 +122,7 @@ public class MathFieldInternal
 				directFormulaBuilder);
 		inputController.setMathField(mathField);
 		setupMathField();
-		matrixLeftTopCaret.addAll(Arrays.asList(0,0,0));
+		matrixLeftTopCaret.addAll(Arrays.asList(0, 0, 0));
 	}
 
 	private void setupMathField() {
@@ -173,7 +173,6 @@ public class MathFieldInternal
 			setCaretPath(matrixLeftTopCaret);
 		}
 	}
-
 
 	/**
 	 * @param formula
