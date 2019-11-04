@@ -498,16 +498,6 @@ public class EuclidianPen implements GTimerListener {
 	}
 
 	/**
-	 * @param x
-	 *            initial x
-	 * @param y
-	 *            initial y
-	 */
-	protected void initShapeRecognition(int x, int y) {
-		penPoints.add(new GPoint(x, y));
-	}
-
-	/**
 	 * Reset the first point
 	 */
 	protected void resetInitialPoint() {
@@ -622,17 +612,6 @@ public class EuclidianPen implements GTimerListener {
 		}
 		this.penColor = color;
 		lineDrawingColor = color;
-	}
-
-	/**
-	 * used for subclasses to return the last shape that was created
-	 *
-	 * NOT USED IN THIS CLASS
-	 *
-	 * @return null
-	 */
-	public GeoElement getCreatedShape() {
-		return null;
 	}
 
 	/**
