@@ -452,7 +452,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	private boolean hasMatrix() {
 		return linkedGeo.isIndependent()
 				&& linkedGeo.isGeoList()
-				&& ((GeoList)linkedGeo).isMatrix();
+				&& ((GeoList) linkedGeo).isMatrix();
 	}
 
 	private boolean hasSymbolicFunction() {
