@@ -14,7 +14,6 @@ import com.himamis.retex.renderer.share.platform.FactoryProvider;
 public class EditorTypingTest {
 	private static EditorChecker checker;
 
-
 	@BeforeClass
 	public static void prepare() {
 		if (FactoryProvider.getInstance() == null) {
@@ -73,8 +72,8 @@ public class EditorTypingTest {
 
 	@Test
 	public void testTrig4() {
-		checker.type("sin(x)^123").checkGGBMath("sin" + Unicode.SUPERSCRIPT_1 + Unicode.SUPERSCRIPT_2
-				+ Unicode.SUPERSCRIPT_3 + "(x)");
+		checker.type("sin(x)^123").checkGGBMath("sin" + Unicode.SUPERSCRIPT_1
+				+ Unicode.SUPERSCRIPT_2	+ Unicode.SUPERSCRIPT_3 + "(x)");
 	}
 
 	@Test
@@ -270,7 +269,8 @@ public class EditorTypingTest {
 
 	@Test
 	public void testBackspace() {
-		checker.type("8" + Unicode.DIVIDE).typeKey(JavaKeyCodes.VK_BACK_SPACE).type(Unicode.DIVIDE + "2")
+		checker.type("8" + Unicode.DIVIDE).typeKey(JavaKeyCodes.VK_BACK_SPACE)
+				.type(Unicode.DIVIDE + "2")
 				.checkAsciiMath("8/2");
 	}
 

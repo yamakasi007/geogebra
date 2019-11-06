@@ -94,7 +94,8 @@ public class MathFieldInternal
 
 	private boolean selectionMode = false;
 
-	private static ArrayList<Integer> matrixLeftTopCaret = new ArrayList<>();
+	private static final ArrayList<Integer> MATRIX_TOP_LEFT_CARET
+			= new ArrayList<>(Arrays.asList(0, 0, 0));
 
 	/**
 	 * @param mathField
@@ -122,7 +123,6 @@ public class MathFieldInternal
 				directFormulaBuilder);
 		inputController.setMathField(mathField);
 		setupMathField();
-		matrixLeftTopCaret.addAll(Arrays.asList(0, 0, 0));
 	}
 
 	private void setupMathField() {
@@ -165,12 +165,12 @@ public class MathFieldInternal
 		editorState.setCurrentField(formula.getRootComponent());
 		editorState.setCurrentOffset(editorState.getCurrentField().size());
 		mathFieldController.update(formula, editorState, false);
-		setCaretPathIfMatrix(formula.getRootComponent().wrap());
+		setCaretPathIfMatrix(formula.getRootComponent());
 	}
 
-	private void setCaretPathIfMatrix(MathComponent component) {
-		if (MathSequence.extractMatrix(component) != null) {
-			setCaretPath(matrixLeftTopCaret);
+	private void setCaretPathIfMatrix(MathSequence sequence) {
+		if (sequence.isMatrix()) {
+			setCaretPath(MATRIX_TOP_LEFT_CARET);
 		}
 	}
 

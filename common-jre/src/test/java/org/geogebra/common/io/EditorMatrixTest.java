@@ -19,12 +19,12 @@ public class EditorMatrixTest {
 
 	@Test
 	public void testCaretInitialPosition() {
-		checker.fromParser(matix3x3).checkPath(0,0,0);
+		checker.fromParser(matix3x3).checkPath(0, 0, 0);
 	}
 
 	@Test
 	public void testCaretShouldStayInsideOnHomeInitially() {
-		checker.fromParser(matix3x3).typeKey(JavaKeyCodes.VK_HOME).checkPath(0,0,0);
+		checker.fromParser(matix3x3).typeKey(JavaKeyCodes.VK_HOME).checkPath(0, 0, 0);
 	}
 
 	@Test

@@ -21,7 +21,6 @@ class EditorChecker {
 	private EditorTyper typer;
 	private App app;
 
-	// avoid synthetic access: can't be private
 	protected EditorChecker(App app) {
 		this.app = app;
 		typer = new EditorTyper(mathField);
