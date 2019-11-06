@@ -163,15 +163,22 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	private String toLaTex(GeoElementND geo) {
-		boolean matrix = hasMatrix();
-		boolean singleList = (!matrix && linkedGeo.isGeoList());
-		boolean dependentMatrix = (matrix && !linkedGeo.isIndependent());
 
-		if (geo.isGeoFunction() || singleList || dependentMatrix) {
+		boolean flatEditableList = (!hasEditableMatrix() && linkedGeo.isGeoList());
+
+		if (geo.isGeoFunction() || flatEditableList) {
 			return geo.getRedefineString(true, true,
 					getStringtemplateForLaTeX());
 		}
 		return geo.toLaTeXString(true, StringTemplate.latexTemplate);
+	}
+
+	private boolean hasEditableMatrix() {
+		if (!linkedGeo.isGeoList()) {
+			return false;
+		}
+
+		return ((GeoList) linkedGeo).isEditableMatrix();
 	}
 
 	private StringTemplate getStringtemplateForLaTeX() {
