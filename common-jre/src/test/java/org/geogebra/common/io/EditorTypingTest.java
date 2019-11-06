@@ -38,6 +38,7 @@ public class EditorTypingTest {
 
 		checker.checkEditorInsert("3*x", "3*x");
 	}
+
 	@Test
 	public void testEditor() {
 		checker.checkEditorInsert("sqrt(x/2)", "sqrt(x/2)");
