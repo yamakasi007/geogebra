@@ -163,8 +163,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	private String toLaTex(GeoElementND geo) {
-
-		boolean flatEditableList = (!hasEditableMatrix() && linkedGeo.isGeoList());
+		boolean flatEditableList = !hasEditableMatrix() && linkedGeo.isGeoList();
 
 		if (geo.isGeoFunction() || flatEditableList) {
 			return geo.getRedefineString(true, true,
@@ -447,7 +446,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	/**
-	 *
 	 * @return if linked object can be a symbolic one.
 	 */
 	public boolean canBeSymbolic() {
@@ -474,8 +472,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	/**
-	 *
-	 * @return if the GeoInputBox is under editing.
+	 * @return if the GeoInputBox is being edited
 	 */
 	public boolean isEditing() {
 		return editing;
