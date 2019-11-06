@@ -14,6 +14,9 @@ import com.himamis.retex.renderer.share.platform.FactoryProvider;
 public class EditorTypingTest {
 	private static EditorChecker checker;
 
+	/**
+	 * Reset LaTeX factory
+	 */
 	@BeforeClass
 	public static void prepare() {
 		if (FactoryProvider.getInstance() == null) {
