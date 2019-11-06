@@ -113,22 +113,20 @@ public class VoiceInputOutputController {
 	}-*/;
 
     /**
-     * init speech recognition
+     * Speech recognition functionality
      *
      * @param actionID
      *            action
      */
     public native void initSpeechRec(int actionID) /*-{
 		var that = this;
-		var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-		var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+		var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+		var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 		var SpeechRecognitionEvent = SpeechRecognitionEvent
-				|| webkitSpeechRecognitionEvent
+				|| webkitSpeechRecognitionEvent;
 
 		var recognition = new SpeechRecognition();
 		var speechRecognitionList = new SpeechGrammarList();
-		speechRecognitionList.addFromString("create", 1);
-		speechRecognitionList.addFromString("circle", 1);
 		recognition.grammars = speechRecognitionList;
 		recognition.lang = "en-US";
 		recognition.interimResults = false;
@@ -144,6 +142,7 @@ public class VoiceInputOutputController {
 			var actionType = that.@org.geogebra.web.html5.gui.voiceInput.VoiceInputOutputController::action;
 			var last = event.results.length - 1;
 			var result = event.results[last][0].transcript;
+
 
 			console.log('SPEECH REC: Result received: ' + result + '.');
 			console.log('SPEECH REC: Confidence: '

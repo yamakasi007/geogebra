@@ -632,6 +632,7 @@ public class MouseTouchGestureControllerW extends MouseTouchGestureController
 	}
 
 	/**
+	 *
 	 * Handle mouse up event.
 	 *
 	 * @param event
