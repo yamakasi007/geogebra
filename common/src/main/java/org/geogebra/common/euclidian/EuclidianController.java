@@ -5503,16 +5503,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		// delete selected object
 		case EuclidianConstants.MODE_ERASER:
-			changedKernel = getDeleteMode().process(hits.getTopHits(),
-					isControlDown, selectionPreview);
+			changedKernel = getDeleteMode().process(hits.getTopHits(), selectionPreview);
 			view.setCursor(EuclidianCursor.ERASER);
 
 			break;
 
 		// delete selected object
 		case EuclidianConstants.MODE_DELETE:
-			changedKernel = getDeleteMode().process(hits.getTopHits(),
-					isControlDown, selectionPreview);
+			changedKernel = getDeleteMode().process(hits.getTopHits(), selectionPreview);
 			break;
 
 		case EuclidianConstants.MODE_SHOW_HIDE_OBJECT:
@@ -7905,8 +7903,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (draggingBeyondThreshold && (mode == EuclidianConstants.MODE_DELETE
 				|| mode == EuclidianConstants.MODE_ERASER)) {
 
-			getDeleteMode().handleMouseDraggedForDelete(event,
-					getDeleteToolSize(), false);
+			getDeleteMode().handleMouseDraggedForDelete(event, false);
 
 			kernel.notifyRepaint();
 
@@ -9507,10 +9504,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			break;
 
 		case EuclidianConstants.MODE_DELETE:
-			getDeleteMode().mousePressed(type);
+			getDeleteMode().mousePressed();
 			break;
 		case EuclidianConstants.MODE_ERASER:
-			getDeleteMode().mousePressed(type);
+			getDeleteMode().mousePressed();
 
 		default:
 			moveMode = MOVE_NONE;
