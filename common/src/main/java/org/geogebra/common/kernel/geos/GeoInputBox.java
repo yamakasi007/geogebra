@@ -34,7 +34,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	private StringTemplate tpl = StringTemplate.defaultTemplate;
 
 	private boolean symbolicMode = false;
-	private boolean editing = false;
 
 	private StringTemplate stringTemplateForLaTeX;
 
@@ -107,10 +106,8 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		if (linkedGeo.isGeoNumeric()) {
 			GeoNumeric numeric = (GeoNumeric) linkedGeo;
 
-			if (!numeric.isDefined() || isSymbolicMode() && numeric.isSymbolicMode()) {
+			if (!numeric.isDefined() || isSymbolicMode() || numeric.isSymbolicMode()) {
 				linkedGeoText = numeric.getRedefineString(true, true);
-			} else if (numeric.isSymbolicMode()) {
-				linkedGeoText = numeric.getValueForInputBar();
 			} else {
 				linkedGeoText = numeric.toValueString(tpl);
 			}
@@ -465,24 +462,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 
 		GeoNumeric number = (GeoNumeric) linkedGeo;
 		return !number.isAngle();
-	}
-
-	/**
-	 * @return if the GeoInputBox is being edited
-	 */
-	public boolean isEditing() {
-		return editing;
-	}
-
-	/**
-	 * Set this true if an editor is active for this input box
-	 * or false if it is not.
-	 *
-	 * @param editing
-	 * 			to set.
-	 */
-	public void setEditing(boolean editing) {
-		this.editing = editing;
 	}
 
 	@Override
