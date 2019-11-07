@@ -7554,7 +7554,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 			if ((temporaryMode || textFieldSelected || buttonSelected
 					|| (moveSelected && app.isRightClickEnabled()))) {
-
 				// ie Button Mode is really selected
 				movedGeoButton = (AbsoluteScreenLocateable) movedGeoElement;
 				// move button
@@ -7690,7 +7689,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				|| app.getMode() == EuclidianConstants.MODE_BUTTON_ACTION)));
 	}
 
-	protected boolean isMoveTextFieldExpected(GeoElementND geo) {
+	private boolean isMoveTextFieldExpected(GeoElementND geo) {
 		if (!geo.isGeoInputBox()) {
 			return false;
 		}
