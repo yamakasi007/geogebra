@@ -1,0 +1,3 @@
+[submodule "carota-editor"]
+	path = carota-editor
+	url = https://git.geogebra.org/ggb/carota-editor.git
