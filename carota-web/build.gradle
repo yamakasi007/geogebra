@@ -1,0 +1,9 @@
+buildscript {
+    dependencies {
+        classpath "org.wisepersist:gwt-gradle-plugin:$gwtGradlePluginVersion"
+    }
+}
+
+
+apply plugin: 'java'
+
