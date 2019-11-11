@@ -26,7 +26,6 @@ include 'keyboard-base'
 include 'keyboard-scientific'
 include 'keyboard-web'
 
-include 'carota-editor'
 include 'carota-web'
 
 rootProject.name = 'geogebra'
