@@ -6,6 +6,7 @@ import org.geogebra.web.full.evaluator.EvaluatorEditor;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.main.ApiExporter;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.util.ArticleElement;
 
 /**
  * Evaluator Activity.
@@ -28,7 +29,10 @@ public class EvaluatorActivity extends BaseActivity {
 		GeoGebraFrameW frame = appW.getAppletFrame();
 		frame.clear();
 		frame.add(editor);
-		editor.requestFocus();
+
+		if (!appW.getArticleElement().preventFocus()) {
+			editor.requestFocus();
+		}
 	}
 
 	@Override
