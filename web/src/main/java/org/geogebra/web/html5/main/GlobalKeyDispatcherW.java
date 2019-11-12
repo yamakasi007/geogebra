@@ -5,8 +5,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.himamis.retex.renderer.share.platform.FactoryProvider;
+import org.geogebra.common.awt.GRectangle;
+import org.geogebra.common.awt.GRectangle2D;
+import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.draw.DrawPolygon;
+import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.gui.AccessibilityManagerInterface;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoLocusStroke;
+import org.geogebra.common.kernel.geos.GeoPoly;
+import org.geogebra.common.kernel.geos.GeoPolygon;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.GlobalKeyDispatcher;
@@ -491,6 +500,33 @@ public class GlobalKeyDispatcherW extends GlobalKeyDispatcher
 				+ KeyCodes.translateGWTcode(event.getNativeKeyCode()) + " in "
 				+ getActive());
 		KeyCodes kc = KeyCodes.translateGWTcode(event.getNativeKeyCode());
+
+		if (kc == KeyCodes.S) {
+			GeoLocusStroke stroke = (GeoLocusStroke) app.getKernel().lookupLabel("stroke1");
+			GeoPolygon polygon = (GeoPolygon) app.getKernel().lookupLabel("q1");
+
+			stroke.update();
+			polygon.update();
+
+			EuclidianView view = app.getActiveEuclidianView();
+			GRectangle viewRectangle = ((DrawPolygon) view.getDrawableFor(polygon)).getBounds();
+			GRectangle2D realRectangle = AwtFactory.getPrototype().newRectangle2D();
+			realRectangle.setRect(
+					view.toRealWorldCoordX(viewRectangle.getX()),
+					view.toRealWorldCoordY(viewRectangle.getY() + viewRectangle.getHeight()),
+					viewRectangle.getWidth() * view.getInvXscale(),
+					viewRectangle.getHeight() * view.getInvYscale()
+			);
+
+			List<GeoLocusStroke> splits = stroke.split(realRectangle);
+
+			for (GeoLocusStroke split : splits) {
+				split.setLabel(null);
+				split.setEuclidianVisible(true);
+				split.update();
+			}
+		}
+
 		if (!app.getAccessibilityManager().isTabOverGeos()
 				&& kc == KeyCodes.TAB) {
 			event.stopPropagation();
@@ -501,7 +537,6 @@ public class GlobalKeyDispatcherW extends GlobalKeyDispatcher
 			}
 
 			app.getAccessibilityManager().focusNext(null, -1);
-
 		}
 
 		setDownKeys(event);
