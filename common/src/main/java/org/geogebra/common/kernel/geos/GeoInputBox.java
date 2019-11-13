@@ -104,8 +104,10 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		if (linkedGeo.isGeoNumeric()) {
 			GeoNumeric numeric = (GeoNumeric) linkedGeo;
 
-			if (!numeric.isDefined() || isSymbolicMode() || numeric.isSymbolicMode()) {
+			if (!numeric.isDefined() || isSymbolicMode() && numeric.isSymbolicMode()) {
 				linkedGeoText = numeric.getRedefineString(true, true);
+			} else if (numeric.isSymbolicMode()) {
+				linkedGeoText = numeric.getValueForInputBar();
 			} else {
 				linkedGeoText = numeric.toValueString(tpl);
 			}
