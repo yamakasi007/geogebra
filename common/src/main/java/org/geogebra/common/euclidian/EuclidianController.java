@@ -10030,17 +10030,20 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		kernel.notifyRepaint();
 	}
 
+	/**
+	 * Update bounding box to match selection
+	 * 
+	 * @param crop
+	 *            whether the box should be in crop mode
+	 */
 	public void updateBoundingBoxFromSelection(boolean crop) {
 		List<GeoElement> sel = selection.getSelectedGeos();
 		if (specialBoundingBoxNeeded(crop)) {
 			Drawable dr = ((Drawable) view.getDrawableFor(sel.get(0)));
 			BoundingBox boundingBox = dr.getBoundingBox();
-
 			view.setBoundingBox(boundingBox);
 			view.repaintView();
-		}
-		// multi-selection
-		else {
+		} else { // multi-selection
 			setBoundingBoxFromList(sel);
 		}
 	}
