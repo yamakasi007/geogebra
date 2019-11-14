@@ -209,7 +209,6 @@ task copyHtml {
             def header = vendor == "Mebis" ? "" : template("app-header-beta.html")
             header = headerPartials(header, app.partials)
             def platformSpecific = offline ? "<script src=\"platform.js\"></script>" : "<!--LANGUAGE LINKS-->"
-            def stylesheet = String.valueOf(prerelease).contains("canary") ? "<link rel=\"stylesheet\" href=\"debug.css\"/>\n" :""
             def startscreenStyle = "startscreen " + appID + (offline ? " offline" : "")
             def appStoreBanner = app.appStoreId ? "<meta name=\"apple-itunes-app\" " +
                     "content=\"app-id=${app.appStoreId}\"><link rel=\"manifest\" href=\"https://www.geogebra.org/apps/manifest/${appID}.json\">" : ""
@@ -217,7 +216,7 @@ task copyHtml {
             return replaceVendor(html, vendor)
             .replace("<!--SPLASH-->", header + "<div class=\"$startscreenStyle\">$splashContent</div>")
             .replace("<!--SPLASH STYLE-->", template("app-header.css").replace('$height', offline ? '0' : '64px') + template("app-style.css"))
-            .replace("<!--PLATFORM SPECIFIC CODE-->", stylesheet + "<script>prerelease=${prerelease};appID=\"${appID}\";appOnline=${!offline};</script>" + platformSpecific)
+            .replace("<!--PLATFORM SPECIFIC CODE-->", "<script>prerelease=${prerelease};appID=\"${appID}\";appOnline=${!offline};</script>" + platformSpecific)
             .replace("<!--ICON-->", "https://www.geogebra.org/apps/icons/${appID}.ico")
             .replace("<!--APP ID-->", appID)
             .replace("<!--APP TRANSKEY-->", appTransKey)
@@ -232,9 +231,6 @@ task copyHtml {
             .replace("<!--LANG-->", "en")
         }
 
-        if(!file("war/debug.css").exists()){
-            file("war/debug.css").text = "/** Put your temporary CSS here */"
-        }
         appSpecs.each({app->
             def appID = app.id.split("-")[0]
             def replaceHtml = app.id == "classic" ? classicHtml : appHtml
@@ -244,7 +240,6 @@ task copyHtml {
             // TODO notes features should go to stable, then we simplify this
             file("war/${app.id}-offline.html").text = english(replaceHtml(app, "notes".equals(appID), true), app.title)
             file("war/${app.id}.html").text = english(replaceHtml(app, true), app.title)
-            file("war/${app.id}-canary.html").text = english(replaceHtml(app, "\"canary\""), app.title)
         });
     }
 }
