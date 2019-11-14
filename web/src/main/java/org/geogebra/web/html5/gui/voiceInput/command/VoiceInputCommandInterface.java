@@ -18,7 +18,7 @@ public interface VoiceInputCommandInterface {
 	ArrayList<QuestResErrInterface> getQuestResList();
 
 	/**
-	 * 
+	 * initialize list of questions
 	 */
 	void initQuestList();
 
