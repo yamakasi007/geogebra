@@ -1,6 +1,5 @@
 package org.geogebra.web.full.gui.exam;
 
-import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.exam.ExamLogBuilder;
 import org.geogebra.common.util.AsyncOperation;

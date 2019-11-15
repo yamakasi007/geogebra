@@ -1,8 +1,7 @@
 package org.geogebra.web.full.gui.menubar;
 
-import org.geogebra.common.GeoGebraConstants;
+import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.main.Feature;
-import org.geogebra.common.move.ggtapi.models.Material;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.dialog.DialogManagerW;
@@ -13,8 +12,6 @@ import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.gui.util.ImgResourceHelper;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.resources.SVGResource;
-
-import com.google.gwt.resources.client.ResourcePrototype;
 
 /**
  * Web implementation of PerspectivesMenu
