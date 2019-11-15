@@ -1,5 +1,6 @@
 package org.geogebra.common.main.settings;
 
+import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.gui.toolcategorization.ToolCategorization.AppType;
 import org.geogebra.common.io.layout.DockPanelData;
@@ -216,4 +217,13 @@ public class AppConfigGraphing implements AppConfig {
 	public GeoGebraConstants.Version getVersion() {
 		return GeoGebraConstants.Version.GRAPHING;
 	}
+
+	@Override
+	public boolean hasExam() { return true; }
+
+	@Override
+	public String getExamMenuItemText() { return "ExamGraphingCalc.short"; }
+
+	@Override
+	public String getExamDialogTitle() { return "GeoGebraGraphingCalculator"; }
 }

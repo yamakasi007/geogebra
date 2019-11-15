@@ -1,5 +1,6 @@
 package org.geogebra.web.full.gui.menubar.action;
 
+import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.gui.toolbar.ToolBar;
@@ -181,9 +182,9 @@ public class ExitExamAction extends MenuAction<Void> {
 	/**
 	 * Exit exam and restore normal mode
 	 */
-	protected void exitAndResetExamGraphing() {
+	protected void exitAndResetExamOffline() {
 		getApp().getLAF().toggleFullscreen(false);
-		saveScreenshot(getApp().getLocalization().getMenu("ExamGraphingCalc.long"));
+		saveScreenshot(getApp().getLocalization().getMenu(getApp().getConfig().getExamDialogTitle()));
 		getApp().fileNew();
 		resetAfterExam();
 	}
@@ -197,12 +198,12 @@ public class ExitExamAction extends MenuAction<Void> {
 		// true to make this work
 		String[] optionNames = { loc.getMenu("Cancel"), loc.getMenu("Exit") };
 
-		if (getApp().isUnbundledGraphing()) {
+		if (getApp().getConfig().hasExam()) {
 			new ExamExitConfirmDialog(getApp(), new AsyncOperation<String>() {
 				@Override
 				public void callback(String obj) {
 					if ("exit".equals(obj)) {
-						exitAndResetExamGraphing();
+						exitAndResetExamOffline();
 					}
 				}
 			}).show();

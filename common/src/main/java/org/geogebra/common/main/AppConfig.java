@@ -1,5 +1,6 @@
 package org.geogebra.common.main;
 
+import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.gui.toolcategorization.ToolCategorization.AppType;
 import org.geogebra.common.io.layout.DockPanelData;
@@ -162,5 +163,20 @@ public interface AppConfig {
 	 * @return app version
 	 */
 	GeoGebraConstants.Version getVersion();
+
+	/**
+	 * @return weather has exam or not (currently only graphing and cas)
+	 */
+	boolean hasExam();
+
+	/**
+	 * @return the ggbtranskey for the exam starting menu item in the MainMenu
+	 */
+	String getExamMenuItemText();
+
+	/**
+	 * @return the ggbtranskey for the exam dialog title (log and exit dialogs)
+	 */
+	String getExamDialogTitle();
 }
 
