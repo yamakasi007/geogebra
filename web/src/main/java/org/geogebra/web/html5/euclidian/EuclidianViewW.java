@@ -20,6 +20,7 @@ import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.background.BackgroundType;
 import org.geogebra.common.euclidian.draw.DrawVideo;
 import org.geogebra.common.euclidian.event.PointerEventType;
+import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.io.MyXMLio;
 import org.geogebra.common.kernel.geos.GeoAxis;
@@ -1854,5 +1855,10 @@ public class EuclidianViewW extends EuclidianView implements
 	@Override
 	public AppW getApplication() {
 		return (AppW) super.getApplication();
+	}
+
+	@Override
+	public InlineTextController createInlineTextController() {
+		return new InlineTextControllerW(getAbsolutePanel());
 	}
 }

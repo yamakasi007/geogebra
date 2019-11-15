@@ -114,6 +114,15 @@ public abstract class Drawable extends DrawableND {
 	protected boolean firstCall = true;
 	private GeoElement geoForLabel;
 
+	public Drawable() {
+		this(null, null);
+	}
+
+	public Drawable(EuclidianView view, GeoElement geo) {
+		this.view = view;
+		this.geo = geo;
+	}
+
 	// boolean createdByDrawList = false;
 
 	@Override

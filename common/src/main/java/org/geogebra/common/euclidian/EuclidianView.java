@@ -39,6 +39,7 @@ import org.geogebra.common.euclidian.draw.DrawRay;
 import org.geogebra.common.euclidian.draw.DrawSegment;
 import org.geogebra.common.euclidian.draw.DrawVector;
 import org.geogebra.common.euclidian.event.PointerEventType;
+import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.factories.FormatFactory;
 import org.geogebra.common.gui.SetLabels;
@@ -6562,5 +6563,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public HitDetector getHitDetector() {
 		return hitDetector;
+	}
+
+	public InlineTextController createInlineTextController() {
+		return null;
 	}
 }
