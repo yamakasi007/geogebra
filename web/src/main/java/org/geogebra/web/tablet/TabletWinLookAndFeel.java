@@ -12,6 +12,7 @@ public class TabletWinLookAndFeel extends TabletLookAndFeel {
 	public boolean exportSupported() {
 		return true;
 	}
+
 	
 	@Override
 	public boolean supportsLocalSave() {
@@ -39,6 +40,8 @@ public class TabletWinLookAndFeel extends TabletLookAndFeel {
 	}
 
 	@Override
-	public boolean isOfflineExamSupported() { return true; }
+	public boolean isOfflineExamSupported() {
+		return true;
+	}
 
 }

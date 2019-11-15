@@ -218,11 +218,17 @@ public class AppConfigGraphing implements AppConfig {
 	}
 
 	@Override
-	public boolean hasExam() { return true; }
+	public boolean hasExam() {
+		return true;
+	}
 
 	@Override
-	public String getExamMenuItemText() { return "ExamGraphingCalc.short"; }
+	public String getExamMenuItemText() {
+		return "ExamGraphingCalc.short";
+	}
 
 	@Override
-	public String getExamDialogTitle() { return "GeoGebraGraphingCalculator"; }
+	public String getExamDialogTitle() {
+		return "GeoGebraGraphingCalculator";
+	}
 }

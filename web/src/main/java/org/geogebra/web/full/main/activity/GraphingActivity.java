@@ -22,5 +22,7 @@ public class GraphingActivity extends BaseActivity {
 	}
 
 	@Override
-	public SVGResource getExamIcon() { return MaterialDesignResources.INSTANCE.exam_graphing(); }
+	public SVGResource getExamIcon() {
+		return MaterialDesignResources.INSTANCE.exam_graphing();
+	}
 }

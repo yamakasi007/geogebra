@@ -60,7 +60,9 @@ public class BundleLookAndFeel extends GLookAndFeel {
 	}
 
 	@Override
-	public boolean isOfflineExamSupported() { return true; }
+	public boolean isOfflineExamSupported() {
+		return true;
+	}
 
 	@Override
 	public boolean supportsGoogleDrive() {

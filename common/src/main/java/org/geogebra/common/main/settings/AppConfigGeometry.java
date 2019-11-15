@@ -222,11 +222,17 @@ public class AppConfigGeometry implements AppConfig {
 	}
 
 	@Override
-	public boolean hasExam() { return false; }
+	public boolean hasExam() {
+		return false;
+	}
 
 	@Override
-	public String getExamMenuItemText() { return ""; }
+	public String getExamMenuItemText() {
+		return "";
+	}
 
 	@Override
-	public String getExamDialogTitle() { return ""; }
+	public String getExamDialogTitle() {
+		return "";
+	}
 }

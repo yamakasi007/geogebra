@@ -49,5 +49,7 @@ public class CASActivity extends BaseActivity {
 	}
 
 	@Override
-	public SVGResource getExamIcon() { return MaterialDesignResources.INSTANCE.exam_cas(); }
+	public SVGResource getExamIcon() {
+		return MaterialDesignResources.INSTANCE.exam_cas();
+	}
 }

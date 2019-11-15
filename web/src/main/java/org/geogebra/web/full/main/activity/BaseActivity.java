@@ -1,6 +1,5 @@
 package org.geogebra.web.full.main.activity;
 
-import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.main.AppConfig;
 import org.geogebra.common.main.OptionType;
@@ -12,12 +11,7 @@ import org.geogebra.web.full.gui.layout.DockPanelW;
 import org.geogebra.web.full.gui.layout.panels.ToolbarDockPanelW;
 import org.geogebra.web.full.gui.menubar.BaseMenuItemProvider;
 import org.geogebra.web.full.gui.menubar.MainMenuItemProvider;
-import org.geogebra.web.full.gui.view.algebra.AVErrorHandler;
-import org.geogebra.web.full.gui.view.algebra.AlgebraItemHeader;
-import org.geogebra.web.full.gui.view.algebra.AlgebraViewW;
-import org.geogebra.web.full.gui.view.algebra.MarblePanel;
-import org.geogebra.web.full.gui.view.algebra.MenuActionCollection;
-import org.geogebra.web.full.gui.view.algebra.RadioTreeItem;
+import org.geogebra.web.full.gui.view.algebra.*;
 import org.geogebra.web.full.gui.view.algebra.contextmenu.AlgebraMenuItemCollection;
 import org.geogebra.web.full.main.HeaderResizer;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
@@ -134,5 +128,7 @@ public class BaseActivity implements GeoGebraActivity {
 	}
 
 	@Override
-	public SVGResource getExamIcon() { return null;	}
+	public SVGResource getExamIcon() {
+		return null;
+	}
 }
