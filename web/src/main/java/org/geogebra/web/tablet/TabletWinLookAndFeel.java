@@ -12,7 +12,6 @@ public class TabletWinLookAndFeel extends TabletLookAndFeel {
 	public boolean exportSupported() {
 		return true;
 	}
-
 	
 	@Override
 	public boolean supportsLocalSave() {
