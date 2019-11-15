@@ -1,6 +1,5 @@
 package org.geogebra.common.main;
 
-import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.gui.toolcategorization.ToolCategorization.AppType;
 import org.geogebra.common.io.layout.DockPanelData;

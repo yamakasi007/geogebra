@@ -1,6 +1,5 @@
 package org.geogebra.web.full.main.activity;
 
-import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.main.settings.AppConfigGraphing;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.resources.SVGResource;

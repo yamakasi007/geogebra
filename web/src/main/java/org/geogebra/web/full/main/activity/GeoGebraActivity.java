@@ -1,6 +1,5 @@
 package org.geogebra.web.full.main.activity;
 
-import com.google.gwt.resources.client.ResourcePrototype;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.main.AppConfig;
 import org.geogebra.common.main.error.ErrorHandler;
