@@ -86,6 +86,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	public BoundingBox getBoundingBox() {
 		if (boundingBox == null) {
 			boundingBox = createBoundingBox(false, false);
+			boundingBox.setNrHandlers(0);
 			boundingBox.setRectangle(getBounds());
 		}
 		boundingBox.updateFrom(geo);
@@ -129,7 +130,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 	@Override
 	public void setAbsoluteScreenLoc(int x, int y) {
-		// TODO
+		// Not implemented
 	}
 
 	@Override
@@ -149,7 +150,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 	@Override
 	public void resetRatio() {
-
+		// Not implemented
 	}
 
 	@Override
@@ -159,36 +160,6 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 	@Override
 	public void updateByBoundingBoxResize(GPoint2D point, EuclidianBoundingBoxHandler handler) {
-		GeoPoint location = text.getLocation();
-		double[] oldCoordsRW = new double[2];
-		location.getInhomCoords(oldCoordsRW);
-		double oldXScreen = view.toScreenCoordY(oldCoordsRW[0]);
-		double oldYScreen = view.toScreenCoordY(oldCoordsRW[1]);
-
-		double[] newCoordsScreen = new double[2];
-		newCoordsScreen[0] = point.getX();
-		newCoordsScreen[1] = point.getY();
-
-		int textHeight = text.getHeight();
-		int textWidth = text.getHeight();
-
-		switch (handler) {
-			case TOP:
-				double newYRW = view.toRealWorldCoordY(newCoordsScreen[1]);
-
-				location.setY(newYRW);
-				text.setHeight(textHeight + (int) Math.round(oldYScreen - newCoordsScreen[1]));
-				break;
-			case BOTTOM:
-				text.setHeight(textHeight + (int) Math.round(newCoordsScreen[1] - (oldYScreen + getHeight())));
-				break;
-			case LEFT:
-				double newXRW = view.toRealWorldCoordX(newCoordsScreen[0]);
-				location.setX(newXRW);
-				text.setWidth(textWidth + (int) Math.round(oldXScreen - newCoordsScreen[0]));
-
-		}
-		location.updateCoords();
-		text.updateRepaint();
+		// Not implemented
 	}
 }
