@@ -17,7 +17,7 @@ class CarotaUtil {
 			return;
 		}
 		String javascript = JavascriptBundle.INSTANCE.carotaJs().getText();
-		ScriptInjector.fromString(javascript).inject();
+		ScriptInjector.fromString(javascript).setWindow(ScriptInjector.TOP_WINDOW).inject();
 		isScriptInjected = true;
 	}
 }
