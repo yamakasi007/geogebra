@@ -6565,6 +6565,11 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		return hitDetector;
 	}
 
+	/**
+	 * Create an inline text controller iff the view supports inline text editing.
+	 *
+	 * @return an implementation of the text controller.
+	 */
 	public InlineTextController createInlineTextController() {
 		return null;
 	}

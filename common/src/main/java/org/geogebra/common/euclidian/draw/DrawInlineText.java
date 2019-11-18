@@ -15,6 +15,9 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoPoint;
 
+/**
+ * Class that handles drawing inline text elements.
+ */
 public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget {
 
 	private int padding = 8;
@@ -23,6 +26,12 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	private InlineTextController textController;
 	private BoundingBox boundingBox;
 
+	/**
+	 * Create a new DrawInlineText instance.
+	 *
+	 * @param view view
+	 * @param text geo element
+	 */
 	public DrawInlineText(EuclidianView view, GeoInlineText text) {
 		super(view, text);
 		this.text = text;
@@ -34,8 +43,6 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	private void createEditor() {
 		if (textController != null) {
 			textController.create();
-//			textController.setWidth(text.getWidth());
-//			textController.setHeight(text.getHeight());
 		}
 	}
 
