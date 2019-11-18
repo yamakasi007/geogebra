@@ -100,7 +100,12 @@ public class GeoInlineText extends GeoElement implements AbsoluteScreenLocateabl
 	@Override
 	public void set(GeoElementND geo) {
 		cons = geo.getConstruction();
-		// ToDo
+		if (geo instanceof GeoInlineText) {
+			GeoInlineText text = (GeoInlineText) geo;
+			location = text.location;
+			width = text.width;
+			height = text.height;
+		}
 	}
 
 	@Override
@@ -110,7 +115,7 @@ public class GeoInlineText extends GeoElement implements AbsoluteScreenLocateabl
 
 	@Override
 	public void setUndefined() {
-		//
+		// unimplemented
 	}
 
 	@Override
@@ -145,7 +150,7 @@ public class GeoInlineText extends GeoElement implements AbsoluteScreenLocateabl
 
 	@Override
 	public void setAbsoluteScreenLoc(int x, int y) {
-		System.out.println("Absolute");
+		// unimplemented
 	}
 
 	@Override
@@ -160,7 +165,7 @@ public class GeoInlineText extends GeoElement implements AbsoluteScreenLocateabl
 
 	@Override
 	public void setRealWorldLoc(double x, double y) {
-		System.out.println("Real");
+		// unimplemented
 	}
 
 	@Override
@@ -175,7 +180,7 @@ public class GeoInlineText extends GeoElement implements AbsoluteScreenLocateabl
 
 	@Override
 	public void setAbsoluteScreenLocActive(boolean flag) {
-
+		// unimplemented
 	}
 
 	@Override
