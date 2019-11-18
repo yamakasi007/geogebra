@@ -2,32 +2,31 @@ package org.geogebra.web.html5.euclidian;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Widget;
 import org.geogebra.common.euclidian.text.InlineTextController;
-import org.geogebra.common.kernel.geos.GeoInlineText;
-import org.geogebra.web.resources.JavaScriptInjector;
-import org.geogebra.web.richtext.CarotaEditor;
+import org.geogebra.web.richtext.impl.CarotaEditor;
 import org.geogebra.web.richtext.Editor;
-import org.geogebra.web.richtext.JavascriptBundle;
 
+/**
+ * Web implementation of the inline text controller.
+ */
 public class InlineTextControllerW implements InlineTextController {
-
-	private static void initializeCarota() {
-		JavaScriptInjector.inject(JavascriptBundle.INSTANCE.carotaJs());
-	}
 
 	private Panel parent;
 	private Editor editor;
+	private Style style;
 
 	public InlineTextControllerW(Panel parent) {
-		initializeCarota();
 		this.parent = parent;
 	}
 
 	@Override
 	public void create() {
 		editor = new CarotaEditor();
-		editor.getWidget().getElement().getStyle().setZIndex(100);
-		editor.getWidget().getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+		Widget widget = editor.getWidget();
+		style = widget.getElement().getStyle();
+		style.setZIndex(100);
+		style.setPosition(Style.Position.ABSOLUTE);
 		parent.add(editor.getWidget());
 		editor.focus();
 	}
@@ -39,27 +38,17 @@ public class InlineTextControllerW implements InlineTextController {
 
 	@Override
 	public void setLocation(int x, int y) {
-		editor.getWidget().getElement().getStyle().setLeft(x, Style.Unit.PX);
-		editor.getWidget().getElement().getStyle().setTop(y, Style.Unit.PX);
+		style.setLeft(x, Style.Unit.PX);
+		style.setTop(y, Style.Unit.PX);
 	}
 
 	@Override
 	public void setWidth(int width) {
-		editor.setWidth(width);
+		style.setWidth(width, Style.Unit.PX);
 	}
 
 	@Override
 	public void setHeight(int height) {
-		editor.setHeight(height);
-	}
-
-	@Override
-	public void load(GeoInlineText inlineText) {
-
-	}
-
-	@Override
-	public void persist(GeoInlineText inlineText) {
-
+		style.setHeight(height, Style.Unit.PX);
 	}
 }

@@ -1,10 +1,13 @@
-package org.geogebra.web.richtext;
+package org.geogebra.web.richtext.impl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
-public interface JavascriptBundle extends ClientBundle {
+/**
+ * Bundle containing the Carota javascript.
+ */
+interface JavascriptBundle extends ClientBundle {
 
 	JavascriptBundle INSTANCE = GWT.create(JavascriptBundle.class);
 

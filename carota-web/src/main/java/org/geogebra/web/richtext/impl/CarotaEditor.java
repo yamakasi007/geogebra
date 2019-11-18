@@ -1,10 +1,10 @@
-package org.geogebra.web.richtext;
+package org.geogebra.web.richtext.impl;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import org.geogebra.web.richtext.Editor;
 
 /**
  * Inline text editor based on Carota.
@@ -26,7 +26,7 @@ public class CarotaEditor implements Editor {
 	 * Create a new instance of Carota editor.
 	 */
 	public CarotaEditor() {
-		ScriptInjector.fromString(JavascriptBundle.INSTANCE.carotaJs().getText()).setRemoveTag()
+		CarotaUtil.ensureJavascriptInjected();
 		widget = createWidget();
 	}
 
