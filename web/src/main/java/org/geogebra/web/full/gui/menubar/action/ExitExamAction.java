@@ -184,7 +184,7 @@ public class ExitExamAction extends MenuAction<Void> {
     protected void exitAndResetExamOffline() {
         getApp().getLAF().toggleFullscreen(false);
         saveScreenshot(getApp().getLocalization().getMenu((getApp().getConfig()
-                .getExamDialogTitle())));
+                .getAppName())));
         getApp().fileNew();
         resetAfterExam();
     }

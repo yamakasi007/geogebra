@@ -129,9 +129,4 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 	public String getExamMenuItemText() {
 		return "";
 	}
-
-	@Override
-	public String getExamDialogTitle() {
-		return "";
-	}
 }

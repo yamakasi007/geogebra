@@ -224,9 +224,4 @@ public class AppConfigDefault implements AppConfig {
 	public String getExamMenuItemText() {
 		return "";
 	}
-
-	@Override
-	public String getExamDialogTitle() {
-		return "";
-	}
 }

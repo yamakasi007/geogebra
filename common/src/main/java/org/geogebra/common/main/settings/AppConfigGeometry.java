@@ -230,9 +230,4 @@ public class AppConfigGeometry implements AppConfig {
 	public String getExamMenuItemText() {
 		return "";
 	}
-
-	@Override
-	public String getExamDialogTitle() {
-		return "";
-	}
 }

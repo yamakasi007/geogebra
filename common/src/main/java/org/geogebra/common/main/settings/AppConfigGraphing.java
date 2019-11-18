@@ -226,9 +226,4 @@ public class AppConfigGraphing implements AppConfig {
 	public String getExamMenuItemText() {
 		return "ExamGraphingCalc.short";
 	}
-
-	@Override
-	public String getExamDialogTitle() {
-		return "GeoGebraGraphingCalculator";
-	}
 }

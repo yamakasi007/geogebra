@@ -79,9 +79,4 @@ public class AppConfigCas extends AppConfigGraphing {
 	public String getExamMenuItemText() {
 		return "ExamCAS.short";
 	}
-
-	@Override
-	public String getExamDialogTitle() {
-		return "GeoGebraCASCalculator";
-	}
 }

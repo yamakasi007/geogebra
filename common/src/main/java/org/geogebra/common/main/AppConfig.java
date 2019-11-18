@@ -172,10 +172,5 @@ public interface AppConfig {
 	 * @return the ggbtranskey for the exam starting menu item in the MainMenu
 	 */
 	String getExamMenuItemText();
-
-	/**
-	 * @return the ggbtranskey for the exam dialog title (log and exit dialogs)
-	 */
-	String getExamDialogTitle();
 }
 

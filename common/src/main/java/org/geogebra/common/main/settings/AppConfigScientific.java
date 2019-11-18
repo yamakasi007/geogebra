@@ -94,9 +94,4 @@ public class AppConfigScientific extends AppConfigGraphing {
 	public String getExamMenuItemText() {
     	return "";
     }
-
-	@Override
-	public String getExamDialogTitle() {
-    	return "";
-    }
 }
