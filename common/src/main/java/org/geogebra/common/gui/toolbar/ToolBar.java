@@ -388,7 +388,7 @@ public class ToolBar {
 		sb.append(EuclidianConstants.MODE_SHAPE_LINE);
 		sb.append(" ");
 		sb.append(EuclidianConstants.MODE_MASK);
-		if (app.has(Feature.INLINE_TEXT_TOOL)) {
+		if (app.has(Feature.MOW_INLINE_TEXT_TOOL)) {
 			sb.append(" ");
 			sb.append(EuclidianConstants.MODE_INLINE_TEXT);
 		}
