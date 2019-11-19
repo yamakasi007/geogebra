@@ -32,6 +32,7 @@ public class BoundingBox {
 	private int nrHandlers = 8;
 	private boolean isCropBox = false;
 	private boolean isImage = false;
+	private boolean drawBoundingBox = true;
 	private GColor color;
 	private boolean fixed;
 
@@ -167,6 +168,15 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Set whether to draw the bounding rectangle or not.
+	 *
+	 * @param drawBoundingBox true to draw the bounding rectangle.
+	 */
+	public void setDrawBoundingBox(boolean drawBoundingBox) {
+		this.drawBoundingBox = drawBoundingBox;
+	}
+
+	/**
 	 * @return crop handlers
 	 */
 	public ArrayList<GGeneralPath> getCropHandlers() {
@@ -298,7 +308,7 @@ public class BoundingBox {
 	 */
 	public void draw(GGraphics2D g2) {
 		// draw bounding box
-		if (rectangle != null && nrHandlers > 2) {
+		if (rectangle != null && drawBoundingBox) {
 			g2.setColor(GColor.newColor(192, 192, 192, 0.0));
 			g2.setStroke(AwtFactory.getPrototype().newBasicStroke(2.0f,
 					GBasicStroke.CAP_BUTT, GBasicStroke.JOIN_MITER));

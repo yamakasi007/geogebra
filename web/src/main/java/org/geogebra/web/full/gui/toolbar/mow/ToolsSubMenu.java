@@ -24,7 +24,7 @@ public class ToolsSubMenu extends SubMenuPanel {
 	@Override
 	protected void createContentPanel() {
 		super.createContentPanel();
-		super.createPanelRow(ToolBar.getMOWToolsDefString());
+		super.createPanelRow(ToolBar.getMOWToolsDefString(app));
 	}
 
 	@Override

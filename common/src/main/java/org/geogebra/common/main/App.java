@@ -3850,6 +3850,9 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case VIDEO_PLAYER_OFFLINE:
 			return prerelease && whiteboard;
 
+		case MOW_INLINE_TEXT_TOOL:
+			return prerelease;
+
 		// **********************************************************************
 		// MOW END
 		// *********************************************************
