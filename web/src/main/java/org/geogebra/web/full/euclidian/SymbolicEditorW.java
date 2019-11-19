@@ -1,4 +1,5 @@
- package org.geogebra.web.full.euclidian;
+package org.geogebra.web.full.euclidian;
+
 
  import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.awt.GRectangle;
