@@ -839,6 +839,12 @@ public class EuclidianStyleBarW extends StyleBarW2
 
 	public class ProjectionPopup extends PopupMenuButtonW {
 
+		/**
+		 * @param app
+		 *            application
+		 * @param projectionIcons
+		 *            icons
+		 */
 		public ProjectionPopup(AppW app, ImageOrText[] projectionIcons) {
 			super(app, projectionIcons, 1, projectionIcons.length,
 					SelectionTable.MODE_ICON, true, false, null, false);
