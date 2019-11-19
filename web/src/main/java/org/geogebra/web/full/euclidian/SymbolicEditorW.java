@@ -1,7 +1,6 @@
 package org.geogebra.web.full.euclidian;
 
-
- import org.geogebra.common.awt.GPoint;
+import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
