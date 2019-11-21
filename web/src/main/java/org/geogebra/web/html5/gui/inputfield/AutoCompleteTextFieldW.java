@@ -121,6 +121,7 @@ public class AutoCompleteTextFieldW extends FlowPanel
 	private OnBackSpaceHandler onBackSpaceHandler = null;
 	private boolean suggestionJustHappened = false;
 	private GeoInputBox geoUsedForInputBox;
+	protected boolean isFocused = false;
 	/**
 	 * Pattern to find an argument description as found in the syntax
 	 * information of a command.
@@ -1371,7 +1372,7 @@ public class AutoCompleteTextFieldW extends FlowPanel
 
 	@Override
 	public boolean hasFocus() {
-		return false;
+		return isFocused;
 	}
 
 	/**
@@ -1491,6 +1492,7 @@ public class AutoCompleteTextFieldW extends FlowPanel
 
 	@Override
 	public void setFocus(boolean focus) {
+		isFocused = focus;
 		textField.setFocus(focus);
 	}
 

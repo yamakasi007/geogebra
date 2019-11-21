@@ -71,7 +71,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 
 	@Override
 	public MathKeyboardListener getKeyboardListener() {
-		return null;
+		return editor.getKeyboardListener();
 	}
 
 	private void resetChanges() {
