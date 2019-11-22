@@ -67,7 +67,6 @@ public class ResourceAvailability {
 			case EuclidianConstants.MODE_SURFACE_OF_REVOLUTION:
 			case EuclidianConstants.MODE_FREEHAND_FUNCTION:
 			case EuclidianConstants.MODE_MASK:
-			case EuclidianConstants.MODE_FREEHAND_FUNCTION:
 			case EuclidianConstants.MODE_INLINE_TEXT:
 				continue;
 			default:
