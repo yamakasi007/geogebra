@@ -98,7 +98,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param geos
 	 *            list of geos
 	 */
-	public void initPopup(ArrayList<GeoElement> geos) {
+	private void initPopup(ArrayList<GeoElement> geos) {
 		wrappedPopup.clearItems();
 		if (geos == null || geos.size() == 0 || !geos.get(0).isLabelSet()) {
 			return;
@@ -706,7 +706,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			public void execute() {
 				if (!app.getCopyPaste().isEmpty()) {
 					app.setWaitCursor();
-					app.getCopyPaste().pasteFromXML(app, false);
+					pasteCmd();
 					app.setDefaultCursor();
 				}
 			}
@@ -1102,7 +1102,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * @param subMenu
 	 *            sub menu
 	 */
-	protected void addSubmenuAction(String html, String text,
+	private void addSubmenuAction(String html, String text,
 			AriaMenuBar subMenu) {
 		AriaMenuItem mi;
 		if (html != null) {
