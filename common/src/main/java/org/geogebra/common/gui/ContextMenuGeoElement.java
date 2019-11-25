@@ -730,20 +730,29 @@ public abstract class ContextMenuGeoElement {
 	 * Cuts selected elements
 	 */
 	public void cutCmd() {
+		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
+			app.getSelectionManager().addSelectedGeo(getGeo());
+		}
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 		deleteCmd(true);
 	}
 
 	/**
-	 * Duplicates selected elements
+	 * Copies selected elements
 	 */
-	public void duplicateCmd() {
+	public void copyCmd() {
 		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
 			app.getSelectionManager().addSelectedGeo(getGeo());
 		}
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
+	}
+
+	/**
+	 * Pastes copied elements
+	 */
+	public void pasteCmd() {
 		app.getCopyPaste().pasteFromXML(app, false);
 	}
 

@@ -30,7 +30,6 @@ import org.geogebra.common.main.Localization;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.menubar.MainMenu;
@@ -42,7 +41,6 @@ import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
-import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -658,19 +656,45 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 	private void addEditItems() {
 		if (app.isUnbundledOrWhiteboard() && !(getGeo() instanceof GeoEmbed)) {
-			SVGResource img = MaterialDesignResources.INSTANCE
-					.duplicate_black();
-			addAction(new Command() {
+			MaterialDesignResources resources = MaterialDesignResources.INSTANCE;
 
+			Command cutCommand = new Command() {
 				@Override
 				public void execute() {
 					app.setWaitCursor();
-					duplicateCmd();
+					cutCmd();
 					app.setDefaultCursor();
-
 				}
-			}, MainMenu.getMenuBarHtml(img, loc.getMenu("Duplicate")),
-					loc.getMenu("Duplicate"));
+			};
+
+			addAction(cutCommand, MainMenu.getMenuBarHtml(resources.cut_black(),
+					loc.getMenu("Cut")), null);
+
+			Command copyCommand = new Command() {
+				@Override
+				public void execute() {
+					app.setWaitCursor();
+					copyCmd();
+					app.setDefaultCursor();
+				}
+			};
+
+			addAction(copyCommand, MainMenu.getMenuBarHtml(resources.copy_black(),
+					loc.getMenu("Copy")), null);
+
+			Command pasteCommand = new Command() {
+				@Override
+				public void execute() {
+					app.setWaitCursor();
+					pasteCmd();
+					app.setDefaultCursor();
+				}
+			};
+
+			addAction(pasteCommand, MainMenu.getMenuBarHtml(resources.paste_black(),
+					loc.getMenu("Paste")), null);
+
+			wrappedPopup.addSeparator();
 		}
 	}
 
