@@ -646,9 +646,13 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addEditItems() {
-		if (app.isUnbundledOrWhiteboard() && !(getGeo() instanceof GeoEmbed)) {
-			MaterialDesignResources resources = MaterialDesignResources.INSTANCE;
+		if (getGeo() instanceof GeoEmbed) {
+			return;
+		}
 
+		MaterialDesignResources resources = MaterialDesignResources.INSTANCE;
+
+		if (app.isWhiteboardActive()) {
 			Command cutCommand = new Command() {
 				@Override
 				public void execute() {
@@ -676,6 +680,18 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addPasteItem();
 
 			wrappedPopup.addSeparator();
+		} else {
+			Command duplicateCommand = new Command() {
+				@Override
+				public void execute() {
+					app.setWaitCursor();
+					duplicateCmd();
+					app.setDefaultCursor();
+				}
+			};
+
+			addHtmlAction(duplicateCommand, MainMenu.getMenuBarHtml(resources.duplicate_black(),
+					loc.getMenu("Duplicate")));
 		}
 	}
 
