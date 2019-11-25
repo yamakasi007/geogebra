@@ -105,7 +105,6 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		AriaMenuItem mi = new AriaMenuItem(
 				loc.getMenu("xAxis") + " : " + loc.getMenu("yAxis"), true,
 				(AriaMenuBar) yaxisMenu);
-		mi.addStyleName("mi_no_image_new");
 		if (!app.isUnbundled()) {
 			wrappedPopup.addItem(mi);
 		}

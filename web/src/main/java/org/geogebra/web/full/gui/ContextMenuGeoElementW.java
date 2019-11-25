@@ -225,15 +225,14 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			}
 
 			// open properties dialog
-			addAction(new Command() {
+			addHtmlAction(new Command() {
 
 				@Override
 				public void execute() {
 					openPropertiesDialogCmd();
 				}
 			}, MainMenu.getMenuBarHtmlClassic(img,
-					loc.getMenu("Settings")),
-					loc.getMenu("Settings"));
+					loc.getMenu("Settings")));
 		}
 	}
 
@@ -250,14 +249,13 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 						.asString();
 			}
 
-			addAction(new Command() {
+			addHtmlAction(new Command() {
 
 				@Override
 				public void execute() {
 					deleteCmd(false);
 				}
-			}, MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("Delete")),
-					loc.getMenu("Delete"));
+			}, MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("Delete")));
 		}
 	}
 
@@ -542,14 +540,13 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 		String img = AppResources.INSTANCE.rename20().getSafeUri().asString();
 
-		addAction(new Command() {
+		addHtmlAction(new Command() {
 
 			@Override
 			public void execute() {
 				renameCmd();
 			}
-		}, MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("Rename")),
-				loc.getMenu("Rename"));
+		}, MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("Rename")));
 
 		if (getGeos().size() == 1 && getGeo() instanceof TextValue
 				&& !getGeo().isTextCommand()
@@ -557,14 +554,13 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 			String img2 = AppResources.INSTANCE.edit().getSafeUri().asString();
 
-			addAction(new Command() {
+			addHtmlAction(new Command() {
 
 				@Override
 				public void execute() {
 					editCmd();
 				}
-			}, MainMenu.getMenuBarHtmlClassic(img2, loc.getMenu("Edit")),
-					loc.getMenu("Edit"));
+			}, MainMenu.getMenuBarHtmlClassic(img2, loc.getMenu("Edit")));
 		}
 	}
 
@@ -662,8 +658,8 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				}
 			};
 
-			addAction(cutCommand, MainMenu.getMenuBarHtml(resources.cut_black(),
-					loc.getMenu("Cut")), null);
+			addHtmlAction(cutCommand, MainMenu.getMenuBarHtml(resources.cut_black(),
+					loc.getMenu("Cut")));
 
 			Command copyCommand = new Command() {
 				@Override
@@ -674,8 +670,8 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				}
 			};
 
-			addAction(copyCommand, MainMenu.getMenuBarHtml(resources.copy_black(),
-					loc.getMenu("Copy")), null);
+			addHtmlAction(copyCommand, MainMenu.getMenuBarHtml(resources.copy_black(),
+					loc.getMenu("Copy")));
 
 			addPasteItem();
 
@@ -700,8 +696,8 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			}
 		};
 
-		mnuPaste = addAction(pasteCommand, MainMenu.getMenuBarHtml(img,
-				loc.getMenu("Paste")), null);
+		mnuPaste = addHtmlAction(pasteCommand, MainMenu.getMenuBarHtml(img,
+				loc.getMenu("Paste")));
 	}
 
 	private void updateEditItems() {
@@ -748,7 +744,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				Log.debug("set plane visible : " + plane);
 			}
 		};
-		addAction(action, null, app.getLocalization().getPlain("ShowAas2DView",
+		addAction(action, app.getLocalization().getPlain("ShowAas2DView",
 				getGeo().getLabelSimple()));
 	}
 
@@ -771,7 +767,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 							implicitConicEquationCmd();
 						}
 					};
-					addAction(action, null, loc.getMenu("ExpandedForm"));
+					addAction(action, loc.getMenu("ExpandedForm"));
 				} else {
 					action = new Command() {
 
@@ -780,7 +776,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 							inputFormCmd(inputElement);
 						}
 					};
-					addAction(action, null, loc.getMenu("InputForm"));
+					addAction(action, loc.getMenu("InputForm"));
 				}
 
 			}
@@ -793,7 +789,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					inputFormCmd(inputElement);
 				}
 			};
-			addAction(action, null, loc.getMenu("InputForm"));
+			addAction(action, loc.getMenu("InputForm"));
 		} else if (geo instanceof GeoPlaneND && geo.getDefinition() != null) {
 			Command action = new Command() {
 
@@ -802,7 +798,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					implicitConicEquationCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("ExpandedForm"));
+			addAction(action, loc.getMenu("ExpandedForm"));
 		}
 	}
 
@@ -842,7 +838,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					implicitConicEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 
 		if (specificPossible && mode != GeoConicND.EQUATION_SPECIFIC) {
@@ -860,7 +856,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 						equationConicEqnCmd();
 					}
 				};
-				addAction(action, null, sb.toString());
+				addAction(action, sb.toString());
 			}
 		}
 
@@ -876,7 +872,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationExplicitConicEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 
 		if (vertexformPossible && mode != GeoConicND.EQUATION_VERTEX) {
@@ -891,7 +887,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationVertexEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 
 		if (conicformPossible && mode != GeoConicND.EQUATION_CONICFORM) {
@@ -906,7 +902,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationConicformEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 	}
 
@@ -939,7 +935,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationImplicitEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 
 		if (mode != GeoLine.EQUATION_EXPLICIT) {
@@ -954,7 +950,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationExplicitEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 
 		if (mode != GeoLine.PARAMETRIC) {
@@ -965,7 +961,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					parametricFormCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("ParametricForm"));
+			addAction(action, loc.getMenu("ParametricForm"));
 		}
 
 		if (mode != GeoLine.EQUATION_GENERAL) {
@@ -980,7 +976,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					equationGeneralLineEquationCmd();
 				}
 			};
-			addAction(action, null, sb.toString());
+			addAction(action, sb.toString());
 		}
 	}
 
@@ -1015,7 +1011,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					cartesianCoordsCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("CartesianCoords"));
+			addAction(action, loc.getMenu("CartesianCoords"));
 			break;
 
 		case Kernel.COORD_CARTESIAN:
@@ -1026,7 +1022,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					polarCoorsCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("PolarCoords"));
+			addAction(action, loc.getMenu("PolarCoords"));
 			break;
 
 		// 3D coords styles
@@ -1038,7 +1034,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					cartesianCoords3dCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("CartesianCoords"));
+			addAction(action, loc.getMenu("CartesianCoords"));
 			break;
 
 		case Kernel.COORD_CARTESIAN_3D:
@@ -1049,7 +1045,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					sphericalCoordsCmd();
 				}
 			};
-			addAction(action, null, loc.getMenu("Spherical"));
+			addAction(action, loc.getMenu("Spherical"));
 			break;
 		}
 	}
@@ -1057,22 +1053,25 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	/**
 	 * @param action
 	 *            action to perform on click
-	 * @param html
-	 *            html string of menu item
 	 * @param text
 	 *            text of menu item
+	 */
+	private void addAction(Command action, String text) {
+		AriaMenuItem mi = new AriaMenuItem(text, false, action);
+		wrappedPopup.addItem(mi);
+	}
+
+	/**
+	 * @param action
+	 *            action to perform on click
+	 * @param html
+	 *            html string of menu item
 	 * @return new menu item
 	 */
-	protected AriaMenuItem addAction(Command action, String html, String text) {
-		AriaMenuItem mi;
-		if (html != null) {
-			mi = new AriaMenuItem(html, true, action);
-			if (!app.isUnbundledOrWhiteboard()) {
-				mi.addStyleName("mi_with_image"); // TEMP
-			}
-		} else {
-			mi = new AriaMenuItem(text, false, action);
-			mi.addStyleName("mi_no_image"); // TEMP
+	private AriaMenuItem addHtmlAction(Command action, String html) {
+		AriaMenuItem mi = new AriaMenuItem(html, true, action);
+		if (!app.isUnbundledOrWhiteboard()) {
+			mi.addStyleName("mi_with_image");
 		}
 
 		wrappedPopup.addItem(mi);
@@ -1097,7 +1096,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			}
 		} else {
 			mi = new AriaMenuItem(text, true, subMenu);
-			mi.addStyleName("mi_no_image"); // TEMP
 		}
 
 		wrappedPopup.addItem(mi);
