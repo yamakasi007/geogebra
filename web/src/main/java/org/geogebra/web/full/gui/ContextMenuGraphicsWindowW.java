@@ -87,6 +87,8 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 			}
 			addShowAllObjAndStandView();
 		} else {
+			addPasteItem();
+			wrappedPopup.addSeparator();
 			addRulingMenuItem(ot);
 			addBackgroundMenuItem();
 		}
@@ -604,14 +606,6 @@ public class ContextMenuGraphicsWindowW extends ContextMenuGeoElementW
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	@Override
-	protected void updateEditItems() {
-		if (!app.isUnbundledOrWhiteboard()) {
-			return;
-		}
-		updatePasteItem();
 	}
 
 	/**

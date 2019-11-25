@@ -208,11 +208,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addPropertiesItem() {
-		// if (isWhiteboard()) {
-		// wrappedPopup.addSeparator();
-		// addSelect();
-		// addOrder();
-		// }
 		// Object properties menuitem
 		if (app.showMenuBar() && app.letShowPropertiesDialog()
 				&& getGeo().hasProperties()) {
@@ -682,17 +677,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addAction(copyCommand, MainMenu.getMenuBarHtml(resources.copy_black(),
 					loc.getMenu("Copy")), null);
 
-			Command pasteCommand = new Command() {
-				@Override
-				public void execute() {
-					app.setWaitCursor();
-					pasteCmd();
-					app.setDefaultCursor();
-				}
-			};
-
-			addAction(pasteCommand, MainMenu.getMenuBarHtml(resources.paste_black(),
-					loc.getMenu("Paste")), null);
+			addPasteItem();
 
 			wrappedPopup.addSeparator();
 		}
@@ -702,19 +687,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	 * add paste menu item
 	 */
 	protected void addPasteItem() {
-		if (app.isUnbundled()) {
-			return;
-		}
+		ResourcePrototype img = MaterialDesignResources.INSTANCE.paste_black();
 
-		ResourcePrototype img;
-		if (app.isUnbundledOrWhiteboard()) {
-			img = MaterialDesignResources.INSTANCE.paste_black();
-		} else {
-			img = GuiResources.INSTANCE.menu_icon_edit_paste();
-		}
-
-		mnuPaste = addAction(new Command() {
-
+		Command pasteCommand = new Command() {
 			@Override
 			public void execute() {
 				if (!app.getCopyPaste().isEmpty()) {
@@ -723,24 +698,18 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 					app.setDefaultCursor();
 				}
 			}
-		}, MainMenu.getMenuBarHtml(img, loc.getMenu("Paste")),
-				loc.getMenu("Paste"));
+		};
+
+		mnuPaste = addAction(pasteCommand, MainMenu.getMenuBarHtml(img,
+				loc.getMenu("Paste")), null);
 	}
 
-	/**
-	 * update paste menu item
-	 */
-	protected void updatePasteItem() {
-		if (!app.isUnbundled() && mnuPaste != null) {
-			mnuPaste.setEnabled(!app.getCopyPaste().isEmpty());
+	private void updateEditItems() {
+		if (!app.isUnbundledOrWhiteboard() || mnuPaste == null) {
+			return;
 		}
-	}
 
-	/**
-	 * update edit menu item
-	 */
-	protected void updateEditItems() {
-		// overridden in subclass
+		mnuPaste.setEnabled(!app.getCopyPaste().isEmpty());
 	}
 
 	private void addPinForClassic() {
