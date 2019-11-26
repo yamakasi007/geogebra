@@ -726,13 +726,17 @@ public abstract class ContextMenuGeoElement {
 		this.geos = geos;
 	}
 
+	private void setupSelection() {
+		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
+			app.getSelectionManager().addSelectedGeo(getGeo());
+		}
+	}
+
 	/**
 	 * Cuts selected elements
 	 */
 	public void cutCmd() {
-		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
-			app.getSelectionManager().addSelectedGeo(getGeo());
-		}
+		setupSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 		deleteCmd(true);
@@ -742,9 +746,7 @@ public abstract class ContextMenuGeoElement {
 	 * Duplicates selected elements
 	 */
 	public void duplicateCmd() {
-		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
-			app.getSelectionManager().addSelectedGeo(getGeo());
-		}
+		setupSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 		app.getCopyPaste().pasteFromXML(app, false);
@@ -754,9 +756,7 @@ public abstract class ContextMenuGeoElement {
 	 * Copies selected elements
 	 */
 	public void copyCmd() {
-		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
-			app.getSelectionManager().addSelectedGeo(getGeo());
-		}
+		setupSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 	}

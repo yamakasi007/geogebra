@@ -193,6 +193,9 @@ public class MouseTouchGestureControllerW extends MouseTouchGestureController
 		this.cssZoom = Browser.isSafariByVendor();
 	}
 
+	/**
+	 * Fire touch event at the specified coordinates (right click if not unbundled)
+	 */
 	public void handleLongTouch(int x, int y) {
 		PointerEvent event = new PointerEvent(x, y, PointerEventType.TOUCH,
 		        ZeroOffset.INSTANCE);
