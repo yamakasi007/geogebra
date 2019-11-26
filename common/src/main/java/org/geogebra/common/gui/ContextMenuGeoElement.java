@@ -726,7 +726,7 @@ public abstract class ContextMenuGeoElement {
 		this.geos = geos;
 	}
 
-	private void setupSelection() {
+	private void ensureGeoInSelection() {
 		if (app.getSelectionManager().getSelectedGeos().isEmpty()) {
 			app.getSelectionManager().addSelectedGeo(getGeo());
 		}
@@ -736,7 +736,7 @@ public abstract class ContextMenuGeoElement {
 	 * Cuts selected elements
 	 */
 	public void cutCmd() {
-		setupSelection();
+		ensureGeoInSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 		deleteCmd(true);
@@ -746,7 +746,7 @@ public abstract class ContextMenuGeoElement {
 	 * Duplicates selected elements
 	 */
 	public void duplicateCmd() {
-		setupSelection();
+		ensureGeoInSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 		app.getCopyPaste().pasteFromXML(app, false);
@@ -756,7 +756,7 @@ public abstract class ContextMenuGeoElement {
 	 * Copies selected elements
 	 */
 	public void copyCmd() {
-		setupSelection();
+		ensureGeoInSelection();
 		app.getCopyPaste().copyToXML(app,
 				app.getSelectionManager().getSelectedGeos(), false);
 	}
