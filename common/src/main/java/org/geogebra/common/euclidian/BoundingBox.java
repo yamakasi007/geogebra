@@ -26,8 +26,6 @@ public abstract class BoundingBox<T extends GShape> {
 	private GColor color;
 	private boolean fixed;
 
-	private boolean drawBoundingBox = true;
-
 	/**
 	 * size of handler
 	 */
@@ -91,15 +89,6 @@ public abstract class BoundingBox<T extends GShape> {
 	protected abstract void createHandlers();
 
 	/**
-	 * Set whether to draw the bounding rectangle or not.
-	 *
-	 * @param drawBoundingBox true to draw the bounding rectangle.
-	 */
-	public void setDrawBoundingBox(boolean drawBoundingBox) {
-		this.drawBoundingBox = drawBoundingBox;
-	}
-
-	/**
 	 * Initialize the array of handlers, don't specify positions
 	 *
 	 * @param nrHandlers
@@ -132,10 +121,6 @@ public abstract class BoundingBox<T extends GShape> {
 	 *            graphics
 	 */
 	protected void drawHandlers(GGraphics2D g2) {
-		if (!drawBoundingBox) {
-			return;
-		}
-
 		for (GShape handler : handlers) {
 			g2.setPaint(color);
 			g2.fill(handler);

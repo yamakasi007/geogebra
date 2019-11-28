@@ -6586,7 +6586,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		initPoint.setCoords(xRW, yRW, 1.0);
 		GeoInlineText inlineText = new GeoInlineText(kernel.getConstruction(), initPoint);
 		inlineText.setLabel(null);
-		setBoundingBoxForGeo(inlineText);
 	}
 
 	protected void hitCheckBox(GeoBoolean bool) {
