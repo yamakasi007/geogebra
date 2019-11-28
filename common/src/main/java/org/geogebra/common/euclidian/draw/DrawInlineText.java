@@ -1,9 +1,11 @@
 package org.geogebra.common.euclidian.draw;
 
 import org.geogebra.common.awt.GColor;
+import org.geogebra.common.awt.GEllipse2DDouble;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
+import org.geogebra.common.euclidian.BoundingBox;
 import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
@@ -23,6 +25,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	private GeoInlineText text;
 	private double[] coords = new double[2];
 	private InlineTextController textController;
+	private BoundingBox<GEllipse2DDouble> boundingBox;
 
 	/**
 	 * Create a new DrawInlineText instance.
@@ -58,6 +61,16 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		}
 
 		getBoundingBox().setRectangle(getBounds());
+	}
+
+	@Override
+	public BoundingBox<GEllipse2DDouble> getBoundingBox() {
+		if (boundingBox == null) {
+			boundingBox = createBoundingBox(false);
+			boundingBox.setRectangle(getBounds());
+		}
+		boundingBox.updateFrom(geo);
+		return boundingBox;
 	}
 
 	@Override
