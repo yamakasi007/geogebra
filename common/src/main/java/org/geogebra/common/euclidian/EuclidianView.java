@@ -46,11 +46,11 @@ import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.gui.dialog.options.OptionsEuclidian;
 import org.geogebra.common.gui.inputfield.AutoCompleteTextField;
 import org.geogebra.common.kernel.Kernel;
+import org.geogebra.common.kernel.ModeSetter;
+import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.Matrix.CoordMatrix;
 import org.geogebra.common.kernel.Matrix.CoordSys;
 import org.geogebra.common.kernel.Matrix.Coords;
-import org.geogebra.common.kernel.ModeSetter;
-import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.algos.AlgoAngle;
 import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.arithmetic.Function;
@@ -178,7 +178,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	/**
 	 * bounding box
 	 */
-	protected BoundingBox boundingBox;
+	protected BoundingBox<? extends GShape> boundingBox;
 	private EuclidianBoundingBoxHandler hitHandler = EuclidianBoundingBoxHandler.UNDEFINED;
 
 	// shape tools
@@ -2406,7 +2406,12 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	@Override
 	public void updateHighlight(GeoElementND geo) {
-		// nothing to do here
+		if (!geo.toGeoElement().isSelected()) {
+			DrawableND drawableND = drawableMap.get(geo);
+			if (drawableND != null) {
+				drawableND.setPartialHitClip(null);
+			}
+		}
 	}
 
 	@Override
@@ -2833,17 +2838,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @param boundingBox
 	 *            - bounding box for select
 	 */
-	public void setBoundingBox(BoundingBox boundingBox) {
-		// if old bounding box reset -> reset crop properties
-		if (this.boundingBox != null && boundingBox != null
-				&& boundingBox.equals(this.boundingBox)) {
-			boundingBox.setCropBox(this.boundingBox.isCropBox());
-		}
-		// end croping if geo deselected or other geo selected
-		if ((boundingBox == null || !boundingBox.equals(this.boundingBox))
-				&& this.boundingBox != null) {
-			this.boundingBox.setCropBox(false);
-		}
+	public void setBoundingBox(BoundingBox<? extends GShape> boundingBox) {
 		this.boundingBox = boundingBox;
 	}
 
@@ -3534,7 +3529,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public abstract boolean requestFocusInWindow();
 
-	// Michael Borcherds 2008-03-01
 	/**
 	 * Draws all geometric objects
 	 * 
@@ -3552,17 +3546,15 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			// if (isSVGExtensions)
 			// ((geogebra.export.SVGExtensions)g2).startGroup("layer "+layer);
 			drawLayers[layer].drawAll(g2);
-
-			if (getEuclidianController().isMultiSelection()) {
-				getEuclidianController().setBoundingBoxFromList(
-						app.getSelectionManager().getSelectedGeos());
-			}
 			// if (isSVGExtensions)
 			// ((geogebra.export.SVGExtensions)g2).endGroup("layer "+layer);
 		}
+		if (getEuclidianController().isMultiSelection()) {
+			getEuclidianController()
+					.setBoundingBoxFromList(app.getSelectionManager().getSelectedGeos());
+		}
 	}
 
-	// Michael Borcherds 2008-03-01
 	/**
 	 * Draws all objects
 	 * 
@@ -4246,11 +4238,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		while (it.hasNext()) {
 			Drawable d = it.next();
 			if (d.geo.isMask()) {
-				if (d.needsUpdate()) {
-					d.setNeedsUpdate(false);
-					d.update();
-				}
-
+				d.updateIfNeeded();
 				d.draw(g2);
 			}
 		}
@@ -4339,7 +4327,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (styleBar != null) {
 			styleBar.updateGUI();
 		}
-
 	}
 
 	@Override
@@ -4360,7 +4347,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	/**
 	 * @return boundingBox
 	 */
-	public BoundingBox getBoundingBox() {
+	public BoundingBox<? extends GShape> getBoundingBox() {
 		return boundingBox;
 	}
 
@@ -6572,5 +6559,27 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public InlineTextController createInlineTextController() {
 		return null;
+	}
+
+	/**
+	 * Reset partial hits for all drawables
+	 *
+	 * @param x
+	 *            screen x-coord of pointer event
+	 * @param y
+	 *            screen y-coord of pointer event
+	 * @param threshold
+	 *            hit threshold
+	 * @return whether selection changed
+	 */
+	public boolean resetPartialHits(int x, int y, int threshold) {
+		if (boundingBox != null && boundingBox.hit(x, y, threshold)) {
+			return false;
+		}
+		boolean deselected = false;
+		for (Drawable draw : this.allDrawableList) {
+			deselected = draw.resetPartialHitClip(x, y) || deselected;
+		}
+		return deselected;
 	}
 }
