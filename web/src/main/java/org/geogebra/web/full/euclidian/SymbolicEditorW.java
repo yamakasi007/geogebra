@@ -87,7 +87,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 		}
 
 		editor.setText(text);
-
+		editor.setLabel(geoInputBox.getAuralText());
 	}
 
 	private void updateText() {
@@ -140,6 +140,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 		decorator.update();
 		geoInputBox.update();
 		editor.scrollHorizontally();
+		editor.updateAriaLabel();
 	}
 
 	@Override
