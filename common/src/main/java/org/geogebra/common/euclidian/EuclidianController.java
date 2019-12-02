@@ -9669,11 +9669,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	private void handleVideoPressed(AbstractEvent event) {
-		GeoWidget dv = getVideoOrEmbedHit();
+		widgetsToBackground();
 
-		if (dv == null) {
-			widgetsToBackground();
-		}
+		GeoWidget dv = getVideoOrEmbedHit();
 
 		if ((mode != EuclidianConstants.MODE_MOVE
 				&& mode != EuclidianConstants.MODE_SELECT_MOW)
