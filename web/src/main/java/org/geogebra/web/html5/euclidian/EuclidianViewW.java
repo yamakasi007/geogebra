@@ -127,7 +127,7 @@ public class EuclidianViewW extends EuclidianView implements
 	private long lastRepaint;
 
 	private boolean inFocus = false;
-
+	/** application **/
 	AppW appW = (AppW) super.app;
 
 	private ImageElement resetImage;
@@ -135,7 +135,7 @@ public class EuclidianViewW extends EuclidianView implements
 	private ImageElement pauseImage;
 	private ImageElement playImageHL;
 	private ImageElement pauseImageHL;
-
+	/** parent panel */
 	protected EuclidianPanelWAbstract evPanel;
 	private PointerEventHandler pointerHandler;
 
@@ -280,10 +280,10 @@ public class EuclidianViewW extends EuclidianView implements
 		GGraphics2DWI g2w;
 		if (app.isWhiteboardActive()) {
 			g2w = g2bg;
+			g2w.clearAll();
 		} else {
 			g2w = (GGraphics2DWI) g2;
 		}
-		g2w.clearAll();
 		if (isGridOrAxesShown() || hasBackgroundImages() || isTraceDrawn()
 				|| appW.showResetIcon()
 		        || kernel.needToShowAnimationButton()) {
@@ -726,7 +726,7 @@ public class EuclidianViewW extends EuclidianView implements
 	 * Initialize background image
 	 */
 	public void createImage() {
-		if (bgImage != null) {
+		if (bgImage == null) {
 			bgImage = makeImage();
 			bgGraphics = bgImage.createGraphics();
 		}
