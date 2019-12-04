@@ -3821,7 +3821,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 		/** MOB-1293 */
 		case SELECT_TOOL_NEW_BEHAVIOUR:
-			return prerelease;
+			return prerelease || whiteboard;
 
 		// **********************************************************************
 		// MOBILE END
@@ -3842,11 +3842,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 		/** MOW-189 */
 		case MOW_TEXT_TOOL:
-			return prerelease && whiteboard;
-
-		/** MOW-763 */
-		case VIDEO_PLAYER_OFFLINE:
-			return prerelease && whiteboard;
+			return whiteboard;
 
 		case MOW_INLINE_TEXT_TOOL:
 			return prerelease;
