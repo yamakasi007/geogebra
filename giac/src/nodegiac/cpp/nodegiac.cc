@@ -12,10 +12,11 @@ context ct;
 
 void Evaluate(const v8::FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = Isolate::GetCurrent();
+  Local<Context> context = isolate->GetCurrentContext();
   HandleScope scope(isolate);
   std::string line_out;
 
-  v8::String::Utf8Value param1(args[0]->ToString());
+  v8::String::Utf8Value param1(isolate, args[0]->ToString(context).ToLocalChecked());
   std::string line_in = std::string(*param1);
 
   gen g;
@@ -27,14 +28,15 @@ void Evaluate(const v8::FunctionCallbackInfo<Value>& args) {
     line_out = std::string("ERROR: ") + err.what();
     }
 
-  Handle<Value> line_out_v8 = String::NewFromUtf8( isolate, line_out.c_str() );
+  Local<Value> line_out_v8 = String::NewFromUtf8( isolate, line_out.c_str() );
   args.GetReturnValue().Set(String::NewFromUtf8(isolate,line_out.c_str()));
 }
 
-void Init(Handle<Object> exports) {
+void Initialize(Local<Object> exports) {
   Isolate* isolate = Isolate::GetCurrent();
-  exports->Set(String::NewFromUtf8(isolate, "evaluate"),
-      FunctionTemplate::New(isolate, Evaluate)->GetFunction());
+  Local<Context> context = isolate->GetCurrentContext();
+  exports->Set(context, String::NewFromUtf8(isolate, "evaluate", NewStringType::kNormal).ToLocalChecked(),
+      FunctionTemplate::New(isolate, Evaluate)->GetFunction(context).ToLocalChecked());
 }
 
-NODE_MODULE(giac, Init)
+NODE_MODULE(giac, Initialize)
