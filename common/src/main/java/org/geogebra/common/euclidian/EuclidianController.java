@@ -46,12 +46,12 @@ import org.geogebra.common.gui.inputfield.AutoCompleteTextField;
 import org.geogebra.common.gui.view.data.PlotPanelEuclidianViewInterface;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.Kernel;
+import org.geogebra.common.kernel.Matrix.Coords;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.MyPoint;
 import org.geogebra.common.kernel.Path;
 import org.geogebra.common.kernel.Region;
 import org.geogebra.common.kernel.StringTemplate;
-import org.geogebra.common.kernel.Matrix.Coords;
 import org.geogebra.common.kernel.algos.AlgoCirclePointRadius;
 import org.geogebra.common.kernel.algos.AlgoDispatcher;
 import org.geogebra.common.kernel.algos.AlgoDynamicCoordinatesInterface;
@@ -6905,6 +6905,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			if (!hits.isEmpty()) {
 				app.setMode(EuclidianConstants.MODE_MOVE);
 				GeoElement geo0 = hits.get(0);
+
 				if (geo0.isGeoNumeric() && ((GeoNumeric) geo0).isSlider()) {
 					// double-click slider -> Object Properties
 					getDialogManager().showPropertiesDialog(hits);
@@ -10054,7 +10055,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 	/**
 	 * Update bounding box to match selection
-	 * 
+	 *
 	 * @param crop
 	 *            whether the box should be in crop mode
 	 */
@@ -11059,10 +11060,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void wrapMouseWheelMoved(int x, int y, double delta,
 			boolean shiftOrMeta, boolean alt) {
-		if (view.hasDynamicStyleBar()) {
-			this.hideDynamicStylebar();
-		}
-
 		if (getTextController() != null) {
 			getTextController().stopEditing();
 		}
