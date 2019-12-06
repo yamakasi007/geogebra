@@ -7851,8 +7851,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 					dontClearSelection = true;
 					hideDynamicStylebar();
 					for (GeoElement geo : selection.getSelectedGeos()) {
-						((PointRotateable) geo).rotate(angle, rotationCenter);
-						geo.updateRepaint();
+						if (!geo.isGeoPoint()) {
+							((PointRotateable) geo).rotate(angle,
+									rotationCenter);
+							geo.updateRepaint();
+						}
 					}
 					return;
 				}
@@ -8121,6 +8124,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public void removeSplitParts() {
 		for (GeoElement part : splitPartsToRemove) {
 			part.remove();
+		}
+		if (app.isWhiteboardActive()) {
+			app.setMode(EuclidianConstants.MODE_SELECT_MOW);
 		}
 	}
 
