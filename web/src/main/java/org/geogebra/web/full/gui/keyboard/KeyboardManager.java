@@ -138,8 +138,6 @@ public class KeyboardManager
 		detachedKeyboardParent.setClassName("GeoGebraFrame");
 		Element container = getAppletContainer();
 		container.appendChild(detachedKeyboardParent);
-		container.getStyle().setProperty("paddingBottom",
-				estimateKeyboardHeight() + "px");
 		String keyboardParentId = app.getAppletId() + "keyboard";
 		detachedKeyboardParent.setId(keyboardParentId);
 		Window.addResizeHandler(this);
@@ -218,7 +216,13 @@ public class KeyboardManager
 			keyboard.setProcessing(
 					GuiManagerW.makeKeyboardListener(
 							textField, AlgebraItem.getLastItemProvider(app)));
+			addPaddingBottom();
 		}
+	}
+
+	private void addPaddingBottom() {
+		getAppletContainer().getStyle().setProperty("paddingBottom",
+				estimateKeyboardHeight() + "px");
 	}
 
 	/**
@@ -227,7 +231,12 @@ public class KeyboardManager
 	public void onScreenEditingEnded() {
 		if (keyboard != null) {
 			keyboard.endEditing();
+			removePaddingBottom();
 		}
+	}
+
+	private void removePaddingBottom() {
+		getAppletContainer().getStyle().setProperty("paddingBottom", "0");
 	}
 
 	/**
