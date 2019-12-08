@@ -24,7 +24,7 @@ def s3uploadDefault = { dir, pattern, encoding ->
 }
 
 pipeline {
-    agent any
+    agent {label 'mac'}
     stages {
         stage('build') {
             steps {
