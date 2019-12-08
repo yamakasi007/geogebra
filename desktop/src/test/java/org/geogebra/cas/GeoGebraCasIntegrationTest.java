@@ -154,7 +154,7 @@ public class GeoGebraCasIntegrationTest extends BaseCASIntegrationTest {
 	public void selftest_Remember_0() {
 		t("f(x) := x^2 + p * x + q", "x^(2) + p * x + q", "p * x + q + x^(2)",
 				"x^(2) + x * p + q");
-		t("f(x)", "x^(2) + p * x + q", "p * x + q + x^(2)",
+		t("f(x)", "x^(2) + p * x + q", "p * x + q + x^(2)", "p * x + x^(2) + q",
 				"x^(2) + x * p + q");
 	}
 
@@ -2752,7 +2752,8 @@ public class GeoGebraCasIntegrationTest extends BaseCASIntegrationTest {
 				"1 / 10 + cos(3 * x + 2) * (x + 3)");
 		t("g(x):=2-sqrt(4+8x-5x^2)", "-sqrt(-5 * x^(2) + 8 * x + 4) + 2");
 		t("h(x):=3 * x^2 - x / 2 + 2*sin(x)",
-				"3 * x^(2) + 2 * sin(x) - 1 / 2 * x");
+				"3 * x^(2) + 2 * sin(x) - 1 / 2 * x",
+				"2 * sin(x) + 3 * x^(2) - 1 / 2 * x");
 		// t("f({1,2,3,4}",
 		// "{(4 * cos(5)) + 1 / 10, (5 * cos(8)) + 1 / 10, (6 * cos(11)) + 1 /
 		// 10, (7 * cos(14)) + 1 / 10}");
@@ -2804,7 +2805,8 @@ public class GeoGebraCasIntegrationTest extends BaseCASIntegrationTest {
 		t("f(x):=g(x)/x", "g(x) / x");
 		t("f'(x)", "(-g(x) + x * g'(x)) / x^(2)", "(x * g'(x) - g(x)) / x^(2)");
 		t("f'(x+1)", "(-g(x + 1) + g'(x + 1) * (x + 1)) / (x + 1)^(2)",
-				"(-g(x + 1) + (x + 1) * g'(x + 1)) / (x + 1)^(2)");
+				"(-g(x + 1) + (x + 1) * g'(x + 1)) / (x + 1)^(2)",
+				"(g'(x + 1) * (x + 1) - g(x + 1)) / (x + 1)^(2)");
 	}
 
 	@Test

@@ -1322,8 +1322,12 @@ public class CAStestJSON {
 
 	@Test
 	public void testSolveLambertIneq() {
-		assumeFalse(AppD.MAC_OS);
-		testCat("SolveLambertIneq");
+		if (AppD.MAC_OS) {
+			testCat("SolveLambertIneq");
+		} else {
+			testcases.remove("SolveLambertIneq");
+			assumeFalse(true); // mark test as skipped
+		}
 	}
 
 	@Test
