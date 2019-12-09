@@ -23,10 +23,9 @@ void Evaluate(const v8::FunctionCallbackInfo<Value>& args) {
   g=gen(line_in,&ct);
   try {
     line_out = giac::print(giac::eval(g,&ct),&ct);
-    }
-  catch (runtime_error & err) {
+  } catch (runtime_error & err) {
     line_out = std::string("ERROR: ") + err.what();
-    }
+  }
 
   Local<Value> line_out_v8 = String::NewFromUtf8( isolate, line_out.c_str() );
   args.GetReturnValue().Set(String::NewFromUtf8(isolate,line_out.c_str()));
