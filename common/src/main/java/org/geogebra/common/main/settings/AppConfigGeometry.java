@@ -243,4 +243,9 @@ public class AppConfigGeometry implements AppConfig {
 	public ParserFunctions createParserFunctions() {
 		return ParserFunctionsFactory.createParserFunctions();
 	}
+
+	@Override
+	public boolean isShowingErrorDialogForInputBox() {
+		return true;
+	}
 }

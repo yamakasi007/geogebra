@@ -187,5 +187,12 @@ public interface AppConfig {
 	 * @return creates app specific parser functions
 	 */
 	ParserFunctions createParserFunctions();
+
+	/**
+	 * Whether it shows the error dialog for the input boxes.
+	 *
+	 * @return true iff it should show the error dialog
+	 */
+	boolean isShowingErrorDialogForInputBox();
 }
 
