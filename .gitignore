@@ -16,3 +16,4 @@ web/war
 **/bin
 **/src/main/javacc/**/*.java
 /web/gradle.properties
+giac/node_modules
