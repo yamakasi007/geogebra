@@ -153,7 +153,7 @@ public class GeoGebraCasIntegrationTest extends BaseCASIntegrationTest {
 	@Test
 	public void selftest_Remember_0() {
 		t("f(x) := x^2 + p * x + q", "x^(2) + p * x + q", "p * x + q + x^(2)",
-				"x^(2) + x * p + q");
+				"x^(2) + x * p + q", "p * x + x^(2) + q");
 		t("f(x)", "x^(2) + p * x + q", "p * x + q + x^(2)", "p * x + x^(2) + q",
 				"x^(2) + x * p + q");
 	}

@@ -1322,7 +1322,7 @@ public class CAStestJSON {
 
 	@Test
 	public void testSolveLambertIneq() {
-		if (AppD.MAC_OS) {
+		if (!AppD.MAC_OS) {
 			testCat("SolveLambertIneq");
 		} else {
 			testcases.remove("SolveLambertIneq");
