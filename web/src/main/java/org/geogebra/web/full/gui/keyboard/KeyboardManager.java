@@ -221,6 +221,7 @@ public class KeyboardManager
 	}
 
 	private void addPaddingBottom() {
+		getAppletContainer().removeClassName("noPaddingBottom");
 		getAppletContainer().getStyle().setProperty("paddingBottom",
 				estimateKeyboardHeight() + "px");
 	}
@@ -230,13 +231,13 @@ public class KeyboardManager
 	 */
 	public void onScreenEditingEnded() {
 		if (keyboard != null) {
-			keyboard.endEditing();
 			removePaddingBottom();
+			keyboard.endEditing();
 		}
 	}
 
 	private void removePaddingBottom() {
-		getAppletContainer().getStyle().setProperty("paddingBottom", "0");
+		getAppletContainer().addClassName("noPaddingBottom");
 	}
 
 	/**

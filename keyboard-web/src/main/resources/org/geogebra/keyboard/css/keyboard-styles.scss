@@ -472,6 +472,11 @@ $purple-default: #6557D2;
 		transition: 0s;
 	}
 
+	.noPaddingBottom {
+	    padding-bottom: 0 !important;
+ 	    transition: .2s padding;
+	}
+
 	@keyframes addKeyBoard {
 		0% {max-height: 0px;}
 		100% {max-height: 228px;}
