@@ -321,7 +321,15 @@ public class CAStestJSON {
 			t(failures, cmd.input, cmd.output);
 		}
 		Assert.assertEquals(failures[0].toString(), failures[1].toString());
+	}
 
+	private static void testCatNoMac(String category) {
+		if (!AppD.MAC_OS) {
+			testCat(category);
+		} else {
+			testcases.remove(category);
+			assumeFalse(true); // mark test as skipped
+		}
 	}
 
 	/**
@@ -1322,12 +1330,12 @@ public class CAStestJSON {
 
 	@Test
 	public void testSolveLambertIneq() {
-		if (!AppD.MAC_OS) {
-			testCat("SolveLambertIneq");
-		} else {
-			testcases.remove("SolveLambertIneq");
-			assumeFalse(true); // mark test as skipped
-		}
+		testCatNoMac("SolveLambertIneq");
+	}
+
+	@Test
+	public void testEvaluateOrdering() {
+		testCatNoMac("EvaluateOrdering");
 	}
 
 	@Test
