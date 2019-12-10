@@ -118,6 +118,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 			public void execute(double timestamp) {
 				view.doRepaint2();
 				editor.setVisible(false);
+				editor.setKeyboardVisibility(false);
 			}
 		});
 	}
