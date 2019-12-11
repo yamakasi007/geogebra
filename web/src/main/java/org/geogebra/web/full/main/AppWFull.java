@@ -1619,6 +1619,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 			if (current != null && current.getToolbarDefinition() != null) {
 				getGuiManager().setGeneralToolBarDefinition(
 						current.getToolbarDefinition());
+				updatePerspective(current);
 			}
 		} else if (!asSlide) {
 			getGuiManager().getLayout().getDockManager()
