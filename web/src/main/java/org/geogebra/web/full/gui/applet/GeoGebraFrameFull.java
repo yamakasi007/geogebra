@@ -294,7 +294,7 @@ public class GeoGebraFrameFull
 	}
 
 	private void removeKeyboard(MathKeyboardListener textField) {
-		final VirtualKeyboardGUI keyBoard = getOnScreenKeyboard(textField);
+		final VirtualKeyboardGUI keyBoard = getOnScreenKeyboard(null);
 		this.setKeyboardShowing(false);
 
 		ToolbarPanel toolbarPanel = getGuiManager()

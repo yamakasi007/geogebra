@@ -177,8 +177,24 @@ public class KeyboardManager
 		if (textField != null) {
 			setOnScreenKeyboardTextField(textField);
 		}
+
 		keyboard.setListener(listener);
 		return keyboard;
+	}
+
+	private void addPaddingBottom() {
+		getAppletContainer().getStyle().clearProperty("transition");
+		setPaddingBottom(estimateKeyboardHeight() + "px");
+	}
+
+	private void setPaddingBottom(String value) {
+		getAppletContainer().getStyle().setProperty("paddingBottom", value);
+
+	}
+
+	private void removePaddingBottom() {
+		getAppletContainer().getStyle().setProperty("transition", "padding-bottom 0.2s linear");
+		setPaddingBottom("0");
 	}
 
 	private void ensureKeyboardExists() {
@@ -215,6 +231,12 @@ public class KeyboardManager
 	@Override
 	public void setOnScreenKeyboardTextField(MathKeyboardListener textField) {
 		if (keyboard != null) {
+			if  (textField != null) {
+				addPaddingBottom();
+			} else {
+				removePaddingBottom();
+			}
+
 			keyboard.setProcessing(
 					GuiManagerW.makeKeyboardListener(
 							textField, AlgebraItem.getLastItemProvider(app)));
@@ -227,6 +249,7 @@ public class KeyboardManager
 	public void onScreenEditingEnded() {
 		if (keyboard != null) {
 			keyboard.endEditing();
+			removePaddingBottom();
 		}
 	}
 
