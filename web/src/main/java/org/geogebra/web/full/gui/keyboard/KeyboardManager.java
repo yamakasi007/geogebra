@@ -254,12 +254,9 @@ public class KeyboardManager
 		setAppletContainerPaddingBottom("0");
 	}
 
-
-
 	private void setAppletContainerPaddingBottom(String value) {
 		getAppletContainer().getStyle().setProperty("paddingBottom", value);
 	}
-
 
 	/**
 	 * Notify keyboard about finished editing
