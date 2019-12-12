@@ -47,12 +47,12 @@ import org.geogebra.common.gui.inputfield.AutoCompleteTextField;
 import org.geogebra.common.gui.view.data.PlotPanelEuclidianViewInterface;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.Kernel;
-import org.geogebra.common.kernel.Matrix.Coords;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.MyPoint;
 import org.geogebra.common.kernel.Path;
 import org.geogebra.common.kernel.Region;
 import org.geogebra.common.kernel.StringTemplate;
+import org.geogebra.common.kernel.Matrix.Coords;
 import org.geogebra.common.kernel.algos.AlgoCirclePointRadius;
 import org.geogebra.common.kernel.algos.AlgoDispatcher;
 import org.geogebra.common.kernel.algos.AlgoDynamicCoordinatesInterface;
@@ -98,7 +98,6 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoFunctionable;
 import org.geogebra.common.kernel.geos.GeoImage;
-import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoList;
@@ -6508,10 +6507,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 						controlDown);
 			}
 			break;
-		case EuclidianConstants.MODE_INLINE_TEXT:
-			inlineText();
-			changedKernel = true;
-			break;
 		case EuclidianConstants.MODE_SELECT:
 			if (app.has(Feature.SELECT_TOOL_NEW_BEHAVIOUR)) {
 				break;
@@ -6573,14 +6568,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 
 		return changedKernel;
-	}
-
-	private void inlineText() {
-		GeoPoint initPoint = new GeoPoint(kernel.getConstruction());
-		initPoint.setCoords(xRW, yRW, 1.0);
-		GeoInlineText inlineText = new GeoInlineText(kernel.getConstruction(), initPoint);
-		inlineText.setLabel(null);
-		selectAndShowBoundingBox(inlineText);
 	}
 
 	protected void hitCheckBox(GeoBoolean bool) {

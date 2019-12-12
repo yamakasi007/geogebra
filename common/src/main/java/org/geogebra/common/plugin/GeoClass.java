@@ -169,10 +169,7 @@ public enum GeoClass {
 	DEFAULT("Default", 160, false),
 
 	/** SYmbolic row in CAS calc */
-	SYMBOLIC("Symbolic", 0, false),
-
-	/** Inline text */
-	INLINE_TEXT("InlineText", 0, false);
+	SYMBOLIC("Symbolic", 0, false);
 
 	/**
 	 * name MUST be in ggbtrans/properties

@@ -369,7 +369,7 @@ public class ToolBar {
 	/**
 	 * @return definition for MOW math toolbar
 	 */
-	public static String getMOWToolsDefString(App app) {
+	public static String getMOWToolsDefString() {
 		StringBuilder sb = new StringBuilder();
 		// Shapes
 		sb.append(EuclidianConstants.MODE_SHAPE_RECTANGLE);
@@ -389,10 +389,6 @@ public class ToolBar {
 		sb.append(EuclidianConstants.MODE_SHAPE_LINE);
 		sb.append(" ");
 		sb.append(EuclidianConstants.MODE_MASK);
-		if (app.has(Feature.MOW_INLINE_TEXT_TOOL)) {
-			sb.append(" ");
-			sb.append(EuclidianConstants.MODE_INLINE_TEXT);
-		}
 
 		return sb.toString();
 	}

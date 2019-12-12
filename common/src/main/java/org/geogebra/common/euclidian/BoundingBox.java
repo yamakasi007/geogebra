@@ -89,10 +89,14 @@ public abstract class BoundingBox<T extends GShape> {
 	protected abstract void createHandlers();
 
 	/**
+<<<<<<< HEAD
 	 * Initialize the array of handlers, don't specify positions
 	 *
 	 * @param nrHandlers
 	 *            rebuild the list of handlers
+=======
+	 * @return crop handlers
+>>>>>>> parent of bc2985a2c7... Merge branch 'mow-817' into dev
 	 */
 	protected void initHandlers(int nrHandlers) {
 		handlers.clear();

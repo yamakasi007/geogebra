@@ -14,7 +14,6 @@ import org.geogebra.common.euclidian.draw.DrawEmbed;
 import org.geogebra.common.euclidian.draw.DrawImage;
 import org.geogebra.common.euclidian.draw.DrawImplicitCurve;
 import org.geogebra.common.euclidian.draw.DrawInequality;
-import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.euclidian.draw.DrawIntegral;
 import org.geogebra.common.euclidian.draw.DrawIntegralFunctions;
@@ -56,7 +55,6 @@ import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoImage;
-import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoLocusNDInterface;
@@ -347,9 +345,6 @@ public class EuclidianDraw {
 			break;
 		case SYMBOLIC:
 			d = new DrawSymbolic(ev, (GeoSymbolic) geo);
-			break;
-		case INLINE_TEXT:
-			d = new DrawInlineText(ev, (GeoInlineText) geo);
 		}
 		return d;
 	}

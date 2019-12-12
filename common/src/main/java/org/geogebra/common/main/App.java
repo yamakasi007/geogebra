@@ -3845,9 +3845,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case MOW_TEXT_TOOL:
 			return whiteboard;
 
-		case MOW_INLINE_TEXT_TOOL:
-			return prerelease;
-
 		// **********************************************************************
 		// MOW END
 		// *********************************************************
