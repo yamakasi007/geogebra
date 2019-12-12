@@ -769,8 +769,7 @@ public abstract class GeoElement extends ConstructionElement
 			// beware correct vars for f(t) = t + a
 			if (isAlgebraLabelVisible()) {
 				inputBarStr = getAssignmentLHS(stringTemplate)
-					+ getLabelDelimiterWithSpace()
-						+ inputBarStr;
+						+ getLabelDelimiterWithSpace() + inputBarStr;
 			}
 
 		} else {
@@ -4469,10 +4468,8 @@ public abstract class GeoElement extends ConstructionElement
 		if (isDefinitionValid()) {
 			return toString(tpl);
 		}
-		final StringBuilder sbAlgebraDesc = new StringBuilder();
-		sbAlgebraDesc.append(label);
-		sbAlgebraDesc.append(" = ?");
-		return sbAlgebraDesc.toString();
+
+		return getAssignmentLHS(tpl) + " = ?";
 	}
 
 	/**
@@ -6104,6 +6101,10 @@ public abstract class GeoElement extends ConstructionElement
 			ret = toLaTeXString(!substituteNumbers, tpl);
 		} else {
 			ret = substituteNumbers ? toValueString(tpl) : getDefinition(tpl);
+		}
+		if ("".equals(ret) && isGeoNumeric() && !substituteNumbers
+				&& isLabelSet() && !sendValueToCas) {
+			ret = tpl.printVariableName(label);
 		}
 
 		if ("".equals(ret) && isGeoCasCell()

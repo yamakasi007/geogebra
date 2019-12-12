@@ -245,4 +245,5 @@ public class AppConfigGraphing implements AppConfig {
 	public boolean isShowingErrorDialogForInputBox() {
 		return true;
 	}
+
 }

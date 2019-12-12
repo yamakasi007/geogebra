@@ -248,4 +248,5 @@ public class AppConfigGeometry implements AppConfig {
 	public boolean isShowingErrorDialogForInputBox() {
 		return true;
 	}
+
 }

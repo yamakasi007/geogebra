@@ -194,5 +194,6 @@ public interface AppConfig {
 	 * @return true iff it should show the error dialog
 	 */
 	boolean isShowingErrorDialogForInputBox();
+
 }
 
