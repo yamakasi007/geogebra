@@ -748,7 +748,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (clearRectangle(mode)) {
 			setSelectionRectangle(null);
 			if (hasDynamicStyleBar()) {
-				dynamicStyleBar.setVisible(false);
+				// dynamicStyleBar.setVisible(false);
 			}
 		}
 		setStyleBarMode(mode);
@@ -6578,5 +6578,15 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			deselected = draw.resetPartialHitClip(x, y) || deselected;
 		}
 		return deselected;
+	}
+
+	/**
+	 * Show stylebar if bounding box visible
+	 */
+	public void restoreDynamicStylebar() {
+		// if (boundingBox != null) {
+		if (euclidianController.isMultiSelection()) {
+			euclidianController.showDynamicStylebar();
+		}
 	}
 }
