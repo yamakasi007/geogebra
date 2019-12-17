@@ -148,7 +148,7 @@ public class KeyboardManager
 
 	private Element getAppletContainer() {
 		Element scaler = app.getArticleElement().getParentElement();
-		Element container = scaler.getParentElement();
+		Element container = scaler == null ? null : scaler.getParentElement();
 		if (container == null) {
 			return RootPanel.getBodyElement();
 		}
@@ -180,21 +180,6 @@ public class KeyboardManager
 
 		keyboard.setListener(listener);
 		return keyboard;
-	}
-
-	private void addPaddingBottom() {
-		getAppletContainer().getStyle().clearProperty("transition");
-		setPaddingBottom(estimateKeyboardHeight() + "px");
-	}
-
-	private void setPaddingBottom(String value) {
-		getAppletContainer().getStyle().setProperty("paddingBottom", value);
-
-	}
-
-	private void removePaddingBottom() {
-		getAppletContainer().getStyle().setProperty("transition", "padding-bottom 0.2s linear");
-		setPaddingBottom("0");
 	}
 
 	private void ensureKeyboardExists() {
@@ -232,9 +217,9 @@ public class KeyboardManager
 	public void setOnScreenKeyboardTextField(MathKeyboardListener textField) {
 		if (keyboard != null) {
 			if  (textField != null) {
-				addPaddingBottom();
+				addExtraSpaceForKeyboard();
 			} else {
-				removePaddingBottom();
+				removeExtraSpaceForKeyboard();
 			}
 
 			keyboard.setProcessing(
@@ -243,13 +228,43 @@ public class KeyboardManager
 		}
 	}
 
+	private void addExtraSpaceForKeyboard() {
+		if (noExtraSpaceNeededForKeyboard()) {
+			return;
+		}
+
+		clearAppletContainerTransition();
+		setAppletContainerPaddingBottom(estimateKeyboardHeight() + "px");
+	}
+
+	private boolean noExtraSpaceNeededForKeyboard() {
+		return !shouldDetach() || getAppletContainer() == null;
+	}
+
+	private void clearAppletContainerTransition() {
+		getAppletContainer().getStyle().clearProperty("transition");
+	}
+
+	private void removeExtraSpaceForKeyboard() {
+		if (noExtraSpaceNeededForKeyboard()) {
+			return;
+		}
+
+		getAppletContainer().getStyle().setProperty("transition", "padding-bottom 0.2s linear");
+		setAppletContainerPaddingBottom("0");
+	}
+
+	private void setAppletContainerPaddingBottom(String value) {
+		getAppletContainer().getStyle().setProperty("paddingBottom", value);
+	}
+
 	/**
 	 * Notify keyboard about finished editing
 	 */
 	public void onScreenEditingEnded() {
 		if (keyboard != null) {
 			keyboard.endEditing();
-			removePaddingBottom();
+			removeExtraSpaceForKeyboard();
 		}
 	}
 
