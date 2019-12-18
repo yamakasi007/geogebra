@@ -164,6 +164,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.geogebra.web.html5.util.CopyPasteW;
 
 public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public static final String STORAGE_MACRO_KEY = "storedMacro";
@@ -195,6 +196,8 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	private SpreadsheetTableModelSimple tableModel;
 	private SoundManagerW soundManager;
 	private AsyncManager asyncManager;
+
+	private CopyPasteW copyPaste;
 
 	protected MaterialsManagerI fm;
 	private Material activeMaterial;
@@ -1339,14 +1342,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		reader.readAsDataURL(fileToHandle);
 		return true;
 	}-*/;
-
-	/**
-	 * @param str
-	 *            string to copy
-	 */
-	public void copyBase64ToClipboardChromeWebAppCase(String str) {
-		// This should do nothing in webSimple!
-	}
 
 	/**
 	 * @param id
@@ -3974,6 +3969,15 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	public SettingsBuilder newSettingsBuilder() {
 		return new SettingsBuilderW(this);
+	}
+
+	@Override
+	public CopyPasteW getCopyPaste() {
+		if (copyPaste == null) {
+			copyPaste = new CopyPasteW();
+		}
+
+		return copyPaste;
 	}
 
 	/**

@@ -524,8 +524,16 @@
 		 }		
 	}
 
-	 // unit rectangle for mask to transform with matrix
-	 .maskWidget {
+	.mowMenuSeparator {
+		background-color: #dedede;
+		height: 1px;
+		width: calc(100% - 56px);
+		list-style: none;
+		margin: 6px 0 6px auto;
+	}
+
+	// unit rectangle for mask to transform with matrix
+	.maskWidget {
 	    position: absolute;
 	    z-index: $z_mask;
 	    top: 0;
