@@ -1,6 +1,5 @@
 package org.geogebra.common.main.settings;
 
-
 import org.geogebra.common.gui.toolcategorization.AppType;
 import org.geogebra.common.kernel.arithmetic.filter.OperationArgumentFilter;
 import org.geogebra.common.kernel.commands.selector.CommandFilter;
