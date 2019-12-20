@@ -412,9 +412,11 @@ public class AlgebraProcessor {
 								 boolean redefineIndependent, boolean storeUndoInfo,
 								 boolean withSliders, ErrorHandler handler,
 								 AsyncOperation<GeoElementND> callback) {
-		EvalInfo info = new EvalInfo(!cons.isSuppressLabelsActive(), redefineIndependent)
+		EvalInfo info =
+				new EvalInfo(!cons.isSuppressLabelsActive(), redefineIndependent)
 						.withSymbolicMode(app.getKernel().getSymbolicMode())
-						.withLabelRedefinitionAllowedFor(geo.getLabelSimple());
+						.withLabelRedefinitionAllowedFor(geo.getLabelSimple())
+						.withFractions(true);
 		changeGeoElementNoExceptionHandling(geo, newValue,
 				info.withSliders(withSliders), storeUndoInfo, callback, handler);
 	}
@@ -2189,7 +2191,7 @@ public class AlgebraProcessor {
 				return ret;
 			}
 		}
-		if (!fun.initFunction(info.isSimplifyingIntegers())) {
+		if (!fun.initFunction(info)) {
 			ExpressionNode copy = fun.getExpression().deepCopy(kernel);
 			return getParamProcessor().processParametricFunction(
 					fun.getExpression(),
@@ -3141,7 +3143,7 @@ public class AlgebraProcessor {
 		}
 
 		if (info.isFractions()) {
-			InputHelper.updateSymbolicMode(ret);
+			InputHelper.initSymbolicMode(ret);
 		}
 		if (info.isLabelOutput()) {
 			String label = n.getLabel();
