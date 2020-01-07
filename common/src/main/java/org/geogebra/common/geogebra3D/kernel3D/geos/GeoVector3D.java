@@ -6,11 +6,12 @@ import org.geogebra.common.geogebra3D.kernel3D.transform.MirrorableAtPlane;
 import org.geogebra.common.kernel.CircularDefinitionException;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.Kernel;
-import org.geogebra.common.kernel.MatrixTransformable;
-import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.Matrix.CoordMatrix;
 import org.geogebra.common.kernel.Matrix.Coords;
+import org.geogebra.common.kernel.MatrixTransformable;
+import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
+import org.geogebra.common.kernel.arithmetic.MyVecNDNode;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
 import org.geogebra.common.kernel.arithmetic.ValidExpression;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -20,6 +21,7 @@ import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.geos.GeoVector;
 import org.geogebra.common.kernel.geos.Transformable;
+import org.geogebra.common.kernel.geos.VectorToMatrix;
 import org.geogebra.common.kernel.kernelND.GeoCoordSys2D;
 import org.geogebra.common.kernel.kernelND.GeoDirectionND;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
@@ -54,6 +56,7 @@ public class GeoVector3D extends GeoVec4D
 	private StringBuilder sb;
 
 	private boolean trace;
+	private VectorToMatrix converter = null;
 
 	/**
 	 * simple constructor
@@ -340,11 +343,7 @@ public class GeoVector3D extends GeoVec4D
 
 	@Override
 	public String toLaTeXString(boolean symbolic, StringTemplate tpl) {
-		if (sb == null) {
-			sb = new StringBuilder();
-		} else {
-			sb.setLength(0);
-		}
+		resetStringBuilder();
 
 		if (getToStringMode() == Kernel.COORD_CARTESIAN_3D) {
 			GeoVector.buildLatexValueStringCoordCartesian3D(kernel, tpl, getX(),
@@ -374,6 +373,14 @@ public class GeoVector3D extends GeoVec4D
 		return GeoVector.buildLatexString(kernel, sb, symbolic, tpl,
 				getToStringMode(), getX(), getY(), this);
 
+	}
+
+	private void resetStringBuilder() {
+		if (sb == null) {
+			sb = new StringBuilder();
+		} else {
+			sb.setLength(0);
+		}
 	}
 
 	/**
@@ -849,5 +856,30 @@ public class GeoVector3D extends GeoVec4D
 	@Override
 	public ValidExpression toValidExpression() {
 		return getVector();
+	}
+
+	@Override
+	public String toValueStringAsColumnVector(StringTemplate tpl) {
+		return buildColumnVectorValueString(tpl);
+	}
+
+	private String buildColumnVectorValueString(StringTemplate tpl) {
+		ExpressionNode definition = getDefinition();
+		return definition != null
+				? getConverter().build(tpl, getDefinition())
+				: getConverter().build(tpl, getX(), getY(), getZ());
+	}
+
+	private VectorToMatrix getConverter() {
+		if (converter == null) {
+			converter = new VectorToMatrix(kernel);
+		}
+		return converter;
+	}
+
+	@Override
+	public boolean isColumnEditable() {
+		return isIndependent()
+				|| getDefinition() != null && getDefinition().unwrap() instanceof MyVecNDNode;
 	}
 }

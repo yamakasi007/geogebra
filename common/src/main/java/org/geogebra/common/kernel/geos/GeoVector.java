@@ -36,14 +36,12 @@ import org.geogebra.common.kernel.PathMoverGeneric;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.Matrix.Coords;
 import org.geogebra.common.kernel.algos.AlgoDependentVector;
-import org.geogebra.common.kernel.algos.AlgoElement;
-import org.geogebra.common.kernel.algos.DependentAlgo;
 import org.geogebra.common.kernel.algos.SymbolicParameters;
 import org.geogebra.common.kernel.algos.SymbolicParametersAlgo;
 import org.geogebra.common.kernel.algos.SymbolicParametersBotanaAlgo;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
 import org.geogebra.common.kernel.arithmetic.ExpressionValue;
-import org.geogebra.common.kernel.arithmetic.MyVecNode;
+import org.geogebra.common.kernel.arithmetic.MyVecNDNode;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
 import org.geogebra.common.kernel.arithmetic.ValidExpression;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -85,6 +83,7 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 	private StringBuilder sbToString = new StringBuilder(50);
 	private StringBuilder sbBuildValueString = new StringBuilder(50);
 	private StringBuilder sb;
+	private VectorToMatrix converter;
 
 	/**
 	 * Creates new GeoVector
@@ -507,6 +506,11 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 		return buildValueString(tpl).toString();
 	}
 
+	@Override
+	public String toValueStringAsColumnVector(StringTemplate tpl) {
+		return buildColumnVectorValueString(tpl);
+	}
+
 	private StringBuilder buildValueString(StringTemplate tpl) {
 		sbBuildValueString.setLength(0);
 
@@ -566,6 +570,24 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 		return sbBuildValueString;
 	}
 
+	private String buildColumnVectorValueString(StringTemplate tpl) {
+		if (getToStringMode() != Kernel.COORD_CARTESIAN) {
+			return buildValueString(tpl).toString();
+		}
+
+		ExpressionNode definition = getDefinition();
+		return definition != null
+				? getConverter().build(tpl, getDefinition())
+				: getConverter().build(tpl, getX(), getY());
+	}
+
+	private VectorToMatrix getConverter() {
+		if (converter == null) {
+			converter = new VectorToMatrix(kernel);
+		}
+		return converter;
+	}
+
 	/**
 	 * interface VectorValue implementation
 	 */
@@ -618,7 +640,6 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 		if (startPoint != null) {
 			xmlsb.append(startPoint.getStartPointXML());
 		}
-
 	}
 
 	@Override
@@ -766,36 +787,18 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 	public static void buildLatexValueStringCoordCartesian3D(
 			Kernel kernel, StringTemplate tpl, double x, double y, double z,
 			StringBuilder sb, GeoVectorND vector, boolean symbolic) {
-		String[] inputs;
-		if (symbolic && vector.getParentAlgorithm() instanceof DependentAlgo) {
-			AlgoElement algo = vector.getParentAlgorithm();
-			String symbolicStr = algo.toString(tpl);
-
-			// remove \left( and \right)
-			int firstIndex = symbolicStr.indexOf("\\left(");
-			int lastIndex = symbolicStr.lastIndexOf("\\right)");
-
-			if (firstIndex > -1 && lastIndex > -1) {
-				inputs = symbolicStr.substring(firstIndex + 6, lastIndex)
-						.split(",");
-			} else {
-				inputs = new String[3];
-				inputs[0] = kernel.format(x, tpl);
-				inputs[1] = kernel.format(y, tpl);
-				inputs[2] = kernel.format(z, tpl);
-			}
+		if (symbolic && vector.getDefinition() != null) {
+			sb.append(getColumnLaTeXfromExpression(vector.getDefinition(), tpl));
 		} else {
-			inputs = new String[3];
+			String[] inputs = new String[3];
 			inputs[0] = kernel.format(x, tpl);
 			inputs[1] = kernel.format(y, tpl);
 			inputs[2] = kernel.format(z, tpl);
+			buildTabular(inputs, sb);
 		}
-
-		buildTabular(inputs, sb);
-
 	}
 
-	private static void buildTabular(String[] inputs, StringBuilder sb) {
+	private static String buildTabular(String[] inputs, StringBuilder sb) {
 		boolean alignOnDecimalPoint = true;
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i].indexOf('.') == -1) {
@@ -819,20 +822,23 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 		}
 
 		sb.append("\\end{align} \\right)");
-
+		return sb.toString();
 	}
 
 	@Override
 	public String toLaTeXString(boolean symbolic, StringTemplate tpl) {
+		resetStringBuilder();
+		return buildLatexString(kernel, sb, symbolic, tpl, getToStringMode(), x,
+				y,
+				this);
+	}
+
+	private void resetStringBuilder() {
 		if (sb == null) {
 			sb = new StringBuilder();
 		} else {
 			sb.setLength(0);
 		}
-
-		return buildLatexString(kernel, sb, symbolic, tpl, getToStringMode(), x,
-				y,
-				this);
 	}
 
 	/**
@@ -884,44 +890,34 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 
 		default: // CARTESIAN
 
-			String[] inputs;
-			if (symbolic && vector
-					.getParentAlgorithm() instanceof AlgoDependentVector) {
-				AlgoDependentVector algo = (AlgoDependentVector) vector
-						.getParentAlgorithm();
-
-				// need to do something different for (xx,yy) and a (1,2) + c
-
-				ExpressionNode en = algo.getExpression();
-				ExpressionValue ev = en.unwrap();
-
-				if (ev instanceof MyVecNode) {
-					MyVecNode vn = (MyVecNode) ev;
-
-					inputs = new String[2];
-					inputs[0] = vn.getX().toString(tpl);
-					inputs[1] = vn.getY().toString(tpl);
-				} else {
-					return algo.toString(tpl);
-				}
-
-			} else {
-				inputs = new String[2];
-				inputs[0] = kernel.format(x, tpl);
-				inputs[1] = kernel.format(y, tpl);
+			ExpressionNode definition = vector.getDefinition();
+			if (symbolic && definition != null) {
+				return getColumnLaTeXfromExpression(definition, tpl);
 			}
-
-			// MathQuillGGB can't render v = \left( \begin{tabular}{r}-10 \\ 0
-			// \\ \end{tabular} \right)
-			// so use eg \binom{ -10 }{ 0 } in web
-			// see #1987
-
-			buildTabular(inputs, sb);
-
-			break;
+			String[] inputs = new String[2];
+			inputs[0] = kernel.format(x, tpl);
+			inputs[1] = kernel.format(y, tpl);
+			return buildTabular(inputs, sb);
 		}
 
 		return sb.toString();
+	}
+
+	private static String getColumnLaTeXfromExpression(ExpressionNode definition,
+			StringTemplate tpl) {
+		ExpressionValue ev = definition.unwrap();
+		// need to do something different for (xx,yy) and a (1,2) + c
+		if (ev instanceof MyVecNDNode) {
+			MyVecNDNode vn = (MyVecNDNode) ev;
+			String[] inputs = new String[vn.getDimension()];
+			inputs[0] = vn.getX().toString(tpl);
+			inputs[1] = vn.getY().toString(tpl);
+			if (vn.getDimension() > 2) {
+				inputs[2] = vn.getZ().toString(tpl);
+			}
+			return buildTabular(inputs, new StringBuilder());
+		}
+		return definition.toString(tpl);
 	}
 
 	@Override
@@ -1133,4 +1129,9 @@ final public class GeoVector extends GeoVec3D implements Path, VectorValue,
 		return getVector();
 	}
 
+	@Override
+	public boolean isColumnEditable() {
+		return isIndependent()
+				|| getParentAlgorithm() instanceof AlgoDependentVector;
+	}
 }

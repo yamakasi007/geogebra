@@ -11,6 +11,7 @@ import org.geogebra.common.kernel.commands.redefinition.RedefinitionRule;
 import org.geogebra.common.kernel.commands.redefinition.RedefinitionRules;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
+import org.geogebra.common.kernel.kernelND.GeoVectorND;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.MyError;
 import org.geogebra.common.main.error.ErrorHandler;
@@ -78,8 +79,7 @@ public class InputBoxProcessor {
 	}
 
 	private void updateLinkedGeoNoErrorHandling(String inputText,
-												StringTemplate tpl,
-												ErrorHandler errorHandler) {
+			StringTemplate tpl, ErrorHandler errorHandler) {
 		String defineText = preprocess(inputText, tpl);
 
 		EvalInfo info = new EvalInfo(!kernel.getConstruction().isSuppressLabelsActive(),
@@ -100,10 +100,13 @@ public class InputBoxProcessor {
 		return tempUserInput == null ? inputText : tempUserInput;
 	}
 
-	private String preprocess(String inputText, StringTemplate tpl) {
+	private String  preprocess(String inputText, StringTemplate tpl) {
 		String defineText = inputText;
 
-		if (linkedGeo.isGeoText()) {
+		if (linkedGeo instanceof GeoVectorND && ((GeoVectorND) linkedGeo).isColumnEditable()) {
+			defineText = "(" + inputText.replace("{", "")
+					.replace("}", "") + ")";
+		} else if (linkedGeo.isGeoText()) {
 			defineText = "\"" + defineText + "\"";
 		} else if ("?".equals(inputText.trim()) || "".equals(inputText.trim())) {
 			defineText = "?";
