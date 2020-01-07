@@ -8,6 +8,8 @@ import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
 import org.geogebra.common.gui.dialog.options.model.ConicEqnModel;
 import org.geogebra.common.gui.dialog.options.model.ObjectNameModel;
 import org.geogebra.common.gui.dialog.options.model.ReflexAngleModel;
+import org.geogebra.common.gui.dialog.options.model.ShowLabelModel;
+import org.geogebra.common.gui.view.algebra.AlgebraItem;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.arithmetic.EquationValue;
 import org.geogebra.common.kernel.arithmetic.TextValue;
@@ -30,6 +32,7 @@ import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.debug.Log;
+import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.menubar.MainMenu;
@@ -41,6 +44,7 @@ import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -553,9 +557,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	private void addFixForUnbundledOrNotes() {
 		final GeoElement geo = getGeo();
 		// change back to old name-> Fix instead of Lock
-		if (geo.isFixable()
-				&& app.getSelectionManager().getSelectedGeos().size() <= 1
-				&& !app.isExam()) {
+		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
+				|| !AlgebraItem.isFunctionOrEquationFromUser(geo))
+				&& app.getSelectionManager().getSelectedGeos().size() <= 1) {
 
 			String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
 					.asString();
