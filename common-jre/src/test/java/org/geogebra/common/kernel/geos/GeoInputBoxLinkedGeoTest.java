@@ -194,6 +194,7 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 		Assert.assertEquals("u + v", inputBox.getTextForEditor());
 	}
 
+	@Test
 	public void twoVariableFunctionParameterShouldNotChangeToX() {
 		add("g(p, q) = p / ?");
 		inputBox = add("ib=InputBox(g)");
