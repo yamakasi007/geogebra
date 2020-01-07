@@ -24,6 +24,11 @@ public class QuestResErrConstants {
 	 * radius of a circle
 	 */
 	public static final int RADIUS = 3;
+	/**
+	 * size of an angle
+	 */
+	public static final int ANGLESIZE = 4;
+
 
 	/**
 	 * error message if the input was not a number
@@ -50,6 +55,10 @@ public class QuestResErrConstants {
 	 * id of creating a segment
 	 */
 	public static final int CREATE_SEGMENT = 103;
+	/**
+	 * id of creating an angle
+	 */
+	public static final int CREATE_ANGLE = 104;
 	/**
 	 * task fulfilled
 	 */

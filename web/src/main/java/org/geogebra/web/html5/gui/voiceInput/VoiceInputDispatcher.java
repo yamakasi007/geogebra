@@ -2,6 +2,7 @@ package org.geogebra.web.html5.gui.voiceInput;
 
 import java.util.ArrayList;
 
+import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputAngle;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputCircle;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputCommandInterface;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputPoint;
@@ -57,6 +58,8 @@ public class VoiceInputDispatcher {
 			case QuestResErrConstants.CREATE_CIRCLE:
 				setCurrentCommand(new VoiceInputCircle());
 				break;
+			case QuestResErrConstants.CREATE_ANGLE:
+				setCurrentCommand(new VoiceInputAngle());
 			default:
 				break;
 		}
@@ -88,6 +91,9 @@ public class VoiceInputDispatcher {
 			case "Circle":
 			case "circle":
 				return QuestResErrConstants.CREATE_CIRCLE;
+			case "angle":
+			case "Angle":
+				return QuestResErrConstants.CREATE_ANGLE;
 
 			default:
 				return QuestResErrConstants.NOT_SUPPORTED;

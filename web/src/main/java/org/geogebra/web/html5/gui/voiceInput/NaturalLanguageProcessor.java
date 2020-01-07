@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.geogebra.common.util.StringUtil;
+import org.geogebra.web.html5.gui.voiceInput.questResErr.AngleSizeQuestResErr;
 import org.geogebra.web.html5.gui.voiceInput.questResErr.QuestResErrConstants;
 import org.geogebra.web.html5.gui.voiceInput.questResErr.QuestResErrInterface;
 import org.geogebra.web.html5.gui.voiceInput.questResErr.RadiusQuestResErr;
@@ -21,9 +22,9 @@ public class NaturalLanguageProcessor {
 	private static final HashSet<String> actWords = new HashSet<>(Arrays
 			.asList("create", "draw", "construct", "build", "produce", "make"));
 	private static final HashSet<String> toolWords = new HashSet<>(Arrays
-			.asList("circle", "point", "segment"));
+			.asList("circle", "point", "segment", "angle"));
 	private static final HashSet<String> parameterWords = new HashSet<>(
-			Arrays.asList("coordinates", "radius", "center"));
+			Arrays.asList("coordinates", "radius", "center", "size", "range"));
 	private static final HashSet<String> bindWords = new HashSet<>(
 			Arrays.asList("with", "it", "in", "to", "a", "an", "and"));
 	private String tool;
@@ -187,6 +188,14 @@ public class NaturalLanguageProcessor {
 					parameterWord = "";
 					return;
 				}
+				case "size":
+				case "range":
+					if (questResErr instanceof AngleSizeQuestResErr
+							&& "".equals(questResErr.getResponse())) {
+						questResErr.setResponse(input);
+						parameterWord = "";
+						return;
+					}
 			default:
 				break;
 			}
