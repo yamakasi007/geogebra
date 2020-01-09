@@ -236,25 +236,28 @@ public class CopyPasteW extends CopyPaste {
 			});
 
 			$wnd.navigator.clipboard.write([data]).then(function() {
-				console.log("successfully wrote gegeobra data to clipboard");
+				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("successfully wrote gegeobra data to clipboard");
 			}, function() {
-				console.log("writing geogebra data to clipboard failed");
+				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("writing geogebra data to clipboard failed");
 			});
 		} else if ($wnd.navigator.clipboard && $wnd.navigator.clipboard.writeText) {
 			// Supported in Firefox
 
 			$wnd.navigator.clipboard.writeText(encoded).then(function() {
-				console.log("successfully wrote text to clipboard");
+				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("successfully wrote text to clipboard");
 			}, function() {
-				console.log("writing text to clipboard failed");
+				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("writing text to clipboard failed");
 			});
 		} else {
-		    // Supported in Safari
+			// Supported in Safari
 
-            var copyFrom = @org.geogebra.web.html5.main.AppW::getHiddenTextArea()();
-            copyFrom.value = encoded;
-            copyFrom.select();
-            $doc.execCommand('copy');
+			var copyFrom = @org.geogebra.web.html5.main.AppW::getHiddenTextArea()();
+			copyFrom.value = encoded;
+			copyFrom.select();
+			$doc.execCommand('copy');
+			$wnd.setTimeout(function() {
+				$doc.body.focus();
+			}, 0);
 		}
 
 		$wnd.localStorage.setItem(
@@ -300,7 +303,7 @@ public class CopyPasteW extends CopyPaste {
 						}
 					},
 					function(reason) {
-						console.log("reading data from clipboard failed " + reason);
+						@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("reading data from clipboard failed " + reason);
 						storageFallback();
 					});
 		} else if ($wnd.navigator.clipboard
@@ -312,7 +315,7 @@ public class CopyPasteW extends CopyPaste {
 					@org.geogebra.web.html5.util.CopyPasteW::pasteText(*)(app, text);
 				},
 				function(reason) {
-					console.log("reading text from clipboard failed: " + reason);
+					@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("reading text from clipboard failed: " + reason);
 					storageFallback();
 				})
 		} else {
@@ -458,11 +461,11 @@ public class CopyPasteW extends CopyPaste {
 
 	@Override
 	public native void clearClipboard() /*-{
-        $wnd.localStorage.setItem(
-            @org.geogebra.web.html5.util.CopyPasteW::pastePrefix, '');
+		$wnd.localStorage.setItem(
+			@org.geogebra.web.html5.util.CopyPasteW::pastePrefix, '');
 	}-*/;
 
-	public static native void installPaste(App app, Element target) /*-{
+	public static native void installCutCopyPaste(App app, Element target) /*-{
 		target.addEventListener('paste', function(a) {
 			if (a.target.tagName.toUpperCase() === 'INPUT'
 				|| a.target.tagName.toUpperCase() === 'TEXTAREA'
@@ -498,21 +501,16 @@ public class CopyPasteW extends CopyPaste {
 
 		var copying = false;
 
-		target.addEventListener('copy', function() {
+		function cutCopy(event) {
 			if (!copying) {
-                copying = true;
-                @org.geogebra.common.util.CopyPaste::handleCutCopy(*)(app, false);
-                copying = false;
-            }
-        });
+				copying = true;
+				@org.geogebra.common.util.CopyPaste::handleCutCopy(*)(app, event.type === 'cut');
+				copying = false;
+			}
+		}
 
-        target.addEventListener('cut', function() {
-            if (!copying) {
-                copying = true;
-                @org.geogebra.common.util.CopyPaste::handleCutCopy(*)(app, true);
-                copying = false;
-            }
-        })
+		target.addEventListener('copy', cutCopy);
+		target.addEventListener('cut', cutCopy)
 	}-*/;
 
 	/**
