@@ -508,7 +508,6 @@ public class EuclidianPen implements GTimerListener {
 		// set label
 		newPolyLine.getOutput(0).setLabel(null);
 		newPolyLine.getOutput(0).setTooltipMode(GeoElementND.TOOLTIP_OFF);
-
 		lastAlgo = newPolyLine;
 
 		GeoElement poly = newPolyLine.getOutput(0);
