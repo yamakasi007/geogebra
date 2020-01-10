@@ -120,10 +120,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		return linkedGeoText;
 	}
 
-	private String getLinkedGeoRedefineString() {
-		return linkedGeo.getRedefineString(true, true);
-	}
-
 	/**
 	 * Get the string that should be displayed by the renderer.
 	 *
