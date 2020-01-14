@@ -308,6 +308,7 @@ public class MarvlAPI implements BackendAPI {
 			final MaterialCallbackI userMaterialsCB) {
 		HttpRequest request = makeRequest();
 		request.setContentTypeJson();
+
 		request.sendRequestPost(method, baseURL + endpoint, json, new AjaxCallback() {
 			@Override
 			public void onSuccess(String responseStr) {
@@ -336,7 +337,7 @@ public class MarvlAPI implements BackendAPI {
 			request.put("title", text);
 			request.put("file", base64);
 			if (StringUtil.emptyOrZero(tubeID)) {
-				request.put("type", type.name());
+				request.put("type", type.toString());
 			}
 		} catch (JSONException e) {
 			materialCallback.onError(e);
@@ -481,5 +482,19 @@ public class MarvlAPI implements BackendAPI {
 	public URLChecker getURLChecker() {
 		// implement me
 		return urlChecker;
+	}
+
+	@Override
+	public void getTemplateMaterials(final MaterialCallbackI templateMaterialsCB) {
+		if (model == null) {
+			templateMaterialsCB.onError(new Exception("Error on template load. No model found"));
+			return;
+		}
+
+		performRequest("GET",
+				"/users/" + model.getUserId()
+						+ "/materials?filter="
+						+ "ggs-template",
+				null, templateMaterialsCB);
 	}
 }

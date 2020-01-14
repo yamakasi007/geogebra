@@ -1,5 +1,6 @@
 package org.geogebra.web.full.gui.util;
 
+import com.google.gwt.user.client.ui.Label;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.MaterialVisibility;
 import org.geogebra.common.main.SaveController.SaveListener;
@@ -12,6 +13,7 @@ import org.geogebra.web.html5.gui.util.FormLabel;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.main.LocalizationW;
+import org.geogebra.web.shared.ComponentCheckbox;
 import org.geogebra.web.shared.DialogBoxW;
 import org.geogebra.web.shared.DialogUtil;
 
@@ -44,6 +46,9 @@ public class SaveDialogMow extends DialogBoxW
 	private StandardButton cancelBtn;
 	private StandardButton saveBtn;
 	private LocalizationW loc;
+	private ComponentCheckbox templateCheckbox;
+	private Label templateTxt;
+	private FlowPanel checkboxRow;
 
 	/**
 	 * @param app see {@link AppW}
@@ -70,6 +75,13 @@ public class SaveDialogMow extends DialogBoxW
 		titleField.addStyleName("inputText");
 		inputPanel.add(titleLbl);
 		inputPanel.add(titleField);
+		checkboxRow = new FlowPanel();
+		checkboxRow.addStyleName("templatePanel");
+		templateCheckbox = new ComponentCheckbox(false);
+		templateTxt = new Label();
+		templateTxt.setStyleName("templateTxt");
+		checkboxRow.add(templateCheckbox);
+		checkboxRow.add(templateTxt);
 		buttonPanel = new FlowPanel();
 		buttonPanel.setStyleName("DialogButtonPanel");
 		cancelBtn = new StandardButton("", app);
@@ -79,6 +91,7 @@ public class SaveDialogMow extends DialogBoxW
 		buttonPanel.add(cancelBtn);
 		buttonPanel.add(saveBtn);
 		dialogContent.add(inputPanel);
+		dialogContent.add(checkboxRow);
 		dialogContent.add(buttonPanel);
 		setLabels();
 		this.add(dialogContent);
@@ -182,6 +195,8 @@ public class SaveDialogMow extends DialogBoxW
 			hide();
 			app.getSaveController().cancel();
 		} else if (source == saveBtn) {
+			setSaveType(templateCheckbox.isSelected()
+					? ((AppW) app).getVendorSettings().getTemplateType() : MaterialType.ggs);
 			app.getSaveController().saveAs(getInputField().getText(),
 					getSaveVisibility(), this);
 		}
@@ -211,9 +226,11 @@ public class SaveDialogMow extends DialogBoxW
 		saveBtn.setLabel(loc.getMenu("Save"));
 		titleField.getTextComponent().getTextBox().getElement().setAttribute(
 				"placeholder", loc.getMenu("Untitled"));
+		templateTxt.setText(loc.getMenu("saveTemplate"));
 	}
 
 	private void defaultSaveCaptionAndCancel() {
+		checkboxRow.setVisible(true);
 		setCaptionKey("Save");
 		cancelBtn.setLabel(loc.getMenu("Cancel"));
 	}
@@ -228,6 +245,7 @@ public class SaveDialogMow extends DialogBoxW
 		super.show();
 		center();
 		setTitle();
+		templateCheckbox.setSelected(false);
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
 			public void execute() {
@@ -269,6 +287,7 @@ public class SaveDialogMow extends DialogBoxW
 	@Override
 	public void showIfNeeded(AsyncOperation<Boolean> runnable) {
 		showIfNeeded(runnable, !app.isSaved(), null);
+		checkboxRow.setVisible(false);
 		setCaptionKey("DoYouWantToSaveYourChanges");
 		cancelBtn.setLabel(loc.getMenu("Discard"));
 	}

@@ -23,6 +23,7 @@ import org.geogebra.web.html5.gui.textbox.GTextBox;
 import org.geogebra.web.html5.gui.util.ImageOrText;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.shared.ComponentCheckbox;
 import org.geogebra.web.shared.DialogBoxW;
 
 import com.google.gwt.core.client.Scheduler;
@@ -67,6 +68,8 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 	private ArrayList<Material.Provider> supportedProviders = new ArrayList<>();
 	private Localization loc;
 	private BaseWidgetFactory widgetFactory;
+	private ComponentCheckbox templateCheckbox;
+	private Label templateTxt;
 
 	/**
 	 * Creates a new GeoGebra save dialog.
@@ -89,6 +92,9 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 		this.getCaption().setText(loc.getMenu("Save"));
 		VerticalPanel p = new VerticalPanel();
 		p.add(getTitelPanel());
+		if (app.isWhiteboardActive() && !"".equals(app.getVendorSettings().getAPIBaseUrl())) {
+			p.add(getCheckboxPanel());
+		}
 		p.add(getButtonPanel());
 		contentPanel.add(p);
 		addCancelButton();
@@ -160,7 +166,18 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 		} else {
 			saveButton.setEnabled(true);
 		}
+	}
 
+	private FlowPanel getCheckboxPanel() {
+		FlowPanel checkboxPanel = new FlowPanel();
+		checkboxPanel.addStyleName("templatePanel");
+		templateCheckbox = new ComponentCheckbox(false);
+		templateTxt = new Label();
+		templateTxt.setStyleName("templateTxt");
+		templateTxt.setText(loc.getMenu("saveTemplate"));
+		checkboxPanel.add(templateCheckbox);
+		checkboxPanel.add(templateTxt);
+		return checkboxPanel;
 	}
 
 	private FlowPanel getButtonPanel() {
@@ -259,6 +276,10 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 	 * <li>material is new or was private, than link to GGT</li>
 	 */
 	public void onSave() {
+		if (templateCheckbox != null) {
+			setSaveType(templateCheckbox.isSelected()
+					? appW.getVendorSettings().getTemplateType() : MaterialType.ggs);
+		}
 		appW.getSaveController().saveAs(title.getText(),
 				getSelectedVisibility(), this);
 	}
@@ -308,6 +329,9 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 				appW.getFileManager().getFileProvider() == Provider.TUBE);
 		if (this.title.getText().length() < MIN_TITLE_LENGTH) {
 			this.saveButton.setEnabled(false);
+		}
+		if (templateCheckbox != null) {
+			templateCheckbox.setSelected(false);
 		}
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
@@ -389,6 +413,9 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 		this.titleLabel.setText(loc.getMenu("Title") + ": ");
 		this.dontSaveButton.setText(loc.getMenu("DontSave"));
 		this.saveButton.setText(loc.getMenu("Save"));
+        if (templateTxt != null) {
+            templateTxt.setText(loc.getMenu("saveTemplate"));
+        }
 		rebuildVisibilityList();
 	}
 
