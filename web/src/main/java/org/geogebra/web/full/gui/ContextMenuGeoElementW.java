@@ -1,7 +1,10 @@
 package org.geogebra.web.full.gui;
 
-import java.util.ArrayList;
-
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.resources.client.ResourcePrototype;
+import com.google.gwt.user.client.Command;
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.gui.ContextMenuGeoElement;
 import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
@@ -42,13 +45,9 @@ import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
-
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.resources.client.ResourcePrototype;
-import com.google.gwt.user.client.Command;
 import org.geogebra.web.html5.util.CopyPasteW;
+
+import java.util.ArrayList;
 
 /**
  * @author gabor
@@ -578,10 +577,15 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addCutCopyPaste() {
-		if (getGeo() instanceof GeoEmbed) {
-			return;
+		if (!(getGeo() instanceof GeoEmbed
+				&& ((GeoEmbed) getGeo()).isGraspableMath())) {
+			addCutCopy();
 		}
+		addPasteItem();
+		wrappedPopup.addSeparator();
+	}
 
+	private void addCutCopy() {
 		MaterialDesignResources resources = MaterialDesignResources.INSTANCE;
 
 		Command cutCommand = new Command() {
@@ -607,10 +611,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 		addHtmlAction(copyCommand, MainMenu
 				.getMenuBarHtml(resources.copy_black(), loc.getMenu("Copy")));
-
-		addPasteItem();
-
-		wrappedPopup.addSeparator();
 	}
 
 	private void addDuplicate() {

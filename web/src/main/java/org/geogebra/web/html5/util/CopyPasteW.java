@@ -1,9 +1,6 @@
 package org.geogebra.web.html5.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.gwt.dom.client.Element;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.GRectangle2D;
 import org.geogebra.common.euclidian.EuclidianView;
@@ -16,11 +13,12 @@ import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.algos.AlgoInputBox;
 import org.geogebra.common.kernel.algos.ConstructionElement;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
-import org.geogebra.common.kernel.geos.GeoMedia;
 import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.geos.GeoText;
+import org.geogebra.common.kernel.geos.GeoWidget;
 import org.geogebra.common.kernel.geos.MoveGeos;
 import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.main.App;
@@ -29,7 +27,9 @@ import org.geogebra.common.util.CopyPaste;
 import org.geogebra.common.util.ExternalAccess;
 import org.geogebra.web.html5.main.AppW;
 
-import com.google.gwt.dom.client.Element;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CopyPasteW extends CopyPaste {
 
@@ -103,6 +103,7 @@ public class CopyPasteW extends CopyPaste {
 
 		ConstructionElement geo;
 		String label;
+
 		for (ConstructionElement conel : conels) {
 			geo = conel;
 			if (geo.isGeoElement()) {
@@ -186,7 +187,11 @@ public class CopyPasteW extends CopyPaste {
 
 		// create geoslocal and geostohide
 		ArrayList<ConstructionElement> geoslocal = new ArrayList<>();
-		geoslocal.addAll(geos);
+		for (GeoElement geo:geos) {
+			if (!(geo instanceof GeoEmbed && ((GeoEmbed) geo).isGraspableMath())) {
+				geoslocal.add(geo);
+			}
+		}
 
 		addSubGeos(geoslocal);
 
@@ -200,7 +205,9 @@ public class CopyPasteW extends CopyPaste {
 		geostohide.addAll(addAlgosDependentFromInside(geoslocal));
 
 		Kernel kernel = app.getKernel();
-
+		if (app.getEmbedManager() != null) {
+			app.getEmbedManager().persist();
+		}
 		beforeSavingToXML(geoslocal, geostohide);
 
 		boolean saveScriptsToXML = kernel.getSaveScriptsToXML();
@@ -222,15 +229,12 @@ public class CopyPasteW extends CopyPaste {
 		app.setBlockUpdateScripts(scriptsBlocked);
 	}
 
-	private static native void saveToClipboard(String toSave) /*-{
-		var encoded = @org.geogebra.web.html5.util.CopyPasteW::pastePrefix
-			+ btoa(toSave);
-
+	public static native void writeToExternalClipboard(String toWrite) /*-{
 		if ($wnd.navigator.clipboard && $wnd.navigator.clipboard.write) {
 			// Supported in Chrome
 
 			var data = new ClipboardItem({
-				'text/plain': new Blob([encoded], {
+				'text/plain': new Blob([toWrite], {
 					type: 'text/plain'
 				})
 			});
@@ -243,7 +247,7 @@ public class CopyPasteW extends CopyPaste {
 		} else if ($wnd.navigator.clipboard && $wnd.navigator.clipboard.writeText) {
 			// Supported in Firefox
 
-			$wnd.navigator.clipboard.writeText(encoded).then(function() {
+			$wnd.navigator.clipboard.writeText(toWrite).then(function() {
 				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("successfully wrote text to clipboard");
 			}, function() {
 				@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("writing text to clipboard failed");
@@ -252,13 +256,20 @@ public class CopyPasteW extends CopyPaste {
 			// Supported in Safari
 
 			var copyFrom = @org.geogebra.web.html5.main.AppW::getHiddenTextArea()();
-			copyFrom.value = encoded;
+			copyFrom.value = toWrite;
 			copyFrom.select();
 			$doc.execCommand('copy');
 			$wnd.setTimeout(function() {
 				$doc.body.focus();
 			}, 0);
 		}
+	}-*/;
+
+	private static native void saveToClipboard(String toSave) /*-{
+		var encoded = @org.geogebra.web.html5.util.CopyPasteW::pastePrefix
+			+ btoa(toSave);
+
+		@org.geogebra.web.html5.util.CopyPasteW::writeToExternalClipboard(*)(encoded);
 
 		$wnd.localStorage.setItem(
 			@org.geogebra.web.html5.util.CopyPasteW::pastePrefix, toSave);
@@ -422,7 +433,7 @@ public class CopyPasteW extends CopyPaste {
 			ArrayList<GeoElement> shapes = new ArrayList<>();
 			for (GeoElement created : createdElements) {
 				if (created.isShape() || created instanceof GeoLocusStroke
-						|| created instanceof GeoMedia || created instanceof GeoText
+						|| created instanceof GeoWidget || created instanceof GeoText
 						|| created instanceof GeoImage) {
 					shapes.add(created);
 				}
@@ -466,19 +477,15 @@ public class CopyPasteW extends CopyPaste {
 	}-*/;
 
 	public static native void installCutCopyPaste(App app, Element target) /*-{
+		function incorrectTarget(target) {
+			return target.tagName.toUpperCase() === 'INPUT'
+				|| target.tagName.toUpperCase() === 'TEXTAREA'
+				|| target.tagName.toUpperCase() === 'BR'
+				|| target.parentElement.classList.contains('mowTextEditor');
+		}
+
 		target.addEventListener('paste', function(a) {
-			if (a.target.tagName.toUpperCase() === 'INPUT'
-				|| a.target.tagName.toUpperCase() === 'TEXTAREA'
-				|| a.target.tagName.toUpperCase() === 'BR'
-				|| a.target.parentElement.classList.contains("mowTextEditor")) {
-				return;
-			}
-
-			var pastePrefix = @org.geogebra.web.html5.util.CopyPasteW::pastePrefix;
-
-			var text = a.clipboardData.getData("text/plain");
-			if (text) {
-				@org.geogebra.web.html5.util.CopyPasteW::pasteText(*)(app, text);
+			if (incorrectTarget(a.target)) {
 				return;
 			}
 
@@ -493,20 +500,26 @@ public class CopyPasteW extends CopyPaste {
 				return;
 			}
 
+			var pastePrefix = @org.geogebra.web.html5.util.CopyPasteW::pastePrefix;
+
+			var text = a.clipboardData.getData("text/plain");
+			if (text) {
+				@org.geogebra.web.html5.util.CopyPasteW::pasteText(*)(app, text);
+				return;
+			}
+
 			var stored = $wnd.localStorage.getItem(pastePrefix);
 			if (stored) {
 				@org.geogebra.web.html5.util.CopyPasteW::pasteGeoGebraXML(*)(app, stored);
 			}
 		});
 
-		var copying = false;
-
 		function cutCopy(event) {
-			if (!copying) {
-				copying = true;
-				@org.geogebra.common.util.CopyPaste::handleCutCopy(*)(app, event.type === 'cut');
-				copying = false;
+			if (incorrectTarget(event.target)) {
+				return;
 			}
+
+			@org.geogebra.common.util.CopyPaste::handleCutCopy(*)(app, event.type === 'cut');
 		}
 
 		target.addEventListener('copy', cutCopy);
