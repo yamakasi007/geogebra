@@ -3,7 +3,6 @@ package org.geogebra.common.kernel.geos;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoVectorND;
-import org.geogebra.common.util.debug.Log;
 
 class InputBoxRenderer {
 	private GeoElementND linkedGeo;
@@ -31,7 +30,6 @@ class InputBoxRenderer {
 		} else if (inputBox.isSymbolicMode()) {
 			linkedGeoText = getTextForSymbolic();
 		} else {
-			Log.printStacktrace("default");
 			linkedGeoText = linkedGeo.getRedefineString(true, true);
 		}
 
