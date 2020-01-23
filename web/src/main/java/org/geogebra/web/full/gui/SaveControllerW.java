@@ -10,10 +10,10 @@ import org.geogebra.common.main.MaterialsManager;
 import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.SaveController;
 import org.geogebra.common.move.ggtapi.models.Chapter;
-import org.geogebra.common.move.ggtapi.models.MarvlAPI;
 import org.geogebra.common.move.ggtapi.models.Material;
 import org.geogebra.common.move.ggtapi.models.Material.MaterialType;
 import org.geogebra.common.move.ggtapi.models.Material.Provider;
+import org.geogebra.common.move.ggtapi.models.MowBAPI;
 import org.geogebra.common.move.ggtapi.requests.MaterialCallbackI;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.StringUtil;
@@ -284,7 +284,7 @@ public class SaveControllerW implements SaveController {
 			MaterialCallbackI materialCallback) {
 		if (app.isWhiteboardActive() && !"".equals(app.getVendorSettings().getAPIBaseUrl())
 				&& savedAsTemplate()) {
-			MarvlAPI api = new MarvlAPI(
+			MowBAPI api = new MowBAPI(
 					app.getVendorSettings().getAPIBaseUrl(),
 					new MarvlURLChecker());
 			api.uploadMaterial(tubeID, visibility, fileName, base64,
@@ -502,7 +502,7 @@ public class SaveControllerW implements SaveController {
 			}
 			if (!app.getLoginOperation()
 					.owns(app.getActiveMaterial())) {
-				consTitle = MarvlAPI.getCopyTitle(loc, consTitle);
+				consTitle = MowBAPI.getCopyTitle(loc, consTitle);
 				title.setText(consTitle);
 				return true;
 			}

@@ -48,7 +48,6 @@ public class SaveDialogMow extends DialogBoxW
 	private LocalizationW loc;
 	private ComponentCheckbox templateCheckbox;
 	private Label templateTxt;
-	private FlowPanel checkboxRow;
 
 	/**
 	 * @param app see {@link AppW}
@@ -65,7 +64,7 @@ public class SaveDialogMow extends DialogBoxW
 	private void initGUI() {
 		dialogContent = new FlowPanel();
 		inputPanel = new FlowPanel();
-		inputPanel.setStyleName("mowMediaDialogContent");
+		inputPanel.setStyleName("mowInputPanelContent");
 		inputPanel.addStyleName("emptyState");
 		titleField = new InputPanelW("", app, 1, 25, false);
 		titleLbl = new FormLabel().setFor(titleField.getTextComponent());
@@ -75,13 +74,8 @@ public class SaveDialogMow extends DialogBoxW
 		titleField.addStyleName("inputText");
 		inputPanel.add(titleLbl);
 		inputPanel.add(titleField);
-		checkboxRow = new FlowPanel();
-		checkboxRow.addStyleName("templatePanel");
-		templateCheckbox = new ComponentCheckbox(false);
 		templateTxt = new Label();
-		templateTxt.setStyleName("templateTxt");
-		checkboxRow.add(templateCheckbox);
-		checkboxRow.add(templateTxt);
+		templateCheckbox = new ComponentCheckbox(false, templateTxt);
 		buttonPanel = new FlowPanel();
 		buttonPanel.setStyleName("DialogButtonPanel");
 		cancelBtn = new StandardButton("", app);
@@ -91,7 +85,7 @@ public class SaveDialogMow extends DialogBoxW
 		buttonPanel.add(cancelBtn);
 		buttonPanel.add(saveBtn);
 		dialogContent.add(inputPanel);
-		dialogContent.add(checkboxRow);
+		dialogContent.add(templateCheckbox);
 		dialogContent.add(buttonPanel);
 		setLabels();
 		this.add(dialogContent);
@@ -155,7 +149,7 @@ public class SaveDialogMow extends DialogBoxW
 	 * sets the style of InputPanel to focus state
 	 */
 	protected void setFocusState() {
-		getInputPanel().setStyleName("mowMediaDialogContent");
+		getInputPanel().setStyleName("mowInputPanelContent");
 		getInputPanel().addStyleName("focusState");
 	}
 
@@ -230,7 +224,7 @@ public class SaveDialogMow extends DialogBoxW
 	}
 
 	private void defaultSaveCaptionAndCancel() {
-		checkboxRow.setVisible(true);
+		templateCheckbox.setVisible(true);
 		setCaptionKey("Save");
 		cancelBtn.setLabel(loc.getMenu("Cancel"));
 	}
@@ -287,7 +281,7 @@ public class SaveDialogMow extends DialogBoxW
 	@Override
 	public void showIfNeeded(AsyncOperation<Boolean> runnable) {
 		showIfNeeded(runnable, !app.isSaved(), null);
-		checkboxRow.setVisible(false);
+		templateCheckbox.setVisible(false);
 		setCaptionKey("DoYouWantToSaveYourChanges");
 		cancelBtn.setLabel(loc.getMenu("Discard"));
 	}
