@@ -529,6 +529,7 @@ public class GuiManagerW extends GuiManager
 			} else {
 				sidePanelTab.close();
 			}
+			onToolbarVisibilityChanged(viewId, flag);
 		} else {
 			if (flag) {
 				showViewWithId(viewId);
@@ -543,6 +544,13 @@ public class GuiManagerW extends GuiManager
 
 		if (sidePanel != null) {
 			sidePanel.updateUndoRedoPosition();
+		}
+	}
+
+	private void onToolbarVisibilityChanged(int viewId, boolean isVisible) {
+		DockPanel panel = layout.getDockManager().getPanel(viewId);
+		if (panel != null) {
+			panel.setVisible(isVisible);
 		}
 	}
 
