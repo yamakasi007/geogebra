@@ -40,7 +40,7 @@ public abstract class MediaDialog extends OptionDialog {
 		FlowPanel mainPanel = new FlowPanel();
 
 		mediaInputPanel = new MediaInputPanel(appW, this,
-				app.getLocalization().getMenu("Link"));
+				app.getLocalization().getMenu("Link"), true);
 		mediaInputPanel.addPlaceholder(app.getLocalization().getMenu("pasteLink"));
 
 		// add panels

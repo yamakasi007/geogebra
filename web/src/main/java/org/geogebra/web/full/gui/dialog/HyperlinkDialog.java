@@ -20,9 +20,9 @@ public class HyperlinkDialog extends OptionDialog {
 		FlowPanel mainPanel = new FlowPanel();
 
 		textInputPanel = new MediaInputPanel(app, this,
-				app.getLocalization().getMenu("Text"));
+				app.getLocalization().getMenu("Text"), false);
 		linkInputPanel = new MediaInputPanel(app, this,
-				app.getLocalization().getMenu("Link"));
+				app.getLocalization().getMenu("Link"), true);
 
 		updateButtonLabels("Ok");
 

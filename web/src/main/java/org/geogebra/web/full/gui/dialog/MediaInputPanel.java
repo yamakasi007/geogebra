@@ -23,14 +23,16 @@ public class MediaInputPanel extends FlowPanel {
 
 	private AppW app;
 	private OptionDialog parentDialog;
+	private boolean required;
 
 	protected InputPanelW inputField;
 	private Label errorLabel;
 	private Label infoLabel;
 
-	public MediaInputPanel(AppW app, OptionDialog parentDialog, String label) {
+	public MediaInputPanel(AppW app, OptionDialog parentDialog, String label, boolean required) {
 		this.app = app;
 		this.parentDialog = parentDialog;
+		this.required = required;
 
 		setStyleName("mowMediaDialogContent");
 		addStyleName("emptyState");
@@ -106,7 +108,9 @@ public class MediaInputPanel extends FlowPanel {
 		setStyleName("mowMediaDialogContent");
 		addStyleName("emptyState");
 		removeStyleName("errorState");
-		parentDialog.setPrimaryButtonEnabled(!"".equals(inputField.getText()));
+		if (required) {
+			parentDialog.setPrimaryButtonEnabled(!"".equals(inputField.getText()));
+		}
 	}
 
 	/**
