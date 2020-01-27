@@ -35,7 +35,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-
 public class MowBAPITest {
 
 	private static final String BASE_URL = "http://tafel.dlb-dev01.alp-dlg.net/api";
