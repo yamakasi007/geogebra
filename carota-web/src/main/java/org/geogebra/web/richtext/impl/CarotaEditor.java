@@ -122,7 +122,7 @@ public class CarotaEditor implements Editor {
 
 	@Override
 	public void insertHyperlink(String url, String text) {
-		int newCaretPosition = text.length() == 0 ? url.length() : text.length()
+		int newCaretPosition = (text.length() == 0 ? url.length() : text.length())
 				+ editor.selectedRange().getStart();
 
 		editor.insertHyperlink(url, text);

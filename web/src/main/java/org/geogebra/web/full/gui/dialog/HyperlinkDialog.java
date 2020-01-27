@@ -24,6 +24,7 @@ public class HyperlinkDialog extends OptionDialog {
 		linkInputPanel = new MediaInputPanel(app, this,
 				app.getLocalization().getMenu("Link"), true);
 
+		linkInputPanel.addPlaceholder(app.getLocalization().getMenu("pasteLink"));
 		updateButtonLabels("Ok");
 
 		textInputPanel.setText(inlineText.getSelectedText());
