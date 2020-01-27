@@ -25,11 +25,10 @@ public class MediaInputPanel extends FlowPanel {
 	private OptionDialog parentDialog;
 
 	protected InputPanelW inputField;
-	private FormLabel inputLabel;
 	private Label errorLabel;
 	private Label infoLabel;
 
-	public MediaInputPanel(AppW app, OptionDialog parentDialog) {
+	public MediaInputPanel(AppW app, OptionDialog parentDialog, String label) {
 		this.app = app;
 		this.parentDialog = parentDialog;
 
@@ -37,25 +36,25 @@ public class MediaInputPanel extends FlowPanel {
 		addStyleName("emptyState");
 
 		inputField = new InputPanelW("", app, 1, 25, false);
-		inputLabel = new FormLabel().setFor(inputField.getTextComponent());
+
+		FormLabel inputLabel = new FormLabel().setFor(inputField.getTextComponent());
+		inputLabel.setText(label);
 		inputLabel.addStyleName("inputLabel");
-		inputField.getTextComponent().getTextBox().getElement().setAttribute(
-				"placeholder", app.getLocalization().getMenu("pasteLink"));
 		inputField.addStyleName("inputText");
-		add(inputLabel);
-		add(inputField);
+
 		errorLabel = new Label();
 		errorLabel.addStyleName("msgLabel errorLabel");
-		add(errorLabel);
 
-		infoLabel = new Label();
-		infoLabel.addStyleName("msgLabel");
-		add(infoLabel);
+		add(inputLabel);
+		add(inputField);
+		add(errorLabel);
 
 		addHoverHandlers();
 		addFocusBlurHandlers();
 		addInputHandler();
+	}
 
+	public void focusDeferred() {
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
@@ -64,10 +63,16 @@ public class MediaInputPanel extends FlowPanel {
 		});
 	}
 
-	public void setLabels() {
-		inputLabel.setText(app.getLocalization().getMenu("Link"));
-		infoLabel.setText("");
-		errorLabel.setText(""); // actual error set in showError
+	public void addPlaceholder(String placeholder) {
+		inputField.getTextComponent().getTextBox().getElement()
+				.setAttribute("placeholder", placeholder);
+	}
+
+	public void addInfoLabel() {
+		infoLabel = new Label();
+		infoLabel.addStyleName("msgLabel");
+
+		add(infoLabel);
 	}
 
 	/**

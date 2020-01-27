@@ -21,7 +21,6 @@ public abstract class MediaDialog extends OptionDialog {
 	private static final String HTTPS = "https://";
 
 	protected AppW appW;
-	protected FlowPanel mainPanel;
 
 	protected MediaInputPanel mediaInputPanel;
 
@@ -38,27 +37,30 @@ public abstract class MediaDialog extends OptionDialog {
 	}
 
 	protected void initGui() {
-		mainPanel = new FlowPanel();
+		FlowPanel mainPanel = new FlowPanel();
 
-		mediaInputPanel = new MediaInputPanel(appW, this);
+		mediaInputPanel = new MediaInputPanel(appW, this,
+				app.getLocalization().getMenu("Link"));
+		mediaInputPanel.addPlaceholder(app.getLocalization().getMenu("pasteLink"));
 
 		// add panels
 		add(mainPanel);
 		mainPanel.add(mediaInputPanel);
 		mainPanel.add(getButtonPanel());
+		setLabels();
+
 		// style
 		addStyleName("GeoGebraPopup");
 		addStyleName("mediaDialog");
-		setGlassEnabled(true);
-		setLabels();
 		addStyleName("mebis");
+
+		mediaInputPanel.focusDeferred();
 	}
 
 	/**
 	 * set button labels
 	 */
 	public void setLabels() {
-		mediaInputPanel.setLabels();
 		updateButtonLabels("Insert");
 	}
 

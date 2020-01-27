@@ -38,6 +38,7 @@ public class EmbedInputDialog extends MediaDialog
 	EmbedInputDialog(AppW app, URLChecker urlChecker) {
 		super(app.getPanel(), app);
 		this.urlChecker = urlChecker;
+		mediaInputPanel.addInfoLabel();
 		updateInfo();
 	}
 
