@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.full.gui.view.algebra.InputPanelW;
 import org.geogebra.web.html5.gui.util.FormLabel;
 import org.geogebra.web.html5.main.AppW;
@@ -125,7 +126,7 @@ public class MediaInputPanel extends FlowPanel {
 		addStyleName("emptyState");
 		removeStyleName("errorState");
 		if (required) {
-			parentDialog.setPrimaryButtonEnabled(!"".equals(inputField.getText()));
+			parentDialog.setPrimaryButtonEnabled(!StringUtil.emptyTrim(inputField.getText()));
 		}
 	}
 
