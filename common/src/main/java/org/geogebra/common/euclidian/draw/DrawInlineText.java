@@ -384,4 +384,10 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 		return "";
 	}
+
+	public void insertHyperlink(String url, String text) {
+		if (textController != null) {
+			textController.insertHyperlink(url, text);
+		}
+	}
 }

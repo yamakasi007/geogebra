@@ -16,4 +16,6 @@ public class CarotaDocument {
 	public native CarotaNode byCoordinate(int x, int y);
 
 	public native CarotaRange selectedRange();
+
+	public native void insertHyperlink(String url, String text);
 }

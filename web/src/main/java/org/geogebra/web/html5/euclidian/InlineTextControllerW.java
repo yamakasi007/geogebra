@@ -161,4 +161,9 @@ public class InlineTextControllerW implements InlineTextController {
 
 		g2.restoreTransform();
 	}
+
+	@Override
+	public void insertHyperlink(String url, String text) {
+		editor.insertHyperlink(url, text);
+	}
 }

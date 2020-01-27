@@ -42,9 +42,9 @@ public class HyperlinkDialog extends OptionDialog {
 
 	@Override
 	protected void processInput() {
-		//inputField.getTextComponent().setText(url);
-
-		// TODO: do action ;)
+		inlineText.insertHyperlink(linkInputPanel.getInput(),
+				textInputPanel.inputField.getText());
+		hide();
 	}
 
 	@Override

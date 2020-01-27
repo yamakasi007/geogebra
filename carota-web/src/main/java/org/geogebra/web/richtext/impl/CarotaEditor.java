@@ -120,6 +120,11 @@ public class CarotaEditor implements Editor {
 	}
 
 	@Override
+	public void insertHyperlink(String url, String text) {
+		editor.insertHyperlink(url, text);
+	}
+
+	@Override
 	public String getContent() {
 		return getContentNative(editor);
 	}

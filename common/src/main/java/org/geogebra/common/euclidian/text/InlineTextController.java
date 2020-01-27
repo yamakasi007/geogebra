@@ -85,4 +85,6 @@ public interface InlineTextController {
 	 *            transform w.r.t. top left corner, does not include padding
 	 */
 	void draw(GGraphics2D g2, GAffineTransform transform);
+
+	void insertHyperlink(String url, String text);
 }

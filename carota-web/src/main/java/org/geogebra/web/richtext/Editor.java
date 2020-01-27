@@ -90,6 +90,8 @@ public interface Editor {
 	 */
 	<T> T getDocumentFormat(String key, T fallback);
 
+	void insertHyperlink(String url, String text);
+
 	/**
 	 * @return JSON encoded editor content
 	 */
