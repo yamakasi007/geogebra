@@ -94,7 +94,8 @@ public class CarotaEditor implements Editor {
 
 	@Override
 	public void deselect() {
-		editor.select(0, 0);
+		int end = editor.documentRange().getEnd();
+		editor.select(end, end);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class CarotaEditor implements Editor {
 				+ editor.selectedRange().getStart();
 
 		editor.insertHyperlink(url, text);
-		editor.select(newCaretPosition, newCaretPosition);
+		editor.select(newCaretPosition, newCaretPosition, true);
 	}
 
 	@Override

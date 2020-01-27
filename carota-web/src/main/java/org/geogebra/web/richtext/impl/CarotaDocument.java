@@ -17,5 +17,7 @@ public class CarotaDocument {
 
 	public native CarotaRange selectedRange();
 
+	public native CarotaRange documentRange();
+
 	public native void insertHyperlink(String url, String text);
 }
