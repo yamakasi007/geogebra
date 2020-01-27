@@ -76,6 +76,8 @@ public interface InlineTextController {
 	 */
 	<T> T getFormat(String key, T fallback);
 
+	String getSelectedText();
+
 	/**
 	 * @param g2
 	 * 	          graphics

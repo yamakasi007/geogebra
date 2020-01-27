@@ -376,4 +376,12 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		}
 		return fallback;
 	}
+
+	public String getSelectedText() {
+		if (textController != null) {
+			return textController.getSelectedText();
+		}
+
+		return "";
+	}
 }

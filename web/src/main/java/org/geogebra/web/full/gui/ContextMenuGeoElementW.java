@@ -6,6 +6,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.user.client.Command;
 import org.geogebra.common.awt.GPoint;
+import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.gui.ContextMenuGeoElement;
 import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
 import org.geogebra.common.gui.dialog.options.model.ConicEqnModel;
@@ -218,7 +219,10 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		Command addHyperlinkCommand = new Command() {
 			@Override
 			public void execute() {
-				HyperlinkDialog hyperlinkDialog = new HyperlinkDialog((AppW) app);
+				DrawInlineText inlineText = (DrawInlineText) app.getActiveEuclidianView()
+						.getDrawableFor(getGeo());
+
+				HyperlinkDialog hyperlinkDialog = new HyperlinkDialog((AppW) app, inlineText);
 				hyperlinkDialog.center();
 				hyperlinkDialog.show();
 			}

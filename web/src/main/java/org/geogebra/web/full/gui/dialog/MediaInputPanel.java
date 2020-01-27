@@ -68,6 +68,10 @@ public class MediaInputPanel extends FlowPanel {
 				.setAttribute("placeholder", placeholder);
 	}
 
+	public void setText(String text) {
+		inputField.getTextComponent().setText(text);
+	}
+
 	public void addInfoLabel() {
 		infoLabel = new Label();
 		infoLabel.addStyleName("msgLabel");

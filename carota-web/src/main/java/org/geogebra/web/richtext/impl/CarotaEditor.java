@@ -124,6 +124,11 @@ public class CarotaEditor implements Editor {
 		return getContentNative(editor);
 	}
 
+	@Override
+	public String getSelectedText() {
+		return editor.selectedRange().plainText();
+	}
+
 	private native String getContentNative(CarotaDocument editor) /*-{
 		return JSON.stringify(editor.save());
 	}-*/;

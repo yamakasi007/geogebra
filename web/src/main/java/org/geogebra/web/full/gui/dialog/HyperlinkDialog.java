@@ -2,6 +2,7 @@ package org.geogebra.web.full.gui.dialog;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.geogebra.common.euclidian.EuclidianConstants;
+import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.web.html5.main.AppW;
 
@@ -10,8 +11,11 @@ public class HyperlinkDialog extends OptionDialog {
 	private MediaInputPanel textInputPanel;
 	private MediaInputPanel linkInputPanel;
 
-	public HyperlinkDialog(AppW app) {
+	DrawInlineText inlineText;
+
+	public HyperlinkDialog(AppW app, DrawInlineText inlineText) {
 		super(app.getPanel(), app);
+		this.inlineText = inlineText;
 
 		FlowPanel mainPanel = new FlowPanel();
 
@@ -21,6 +25,8 @@ public class HyperlinkDialog extends OptionDialog {
 				app.getLocalization().getMenu("Link"));
 
 		updateButtonLabels("Ok");
+
+		textInputPanel.setText(inlineText.getSelectedText());
 
 		mainPanel.add(textInputPanel);
 		mainPanel.add(linkInputPanel);

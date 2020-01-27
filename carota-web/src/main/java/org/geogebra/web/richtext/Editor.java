@@ -94,4 +94,6 @@ public interface Editor {
 	 * @return JSON encoded editor content
 	 */
 	String getContent();
+
+	String getSelectedText();
 }

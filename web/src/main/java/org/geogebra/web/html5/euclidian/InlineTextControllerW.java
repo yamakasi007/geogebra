@@ -137,6 +137,11 @@ public class InlineTextControllerW implements InlineTextController {
 	}
 
 	@Override
+	public String getSelectedText() {
+		return editor.getSelectedText();
+	}
+
+	@Override
 	public void draw(GGraphics2D g2, GAffineTransform transform) {
 		g2.saveTransform();
 
