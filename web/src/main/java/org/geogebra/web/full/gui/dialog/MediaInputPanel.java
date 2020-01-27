@@ -1,5 +1,10 @@
 package org.geogebra.web.full.gui.dialog;
 
+import org.geogebra.common.util.StringUtil;
+import org.geogebra.web.full.gui.view.algebra.InputPanelW;
+import org.geogebra.web.html5.gui.util.FormLabel;
+import org.geogebra.web.html5.main.AppW;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -15,10 +20,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import org.geogebra.common.util.StringUtil;
-import org.geogebra.web.full.gui.view.algebra.InputPanelW;
-import org.geogebra.web.html5.gui.util.FormLabel;
-import org.geogebra.web.html5.main.AppW;
 
 public class MediaInputPanel extends FlowPanel {
 
@@ -30,6 +31,16 @@ public class MediaInputPanel extends FlowPanel {
 	private Label errorLabel;
 	private Label infoLabel;
 
+	/**
+	 * @param app
+	 *         application
+	 * @param parentDialog
+	 *         parent dialog
+	 * @param label
+	 *         label
+	 * @param required
+	 *         whether nonempty string is expected
+	 */
 	public MediaInputPanel(AppW app, OptionDialog parentDialog, String label, boolean required) {
 		this.app = app;
 		this.parentDialog = parentDialog;
