@@ -3,6 +3,7 @@ package org.geogebra.web.full.gui;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.user.client.Command;
 import org.geogebra.common.awt.GPoint;
@@ -228,7 +229,12 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			}
 		};
 
-		addHtmlAction(addHyperlinkCommand, loc.getMenu("Link"));
+		AriaMenuItem addHyperlinkItem = new AriaMenuItem(loc.getMenu("Link"), false,
+				addHyperlinkCommand);
+		addHyperlinkItem.getElement().getStyle()
+				.setPaddingLeft(18, Style.Unit.PX);
+
+		wrappedPopup.addItem(addHyperlinkItem);
 	}
 
 	private void addPropertiesItem() {

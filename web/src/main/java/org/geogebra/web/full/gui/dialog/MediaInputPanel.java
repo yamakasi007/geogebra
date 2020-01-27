@@ -56,6 +56,9 @@ public class MediaInputPanel extends FlowPanel {
 		addInputHandler();
 	}
 
+	/**
+	 * Set focus the text field of the input panel
+	 */
 	public void focusDeferred() {
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
@@ -65,6 +68,10 @@ public class MediaInputPanel extends FlowPanel {
 		});
 	}
 
+	/**
+	 * Add placeholder to the text field of the input panel
+	 * @param placeholder localized placeholder string
+	 */
 	public void addPlaceholder(String placeholder) {
 		inputField.getTextComponent().getTextBox().getElement()
 				.setAttribute("placeholder", placeholder);
@@ -74,6 +81,9 @@ public class MediaInputPanel extends FlowPanel {
 		inputField.getTextComponent().setText(text);
 	}
 
+	/**
+	 * Add info label to the input panel
+	 */
 	public void addInfoLabel() {
 		infoLabel = new Label();
 		infoLabel.addStyleName("msgLabel");
@@ -88,6 +98,10 @@ public class MediaInputPanel extends FlowPanel {
 		return inputField.getText().trim();
 	}
 
+	/**
+	 * Set the input panel to the error state
+	 * @param msg error message to show
+	 */
 	public void showError(String msg) {
 		setStyleName("mowMediaDialogContent");
 		addStyleName("errorState");
@@ -97,13 +111,15 @@ public class MediaInputPanel extends FlowPanel {
 	}
 
 	/**
-	 * @param info
-	 *            permanent information message
+	 * @param info permanent information message
 	 */
 	public void showInfo(String info) {
 		infoLabel.setText(info);
 	}
 
+	/**
+	 * Remove error state from input panel
+	 */
 	public void resetError() {
 		setStyleName("mowMediaDialogContent");
 		addStyleName("emptyState");
@@ -142,11 +158,11 @@ public class MediaInputPanel extends FlowPanel {
 	}
 
 	private native void nativeOn(Element img) /*-{
-        var that = this;
-        img.addEventListener("input", function () {
-            that.@org.geogebra.web.full.gui.dialog.MediaInputPanel::onInput()();
-        });
-    }-*/;
+		var that = this;
+		img.addEventListener("input", function () {
+			that.@org.geogebra.web.full.gui.dialog.MediaInputPanel::onInput()();
+		});
+	}-*/;
 
 	/**
 	 * Add mouse over/ out handlers

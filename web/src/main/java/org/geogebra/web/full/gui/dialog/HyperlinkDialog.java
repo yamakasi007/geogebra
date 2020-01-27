@@ -11,8 +11,11 @@ public class HyperlinkDialog extends OptionDialog {
 	private MediaInputPanel textInputPanel;
 	private MediaInputPanel linkInputPanel;
 
-	DrawInlineText inlineText;
+	private DrawInlineText inlineText;
 
+	/**
+	 * Dialog for inserting hyperlink into an inline text
+	 */
 	public HyperlinkDialog(AppW app, DrawInlineText inlineText) {
 		super(app.getPanel(), app);
 		this.inlineText = inlineText;
