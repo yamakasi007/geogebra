@@ -213,7 +213,7 @@ public class AppConfigGraphing implements AppConfig {
 
 	@Override
 	public String getAppCode() {
-		return "graphing-restricted";
+		return "graphing";
 	}
 
 	@Override

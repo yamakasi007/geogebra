@@ -16,6 +16,6 @@ public class MyXMLioTest extends BaseUnitTest {
 				.useConstructor(getKernel(), getConstruction()));
 		getApp().setConfig(new AppConfigGraphing());
 		String fullXml = myXMLio.getFullXML();
-		Assert.assertTrue(fullXml.contains("app=\"graphing-restricted\""));
+		Assert.assertTrue(fullXml.contains("app=\"graphing\""));
 	}
 }
