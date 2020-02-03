@@ -40,7 +40,7 @@ public class InlineTextToolsMenu extends AriaMenuItem implements ValueChangeHand
 		this.app = app;
 
 		localization = app.getLocalization();
-
+		removeStyleName("gwt-MenuItem");
 		addStyleName("mowMenuToolbar");
 		panel = new FlowPanel();
 		panel.addStyleName("content");

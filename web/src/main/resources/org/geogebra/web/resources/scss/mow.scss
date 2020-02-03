@@ -577,10 +577,9 @@
 	.mowMenuToolbar {
 		@extend .mowDynStyleBar;
 
-		padding: 0 0 8px 12px !important;
-		height: 40px !important;
+		padding: 0 0 8px 12px;
+		height: 40px;
 		width: 100%;
-		list-style: none;
 
 		&.selectedItem {
 			background: none;
@@ -589,11 +588,11 @@
 		.MyToggleButton {
 			@extend .mowToolButton;
 
-			img {
-				position: relative !important;
-				opacity: 0.7 !important;
-				margin-left: auto !important;
-				margin-right: auto !important;
+			.gwt-Image {
+				position: relative;
+				opacity: 0.7;
+				margin-left: auto;
+				margin-right: auto;
 			}
 		}
 
