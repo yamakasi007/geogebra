@@ -75,6 +75,8 @@ public class InlineTextToolbar extends AriaMenuItem implements ValueChangeHandle
 	private void updateState() {
 		subScriptBtn.setSelected("sub".equals(getScriptFormat()));
 		superScriptBtn.setSelected("super".equals(getScriptFormat()));
+		bulletListBtn.setSelected("bullet".equals(getListStyle()));
+		numberedListBtn.setSelected("number".equals(getListStyle()));
 	}
 
 	private MyToggleButtonW createButton(SVGResource resource) {
@@ -85,6 +87,10 @@ public class InlineTextToolbar extends AriaMenuItem implements ValueChangeHandle
 
 	private String getScriptFormat() {
 		return drawInlineText.getFormat("script", "normal");
+	}
+
+	private String getListStyle() {
+		return drawInlineText.getListStyle();
 	}
 
 	@Override
@@ -99,13 +105,9 @@ public class InlineTextToolbar extends AriaMenuItem implements ValueChangeHandle
 		} else if (superScriptBtn.equals(event.getSource())) {
 			setSuperscript(event.getValue());
 		} else if (bulletListBtn.equals(event.getSource())) {
-			if (event.getValue().booleanValue()) {
-				drawInlineText.switchListTo("bullet");
-			}
+			drawInlineText.switchListTo("bullet");
 		} else if (numberedListBtn.equals(event.getSource())) {
-			if (event.getValue().booleanValue()) {
-				drawInlineText.switchListTo("number");
-			}
+			drawInlineText.switchListTo("number");
 		}
 
 		updateState();

@@ -106,4 +106,6 @@ public interface Editor {
 	String urlByCoordinate(int x, int y);
 
 	void switchListTo(String listType);
+
+	String getListStyle();
 }

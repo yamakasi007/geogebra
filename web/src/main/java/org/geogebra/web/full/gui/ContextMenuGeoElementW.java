@@ -18,6 +18,7 @@ import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoEmbed;
+import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoSegment;
@@ -215,7 +216,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addInlineTextItems() {
-		if (!getGeo().isGeoInlineText()) {
+		if (!(getGeo() instanceof GeoInlineText)) {
 			return;
 		}
 

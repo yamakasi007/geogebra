@@ -200,4 +200,10 @@ public class CarotaEditor implements Editor {
 	public void switchListTo(String listType) {
 		editor.switchListTo(listType);
 	}
+
+	@Override
+	public String getListStyle() {
+		CarotaRange selection = editor.selectedRange();
+		return selection.getListStyle();
+	}
 }

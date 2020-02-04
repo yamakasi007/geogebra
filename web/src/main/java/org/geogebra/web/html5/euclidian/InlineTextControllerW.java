@@ -184,4 +184,9 @@ public class InlineTextControllerW implements InlineTextController {
 	public void switchListTo(String listType) {
 		editor.switchListTo(listType);
 	}
+
+	@Override
+	public String getListStyle() {
+		return editor.getListStyle();
+	}
 }
