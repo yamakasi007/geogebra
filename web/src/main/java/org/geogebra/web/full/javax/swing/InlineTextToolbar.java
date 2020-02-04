@@ -2,7 +2,6 @@ package org.geogebra.web.full.javax.swing;
 
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.main.App;
-import org.geogebra.common.main.Localization;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.util.MyToggleButtonW;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
@@ -19,61 +18,68 @@ import com.google.gwt.user.client.ui.Widget;
  *
  * @author laszlo
  */
-public class InlineTextToolsMenu extends AriaMenuItem implements ValueChangeHandler<Boolean> {
-
+public class InlineTextToolbar extends AriaMenuItem implements ValueChangeHandler<Boolean> {
 	private final App app;
-	private final Localization localization;
-
 	private DrawInlineText drawInlineText;
-
 	private FlowPanel panel;
-	private MyToggleButtonW subScript;
-	private MyToggleButtonW superScript;
+	private MyToggleButtonW subScriptBtn;
+	private MyToggleButtonW superScriptBtn;
+	private MyToggleButtonW bulletListBtn;
+	private MyToggleButtonW numberedListBtn;
 
 	/**
-	 * Constructor
+	 * Constructor of special context menu item holding the
+	 * list and sub/superscript toggle buttons
 	 * @param drawInlineText the drawable.
 	 */
-	public InlineTextToolsMenu(DrawInlineText drawInlineText, App app) {
+	public InlineTextToolbar(DrawInlineText drawInlineText, App app) {
 		super();
 		this.drawInlineText = drawInlineText;
 		this.app = app;
 
-		localization = app.getLocalization();
-
-		addStyleName("mowMenuToolbar");
-		panel = new FlowPanel();
-		panel.addStyleName("content");
 		createGui();
 		setLabels();
 	}
 
 	private void createGui() {
-		createSubscript();
-		createSuperscript();
+		setStyleName("inlineTextToolbar");
+		panel = new FlowPanel();
+		createSubscriptBtn();
+		createSuperscriptBtn();
+		createBulletListBtn();
+		createNumberedListBtn();
 		setWidget(panel);
 		updateState();
 	}
 
-	private void createSubscript() {
-		subScript = createButton(MaterialDesignResources.INSTANCE.format_subscript());
-		add(subScript);
+	private void createSubscriptBtn() {
+		subScriptBtn = createButton(MaterialDesignResources.INSTANCE.format_subscript());
+		add(subScriptBtn);
 	}
 
-	private void createSuperscript() {
-		superScript = createButton(MaterialDesignResources.INSTANCE.format_superscript());
-		add(superScript);
+	private void createSuperscriptBtn() {
+		superScriptBtn = createButton(MaterialDesignResources.INSTANCE.format_superscript());
+		add(superScriptBtn);
+	}
+
+	private void createBulletListBtn() {
+		bulletListBtn = createButton(MaterialDesignResources.INSTANCE.bulletList());
+		add(bulletListBtn);
+	}
+
+	private void createNumberedListBtn() {
+		numberedListBtn = createButton(MaterialDesignResources.INSTANCE.numberedList());
+		add(numberedListBtn);
 	}
 
 	private void updateState() {
-		subScript.setSelected("sub".equals(getScriptFormat()));
-		superScript.setSelected("super".equals(getScriptFormat()));
+		subScriptBtn.setSelected("sub".equals(getScriptFormat()));
+		superScriptBtn.setSelected("super".equals(getScriptFormat()));
 	}
 
 	private MyToggleButtonW createButton(SVGResource resource) {
 		MyToggleButtonW button = new MyToggleButtonW(new NoDragImage(resource, 24));
 		button.addValueChangeHandler(this);
-		button.addStyleName("mowToolButton");
 		return button;
 	}
 
@@ -88,9 +94,9 @@ public class InlineTextToolsMenu extends AriaMenuItem implements ValueChangeHand
 
 	@Override
 	public void onValueChange(ValueChangeEvent<Boolean> event) {
-		if (event.getSource() == subScript) {
+		if (subScriptBtn.equals(event.getSource())) {
 			setSubscript(event.getValue());
-		} else if (event.getSource() == superScript) {
+		} else if (superScriptBtn.equals(event.getSource())) {
 			setSuperscript(event.getValue());
 		}
 
@@ -98,12 +104,12 @@ public class InlineTextToolsMenu extends AriaMenuItem implements ValueChangeHand
 	}
 
 	private void setSubscript(Boolean value) {
-		superScript.setSelected(false);
+		//superScriptBtn.setSelected(false);
 		formatScript("sub", value);
 	}
 
 	private void setSuperscript(Boolean value) {
-		subScript.setSelected(false);
+		//subScriptBtn.setSelected(false);
 		formatScript("super", value);
 	}
 
@@ -113,7 +119,9 @@ public class InlineTextToolsMenu extends AriaMenuItem implements ValueChangeHand
 	}
 
 	private void setLabels() {
-		subScript.setToolTipText(localization.getMenu("Subscript"));
-		superScript.setToolTipText(localization.getMenu("Superscript"));
+		subScriptBtn.setToolTipText(app.getLocalization().getMenu("Subscript"));
+		superScriptBtn.setToolTipText(app.getLocalization().getMenu("Superscript"));
+		bulletListBtn.setToolTipText(app.getLocalization().getMenu("bulletList"));
+		numberedListBtn.setToolTipText(app.getLocalization().getMenu("numberedList"));
 	}
 }
