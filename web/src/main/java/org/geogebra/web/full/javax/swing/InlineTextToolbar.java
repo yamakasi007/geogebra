@@ -98,18 +98,24 @@ public class InlineTextToolbar extends AriaMenuItem implements ValueChangeHandle
 			setSubscript(event.getValue());
 		} else if (superScriptBtn.equals(event.getSource())) {
 			setSuperscript(event.getValue());
+		} else if (bulletListBtn.equals(event.getSource())) {
+			if (event.getValue().booleanValue()) {
+				drawInlineText.switchListTo("bullet");
+			}
+		} else if (numberedListBtn.equals(event.getSource())) {
+			if (event.getValue().booleanValue()) {
+				drawInlineText.switchListTo("number");
+			}
 		}
 
 		updateState();
 	}
 
 	private void setSubscript(Boolean value) {
-		//superScriptBtn.setSelected(false);
 		formatScript("sub", value);
 	}
 
 	private void setSuperscript(Boolean value) {
-		//subScriptBtn.setSelected(false);
 		formatScript("super", value);
 	}
 

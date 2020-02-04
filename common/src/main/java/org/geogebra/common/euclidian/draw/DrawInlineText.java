@@ -394,6 +394,12 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		return fallback;
 	}
 
+	public void switchListTo(String listType) {
+		if (textController != null) {
+			textController.switchListTo(listType);
+		}
+	}
+
 	public InlineTextController getTextController() {
 		return textController;
 	}

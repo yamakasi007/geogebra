@@ -104,4 +104,6 @@ public interface Editor {
 	void setHyperlinkUrl(String input);
 
 	String urlByCoordinate(int x, int y);
+
+	void switchListTo(String listType);
 }

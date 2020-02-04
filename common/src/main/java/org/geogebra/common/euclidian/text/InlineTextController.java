@@ -101,4 +101,6 @@ public interface InlineTextController {
 	void setHyperlinkUrl(String url);
 
 	String urlByCoordinate(int x, int y);
+
+	void switchListTo(String listType);
 }

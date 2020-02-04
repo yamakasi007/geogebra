@@ -196,4 +196,8 @@ public class CarotaEditor implements Editor {
 		return format || fallback;
 	}-*/;
 
+	@Override
+	public void switchListTo(String listType) {
+		editor.switchListTo(listType);
+	}
 }
