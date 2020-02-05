@@ -7,16 +7,18 @@ import com.google.gwt.dom.client.Style;
 public class FontSubMenu extends AriaMenuBar {
 
 	public static final int VERTICAL_PADDING = 16;
+	private final FontList fontList;
 
-	FontSubMenu(int height) {
+	FontSubMenu(int height, FontList fontList) {
+		this.fontList = fontList;
 		addStyleName("mowScrollableSubmenu");
 		setMaxHeight(height);
-		createTestItems();
+		createItems();
 	}
 
-	private void createTestItems() {
-		for (int i=0;i < 20; i++) {
-			addItem("Item " + i, false,null);
+	private void createItems() {
+		for (int i=0;i < fontList.size(); i++) {
+			addItem(fontList.getFontName(i), false,null);
 		}
 	}
 

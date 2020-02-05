@@ -236,11 +236,55 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 	private void addFontItem() {
 		AriaMenuItem item = new AriaMenuItem("Font", false,
-				new FontSubMenu(app.getEuclidianView1().getHeight()));
+				new FontSubMenu(app.getActiveEuclidianView().getHeight(),
+						createFontList()));
 		item.addStyleName("mowTextOnlyMenuItem");
 		wrappedPopup.addItem(item);
 
 	}
+
+	private FontList createFontList() {
+		return app.isMebis() ? createFontListMow(): createFontListNotes();
+	}
+
+	private FontList createFontListMow() {
+		FontList fontList = new FontList();
+		fontList.add("Arial");
+		fontList.add("Calibri");
+		fontList.add("Century Gothic");
+		fontList.add("Comic Sans");
+		fontList.add("Courier");
+		fontList.add("Georgia");
+		fontList.add("Open dyslexic mit Fibel a", "Arial");
+		fontList.add("Palatino", "Arial");
+		fontList.add("Qicksand");
+		fontList.add("Roboto");
+		fontList.add("Schulbuch Bayern");
+		fontList.add("SF Mono");
+		fontList.add("SF Pro");
+		fontList.add("Times");
+		fontList.add("Titilium Web");
+		fontList.add("Trebuchet");
+		fontList.add("Verdana");
+		return fontList;
+	};
+
+	private FontList createFontListNotes() {
+		FontList fontList = new FontList();
+		fontList.add("Arial");
+		fontList.add("Calibri");
+		fontList.add("Century Gothic");
+		fontList.add("Comic Sans");
+		fontList.add("Courier");
+		fontList.add("Georgia");
+		fontList.add("Roboto");
+		fontList.add("SF Mono");
+		fontList.add("SF Pro");
+		fontList.add("Times");
+		fontList.add("Trebuchet");
+		fontList.add("Verdana");
+		return fontList;
+	};
 
 	private void addHyperlinkItems() {
 		DrawInlineText inlineText = (DrawInlineText) app.getActiveEuclidianView()
