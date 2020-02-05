@@ -221,6 +221,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		addInlineTextToolbar();
+		addFontItem();
 		addHyperlinkItems();
 		wrappedPopup.addSeparator();
 
@@ -231,6 +232,14 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				.getDrawableFor(getGeo());
 		InlineTextToolbar toolbar = new InlineTextToolbar(inlineText, app);
 		wrappedPopup.addItem(toolbar, false);
+	}
+
+	private void addFontItem() {
+		AriaMenuItem item = new AriaMenuItem("Font", false,
+				new FontSubMenu(app.getEuclidianView1().getHeight()));
+		item.addStyleName("mowTextOnlyMenuItem");
+		wrappedPopup.addItem(item);
+
 	}
 
 	private void addHyperlinkItems() {
