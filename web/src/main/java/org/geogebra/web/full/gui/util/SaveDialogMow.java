@@ -1,6 +1,5 @@
 package org.geogebra.web.full.gui.util;
 
-import com.google.gwt.user.client.ui.Label;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.MaterialVisibility;
 import org.geogebra.common.main.SaveController.SaveListener;
@@ -28,6 +27,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -189,8 +189,12 @@ public class SaveDialogMow extends DialogBoxW
 			hide();
 			app.getSaveController().cancel();
 		} else if (source == saveBtn) {
-			setSaveType(templateCheckbox.isSelected()
-					? ((AppW) app).getVendorSettings().getTemplateType() : MaterialType.ggs);
+            if (templateCheckbox.isSelected()) {
+                setSaveType(((AppW) app).getVendorSettings().getTemplateType());
+            } else {
+                ((AppW) app).setActiveMaterial(new Material(0, MaterialType.ggs));
+            }
+			app.getKernel().getConstruction().setTitle(getInputField().getText());
 			app.getSaveController().saveAs(getInputField().getText(),
 					getSaveVisibility(), this);
 		}
@@ -213,7 +217,7 @@ public class SaveDialogMow extends DialogBoxW
 		return !material.getTitle().equals(getInputField().getText());
 	}
 
-			@Override
+	@Override
 	public void setLabels() {
 		defaultSaveCaptionAndCancel();
 		titleLbl.setText(loc.getMenu("Title"));
@@ -253,6 +257,10 @@ public class SaveDialogMow extends DialogBoxW
 	 */
 	@Override
 	public void setTitle() {
+		if (((AppW) app).getActiveMaterial() != null && MaterialType.ggsTemplate
+				.equals(((AppW) app).getActiveMaterial().getType())) {
+			app.getKernel().getConstruction().setTitle("");
+		}
 		app.getSaveController()
 				.updateSaveTitle(getInputField().getTextComponent(), "");
 	}
