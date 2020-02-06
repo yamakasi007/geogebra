@@ -11,6 +11,11 @@ import org.geogebra.web.html5.gui.util.AriaMenuItem;
 public class FontMenu {
 	private final AriaMenuItem item;
 
+	/**
+	 * Constructor
+	 *
+	 * @param app The application.
+	 */
 	public FontMenu(App app) {
 		item = new AriaMenuItem("Font", false, createSubMenu(app));
 		item.addStyleName("mowTextOnlyMenuItem");
@@ -40,8 +45,9 @@ public class FontMenu {
 		list.add("Titilium Web");
 		list.add("Trebuchet");
 		list.add("Verdana");
+
 		return list;
-	};
+	}
 
 	private FontList createNotesFonts() {
 		FontList list = new FontList();
@@ -58,7 +64,7 @@ public class FontMenu {
 		list.add("Trebuchet");
 		list.add("Verdana");
 		return list;
-	};
+	}
 
 	public AriaMenuItem getItem() {
 		return item;
