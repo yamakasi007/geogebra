@@ -685,6 +685,7 @@ public final class ArticleElement extends Element implements ArticleElementInter
 		return getBoolDataParam("errorDialogsActive", true);
 	}
 
+	@Override
 	public boolean isEnableApiPing() {
 		return true;
 	}
