@@ -240,7 +240,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	private void addFontItem(List<String> fonts) {
 		int maxSubMenuHeight = app.getEuclidianView1().getViewHeight();
 		AriaMenuItem fontMenu = new AriaMenuItem("Font", false,
-				new FontSubMenu(null, fonts, maxSubMenuHeight));
+				new FontSubMenu(fonts, maxSubMenuHeight));
 		fontMenu.addStyleName("mowTextOnlyMenuItem");
 		wrappedPopup.addItem(fontMenu);
 	}
