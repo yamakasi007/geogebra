@@ -12,8 +12,9 @@ import java.util.List;
  * @author Laszlo
  */
 public class FontNames {
+
 	/**
-	 * Font list for GGB notes
+	 * @return font list for GGB notes
 	 */
 	public static List<String> getNotes() {
 		return Arrays.asList("Arial",
@@ -31,7 +32,7 @@ public class FontNames {
 	}
 
 	/**
-	 * Font list for MOW
+	 * @return font list for MOW
 	 */
 	public static List<String> getMow() {
 		return Arrays.asList("Arial",
