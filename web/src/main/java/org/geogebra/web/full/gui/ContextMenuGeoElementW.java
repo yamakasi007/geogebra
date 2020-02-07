@@ -224,7 +224,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		addInlineTextToolbar();
-		addFontItem(app.isMebis() ? FontNames.mow : FontNames.notes);
+		addFontItem(app.isMebis() ? FontNames.getMow() : FontNames.getNotes());
 		addHyperlinkItems();
 		wrappedPopup.addSeparator();
 
@@ -240,7 +240,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	private void addFontItem(List<String> fonts) {
 		int maxSubMenuHeight = app.getEuclidianView1().getViewHeight();
 		AriaMenuItem fontMenu = new AriaMenuItem("Font", false,
-				new FontSubMenu(fonts, maxSubMenuHeight));
+				new FontSubMenu(null, fonts, maxSubMenuHeight));
 		fontMenu.addStyleName("mowTextOnlyMenuItem");
 		wrappedPopup.addItem(fontMenu);
 	}

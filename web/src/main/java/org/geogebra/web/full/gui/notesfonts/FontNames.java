@@ -15,37 +15,41 @@ public class FontNames {
 	/**
 	 * Font list for GGB notes
 	 */
-	public static final List<String> notes = Arrays.asList("Arial",
-			"Calibri",
-			"Century Gothic",
-			"Comic Sans",
-			"Courier",
-			"Georgia",
-			"Roboto",
-			"SF Mono",
-			"SF Pro",
-			"Times",
-			"Trebuchet",
-			"Verdana");
+	public static List<String> getNotes() {
+		return Arrays.asList("Arial",
+				"Calibri",
+				"Century Gothic",
+				"Comic Sans",
+				"Courier",
+				"Georgia",
+				"Roboto",
+				"SF Mono",
+				"SF Pro",
+				"Times",
+				"Trebuchet",
+				"Verdana");
+	}
 
 	/**
 	 * Font list for MOW
 	 */
-	public static final List<String> mow = Arrays.asList("Arial",
-			"Calibri",
-			"Century Gothic",
-			"Comic Sans",
-			"Courier",
-			"Georgia",
-			"Open dyslexic mit Fibel a",
-			"Palatino",
-			"Qicksand",
-			"Roboto",
-			"Schulbuch Bayern",
-			"SF Mono",
-			"SF Pro",
-			"Times",
-			"Titilium Web",
-			"Trebuchet",
-			"Verdana");
+	public static List<String> getMow() {
+		return Arrays.asList("Arial",
+				"Calibri",
+				"Century Gothic",
+				"Comic Sans",
+				"Courier",
+				"Georgia",
+				"Open dyslexic mit Fibel a",
+				"Palatino",
+				"Qicksand",
+				"Roboto",
+				"Schulbuch Bayern",
+				"SF Mono",
+				"SF Pro",
+				"Times",
+				"Titilium Web",
+				"Trebuchet",
+				"Verdana");
+	}
 }
