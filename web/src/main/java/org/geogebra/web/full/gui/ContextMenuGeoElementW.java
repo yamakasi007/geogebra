@@ -1,6 +1,7 @@
 package org.geogebra.web.full.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
@@ -38,7 +39,8 @@ import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.dialog.HyperlinkDialog;
 import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.menubar.MainMenu;
-import org.geogebra.web.full.gui.notesfonts.FontMenu;
+import org.geogebra.web.full.gui.notesfonts.FontNames;
+import org.geogebra.web.full.gui.notesfonts.FontSubMenu;
 import org.geogebra.web.full.html5.AttachedToDOM;
 import org.geogebra.web.full.javax.swing.GCheckBoxMenuItem;
 import org.geogebra.web.full.javax.swing.GCheckmarkMenuItem;
@@ -222,7 +224,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		addInlineTextToolbar();
-		addFontItem();
+		addFontItem(app.isMebis() ? FontNames.mow : FontNames.notes);
 		addHyperlinkItems();
 		wrappedPopup.addSeparator();
 
@@ -235,9 +237,12 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		wrappedPopup.addItem(toolbar, false);
 	}
 
-	private void addFontItem() {
-		FontMenu fontMenu = new FontMenu(app);
-		wrappedPopup.addItem(fontMenu.getItem());
+	private void addFontItem(List<String> fonts) {
+		int maxSubMenuHeight = app.getEuclidianView1().getViewHeight();
+		AriaMenuItem fontMenu = new AriaMenuItem("Font", false,
+				new FontSubMenu(fonts, maxSubMenuHeight));
+		fontMenu.addStyleName("mowTextOnlyMenuItem");
+		wrappedPopup.addItem(fontMenu);
 	}
 
 	private void addHyperlinkItems() {
