@@ -3,13 +3,13 @@ package org.geogebra.web.html5.euclidian;
 import java.util.Locale;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.util.ExternalAccess;
 import org.geogebra.web.html5.event.HasOffsets;
 import org.geogebra.web.html5.event.PointerEvent;
-import org.geogebra.web.html5.event.ZeroOffset;
 
 import com.google.gwt.dom.client.Element;
 
@@ -43,60 +43,21 @@ public class PointerEventHandler {
 		}
 	}
 
-	private static class MsOffset extends ZeroOffset {
-
-		private IsEuclidianController ec;
-
-		public MsOffset(IsEuclidianController ec) {
-			this.ec = ec;
-		}
-
-		@Override
-		public int mouseEventX(int clientX) {
-			return clientX + (zoom() - 1);
-		}
-
-		private native int zoom() /*-{
-			return $wnd.screen.deviceXDPI ? $wnd.screen.deviceXDPI
-					/ $wnd.screen.logicalXDPI : 1;
-		}-*/;
-
-		@Override
-		public int mouseEventY(int clientY) {
-			return clientY + (zoom() - 1);
-		}
-
-		@Override
-		public int touchEventX(int clientX) {
-			return mouseEventX(clientX);
-		}
-
-		@Override
-		public int touchEventY(int clientY) {
-			return mouseEventY(clientY);
-		}
-
-		@Override
-		public int getEvID() {
-			return ec.getEvNo();
-		}
-
-	}
-
 	/**
 	 * @param tc
 	 *            euclidian controller
 	 * @param off
 	 *            offset provider
 	 */
-	public PointerEventHandler(IsEuclidianController tc, HasOffsets off) {
+	public PointerEventHandler(IsEuclidianController tc, @Nonnull HasOffsets off) {
 		this.tc = tc;
-		this.off = off == null ? new MsOffset(tc) : off;
+		this.off = off;
 	}
 
 	private void twoPointersDown(PointerState pointer1, PointerState pointer2) {
-		this.tc.setExternalHandling(true);
-		this.tc.twoTouchStart(touchEventX(pointer1), touchEventY(pointer1),
+		tc.getLongTouchManager().cancelTimer();
+		tc.setExternalHandling(true);
+		tc.twoTouchStart(touchEventX(pointer1), touchEventY(pointer1),
 				touchEventX(pointer2), touchEventY(pointer2));
 	}
 
@@ -115,7 +76,7 @@ public class PointerEventHandler {
 
 	private void singleDown(PointerEvent e) {
 		tc.getOffsets().closePopups();
-		this.tc.onPointerEventStart(e);
+		tc.onPointerEventStart(e);
 	}
 
 	private static void adjust(PointerEvent event, NativePointerEvent nativeEvent) {
@@ -195,7 +156,7 @@ public class PointerEventHandler {
 		} else {
 			first = new PointerState(e);
 		}
-		//prevent touch but not mouse: make sure focus is moved
+		// prevent touch but not mouse: make sure focus is moved
 		if (!"mouse".equals(e.getPointerType())) {
 			e.preventDefault();
 		}
@@ -242,8 +203,7 @@ public class PointerEventHandler {
 	 * @param zoomer
 	 *            event handler
 	 */
-	public static void attachTo(Element element,
-									   PointerEventHandler zoomer) {
+	public static void attachTo(Element element, PointerEventHandler zoomer) {
 		zoomer.reset();
 		attachToNative(element, zoomer);
 	}
@@ -267,7 +227,7 @@ public class PointerEventHandler {
 						function(e) {
 							zoomer.@org.geogebra.web.html5.euclidian.PointerEventHandler::onPointerDown(*)(e, element);
 						});
-		function removePointer(out, stopPropagation){
+		function removePointer(out){
 			return function(e) {
 				zoomer.@org.geogebra.web.html5.euclidian.PointerEventHandler::onMouseUpOrOut(*)(e, element, out);
 			};
