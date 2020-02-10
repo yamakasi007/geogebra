@@ -1,5 +1,8 @@
 package org.geogebra.web.html5.gui.laf;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.main.AppConfig;
 import org.geogebra.common.main.GeoGebraColorConstants;
@@ -56,5 +59,26 @@ public class MebisSettings implements VendorSettings {
 	@Override
 	public boolean isGraspableMathEnabled() {
 		return false;
+	}
+
+	@Override
+	public List<String> getTextToolFonts() {
+		return Arrays.asList("Arial",
+				"Calibri",
+				"Century Gothic",
+				"Comic Sans",
+				"Courier",
+				"Georgia",
+				"Open dyslexic mit Fibel a",
+				"Palatino",
+				"Qicksand",
+				"Roboto",
+				"Schulbuch Bayern",
+				"SF Mono",
+				"SF Pro",
+				"Times",
+				"Titilium Web",
+				"Trebuchet",
+				"Verdana");
 	}
 }

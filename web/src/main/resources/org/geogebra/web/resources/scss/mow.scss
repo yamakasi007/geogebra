@@ -557,11 +557,11 @@
 		margin: 6px 0 6px auto;
 	}
 
-	.mowTextOnlyMenuItem {
-	    padding-left: 16px !important;
+    li.gwt-MenuItem.listMenuItem.textOnly {
+	    padding-left: 16px;
 	}
 
-	.mowScrollableSubmenu {
+	.scrollableSubmenu {
 	    overflow-y: auto;
 	}
 

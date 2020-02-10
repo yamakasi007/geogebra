@@ -1,5 +1,8 @@
 package org.geogebra.web.html5.gui.laf;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.main.AppConfig;
@@ -49,5 +52,21 @@ public class GgbSettings implements VendorSettings {
 	@Override
 	public boolean isGraspableMathEnabled() {
 		return true;
+	}
+
+	@Override
+	public List<String> getTextToolFonts() {
+		return Arrays.asList("Arial",
+				"Calibri",
+				"Century Gothic",
+				"Comic Sans",
+				"Courier",
+				"Georgia",
+				"Roboto",
+				"SF Mono",
+				"SF Pro",
+				"Times",
+				"Trebuchet",
+				"Verdana");
 	}
 }
