@@ -29,7 +29,7 @@ public class FontSubMenu extends AriaMenuBar {
 	public FontSubMenu(AppW app, InlineTextController textController) {
 		this.app = app;
 		this.fonts = app.getVendorSettings().getTextToolFonts();
-		addStyleName("scrollableSubmenu");
+		addStyleName("fontSubMenu");
 		setMaxHeight(app.getActiveEuclidianView().getHeight());
 		createItems(textController);
 		selectCurrent(textController);
@@ -49,6 +49,6 @@ public class FontSubMenu extends AriaMenuBar {
 	}
 
 	private void setMaxHeight(int height) {
-		getElement().getStyle().setProperty("maxHeight", height - VERTICAL_PADDING, Style.Unit.PX);
+		getElement().getStyle().setProperty("maxHeight", height, Style.Unit.PX);
 	}
 }
