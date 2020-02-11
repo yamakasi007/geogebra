@@ -8,6 +8,6 @@ public class FontMenuItem extends AriaMenuItem {
 	public FontMenuItem(AppW app, InlineTextController textController) {
 		super("Font", false,
 				new FontSubMenu(app, textController));
-		addStyleName("textOnly");
+		addStyleName("no-image");
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
+import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
 
 import com.google.gwt.dom.client.Style;
@@ -41,7 +42,9 @@ public class FontSubMenu extends AriaMenuBar {
 
 	private void createItems(InlineTextController textController) {
 		for (String font : fonts) {
-			addItem(font, false, new FontCommand(app, textController, font));
+			AriaMenuItem item = new AriaMenuItem(font, false, new FontCommand(app, textController, font));
+			item.addStyleName("no-image");
+			addItem(item);
 		}
 	}
 
