@@ -17,8 +17,9 @@ import com.google.gwt.dom.client.Style;
  */
 public class FontSubMenu extends AriaMenuBar {
 
-	public static final int VERTICAL_PADDING = 16;
+	public static final int VERTICAL_PADDING = 32;
 	public static final String FALLBACK_FONT = "Arial";
+	public static final int FONT_SIZE = 32;
 	private final List<String> fonts;
 	private final AppW app;
 
@@ -30,9 +31,19 @@ public class FontSubMenu extends AriaMenuBar {
 		this.app = app;
 		this.fonts = app.getVendorSettings().getTextToolFonts();
 		addStyleName("fontSubMenu");
-		setMaxHeight(app.getActiveEuclidianView().getHeight());
+		makeResponsive(app.getActiveEuclidianView().getHeight());
 		createItems(textController);
 		selectCurrent(textController);
+	}
+
+	private void makeResponsive(int maxHeight) {
+		double itemsHeightViewPort = (getItemHeight() / maxHeight) * 100;
+		setHeight(itemsHeightViewPort + "vh");
+		getElement().getStyle().setProperty("maxHeight", getItemHeight(), Style.Unit.PX);
+	}
+
+	private double getItemHeight() {
+		return fonts.size() * FONT_SIZE + VERTICAL_PADDING;
 	}
 
 	private void selectCurrent(InlineTextController textController) {
@@ -48,7 +59,4 @@ public class FontSubMenu extends AriaMenuBar {
 		}
 	}
 
-	private void setMaxHeight(int height) {
-		getElement().getStyle().setProperty("maxHeight", height, Style.Unit.PX);
-	}
 }

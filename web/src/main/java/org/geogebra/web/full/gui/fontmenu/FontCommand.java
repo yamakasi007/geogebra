@@ -18,7 +18,7 @@ public class FontCommand implements Scheduler.ScheduledCommand {
 
 	@Override
 	public void execute() {
-		textController.format("font", font);
-		app.storeUndoInfo();
+//		textController.format("font", font);
+//		app.storeUndoInfo();
 	}
 }
