@@ -19,8 +19,6 @@ public class WebSimple implements EntryPoint {
 	 */
 	@Override
 	public void onModuleLoad() {
-		Browser.checkFloat64();
-
 		exportGGBElementRenderer();
 
 		// instead, load it immediately

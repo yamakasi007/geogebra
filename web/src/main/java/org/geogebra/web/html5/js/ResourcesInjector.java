@@ -56,8 +56,7 @@ public class ResourcesInjector {
 
 		Browser.setWebWorkerSupported(Location
 				.getParameter("GeoGebraDebug") == null
-				&& Browser.checkWorkerSupport(GWT
-						.getModuleBaseURL()));
+				&& Browser.checkWorkerSupport());
 		if (!Browser.webWorkerSupported()) {
 			loadCodecs();
 		}
