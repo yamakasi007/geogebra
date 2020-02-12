@@ -30,7 +30,6 @@ import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppCompanion;
 import org.geogebra.common.main.Feature;
 import org.geogebra.common.plugin.GgbAPI;
-import org.geogebra.common.plugin.ScriptManager;
 import org.geogebra.common.plugin.SensorLogger;
 import org.geogebra.common.sound.SoundManager;
 import org.geogebra.common.util.FileExtensions;
@@ -349,7 +348,4 @@ public class AppDNoGui extends AppCommon implements AppDI {
 		return true;
 	}
 
-	public void setScriptManager(ScriptManager scriptManager) {
-		this.scriptManager = scriptManager;
-	}
 }
