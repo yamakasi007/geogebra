@@ -732,4 +732,8 @@ public class AppCommon extends App {
 	public void setCASFactory(CASFactory casFactory) {
 		this.casFactory = casFactory;
 	}
+
+	public void setScriptManager(ScriptManager scriptManager) {
+		this.scriptManager = scriptManager;
+	}
 }
