@@ -650,7 +650,11 @@ public class GeoNumeric extends GeoElement
 			return toValueString(tpl);
 		}
 
-		return label + " = " + toValueString(tpl);
+		if (LabelManager.isShowableLabel(label)) {
+			return label + " = " + toValueString(tpl);
+		} else {
+			return toValueString(tpl);
+		}
 	}
 
 	/**
@@ -1761,6 +1765,7 @@ public class GeoNumeric extends GeoElement
 	@Override
 	public void setShowExtendedAV(boolean showExtendedAV) {
 		this.showExtendedAV = showExtendedAV;
+		notifyUpdate();
 	}
 
 	@Override
