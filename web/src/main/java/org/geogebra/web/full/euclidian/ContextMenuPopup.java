@@ -13,6 +13,7 @@ import org.geogebra.web.html5.gui.util.ClickEndHandler;
 import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.ImgResourceHelper;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -20,7 +21,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import org.geogebra.web.resources.SVGResource;
 
 /**
  * context menu
@@ -153,6 +153,7 @@ public class ContextMenuPopup extends MyCJButton
 	@Override
 	public void onClose(CloseEvent<GPopupPanel> event) {
 		unselectButton();
+		popup.setMenuShown(false);
 	}
 	
 	/**

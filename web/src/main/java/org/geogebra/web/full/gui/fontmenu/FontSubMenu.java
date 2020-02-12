@@ -61,7 +61,6 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 	private void resize() {
 		int maxHeight = view.getHeight();
 		setMaxHeight(maxHeight);
-		int top = getAbsoluteTop();
 		int menuHeight = getOffsetHeight();
 		if (maxHeight - topWhenOpened < menuHeight) {
 			setTop(Math.min(topWhenOpened, maxHeight - menuHeight));
