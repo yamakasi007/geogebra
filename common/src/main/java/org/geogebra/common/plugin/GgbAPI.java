@@ -159,7 +159,7 @@ public abstract class GgbAPI implements JavaScriptAPI {
 			return "?";
 		}
 		GeoCasCell assignment = algebraprocessor.checkCasEval(cmdString,
-				":" + Unicode.ASSIGN_STRING);
+				"(:=?)|" + Unicode.ASSIGN_STRING);
 		if (assignment != null) {
 			return getCasCellValue(assignment);
 		}

@@ -328,20 +328,6 @@ public class StringUtil extends com.himamis.retex.editor.share.input.Character {
 	}
 
 	/**
-	 * @param haystack string to be searched
-	 * @param allowed characters to search for
-	 * @return position of first allowed char in the haystack or -1 if not found
-	 */
-	public static int findFirst(String haystack, String allowed) {
-		for (int i = 0; i < haystack.length(); i++) {
-			if (allowed.contains(haystack.substring(i, i + 1))) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/**
 	 * Default implementation does not work, overriden in desktop TODO make sure
 	 * we override this in Web as well
 	 * 

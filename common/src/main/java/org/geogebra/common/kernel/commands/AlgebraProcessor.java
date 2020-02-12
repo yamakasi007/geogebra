@@ -807,7 +807,7 @@ public class AlgebraProcessor {
 			return rett;
 		}
 		try {
-			GeoCasCell casEval = checkCasEval(cmd, ":=" + Unicode.ASSIGN_STRING);
+			GeoCasCell casEval = checkCasEval(cmd, "(:=?)|=|" + Unicode.ASSIGN_STRING);
 			if (casEval != null) {
 				if (callback0 != null) {
 					callback0.callback(array(casEval));
@@ -1067,21 +1067,18 @@ public class AlgebraProcessor {
 	 *            whole command including label
 	 * @return cell
 	 */
-	public GeoCasCell checkCasEval(String input, String allowedAssignmentOps) {
+	public GeoCasCell checkCasEval(String input, String allowedAssignmentRegex) {
 		if (input != null && input.startsWith("$")) {
-			int lhsLength = StringUtil.findFirst(input, allowedAssignmentOps);
-			if (input.charAt(lhsLength) == '=' && input.charAt(lhsLength + 1) == '=') {
+			String[] result = input.split(allowedAssignmentRegex, 2);
+
+			if (result.length != 2 || result[1].startsWith("=")) {
 				return null;
 			}
-			String lhs = input.substring(1, lhsLength);
-			int prefixLength = input.charAt(lhsLength + 1) == '='
-					? lhsLength + 2 : lhsLength + 1;
-			String rhs = input.substring(prefixLength);
-			int row = cellNumber(lhs);
-			if (row < 0) {
-				return null;
+
+			int row = cellNumber(result[0].substring(1));
+			if (row >= 0) {
+				return casEval(row, result[1]);
 			}
-			return casEval(row, rhs);
 		}
 		return null;
 	}

@@ -111,18 +111,6 @@ public class StringUtilTest {
 		compatibleNewlines(in, out);
 	}
 
-	@Test
-	public void findFirstShouldFindCharacter() {
-		assertEquals(2, StringUtil.findFirst("abcd", "dc"));
-		assertEquals(2, StringUtil.findFirst("abdc", "dc"));
-	}
-
-	@Test
-	public void findFirstShouldReturnNegativeWhenCharNotFound() {
-		assertEquals(-1, StringUtil.findFirst("abcd", "efg"));
-		assertEquals(-1, StringUtil.findFirst("", "efg"));
-	}
-
 	private static void compatibleNewlines(String in, String out) {
 		assertEquals(out, StringUtil.newlinesToHTML(in));
 		assertEquals(StringUtil.toJavaString(in),
