@@ -45,7 +45,6 @@ public class Web implements EntryPoint {
 			// loading touch, ignore.
 			return;
 		}
-		Browser.checkFloat64();
 
 		SuperDevUncaughtExceptionHandler.register();
 		exportGGBElementRenderer();

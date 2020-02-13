@@ -19,7 +19,6 @@ import java.util.Locale;
 
 public class Browser {
 	private static boolean webWorkerSupported = false;
-	private static boolean float64supported = true;
 	private static Boolean webglSupported = null;
 
 	/**
@@ -113,64 +112,15 @@ public class Browser {
 	}-*/;
 
 	/**
-	 * @param workerpath
-	 *            JS folder with workers
 	 * @return whether workers are supported
 	 */
-	public static boolean checkWorkerSupport(String workerpath) {
-		if ("tablet".equals(GWT.getModuleName())
-				|| "tabletWin".equals(GWT.getModuleName())) {
-			return false;
-		}
-		return nativeCheckWorkerSupport(workerpath);
+	public static boolean checkWorkerSupport() {
+		return !"tablet".equals(GWT.getModuleName())
+				&& !"tabletWin".equals(GWT.getModuleName());
 	}
-
-	private static native boolean nativeCheckWorkerSupport(
-			String workerpath) /*-{
-		// Worker support in Firefox is incompatible at the moment for zip.js,
-		// see http://gildas-lormeau.github.com/zip.js/ for details:
-		if (navigator.userAgent.toLowerCase().indexOf("firefox") != -1) {
-			@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: worker not supported in Firefox, fallback for simple js");
-			return false;
-		}
-		if (navigator.userAgent.toLowerCase().indexOf("safari") != -1
-			&& navigator.userAgent.toLowerCase().indexOf("chrome") == -1) {
-			@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: worker not supported in Safari, fallback for simple js");
-			return false;
-		}
-
-	    try {
-	    	var worker = new $wnd.Worker(workerpath+"js/workercheck.js");
-	    } catch (e) {
-	    	@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: worker not supported (no worker at " + workerpath + "), fallback for simple js");
-
-	    	return false;
-	    }
-	    @org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: workers are supported");
-
-	    worker.terminate();
-	    return true;
-	}-*/;
 
 	public static native boolean zipjsLoadedWithoutWebWorkers() /*-{
 		return !!($wnd.zip && $wnd.zip.useWebWorkers === false);
-	}-*/;
-
-	/**
-	 * Checks whether browser supports float64. Must be called before a polyfill
-	 * kicks in.
-	 */
-	public static void checkFloat64() {
-		float64supported = doCheckFloat64();
-	}
-
-	public static boolean isFloat64supported() {
-		return float64supported;
-	}
-
-	private static native boolean doCheckFloat64()/*-{
-		var floatSupport = 'undefined' !== typeof Float64Array;
-		return 'undefined' !== typeof Float64Array;
 	}-*/;
 
 	/**
@@ -373,8 +323,7 @@ public class Browser {
 	 * @return true if Javascript CAS is supported.
 	 */
 	public static boolean supportsJsCas() {
-		return Browser.isFloat64supported()
-				&& !Browser.isAndroidVersionLessThan(4.0);
+		return !Browser.isAndroidVersionLessThan(4.0);
 	}
 
 	/**
