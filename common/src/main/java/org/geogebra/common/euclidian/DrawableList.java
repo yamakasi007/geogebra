@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoList;
+import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 
 /**
  * List to store Drawable objects for fast drawing.
@@ -29,6 +30,12 @@ public class DrawableList implements Iterable<Drawable> {
 	public Link head;
 	private Link tail;
 	private int size = 0;
+
+	private GeoPriorityComparator comparator;
+
+	public DrawableList(GeoPriorityComparator comparator) {
+		this.comparator = comparator;
+	}
 
 	/**
 	 * Number of drawables in list
@@ -60,14 +67,14 @@ public class DrawableList implements Iterable<Drawable> {
 			Link cur = head;
 			Link last = head;
 			// cur.next test only relevant in concurrent scenarios
-			while ((cur.d.getGeoElement().drawBefore(priority, false))
+			while ((comparator.compare(cur.d.getGeoElement(), priority, false) < 0)
 					&& !cur.equals(tail) && cur.next != null) {
 				last = cur;
 				cur = cur.next;
 			}
 
 			if (cur.equals(head)) {
-				if (cur.d.getGeoElement().drawBefore(priority, false)) {
+				if (comparator.compare(cur.d.getGeoElement(), priority, false) < 0) {
 					// add at end (list size=1)
 					Link temp = new Link(d, null);
 					tail.next = temp;
@@ -78,7 +85,7 @@ public class DrawableList implements Iterable<Drawable> {
 					head.next = temp2;
 				}
 			} else if (cur.equals(tail)) {
-				if ((cur.d.getGeoElement().drawBefore(priority, false))) {
+				if (comparator.compare(cur.d.getGeoElement(), priority, false) < 0) {
 					// add at end
 					Link temp = new Link(d, null);
 					tail.next = temp;

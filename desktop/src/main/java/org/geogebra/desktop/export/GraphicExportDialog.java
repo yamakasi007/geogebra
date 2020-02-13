@@ -853,17 +853,10 @@ public class GraphicExportDialog extends JDialog implements KeyListener {
 			}
 
 			return true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Throwable t) {
 			app.showError(Errors.SaveFileFailed);
-			Log.debug(ex.toString());
+			Log.printStacktrace(t.getMessage());
 			return false;
-		} catch (Error ex) {
-			app.showError(Errors.SaveFileFailed);
-			Log.debug(ex.toString());
-			return false;
-		} finally {
-			ev.restoreOldCoordSystem();
 		}
 	}
 

@@ -81,6 +81,7 @@ import org.geogebra.common.kernel.arithmetic.NumberValue;
 import org.geogebra.common.kernel.arithmetic.PolyFunction;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.AbsoluteScreenLocateable;
+import org.geogebra.common.kernel.geos.DefaultGeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoAudio;
 import org.geogebra.common.kernel.geos.GeoAxis;
@@ -106,6 +107,7 @@ import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.geos.GeoPoly;
 import org.geogebra.common.kernel.geos.GeoPolyLine;
 import org.geogebra.common.kernel.geos.GeoPolygon;
+import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GeoSegment;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.GeoVector;
@@ -1460,9 +1462,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			// now just choose geo with highest drawing priority:
 			ret = geos.get(0);
 
+			GeoPriorityComparator comparator = new DefaultGeoPriorityComparator();
+
 			for (GeoElement geo : geos) {
 				// other not drawn before = other is on top
-				if (!geo.drawBefore(ret, true)) {
+				if (comparator.compare(geo, ret, true) > 0) {
 					ret = geo;
 				}
 			}

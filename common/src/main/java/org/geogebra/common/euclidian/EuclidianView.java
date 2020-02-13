@@ -51,6 +51,7 @@ import org.geogebra.common.kernel.algos.AlgoAngle;
 import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.arithmetic.Function;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
+import org.geogebra.common.kernel.geos.DefaultGeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoCurveCartesian;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -60,6 +61,7 @@ import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPoint;
+import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.XMLBuilder;
 import org.geogebra.common.kernel.kernelND.GeoDirectionND;
@@ -279,13 +281,13 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	private ArrayList<GeoPointND> stickyPointList = new ArrayList<>();
 
-	protected DrawableList allDrawableList = new DrawableList();
+	protected DrawableList allDrawableList;
 	/** lists of geos on different layers */
 	public DrawableList[] drawLayers;
 
 	// on add: change resetLists()
 	/** list of background images */
-	private DrawableList bgImageList = new DrawableList();
+	private DrawableList bgImageList;
 
 	protected boolean[] piAxisUnit;
 
@@ -455,11 +457,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	protected boolean reIniting = false;
 	private boolean backgroundIsUpdating = false;
 
-	private double xminTemp;
-	private double xmaxTemp;
-	private double yminTemp;
-	private double ymaxTemp;
-
 	private Hits tempArrayList = new Hits();
 
 	private CoordSystemAnimation zoomer;
@@ -500,11 +497,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	// the curve is sampled at least at this many positions to plot it
 	private static final int MIN_SAMPLE_POINTS = 80;
-
-	// Counts of sliders that need to be adjusted, to omit overlaps.
-	// See GGB-334, Feature.ADJUST.
-	// private int adjustedHSliderCount = 0;
-	// private int adjustedVSliderCount = 0;
 
 	// keep same center after layout resize
 	private boolean keepCenter = false;
@@ -614,11 +606,16 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		companion = newEuclidianViewCompanion();
 
+		GeoPriorityComparator cmp = new DefaultGeoPriorityComparator();
+
 		// Michael Borcherds 2008-03-01
 		drawLayers = new DrawableList[EuclidianStyleConstants.MAX_LAYERS + 1];
 		for (int k = 0; k <= EuclidianStyleConstants.MAX_LAYERS; k++) {
-			drawLayers[k] = new DrawableList();
+			drawLayers[k] = new DrawableList(cmp);
 		}
+
+		allDrawableList = new DrawableList(cmp);
+		bgImageList = new DrawableList(cmp);
 
 		initAxesValues();
 
@@ -4564,13 +4561,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			}
 		}
 		return max;
-	}
-
-	/**
-	 * Restore coord system from temp variables
-	 */
-	final public void restoreOldCoordSystem() {
-		setRealWorldCoordSystem(xminTemp, xmaxTemp, yminTemp, ymaxTemp);
 	}
 
 	/**
