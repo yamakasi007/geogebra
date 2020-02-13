@@ -21,7 +21,6 @@ import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.GShape;
 import org.geogebra.common.awt.MyImage;
-import org.geogebra.common.euclidian.DrawableList.DrawableIterator;
 import org.geogebra.common.euclidian.background.DrawBackground;
 import org.geogebra.common.euclidian.draw.CanvasDrawable;
 import org.geogebra.common.euclidian.draw.DrawAngle;
@@ -60,6 +59,7 @@ import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPoint;
+import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.XMLBuilder;
 import org.geogebra.common.kernel.kernelND.GeoDirectionND;
@@ -279,13 +279,11 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	private ArrayList<GeoPointND> stickyPointList = new ArrayList<>();
 
-	protected DrawableList allDrawableList = new DrawableList();
-	/** lists of geos on different layers */
-	public DrawableList[] drawLayers;
+	public DrawableList allDrawableList;
 
 	// on add: change resetLists()
 	/** list of background images */
-	private DrawableList bgImageList = new DrawableList();
+	private DrawableList bgImageList;
 
 	protected boolean[] piAxisUnit;
 
@@ -455,11 +453,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	protected boolean reIniting = false;
 	private boolean backgroundIsUpdating = false;
 
-	private double xminTemp;
-	private double xmaxTemp;
-	private double yminTemp;
-	private double ymaxTemp;
-
 	private Hits tempArrayList = new Hits();
 
 	private CoordSystemAnimation zoomer;
@@ -501,11 +494,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	// the curve is sampled at least at this many positions to plot it
 	private static final int MIN_SAMPLE_POINTS = 80;
 
-	// Counts of sliders that need to be adjusted, to omit overlaps.
-	// See GGB-334, Feature.ADJUST.
-	// private int adjustedHSliderCount = 0;
-	// private int adjustedVSliderCount = 0;
-
 	// keep same center after layout resize
 	private boolean keepCenter = false;
 
@@ -527,13 +515,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	private GRectangle exportFrame;
 	private GRectangle tempFrame;
 	private GPoint2D[] tmpClipPoints;
-	public int maxCachedLayer;
 	private NumberFormatAdapter[] axesNumberFormatsNormal = new NumberFormatAdapter[16];
 	private NumberFormatAdapter[] axesNumberFormatsExponential = new NumberFormatAdapter[16];
 	private boolean showBackground = true;
 	private DrawBackground drawBg = null;
 	private final HitDetector hitDetector;
 	private boolean isResetIconSelected = false;
+
+	private Drawable maxCachedDrawable;
 
 	/** @return line types */
 	public static final Integer[] getLineTypes() {
@@ -614,18 +603,17 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		companion = newEuclidianViewCompanion();
 
-		// Michael Borcherds 2008-03-01
-		drawLayers = new DrawableList[EuclidianStyleConstants.MAX_LAYERS + 1];
-		for (int k = 0; k <= EuclidianStyleConstants.MAX_LAYERS; k++) {
-			drawLayers[k] = new DrawableList();
-		}
+		this.euclidianController = ec;
+		this.kernel = ec.getKernel();
+		this.app = kernel.getApplication();
+		this.settings = settings;
+
+		GeoPriorityComparator cmp = app.getGeoPriorityComparator();
+		allDrawableList = new DrawableList(cmp);
+		bgImageList = new DrawableList(cmp);
 
 		initAxesValues();
 
-		this.euclidianController = ec;
-		kernel = ec.getKernel();
-		app = kernel.getApplication();
-		this.settings = settings;
 		// no repaint
 		if (kernel.getConstruction() != null) {
 			kernel.getConstruction().setIgnoringNewTypes(true);
@@ -1716,6 +1704,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	/**
+	 * Called when the drawing priorities of the objects in the view have changed
+	 */
+	public void invalidateDrawableList() {
+		allDrawableList.sort();
+		repaintView();
+	}
+
+	/**
 	 * @param repaint
 	 *            true to repaint
 	 */
@@ -1724,7 +1720,12 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			this.needsAllDrawablesUpdate = true;
 			return;
 		}
-		allDrawableList.updateAllForView();
+		for (Drawable d : allDrawableList) {
+			d.updateForView();
+		}
+		for (Drawable d : bgImageList) {
+			d.updateForView();
+		}
 		if (repaint) {
 			repaint();
 		}
@@ -1890,7 +1891,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public void update(GeoElement geo) {
 		DrawableND d = drawableMap.get(geo);
-		cacheLayers(-1);
+		invalidateCache();
 		if (d != null) {
 			if (!d.isCompatibleWithGeo()) {
 				remove(geo);
@@ -1930,7 +1931,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	@Override
 	public void add(GeoElement geo) {
-		cacheLayers(-1);
+		invalidateCache();
 		// G.Sturr 2010-6-30
 		// filter out any geo not marked for this view
 		if (!drawableNeeded(geo)) {
@@ -1963,7 +1964,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	protected boolean createAndAddDrawable(GeoElement geo) {
 		DrawableND d = createDrawable(geo);
 		if (d != null) {
-			addToDrawableLists((Drawable) d);
+			if (!bgImageList.contains(d)) {
+				allDrawableList.add((Drawable) d);
+			}
 			return true;
 		}
 		return false;
@@ -2098,18 +2101,17 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public void remove(GeoElement geo) {
 		this.geosWaiting.remove(geo);
-		Drawable d = (Drawable) drawableMap.get(geo);
-		int layer = geo.getLayer();
+		Drawable d = (Drawable) drawableMap.remove(geo);
 		if (d == null) {
 			return;
 		}
-		drawLayers[layer].remove(d);
+
+		allDrawableList.remove(d);
+
 		if (d instanceof RemoveNeeded) {
 			((RemoveNeeded) d).remove();
 		}
-		allDrawableList.remove(d);
 
-		drawableMap.remove(geo);
 		if (geo.isGeoPoint()) {
 			stickyPointList.remove(geo);
 		}
@@ -2117,7 +2119,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (!d.isCreatedByDrawListVisible()) {
 			repaint();
 		}
-
 	}
 
 	/** get the hits recorded */
@@ -2139,12 +2140,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return whether textfield was clicked
 	 */
 	public boolean textfieldClicked(int x, int y, PointerEventType type) {
-		DrawableIterator it = allDrawableList.getIterator();
 		if (getEuclidianController().isDraggingBeyondThreshold()) {
 			return false;
 		}
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if ((d.isCanvasDrawable())
 					&& (d.hit(x, y, app.getCapturingThreshold(type)) || d
 							.hitLabel(x, y))) {
@@ -2188,9 +2187,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (!getApplication().isLabelDragsEnabled()) {
 			return null;
 		}
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d.hitLabel(p.x, p.y)) {
 				GeoElement geo = d.getGeoElement();
 				if (geo.isEuclidianVisible()) {
@@ -2214,9 +2211,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (p == null || getEuclidianController().isMultiSelection()) {
 			return null;
 		}
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			hitHandler = d.hitBoundingBoxHandler(p.x, p.y, getThresholdForDrawable(type, d));
 			if (hitHandler != EuclidianBoundingBoxHandler.UNDEFINED) {
 				GeoElement geo = d.getGeoElement();
@@ -2282,51 +2277,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public DrawableND getDrawableND(GeoElement geo) {
 		return getDrawable(geo);
-	}
-
-	/**
-	 * adds a GeoElement to this view
-	 * 
-	 * @param draw
-	 *            drawable to be added
-	 */
-	protected void addToDrawableLists(Drawable draw) {
-		if (draw == null) {
-			return;
-		}
-		Drawable d = draw;
-		GeoElement geo = d.getGeoElement();
-		int layer = geo.getLayer();
-
-		switch (geo.getGeoClassType()) {
-
-		case ANGLE:
-			if (geo.isIndependent()) {
-				drawLayers[layer].add(d);
-			} else {
-				if (geo.isDrawable()) {
-					drawLayers[layer].add(d);
-				} else {
-					d = null;
-				}
-			}
-			break;
-
-		case IMAGE:
-			if (!bgImageList.contains(d)) {
-				drawLayers[layer].add(d);
-			}
-			break;
-
-		default:
-			drawLayers[layer].add(d);
-			break;
-
-		}
-
-		if (d != null) {
-			allDrawableList.add(d);
-		}
 	}
 
 	/**
@@ -2440,7 +2390,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * Updates font size for all drawables
 	 */
 	protected void updateDrawableFontSize() {
-		allDrawableList.updateFontSizeAll();
+		for (Drawable d : allDrawableList) {
+			d.updateFontSize();
+		}
 		repaint();
 	}
 
@@ -2608,8 +2560,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	@Override
 	public void changeLayer(GeoElement geo, int oldlayer, int newlayer) {
-		drawLayers[oldlayer].remove((Drawable) drawableMap.get(geo));
-		drawLayers[newlayer].add((Drawable) drawableMap.get(geo));
+		invalidateDrawableList();
 	}
 
 	/**
@@ -3508,13 +3459,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	private void updateSizeChange() {
-		cacheLayers(-1);
+		invalidateCache();
 		updateSizeKeepDrawables();
 		updateAllDrawablesForView(true);
-		if (app.has(Feature.ADJUST_WIDGETS)) {
-			// adjustedHSliderCount = 0;
-			// adjustedVSliderCount = 0;
-		}
 	}
 
 	/**
@@ -3536,21 +3483,11 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * 
 	 * @param g2
 	 *            graphics
-	 * @param layerMin
-	 *            minimal layer
-	 * @param layerMax
-	 *            top layer
 	 */
-	final protected void drawGeometricObjects(GGraphics2D g2, int layerMin,
-			int layerMax) {
-		// only draw layers we need
-		for (int layer = layerMin; layer <= layerMax; layer++) {
-			// if (isSVGExtensions)
-			// ((geogebra.export.SVGExtensions)g2).startGroup("layer "+layer);
-			drawLayers[layer].drawAll(g2);
-			// if (isSVGExtensions)
-			// ((geogebra.export.SVGExtensions)g2).endGroup("layer "+layer);
-		}
+	final private void drawGeometricObjects(GGraphics2D g2) {
+		// only draw drawables we need
+		allDrawableList.drawAll(g2, maxCachedDrawable);
+
 		if (getEuclidianController().isMultiSelection()) {
 			getEuclidianController()
 					.setBoundingBoxFromList(app.getSelectionManager().getSelectedGeos());
@@ -3564,11 +3501,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            graphics
 	 */
 	public void drawObjects(GGraphics2D g2) {
-		if (maxCachedLayer >= 0 && getCacheGraphics() != null) {
+		if (maxCachedDrawable != null && getCacheGraphics() != null) {
 			g2.drawImage(getCacheGraphics(), 0, 0);
 		}
-		drawGeometricObjects(g2, maxCachedLayer + 1,
-				getApplication().getMaxLayerUsed());
+		drawGeometricObjects(g2);
 		drawActionObjects(g2);
 
 		if (previewDrawable != null) {
@@ -3605,7 +3541,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		// GGB-977
 		setBackgroundUpdating(true);
-		bgImageList.drawAll(g);
+		bgImageList.drawAll(g, null);
 		setBackgroundUpdating(false);
 
 		drawBackground(g, false);
@@ -4180,12 +4116,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            graphics
 	 */
 	public void drawActionObjects(GGraphics2D g) {
-		DrawableIterator it = allDrawableList.getIterator();
-		it.reset();
 		DrawDropDownList selected = null;
 		DrawDropDownList opened = null;
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d instanceof DrawDropDownList
 					&& ((DrawDropDownList) d).isCanvasDrawable()) {
 				DrawDropDownList dl = (DrawDropDownList) d;
@@ -4235,10 +4168,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            graphics
 	 */
 	public void drawMasks(GGraphics2D g2) {
-		DrawableIterator it = allDrawableList.getIterator();
-		it.reset();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d.geo.isMask()) {
 				d.updateIfNeeded();
 				d.draw(g2);
@@ -4423,12 +4353,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            new background image
 	 */
 	final public void addBackgroundImage(DrawImage img) {
-		bgImageList.addUnique(img);
-		// drawImageList.remove(img);
-
-		// Michael Borcherds 2008-02-29
-		int layer = img.getGeoElement().getLayer();
-		drawLayers[layer].remove(img);
+		bgImageList.add(img);
+		allDrawableList.remove(img);
 	}
 
 	/**
@@ -4437,11 +4363,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	final public void removeBackgroundImage(DrawImage img) {
 		bgImageList.remove(img);
-		// drawImageList.add(img);
-
-		// Michael Borcherds 2008-02-29
-		int layer = img.getGeoElement().getLayer();
-		drawLayers[layer].add(img);
+		allDrawableList.add(img);
 	}
 
 	/**
@@ -4455,10 +4377,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		previewFromInputBarGeos = null;
 		this.geosWaiting.clear();
 
-		for (int i = 0; i <= getApplication().getMaxLayerUsed(); i++) {
-			drawLayers[i].clear(); // Michael Borcherds 2008-02-29
-		}
-
 		setToolTipText(null);
 	}
 
@@ -4471,9 +4389,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	public GRectangle getBounds() {
 		GRectangle result = null;
 
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			GRectangle bb = d.getBounds();
 			if (bb != null) {
 				if (result == null) {
@@ -4567,13 +4483,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	/**
-	 * Restore coord system from temp variables
-	 */
-	final public void restoreOldCoordSystem() {
-		setRealWorldCoordSystem(xminTemp, xmaxTemp, yminTemp, ymaxTemp);
-	}
-
-	/**
 	 * change showing flag of the axis
 	 * 
 	 * @param axis
@@ -4635,9 +4544,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return true if there are any traces in background
 	 */
 	protected boolean isTracing() {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			if (it.next().isTracing()) {
+		for (Drawable d : allDrawableList) {
+			if (d.isTracing()) {
 				return true;
 			}
 		}
@@ -5890,7 +5798,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public void exportPaintPre(GGraphics2D g2d, double scale,
 			boolean transparency) {
-		cacheLayers(-1);
+		invalidateCache();
 		exportPaintPreScale(g2d, scale);
 
 		// clipping on selection rectangle
@@ -6119,23 +6027,18 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	@Override
 	public void closeDropDowns(int x, int y) {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
-
-			boolean repaintNeeded = false;
-
+		boolean repaintNeeded = false;
+		for (Drawable d : allDrawableList) {
 			if (d instanceof DrawDropDownList && d.isCanvasDrawable()) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				if (!(dl.isControlHit(x, y) || dl.isOptionsHit(x, y))) {
 					repaintNeeded = repaintNeeded || dl.closeOptions();
 				}
-
 			}
+		}
 
-			if (repaintNeeded) {
-				repaintView();
-			}
+		if (repaintNeeded) {
+			repaintView();
 		}
 	}
 
@@ -6143,10 +6046,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * Close all dropdowns.
 	 */
 	public void closeAllDropDowns() {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
-
+		for (Drawable d : allDrawableList) {
 			if (d instanceof DrawDropDownList) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				dl.closeOptions();
@@ -6389,20 +6289,21 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	/**
-	 * Store several layers in a single bitmap.
-	 * 
-	 * @param topLayer index of highest layer to cache or -1 to clear the cache
+	 * Invalidate cached graphics
 	 */
-	public void cacheLayers(int topLayer) {
-		if (topLayer < 0) {
-			maxCachedLayer = -1;
-			cacheGraphics = null;
-			return;
-		}
-		if (getCacheGraphics() != null && topLayer != maxCachedLayer) {
+	public void invalidateCache() {
+		maxCachedDrawable = null;
+		cacheGraphics = null;
+	}
+
+	/**
+	 * Cache all drawables
+	 */
+	public void cacheGraphics() {
+		if (getCacheGraphics() != null && allDrawableList.size() > 0) {
 			cacheGraphics = getCacheGraphics().createGraphics();
-			drawGeometricObjects(cacheGraphics, 0, topLayer);
-			maxCachedLayer = topLayer;
+			drawGeometricObjects(cacheGraphics);
+			maxCachedDrawable = allDrawableList.get(allDrawableList.size() - 1);
 		}
 	}
 
