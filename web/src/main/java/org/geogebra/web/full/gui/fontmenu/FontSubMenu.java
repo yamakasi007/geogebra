@@ -2,7 +2,6 @@ package org.geogebra.web.full.gui.fontmenu;
 
 import java.util.List;
 
-import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
@@ -27,8 +26,6 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 	public static final int FONT_SIZE = 32;
 	private final List<String> fonts;
 	private final AppW app;
-	private final EuclidianView view;
-	private Integer topWhenOpened = null;
 
 	/**
 	 * @param app the application
@@ -38,7 +35,6 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 		this.app = app;
 		this.fonts = app.getVendorSettings().getTextToolFonts();
 		addStyleName("fontSubMenu");
-		view = app.getActiveEuclidianView();
 		createItems(textController);
 		selectCurrent(textController);
 		Window.addResizeHandler(this);
@@ -70,7 +66,8 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 
 	private void createItems(InlineTextController textController) {
 		for (String font : fonts) {
-			AriaMenuItem item = new AriaMenuItem(font, false, new FontCommand(app, textController, font));
+			AriaMenuItem item = new AriaMenuItem(font, false,
+					new FontCommand(app, textController, font));
 			item.addStyleName("no-image");
 			addItem(item);
 		}

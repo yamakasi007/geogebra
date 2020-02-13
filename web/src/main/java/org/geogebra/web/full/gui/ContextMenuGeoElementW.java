@@ -236,7 +236,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addFontItem() {
-		wrappedPopup.addItem(new FontMenuItem((AppW)app, getTextController()));
+		wrappedPopup.addItem(new FontMenuItem((AppW) app, getTextController()));
 	}
 
 	private void addHyperlinkItems() {
