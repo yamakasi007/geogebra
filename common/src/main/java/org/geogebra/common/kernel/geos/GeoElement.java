@@ -332,6 +332,8 @@ public abstract class GeoElement extends ConstructionElement
 	private TeXFormula teXFormula;
 	private TeXAtomSerializer texAtomSerializer;
 
+	private int ordering;
+
 	private static Comparator<AlgoElement> algoComparator = new Comparator<AlgoElement>() {
 
 		@Override
@@ -7653,5 +7655,13 @@ public abstract class GeoElement extends ConstructionElement
 
 	public List<GeoElement> getPartialSelection(boolean removeOriginal) {
 		return Collections.singletonList(this);
+	}
+
+	public int getOrdering() {
+		return ordering;
+	}
+
+	public void setOrdering(int ordering) {
+		this.ordering = ordering;
 	}
 }
