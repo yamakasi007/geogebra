@@ -29,7 +29,7 @@ import com.google.gwt.user.client.Window;
  * context menu
  */
 public class ContextMenuPopup extends MyCJButton
-		implements CloseHandler<GPopupPanel>, MouseOverHandler {
+		implements CloseHandler<GPopupPanel>, MouseOverHandler, ResizeHandler {
 
 	private EuclidianController ec;
 	private GPoint location;
@@ -54,17 +54,16 @@ public class ContextMenuPopup extends MyCJButton
 		updateLocation();
 		createPopup();
 		addStyleName("MyCanvasButton-borderless");
-		updateOnResize();
+		Window.addResizeHandler(this);
 	}
 
-	private void updateOnResize() {
-		Window.addResizeHandler(new ResizeHandler() {
-			@Override
-			public void onResize(ResizeEvent event) {
-				updateLocation();
-				popup.show(location);
-			}
-		});
+	@Override
+	public void onResize(ResizeEvent event) {
+		if (!popup.isMenuShown()) {
+			return;
+		}
+		updateLocation();
+		popup.show(location);
 	}
 
 	private void updateLocation() {
