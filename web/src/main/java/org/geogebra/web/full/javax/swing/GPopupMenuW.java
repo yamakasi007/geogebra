@@ -154,7 +154,7 @@ public class GPopupMenuW implements AttachedToDOM {
 		}
 
 		if (subPopup != null) {
-			positionAndShowSubmenu(Math.max(0, top));
+			positionAndShowSubmenu(Math.max(16, top));
 		}
 	}
 
@@ -315,11 +315,13 @@ public class GPopupMenuW implements AttachedToDOM {
 			itemCommand = new ScheduledCommand() {
 				@Override
 				public void execute() {
+					int xCord, yCoord;
 					if (subPopup != null) {
 						subPopup.removeFromDOM();
 					}
 					subPopup = new GPopupMenuW(subMenu, getApp());
 					subPopup.setVisible(true);
+					subMenu.stylePopup(subPopup.getPopupPanel());
 					// Calculate the position of the "submenu", and show it
 					positionAndShowSubmenu(newItem.getAbsoluteTop());
 

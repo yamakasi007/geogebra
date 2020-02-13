@@ -7,11 +7,7 @@ import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Submenu for Font item in 3-dot menu of inline text
@@ -19,7 +15,7 @@ import com.google.gwt.user.client.Window;
  * @author Laszlo
  *
  */
-public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
+public class FontSubMenu extends AriaMenuBar {
 
 	public static final int VERTICAL_PADDING = 32;
 	public static final String FALLBACK_FONT = "Arial";
@@ -34,29 +30,8 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 	public FontSubMenu(AppW app, InlineTextController textController) {
 		this.app = app;
 		this.fonts = app.getVendorSettings().getTextToolFonts();
-		addStyleName("fontSubMenu");
 		createItems(textController);
 		selectCurrent(textController);
-		Window.addResizeHandler(this);
-	}
-
-	@Override
-	public void onResize(ResizeEvent event) {
-		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-			@Override
-			public void execute() {
-				resize();
-			}
-		});
-	}
-
-	private void resize() {
-		int maxHeight = Window.getClientHeight();
-		setMaxHeight(maxHeight);
-	}
-
-	private void setMaxHeight(int maxHeight) {
-		getElement().getStyle().setProperty("maxHeight", maxHeight, Style.Unit.PX);
 	}
 
 	private void selectCurrent(InlineTextController textController) {
@@ -71,5 +46,10 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 			item.addStyleName("no-image");
 			addItem(item);
 		}
+	}
+
+	@Override
+	public void stylePopup(Widget widget) {
+		widget.addStyleName("fontSubMenu");
 	}
 }

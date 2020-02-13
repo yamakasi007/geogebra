@@ -558,16 +558,20 @@
 	}
 
     .fontSubMenu {
-        .gwt-MenuItem.listMenuItem.no-image {
-            min-width: 190px;
-            padding: 4px 16px 0px 0px;
-            border-radius: 2px;
-            cursor: pointer;
-            height: 32px;
+        .popupContent {
+             background-color: $white;
+             .gwt-MenuBar {
+                max-height: calc(100vh - 32px);
+                overflow-y: auto;
+                .gwt-MenuItem.listMenuItem.no-image {
+                      min-width: 190px;
+                      padding: 4px 16px 0px 0px;
+                      border-radius: 2px;
+                      cursor: pointer;
+                      height: 32px;
+                  }
+             }
         }
-
-        background-color: $white;
-        overflow-y: auto;
     }
 
   	.inlineTextToolbar {
