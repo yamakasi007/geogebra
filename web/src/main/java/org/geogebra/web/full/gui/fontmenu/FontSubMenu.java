@@ -49,26 +49,14 @@ public class FontSubMenu extends AriaMenuBar implements ResizeHandler {
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
-				if (topWhenOpened == null) {
-					topWhenOpened = getParent().getAbsoluteTop();
-				}
-
 				resize();
 			}
 		});
 	}
 
 	private void resize() {
-		int maxHeight = view.getHeight();
+		int maxHeight = Window.getClientHeight();
 		setMaxHeight(maxHeight);
-		int menuHeight = getOffsetHeight();
-		if (maxHeight - topWhenOpened < menuHeight) {
-			setTop(Math.min(topWhenOpened, maxHeight - menuHeight));
-		}
-	}
-
-	private void setTop(int top) {
-		getParent().getElement().getStyle().setTop(top, Style.Unit.PX);
 	}
 
 	private void setMaxHeight(int maxHeight) {

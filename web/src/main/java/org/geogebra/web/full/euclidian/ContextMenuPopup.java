@@ -21,6 +21,9 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Window;
 
 /**
  * context menu
@@ -51,6 +54,17 @@ public class ContextMenuPopup extends MyCJButton
 		updateLocation();
 		createPopup();
 		addStyleName("MyCanvasButton-borderless");
+		updateOnResize();
+	}
+
+	private void updateOnResize() {
+		Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent event) {
+				updateLocation();
+				popup.show(location);
+			}
+		});
 	}
 
 	private void updateLocation() {

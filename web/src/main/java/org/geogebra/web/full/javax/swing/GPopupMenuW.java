@@ -152,6 +152,10 @@ public class GPopupMenuW implements AttachedToDOM {
 			popupPanel.setPopupPosition(left, top);
 			// App.debug(left + "x" + top);
 		}
+
+		if (subPopup != null) {
+			positionAndShowSubmenu(Math.max(0, top));
+		}
 	}
 
 	/**
@@ -318,27 +322,7 @@ public class GPopupMenuW implements AttachedToDOM {
 					subPopup = new GPopupMenuW(subMenu, getApp());
 					subPopup.setVisible(true);
 					// Calculate the position of the "submenu", and show it
-					if (getApp().getLocalization()
-							.isRightToLeftReadingOrder()) {
-						xCord = getLeftSubPopupXCord();
-						if (xCord < 0) {
-							xCord = getRightSubPopupXCord();
-						}
-					} else {
-						xCord = getRightSubPopupXCord();
-						if (xCord + getSubPopupWidth() > Window
-								.getClientWidth()) {
-							xCord = getLeftSubPopupXCord();
-						}
-					}
-					yCoord = (int) Math.min(
-							(newItem.getAbsoluteTop()
-									- getApp().getPanel().getAbsoluteTop())
-									/ getScaleY(),
-							(Window.getClientHeight() + Window.getScrollTop()
-									- getApp().getPanel().getAbsoluteTop())
-									/ getScaleY() - getSubPopupHeight());
-					showSubPopup(xCord, yCoord);
+					positionAndShowSubmenu(newItem.getAbsoluteTop());
 
 				}
 			};
@@ -356,6 +340,32 @@ public class GPopupMenuW implements AttachedToDOM {
 		}
 		popupMenuSize++;
 		item.addStyleName("gPopupMenu_item");
+	}
+
+	private void positionAndShowSubmenu(int top) {
+		int xCord;
+		int yCoord;
+		if (getApp().getLocalization()
+				.isRightToLeftReadingOrder()) {
+			xCord = getLeftSubPopupXCord();
+			if (xCord < 0) {
+				xCord = getRightSubPopupXCord();
+			}
+		} else {
+			xCord = getRightSubPopupXCord();
+			if (xCord + getSubPopupWidth() > Window
+					.getClientWidth()) {
+				xCord = getLeftSubPopupXCord();
+			}
+		}
+		yCoord = (int) Math.min(
+				(top
+						- getApp().getPanel().getAbsoluteTop())
+						/ getScaleY(),
+				(Window.getClientHeight() + Window.getScrollTop()
+						- getApp().getPanel().getAbsoluteTop())
+						/ getScaleY() - getSubPopupHeight());
+		showSubPopup(xCord, yCoord);
 	}
 
 	/**
