@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class GPopupMenuW implements AttachedToDOM {
 
+	public static final int SUBMENU_VERTICAL_PADDING = 8;
 	/**
 	 * popup panel
 	 */
@@ -153,9 +154,7 @@ public class GPopupMenuW implements AttachedToDOM {
 			// App.debug(left + "x" + top);
 		}
 
-		if (subPopup != null) {
-			positionAndShowSubmenu(Math.max(16, top));
-		}
+		positionAndShowSubmenu(Math.max(2 * SUBMENU_VERTICAL_PADDING, top));
 	}
 
 	/**
@@ -343,6 +342,10 @@ public class GPopupMenuW implements AttachedToDOM {
 	}
 
 	private void positionAndShowSubmenu(int top) {
+		if (subPopup == null) {
+			return;
+		}
+
 		int xCord;
 		int yCoord;
 		if (getApp().getLocalization()
@@ -358,13 +361,14 @@ public class GPopupMenuW implements AttachedToDOM {
 				xCord = getLeftSubPopupXCord();
 			}
 		}
-		yCoord = (int) Math.min(
-				(top
-						- getApp().getPanel().getAbsoluteTop())
-						/ getScaleY(),
-				(Window.getClientHeight() + Window.getScrollTop()
-						- getApp().getPanel().getAbsoluteTop())
-						/ getScaleY() - getSubPopupHeight());
+
+		double y1 = (top	- getApp().getPanel().getAbsoluteTop())
+						/ getScaleY();
+		double y2 = ((Window.getClientHeight() + Window.getScrollTop()
+				- getApp().getPanel().getAbsoluteTop())
+				/ getScaleY() - getSubPopupHeight()) - SUBMENU_VERTICAL_PADDING;
+
+		yCoord = (int) Math.min(y1, y2);
 		showSubPopup(xCord, yCoord);
 	}
 
