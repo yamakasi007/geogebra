@@ -434,7 +434,6 @@ public class AriaMenuBar extends FlowPanel {
 	 * Style popup menu appears
 	 * @param widget to style.
 	 */
-	@SuppressWarnings("unused")
 	public void stylePopup(Widget widget) {
 		// implement in subclasses if needed
 	}
