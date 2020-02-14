@@ -10,7 +10,7 @@ public enum FontFamily {
 	DYSLEXIC("Open dyslexic mit Fibel a", "Open dyslexic mit Fibel a"),
 	PALATINO("Palatino", "Palatino Linotype"),
 	QUICKSAND("Qicksand", "Qicksand"),
-	ROBOTO(	"Roboto", "Roboto"),
+	ROBOTO("Roboto", "Roboto"),
 	SCHULBUCH_BAYERN("Schulbuch Bayern", "Schulbuch Bayern"),
 	SF_MONO("SF Mono", "SF Mono"),
 	SF_PRO("SF Pro", "SF Pro"),
