@@ -1720,7 +1720,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			this.needsAllDrawablesUpdate = true;
 			return;
 		}
-		allDrawableList.updateAllForView();
+		for (Drawable d : allDrawableList) {
+			d.updateForView();
+		}
 		if (repaint) {
 			repaint();
 		}
@@ -2430,7 +2432,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * Updates font size for all drawables
 	 */
 	protected void updateDrawableFontSize() {
-		allDrawableList.updateFontSizeAll();
+		for (Drawable d : allDrawableList) {
+			d.updateFontSize();
+		}
 		repaint();
 	}
 
@@ -6092,20 +6096,18 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	@Override
 	public void closeDropDowns(int x, int y) {
+		boolean repaintNeeded = false;
 		for (Drawable d : allDrawableList) {
-			boolean repaintNeeded = false;
-
 			if (d instanceof DrawDropDownList && d.isCanvasDrawable()) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				if (!(dl.isControlHit(x, y) || dl.isOptionsHit(x, y))) {
 					repaintNeeded = repaintNeeded || dl.closeOptions();
 				}
-
 			}
+		}
 
-			if (repaintNeeded) {
-				repaintView();
-			}
+		if (repaintNeeded) {
+			repaintView();
 		}
 	}
 

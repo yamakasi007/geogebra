@@ -78,22 +78,4 @@ public class DrawableList extends TreeSet<Drawable> {
 			d.update();
 		}
 	}
-
-	/**
-	 * Update all elements when view was updated
-	 */
-	public final void updateAllForView() {
-		for (Drawable d : this) {
-			d.updateForView();
-		}
-	}
-
-	/**
-	 * Updates fot size for all drawables in list
-	 */
-	public final void updateFontSizeAll() {
-		for (Drawable d : this) {
-			d.updateFontSize();
-		}
-	}
 }
