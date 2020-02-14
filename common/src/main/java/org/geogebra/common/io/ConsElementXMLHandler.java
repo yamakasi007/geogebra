@@ -50,6 +50,7 @@ import org.geogebra.common.kernel.geos.LimitedPath;
 import org.geogebra.common.kernel.geos.PointProperties;
 import org.geogebra.common.kernel.geos.TextProperties;
 import org.geogebra.common.kernel.geos.Traceable;
+import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.geos.properties.Auxiliary;
 import org.geogebra.common.kernel.geos.properties.FillType;
 import org.geogebra.common.kernel.geos.properties.TextAlignment;
@@ -2505,6 +2506,21 @@ public class ConsElementXMLHandler {
 		} else {
 			docPointStyle = -1;
 		}
+	}
 
+	public void handleGroup(LinkedHashMap<String, String> attrs) {
+		String groupSize = attrs.get("size");
+		ArrayList<GeoElement> geosInGroup = new ArrayList<>();
+		for (int i = 0; i < Integer.parseInt(groupSize); i++) {
+			String label = "l" + i;
+			String geoLabel = attrs.get(label);
+			GeoElement geo = xmlHandler.kernel.lookupLabel(geoLabel);
+			if (geo != null) {
+				geosInGroup.add(geo);
+			}
+		}
+		if (!geosInGroup.isEmpty()) {
+			new Group(xmlHandler.cons, geosInGroup);
+		}
 	}
 }

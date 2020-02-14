@@ -51,11 +51,14 @@ public class Group {
 
     /**
      * xml representation of group for saving/loading
-     * <group l1="A" l2="B" ...></group>
+     * <group l0="A" l1="B" ...></group>
      * @param sb - xml string builder
      */
     public void getXML(StringBuilder sb) {
         sb.append("<group ");
+        sb.append("size=\"");
+        sb.append(getGeosGroup().size());
+        sb.append("\" ");
         for (int i = 0; i < getGeosGroup().size(); i++) {
             sb.append("l");
             sb.append(i);
@@ -63,7 +66,6 @@ public class Group {
             sb.append(getGeosGroup().get(i).getLabelSimple());
             sb.append("\" ");
         }
-        sb.append(">\n");
-        sb.append("</group>\n");
+        sb.append("/>\n");
     }
 }
