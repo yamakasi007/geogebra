@@ -1,0 +1,51 @@
+package org.geogebra.common.kernel.geos.groups;
+
+import java.util.ArrayList;
+
+import org.geogebra.common.kernel.Construction;
+import org.geogebra.common.kernel.geos.GeoElement;
+
+/**
+ *  model for group of selected geos
+ */
+public class Group {
+    private ArrayList<GeoElement> geosGroup = new ArrayList();
+    private boolean isFixed;
+
+    public Group(Construction cons, ArrayList<GeoElement> selectedGeos) {
+        setFixed(selectedGeos.get(0).isLocked());
+        for (GeoElement geo : selectedGeos) {
+            geosGroup.add(geo);
+            geo.setParentGroup(this);
+        }
+        cons.addGroupToGroupList(this);
+    }
+
+    /**
+     * @return list of geos in this group
+     */
+    public ArrayList<GeoElement> getGeosGroup() {
+        return geosGroup;
+    }
+
+    /**
+     * set as group the geos given
+     * @param geos list of selected geos
+     */
+    public void setGeosGroup(ArrayList<GeoElement> geos) {
+        geosGroup = geos;
+    }
+
+    public void setFixed(boolean fixed) {
+        isFixed = fixed;
+    }
+
+    public void getXML(StringBuilder sb) {
+        sb.append("<group ");
+        for (int i=0;i<getGeosGroup().size();i++) {
+            sb.append("l" + i + "=\"");
+            sb.append(getGeosGroup().get(i).getLabelSimple() + "\" ");
+        }
+        sb.append(">\n");
+    }
+}
