@@ -1592,6 +1592,4 @@ public interface GeoElementND extends ExpressionValue {
 	 * @return the unwrapped geo
 	 */
 	GeoElementND unwrapSymbolic();
-
-	void setParentGroup(Group parentGroup);
 }

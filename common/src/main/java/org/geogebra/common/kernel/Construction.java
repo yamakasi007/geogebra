@@ -1327,7 +1327,7 @@ public class Construction {
 	}
 
 	private void getGroupsXML(StringBuilder sb) {
-		for (Group gr : getGroups() ) {
+		for (Group gr : getGroups()) {
 			gr.getXML(sb);
 		}
 	}

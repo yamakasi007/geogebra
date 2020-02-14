@@ -7769,4 +7769,8 @@ public abstract class GeoElement extends ConstructionElement
 	public void setParentGroup(Group parentGroup) {
 		this.parentGroup = parentGroup;
 	}
+
+	public Group getParentGroup() {
+		return parentGroup;
+	}
 }

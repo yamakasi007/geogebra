@@ -12,6 +12,11 @@ public class Group {
     private ArrayList<GeoElement> geosGroup = new ArrayList();
     private boolean isFixed;
 
+    /**
+     * Constructor for group
+     * @param cons - construction, see {@link Construction}
+     * @param selectedGeos - geos selected for group
+     */
     public Group(Construction cons, ArrayList<GeoElement> selectedGeos) {
         setFixed(selectedGeos.get(0).isLocked());
         for (GeoElement geo : selectedGeos) {
@@ -40,12 +45,25 @@ public class Group {
         isFixed = fixed;
     }
 
+    public boolean isGroupFixed() {
+        return isFixed;
+    }
+
+    /**
+     * xml representation of group for saving/loading
+     * <group l1="A" l2="B" ...></group>
+     * @param sb - xml string builder
+     */
     public void getXML(StringBuilder sb) {
         sb.append("<group ");
-        for (int i=0;i<getGeosGroup().size();i++) {
-            sb.append("l" + i + "=\"");
-            sb.append(getGeosGroup().get(i).getLabelSimple() + "\" ");
+        for (int i = 0; i < getGeosGroup().size(); i++) {
+            sb.append("l");
+            sb.append(i);
+            sb.append("=\"");
+            sb.append(getGeosGroup().get(i).getLabelSimple());
+            sb.append("\" ");
         }
         sb.append(">\n");
+        sb.append("</group>\n");
     }
 }
