@@ -315,7 +315,6 @@ public class GPopupMenuW implements AttachedToDOM {
 			itemCommand = new ScheduledCommand() {
 				@Override
 				public void execute() {
-					int xCord, yCoord;
 					if (subPopup != null) {
 						subPopup.removeFromDOM();
 					}
