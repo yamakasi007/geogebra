@@ -411,6 +411,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private SnapController snapController = new SnapController();
 	private ArrayList<GeoElement> splitPartsToRemove = new ArrayList<>();
 
+	GeoPriorityComparator priorityComparator;
+
 	/**
 	 * state for selection tool over press/release
 	 */
@@ -439,6 +441,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		this.app = app;
 		this.selection = app.getSelectionManager();
 		this.localization = app.getLocalization();
+		this.priorityComparator = app.getGeoPriorityComparator();
 		createCompanions();
 	}
 
@@ -1462,11 +1465,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			// now just choose geo with highest drawing priority:
 			ret = geos.get(0);
 
-			GeoPriorityComparator comparator = new DefaultGeoPriorityComparator();
-
 			for (GeoElement geo : geos) {
 				// other not drawn before = other is on top
-				if (comparator.compare(geo, ret, true) > 0) {
+				if (priorityComparator.compare(geo, ret, true) > 0) {
 					ret = geo;
 				}
 			}

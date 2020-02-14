@@ -50,7 +50,6 @@ import org.geogebra.common.kernel.algos.AlgoAngle;
 import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.arithmetic.Function;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
-import org.geogebra.common.kernel.geos.DefaultGeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoCurveCartesian;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -605,9 +604,13 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		companion = newEuclidianViewCompanion();
 
-		GeoPriorityComparator cmp = new DefaultGeoPriorityComparator();
+		this.euclidianController = ec;
+		this.kernel = ec.getKernel();
+		this.app = kernel.getApplication();
+		this.settings = settings;
 
-		// Michael Borcherds 2008-03-01
+		GeoPriorityComparator cmp = app.getGeoPriorityComparator();
+
 		drawLayers = new DrawableList[EuclidianStyleConstants.MAX_LAYERS + 1];
 		for (int k = 0; k <= EuclidianStyleConstants.MAX_LAYERS; k++) {
 			drawLayers[k] = new DrawableList(cmp);
@@ -618,10 +621,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		initAxesValues();
 
-		this.euclidianController = ec;
-		kernel = ec.getKernel();
-		app = kernel.getApplication();
-		this.settings = settings;
 		// no repaint
 		if (kernel.getConstruction() != null) {
 			kernel.getConstruction().setIgnoringNewTypes(true);

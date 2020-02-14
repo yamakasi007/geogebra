@@ -68,12 +68,15 @@ import org.geogebra.common.kernel.arithmetic.MyDouble;
 import org.geogebra.common.kernel.commands.CommandDispatcher;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.commands.CommandsConstants;
+import org.geogebra.common.kernel.geos.DefaultGeoPriorityComparator;
 import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoNumeric;
+import org.geogebra.common.kernel.geos.GeoPriorityComparator;
+import org.geogebra.common.kernel.geos.NotesPriorityComparator;
 import org.geogebra.common.kernel.geos.description.DefaultLabelDescriptionConverter;
 import org.geogebra.common.kernel.geos.description.ProtectiveLabelDescriptionConverter;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
@@ -5190,6 +5193,14 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 			return new ProtectiveGeoElementValueConverter();
 		} else {
 			return new GeoElementValueConverter();
+		}
+	}
+
+	public GeoPriorityComparator getGeoPriorityComparator() {
+		if (isWhiteboardActive()) {
+			return new NotesPriorityComparator();
+		} else {
+			return new DefaultGeoPriorityComparator();
 		}
 	}
 }
