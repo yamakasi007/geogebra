@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import org.geogebra.common.awt.GGraphics2D;
+import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.DrawableList;
-import org.geogebra.common.euclidian.DrawableList.Link;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.util.DoubleUtil;
@@ -108,14 +108,13 @@ public class SVGExtensions extends org.freehep.graphicsio.svg.SVGGraphics2D {
 	 * @param g2
 	 */
 	public final void drawAll(DrawableList list, GGraphics2D g2) {
-		Link cur = list.head;
-		while (cur != null) {
-			GeoElement geo = cur.d.getGeoElement();
+		for (Drawable d : list) {
+			GeoElement geo = d.getGeoElement();
 			// defined check needed in case the GeoList changed its size
 			if (geo.isDefined()) {
-				if (cur.d.needsUpdate()) {
-					cur.d.setNeedsUpdate(false);
-					cur.d.update();
+				if (d.needsUpdate()) {
+					d.setNeedsUpdate(false);
+					d.update();
 				}
 
 				if (geo.isGeoText()) {
@@ -132,9 +131,8 @@ public class SVGExtensions extends org.freehep.graphicsio.svg.SVGGraphics2D {
 					setElementDesc(geo.getLongDescription());
 				}
 
-				cur.d.draw(g2);
+				d.draw(g2);
 			}
-			cur = cur.next;
 		}
 	}
 }

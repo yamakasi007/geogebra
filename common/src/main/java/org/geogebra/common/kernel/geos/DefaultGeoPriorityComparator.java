@@ -37,7 +37,7 @@ public class DefaultGeoPriorityComparator implements GeoPriorityComparator {
 					.drawBefore(a, b);
 		}
 
-		return 0;
+		return (int) (a.getID() - b.getID());
 	}
 
 

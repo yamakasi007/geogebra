@@ -21,7 +21,6 @@ import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.GShape;
 import org.geogebra.common.awt.MyImage;
-import org.geogebra.common.euclidian.DrawableList.DrawableIterator;
 import org.geogebra.common.euclidian.background.DrawBackground;
 import org.geogebra.common.euclidian.draw.CanvasDrawable;
 import org.geogebra.common.euclidian.draw.DrawAngle;
@@ -2136,12 +2135,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return whether textfield was clicked
 	 */
 	public boolean textfieldClicked(int x, int y, PointerEventType type) {
-		DrawableIterator it = allDrawableList.getIterator();
 		if (getEuclidianController().isDraggingBeyondThreshold()) {
 			return false;
 		}
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if ((d.isCanvasDrawable())
 					&& (d.hit(x, y, app.getCapturingThreshold(type)) || d
 							.hitLabel(x, y))) {
@@ -2185,9 +2182,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (!getApplication().isLabelDragsEnabled()) {
 			return null;
 		}
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d.hitLabel(p.x, p.y)) {
 				GeoElement geo = d.getGeoElement();
 				if (geo.isEuclidianVisible()) {
@@ -2211,9 +2206,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (p == null || getEuclidianController().isMultiSelection()) {
 			return null;
 		}
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			hitHandler = d.hitBoundingBoxHandler(p.x, p.y, getThresholdForDrawable(type, d));
 			if (hitHandler != EuclidianBoundingBoxHandler.UNDEFINED) {
 				GeoElement geo = d.getGeoElement();
@@ -4177,12 +4170,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            graphics
 	 */
 	public void drawActionObjects(GGraphics2D g) {
-		DrawableIterator it = allDrawableList.getIterator();
-		it.reset();
 		DrawDropDownList selected = null;
 		DrawDropDownList opened = null;
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d instanceof DrawDropDownList
 					&& ((DrawDropDownList) d).isCanvasDrawable()) {
 				DrawDropDownList dl = (DrawDropDownList) d;
@@ -4232,10 +4222,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            graphics
 	 */
 	public void drawMasks(GGraphics2D g2) {
-		DrawableIterator it = allDrawableList.getIterator();
-		it.reset();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			if (d.geo.isMask()) {
 				d.updateIfNeeded();
 				d.draw(g2);
@@ -4420,8 +4407,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *            new background image
 	 */
 	final public void addBackgroundImage(DrawImage img) {
-		bgImageList.addUnique(img);
-		// drawImageList.remove(img);
+		bgImageList.add(img);
 
 		// Michael Borcherds 2008-02-29
 		int layer = img.getGeoElement().getLayer();
@@ -4468,9 +4454,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	public GRectangle getBounds() {
 		GRectangle result = null;
 
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
+		for (Drawable d : allDrawableList) {
 			GRectangle bb = d.getBounds();
 			if (bb != null) {
 				if (result == null) {
@@ -4625,9 +4609,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return true if there are any traces in background
 	 */
 	protected boolean isTracing() {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			if (it.next().isTracing()) {
+		for (Drawable d : allDrawableList) {
+			if (d.isTracing()) {
 				return true;
 			}
 		}
@@ -6109,10 +6092,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	@Override
 	public void closeDropDowns(int x, int y) {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
-
+		for (Drawable d : allDrawableList) {
 			boolean repaintNeeded = false;
 
 			if (d instanceof DrawDropDownList && d.isCanvasDrawable()) {
@@ -6133,10 +6113,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * Close all dropdowns.
 	 */
 	public void closeAllDropDowns() {
-		DrawableIterator it = allDrawableList.getIterator();
-		while (it.hasNext()) {
-			Drawable d = it.next();
-
+		for (Drawable d : allDrawableList) {
 			if (d instanceof DrawDropDownList) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				dl.closeOptions();
