@@ -119,6 +119,7 @@ import org.geogebra.common.kernel.geos.PolygonFactory;
 import org.geogebra.common.kernel.geos.TestGeo;
 import org.geogebra.common.kernel.geos.Transformable;
 import org.geogebra.common.kernel.geos.Translateable;
+import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.implicit.GeoImplicit;
 import org.geogebra.common.kernel.implicit.GeoImplicitCurve;
 import org.geogebra.common.kernel.kernelND.GeoAxisND;
@@ -9716,6 +9717,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 					// hit found
 					if (hits != null && hits.size() > 0) {
 						selection.setSelectedGeos(hits, true);
+						Group gr = new Group(kernel.getConstruction(), selection.getSelectedGeos());
 						updateBoundingBoxFromSelection(false);
 					}
 				}
