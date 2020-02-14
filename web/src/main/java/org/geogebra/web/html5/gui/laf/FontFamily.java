@@ -8,7 +8,7 @@ public enum FontFamily {
 	COURIER("Courier", "Courier"),
 	GEORGIA("Georgia", "Georgia"),
 	DYSLEXIC("Open dyslexic mit Fibel a", "Open dyslexic mit Fibel a"),
-	PALATINO("Palatino", "Palatino"),
+	PALATINO("Palatino", "Palatino Linotype"),
 	QUICKSAND("Qicksand", "Qicksand"),
 	ROBOTO(	"Roboto", "Roboto"),
 	SCHULBUCH_BAYERN("Schulbuch Bayern", "Schulbuch Bayern"),
