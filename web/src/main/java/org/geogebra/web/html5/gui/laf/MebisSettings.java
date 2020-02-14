@@ -62,23 +62,23 @@ public class MebisSettings implements VendorSettings {
 	}
 
 	@Override
-	public List<String> getTextToolFonts() {
-		return Arrays.asList("Arial",
-				"Calibri",
-				"Century Gothic",
-				"Comic Sans",
-				"Courier",
-				"Georgia",
-				"Open dyslexic mit Fibel a",
-				"Palatino",
-				"Qicksand",
-				"Roboto",
-				"Schulbuch Bayern",
-				"SF Mono",
-				"SF Pro",
-				"Times",
-				"Titilium Web",
-				"Trebuchet",
-				"Verdana");
+	public List<FontFamily> getTextToolFonts() {
+		return Arrays.asList(FontFamily.ARIAL,
+				FontFamily.CALIBRI,
+				FontFamily.CENTURY_GOTHIC,
+				FontFamily.COMIC_SANS,
+				FontFamily.COURIER,
+				FontFamily.GEORGIA,
+				FontFamily.DYSLEXIC,
+				FontFamily.PALATINO,
+				FontFamily.QUICKSAND,
+				FontFamily.ROBOTO,
+				FontFamily.SCHULBUCH_BAYERN,
+				FontFamily.SF_MONO,
+				FontFamily.SF_PRO,
+				FontFamily.TIMES,
+				FontFamily.TITILIUM,
+				FontFamily.TREBUCHET,
+				FontFamily.VERDANA);
 	}
 }

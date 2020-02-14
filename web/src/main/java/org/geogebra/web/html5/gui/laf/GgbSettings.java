@@ -55,18 +55,18 @@ public class GgbSettings implements VendorSettings {
 	}
 
 	@Override
-	public List<String> getTextToolFonts() {
-		return Arrays.asList("Arial",
-				"Calibri",
-				"Century Gothic",
-				"Comic Sans",
-				"Courier",
-				"Georgia",
-				"Roboto",
-				"SF Mono",
-				"SF Pro",
-				"Times",
-				"Trebuchet",
-				"Verdana");
+	public List<FontFamily> getTextToolFonts() {
+		return Arrays.asList(FontFamily.ARIAL,
+				FontFamily.CALIBRI,
+				FontFamily.CENTURY_GOTHIC,
+				FontFamily.COMIC_SANS,
+				FontFamily.COURIER,
+				FontFamily.GEORGIA,
+				FontFamily.ROBOTO,
+				FontFamily.SF_MONO,
+				FontFamily.SF_PRO,
+				FontFamily.TIMES,
+				FontFamily.TREBUCHET,
+				FontFamily.VERDANA);
 	}
 }

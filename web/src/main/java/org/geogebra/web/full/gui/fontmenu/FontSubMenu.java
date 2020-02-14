@@ -3,6 +3,7 @@ package org.geogebra.web.full.gui.fontmenu;
 import java.util.List;
 
 import org.geogebra.common.euclidian.text.InlineTextController;
+import org.geogebra.web.html5.gui.laf.FontFamily;
 import org.geogebra.web.html5.gui.util.AriaMenuBar;
 import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
@@ -20,7 +21,7 @@ public class FontSubMenu extends AriaMenuBar {
 	public static final int VERTICAL_PADDING = 32;
 	public static final String FALLBACK_FONT = "Arial";
 	public static final int FONT_SIZE = 32;
-	private final List<String> fonts;
+	private final List<FontFamily> fonts;
 	private final AppW app;
 
 	/**
@@ -36,13 +37,19 @@ public class FontSubMenu extends AriaMenuBar {
 
 	private void selectCurrent(InlineTextController textController) {
 		String font = textController.getFormat("font", FALLBACK_FONT);
-		selectItem(fonts.indexOf(font));
+		for (FontFamily family : fonts) {
+			if (font.equals(family.cssName())) {
+				selectItem(fonts.indexOf(family));
+				return;
+			}
+		}
 	}
 
 	private void createItems(InlineTextController textController) {
-		for (String font : fonts) {
-			AriaMenuItem item = new AriaMenuItem(font, false,
-					new FontCommand(app, textController, font));
+		for (FontFamily font : fonts) {
+			AriaMenuItem item = new AriaMenuItem(font.displayName(),
+					false,
+					new FontCommand(app, textController, font.cssName()));
 			item.addStyleName("no-image");
 			addItem(item);
 		}

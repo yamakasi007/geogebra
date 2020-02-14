@@ -72,5 +72,5 @@ public interface VendorSettings {
 	 *
 	 * @return the list
 	 */
-	List<String> getTextToolFonts();
+	List<FontFamily> getTextToolFonts();
 }
