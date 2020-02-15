@@ -6,7 +6,6 @@ import org.geogebra.web.full.gui.applet.AppletFactory;
 import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.laf.GLookAndFeel;
 import org.geogebra.web.full.main.GDevice;
-import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.SuperDevUncaughtExceptionHandler;
 import org.geogebra.web.tablet.main.TabletDevice;
