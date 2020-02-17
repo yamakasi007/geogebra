@@ -364,7 +364,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 	}
 
 	@Override
-	public DescriptionMode needToShowBothRowsInAV() {
+	public DescriptionMode getDescriptionMode() {
 		return DescriptionMode.DEFINITION;
 	}
 

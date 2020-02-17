@@ -18,19 +18,11 @@ the Free Software Foundation.
 
 package org.geogebra.common.kernel.geos;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
-
+import com.google.j2objc.annotations.Weak;
+import com.himamis.retex.editor.share.util.Greek;
+import com.himamis.retex.editor.share.util.Unicode;
+import com.himamis.retex.renderer.share.TeXFormula;
+import com.himamis.retex.renderer.share.serialize.TeXAtomSerializer;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.awt.MyImage;
@@ -43,6 +35,7 @@ import org.geogebra.common.factories.LaTeXFactory;
 import org.geogebra.common.gui.dialog.options.model.AxisModel.IAxisModelListener;
 import org.geogebra.common.gui.view.algebra.AlgebraItem;
 import org.geogebra.common.gui.view.algebra.AlgebraView.SortMode;
+import org.geogebra.common.gui.view.algebra.fiter.AlgebraOutputFilter;
 import org.geogebra.common.kernel.AnimationManager;
 import org.geogebra.common.kernel.AutoColor;
 import org.geogebra.common.kernel.CircularDefinitionException;
@@ -112,11 +105,17 @@ import org.geogebra.common.util.debug.GeoGebraProfiler;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.common.util.lang.Language;
 
-import com.google.j2objc.annotations.Weak;
-import com.himamis.retex.editor.share.util.Greek;
-import com.himamis.retex.editor.share.util.Unicode;
-import com.himamis.retex.renderer.share.TeXFormula;
-import com.himamis.retex.renderer.share.serialize.TeXAtomSerializer;
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeSet;
 
 /**
  * 
@@ -330,6 +329,7 @@ public abstract class GeoElement extends ConstructionElement
 
 	private TeXFormula teXFormula;
 	private TeXAtomSerializer texAtomSerializer;
+	private AlgebraOutputFilter algebraOutputFilter;
 
 	private static Comparator<AlgoElement> algoComparator = new Comparator<AlgoElement>() {
 
@@ -358,6 +358,7 @@ public abstract class GeoElement extends ConstructionElement
 	private void initWith(@Nonnull App app) {
 		appConfig = app.getConfig();
 		graphicsadapter = app.newGeoElementGraphicsAdapter();
+        algebraOutputFilter = app.getAlgebraOutputFilter();
 		EuclidianViewInterfaceSlim ev  = app.getActiveEuclidianView();
 		if (ev != null && app.getActiveEuclidianView().getViewID() != App.VIEW_EUCLIDIAN) {
 			initWith(ev);
@@ -7304,8 +7305,8 @@ public abstract class GeoElement extends ConstructionElement
 	}
 
 	@Override
-	public DescriptionMode needToShowBothRowsInAV() {
-	    if (AlgebraItem.shouldShowOnlyDefinitionForGeo(this)) {
+	public DescriptionMode getDescriptionMode() {
+	    if (!algebraOutputFilter.isAllowed(this)) {
 	        return DescriptionMode.DEFINITION;
         }
 		String def0 = getDefinition(StringTemplate.defaultTemplate);
@@ -7708,5 +7709,10 @@ public abstract class GeoElement extends ConstructionElement
 
 	public List<GeoElement> getPartialSelection(boolean removeOriginal) {
 		return Collections.singletonList(this);
+	}
+
+	@Override
+	public App getApp() {
+		return getKernel().getApplication();
 	}
 }
