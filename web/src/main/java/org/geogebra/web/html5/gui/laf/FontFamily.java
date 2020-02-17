@@ -1,12 +1,12 @@
 package org.geogebra.web.html5.gui.laf;
 
 public enum FontFamily {
-	ARIAL("Arial", "arial, sans-serif"),
-	CALIBRI("Calibri", "Calibri, sans-serif"),
-	CENTURY_GOTHIC("Century Gothic", "Century Gothic, sans-serif"),
-	COMIC_SANS("Comic Sans", "Comic Sans MS, sans-serif"),
-	COURIER("Courier", "Courier, monospace"),
-	GEORGIA("Georgia", "Georgia, serif"),
+	ARIAL("Arial", "arial"),
+	CALIBRI("Calibri", "Calibri"),
+	CENTURY_GOTHIC("Century Gothic", "Century Gothic"),
+	COMIC_SANS("Comic Sans", "Comic Sans MS"),
+	COURIER("Courier", "Courier"),
+	GEORGIA("Georgia", "Georgia"),
 	DYSLEXIC("Open dyslexic mit Fibel a", "Open dyslexic mit Fibel a"),
 	PALATINO("Palatino", "Palatino Linotype, serif"),
 	QUICKSAND("Qicksand", "Qicksand, sans-serif"),
