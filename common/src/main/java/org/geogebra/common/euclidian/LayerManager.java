@@ -24,4 +24,8 @@ public class LayerManager {
 			drawingOrder.get(i).setOrdering(i);
 		}
 	}
+
+	public void clear() {
+		drawingOrder.clear();
+	}
 }

@@ -3047,6 +3047,8 @@ public class Construction {
 		geoSetWithCasCells.clear();
 		geoSetLabelOrder.clear();
 
+		layerManager.clear();
+
 		geoSetsTypeMap.clear();
 		euclidianViewCE.clear();
 
