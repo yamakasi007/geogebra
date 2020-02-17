@@ -1710,6 +1710,18 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 	}
 
+	public void invalidateDrawableLists() {
+		allDrawableList.clear();
+		drawLayers[0].clear();
+
+		for (DrawableND drawable : drawableMap.values()) {
+			allDrawableList.add((Drawable) drawable);
+			drawLayers[0].add((Drawable) drawable);
+		}
+
+		repaintView();
+	}
+
 	/**
 	 * @param repaint
 	 *            true to repaint
@@ -2114,7 +2126,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (!d.isCreatedByDrawListVisible()) {
 			repaint();
 		}
-
 	}
 
 	/** get the hits recorded */
