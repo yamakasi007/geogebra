@@ -232,7 +232,7 @@ public class Construction {
 		geoSetsTypeMap = new HashMap<>();
 		euclidianViewCE = new ArrayList<>();
 
-		layerManager = new LayerManager(getApplication());
+		layerManager = new LayerManager();
 
 		if (parentConstruction != null) {
 			consDefaults = parentConstruction.getConstructionDefaults();

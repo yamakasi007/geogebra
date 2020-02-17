@@ -2098,17 +2098,21 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public void remove(GeoElement geo) {
 		this.geosWaiting.remove(geo);
-		Drawable d = (Drawable) drawableMap.get(geo);
+		Drawable d = (Drawable) drawableMap.remove(geo);
 		if (d == null) {
 			return;
 		}
 
-		allDrawableList.remove(d);
+		if (app.isWhiteboardActive()) {
+			app.getActiveEuclidianView().invalidateDrawableList();
+		} else {
+			allDrawableList.remove(d);
+		}
+
 		if (d instanceof RemoveNeeded) {
 			((RemoveNeeded) d).remove();
 		}
 
-		drawableMap.remove(geo);
 		if (geo.isGeoPoint()) {
 			stickyPointList.remove(geo);
 		}
