@@ -30,10 +30,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.WithClassesToStub;
+import com.google.gwtmockito.WithExperimentalGarbageCollection;
 import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({TextAreaElement.class, EuclidianSimplePanelW.class, JLMContext2d.class})
+@WithExperimentalGarbageCollection
 public class AccessibilityViewTest {
 
 	private AppW app;
@@ -47,7 +49,6 @@ public class AccessibilityViewTest {
 		mockPanel = new ArrayFlowPanel();
 		baseWidgetFactory = getBaseWidgetFactory();
 	}
-
 
 	private void initAccessibilityViewFull() {
 		app = AppMocker.mockGraphing(AccessibilityViewTest.class);

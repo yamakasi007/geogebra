@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import com.google.gwt.dom.client.TextAreaElement;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.WithClassesToStub;
+import com.google.gwtmockito.WithExperimentalGarbageCollection;
 
 /**
  * Tests for Undo with multiple slides
@@ -20,6 +21,7 @@ import com.google.gwtmockito.WithClassesToStub;
  */
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({ TextAreaElement.class })
+@WithExperimentalGarbageCollection
 public class NotesUndoTest {
 	private static AppWFull app;
 

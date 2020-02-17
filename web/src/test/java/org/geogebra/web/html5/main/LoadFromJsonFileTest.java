@@ -22,11 +22,13 @@ import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.WithClassesToStub;
+import com.google.gwtmockito.WithExperimentalGarbageCollection;
 import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({TextAreaElement.class, EuclidianSimplePanelW.class,
 		JLMContext2d.class, RootPanel.class, ResizeComposite.class})
+@WithExperimentalGarbageCollection
 public class LoadFromJsonFileTest {
 	private static final String CLOSED_AV_JSON_PATH =
 			"src/test/java/org/geogebra/web/html5/main/closedAV.json";
@@ -37,7 +39,6 @@ public class LoadFromJsonFileTest {
 
 	@Test
 	public void testLoadApp() {
-
 		TestArticleElement articleElement = new TestArticleElement("prerelease", "simple");
 		String json = FileIO.load(jsonPath);
 		articleElement.attr("jsonFile", json);

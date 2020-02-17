@@ -10,9 +10,11 @@ import org.junit.runner.RunWith;
 import com.google.gwt.dom.client.TextAreaElement;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.WithClassesToStub;
+import com.google.gwtmockito.WithExperimentalGarbageCollection;
 
 @RunWith(GwtMockitoTestRunner.class)
 @WithClassesToStub({ TextAreaElement.class })
+@WithExperimentalGarbageCollection
 public class Graphing3DTest {
 	private static AppW app;
 	@Before
