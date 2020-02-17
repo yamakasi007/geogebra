@@ -100,39 +100,30 @@ public class SVGExtensions extends org.freehep.graphicsio.svg.SVGGraphics2D {
 
 	}
 
-	/**
-	 * 
-	 * Adapted from DrawableList (to handle SVG &lt;title&gt; and &lt;desc&gt;)
-	 * 
-	 * @param list
-	 * @param g2
-	 */
-	public final void drawAll(DrawableList list, GGraphics2D g2) {
-		for (Drawable d : list) {
-			GeoElement geo = d.getGeoElement();
-			// defined check needed in case the GeoList changed its size
-			if (geo.isDefined()) {
-				if (d.needsUpdate()) {
-					d.setNeedsUpdate(false);
-					d.update();
-				}
-
-				if (geo.isGeoText()) {
-					setElementTitle(((GeoText) geo).getTextString());
-				} else {
-					setElementTitle(geo.getNameDescription());
-				}
-
-				if (geo.isIndependent()) {
-					// eg a:y = 4x + 3
-					// eg A =(3, 4)
-					setElementDesc(geo.getAlgebraDescriptionDefault());
-				} else {
-					setElementDesc(geo.getLongDescription());
-				}
-
-				d.draw(g2);
+	public final void draw(Drawable d, GGraphics2D g2) {
+		GeoElement geo = d.getGeoElement();
+		// defined check needed in case the GeoList changed its size
+		if (geo.isDefined()) {
+			if (d.needsUpdate()) {
+				d.setNeedsUpdate(false);
+				d.update();
 			}
+
+			if (geo.isGeoText()) {
+				setElementTitle(((GeoText) geo).getTextString());
+			} else {
+				setElementTitle(geo.getNameDescription());
+			}
+
+			if (geo.isIndependent()) {
+				// eg a:y = 4x + 3
+				// eg A =(3, 4)
+				setElementDesc(geo.getAlgebraDescriptionDefault());
+			} else {
+				setElementDesc(geo.getLongDescription());
+			}
+
+			d.draw(g2);
 		}
 	}
 }

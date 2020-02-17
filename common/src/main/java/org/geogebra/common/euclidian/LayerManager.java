@@ -31,6 +31,6 @@ public class LayerManager {
 			drawingOrder.get(i).setOrdering(i);
 		}
 
-		app.getActiveEuclidianView().invalidateDrawableLists();
+		app.getActiveEuclidianView().invalidateDrawableList();
 	}
 }

@@ -13,6 +13,7 @@ the Free Software Foundation.
 package org.geogebra.common.euclidian;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.geogebra.common.awt.GGraphics2D;
@@ -58,8 +59,10 @@ public class DrawableList extends TreeSet<Drawable> {
 	 * @param g2
 	 *            Graphic to be used
 	 */
-	public final void drawAll(GGraphics2D g2) {
-		for (Drawable d : this) {
+	public final void drawAll(GGraphics2D g2, Drawable maxCache) {
+		Set<Drawable> toDraw = maxCache != null && contains(maxCache) ? tailSet(maxCache) : this;
+
+		for (Drawable d : toDraw) {
 			GeoElement geo = d.getGeoElement();
 			if (geo.isDefined()
 					&& !(geo.isGeoList() && ((GeoList) geo).drawAsComboBox())

@@ -9221,10 +9221,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (popupJustClosed) {
 			popupJustClosed = false;
 		} else if (penMode(mode)) {
-			setViewHits(event.getType());
-			hits = view.getHits();
-			hits.removeAllButImages();
-			getPen().handleMousePressedForPenMode(event, hits);
+			getPen().handleMousePressedForPenMode(event);
 			return;
 		}
 		// check if side of bounding box was hit
