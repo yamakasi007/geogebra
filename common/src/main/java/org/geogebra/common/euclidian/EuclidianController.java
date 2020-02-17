@@ -119,7 +119,6 @@ import org.geogebra.common.kernel.geos.PolygonFactory;
 import org.geogebra.common.kernel.geos.TestGeo;
 import org.geogebra.common.kernel.geos.Transformable;
 import org.geogebra.common.kernel.geos.Translateable;
-import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.implicit.GeoImplicit;
 import org.geogebra.common.kernel.implicit.GeoImplicitCurve;
 import org.geogebra.common.kernel.kernelND.GeoAxisND;
