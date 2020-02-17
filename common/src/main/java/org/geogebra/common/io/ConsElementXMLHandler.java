@@ -2508,6 +2508,10 @@ public class ConsElementXMLHandler {
 		}
 	}
 
+	/**
+	 * parse list of geos in a group
+	 * @param attrs - labels of geos in the group
+	 */
 	public void handleGroup(LinkedHashMap<String, String> attrs) {
 		String groupSize = attrs.get("size");
 		ArrayList<GeoElement> geosInGroup = new ArrayList<>();

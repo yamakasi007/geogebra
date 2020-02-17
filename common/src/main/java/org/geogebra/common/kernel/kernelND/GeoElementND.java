@@ -37,7 +37,6 @@ import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.ScreenReaderBuilder;
-import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.geos.properties.FillType;
 import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.main.Localization;

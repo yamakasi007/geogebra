@@ -51,7 +51,6 @@ public class Group {
 
     /**
      * xml representation of group for saving/loading
-     * <group l0="A" l1="B" ...></group>
      * @param sb - xml string builder
      */
     public void getXML(StringBuilder sb) {
