@@ -656,14 +656,14 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	public void constantShouldBeOneRow() {
 		t("1", "1");
 		GeoElement a = app.getKernel().lookupLabel("a");
-		assertEquals(DescriptionMode.VALUE, a.needToShowBothRowsInAV());
+		assertEquals(DescriptionMode.VALUE, a.getDescriptionMode());
 	}
 
 	@Test
 	public void labeledConstantShouldBeOneRow() {
 		t("a=7", "7");
 		GeoElement a = app.getKernel().lookupLabel("a");
-		assertEquals(DescriptionMode.VALUE, a.needToShowBothRowsInAV());
+		assertEquals(DescriptionMode.VALUE, a.getDescriptionMode());
 	}
 
 	@Test
