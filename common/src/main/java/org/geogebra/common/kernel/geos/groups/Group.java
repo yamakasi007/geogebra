@@ -14,22 +14,20 @@ public class Group {
 
     /**
      * Constructor for group
-     * @param cons - construction, see {@link Construction}
      * @param selectedGeos - geos selected for group
      */
-    public Group(Construction cons, ArrayList<GeoElement> selectedGeos) {
+    public Group(ArrayList<GeoElement> selectedGeos) {
         setFixed(selectedGeos.get(0).isLocked());
         for (GeoElement geo : selectedGeos) {
             geosGroup.add(geo);
             geo.setParentGroup(this);
         }
-        cons.addGroupToGroupList(this);
     }
 
     /**
      * @return list of geos in this group
      */
-    public ArrayList<GeoElement> getGeosGroup() {
+    public ArrayList<GeoElement> getGroupedGeos() {
         return geosGroup;
     }
 
@@ -37,7 +35,7 @@ public class Group {
      * set as group the geos given
      * @param geos list of selected geos
      */
-    public void setGeosGroup(ArrayList<GeoElement> geos) {
+    public void setGroupedGeos(ArrayList<GeoElement> geos) {
         geosGroup = geos;
     }
 
@@ -56,13 +54,13 @@ public class Group {
     public void getXML(StringBuilder sb) {
         sb.append("<group ");
         sb.append("size=\"");
-        sb.append(getGeosGroup().size());
+        sb.append(getGroupedGeos().size());
         sb.append("\" ");
-        for (int i = 0; i < getGeosGroup().size(); i++) {
+        for (int i = 0; i < getGroupedGeos().size(); i++) {
             sb.append("l");
             sb.append(i);
             sb.append("=\"");
-            sb.append(getGeosGroup().get(i).getLabelSimple());
+            sb.append(getGroupedGeos().get(i).getLabelSimple());
             sb.append("\" ");
         }
         sb.append("/>\n");

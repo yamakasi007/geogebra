@@ -2514,8 +2514,9 @@ public class ConsElementXMLHandler {
 	 */
 	public void handleGroup(LinkedHashMap<String, String> attrs) {
 		String groupSize = attrs.get("size");
+		int groupLength = Integer.parseInt(groupSize);
 		ArrayList<GeoElement> geosInGroup = new ArrayList<>();
-		for (int i = 0; i < Integer.parseInt(groupSize); i++) {
+		for (int i = 0; i < groupLength; i++) {
 			String label = "l" + i;
 			String geoLabel = attrs.get(label);
 			GeoElement geo = xmlHandler.kernel.lookupLabel(geoLabel);
@@ -2524,7 +2525,7 @@ public class ConsElementXMLHandler {
 			}
 		}
 		if (!geosInGroup.isEmpty()) {
-			new Group(xmlHandler.cons, geosInGroup);
+			app.getKernel().getConstruction().createGroup(geosInGroup);
 		}
 	}
 }

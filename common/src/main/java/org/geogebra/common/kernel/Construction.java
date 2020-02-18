@@ -3678,4 +3678,13 @@ public class Construction {
 	public void addGroupToGroupList(Group group) {
 		groups.add(group);
 	}
+
+	/**
+	 * creates group of selected geos and adds it to the construction
+	 * @param geos - list of geos selected for grouping
+	 */
+	public void createGroup(ArrayList<GeoElement> geos) {
+		Group group = new Group(geos);
+		addGroupToGroupList(group);
+	}
 }
