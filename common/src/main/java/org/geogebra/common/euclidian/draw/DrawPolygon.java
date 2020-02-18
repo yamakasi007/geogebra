@@ -16,17 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.geogebra.common.awt.GArea;
-import org.geogebra.common.awt.GEllipse2DDouble;
-import org.geogebra.common.awt.GGeneralPath;
 import org.geogebra.common.awt.GGraphics2D;
-import org.geogebra.common.awt.GPathIterator;
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.GShape;
-import org.geogebra.common.euclidian.BoundingBox;
 import org.geogebra.common.euclidian.Drawable;
-import org.geogebra.common.euclidian.DrawableND;
-import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.euclidian.Previewable;
@@ -41,7 +35,6 @@ import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.geos.GeoPolygon;
 import org.geogebra.common.kernel.geos.GeoVec3D;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
-import org.geogebra.common.kernel.kernelND.GeoSegmentND;
 import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.MyMath;
@@ -59,9 +52,6 @@ public class DrawPolygon extends Drawable implements Previewable {
 	private double[] coords = new double[2];
 	private ArrayList<GeoPointND> points;
 
-	private BoundingBox<GEllipse2DDouble> boundingBox;
-	private GGeneralPath prewPolygon = AwtFactory.getPrototype()
-			.newGeneralPath();
 	private boolean fillShape = false;
 
 	private GPoint2D endPoint = AwtFactory.getPrototype().newPoint2D();
@@ -137,11 +127,6 @@ public class DrawPolygon extends Drawable implements Previewable {
 					// view.updateBackground();
 				}
 			}
-
-		}
-		if (geo.isShape() && view
-				.getHitHandler() != EuclidianBoundingBoxHandler.ROTATION && getBounds() != null) {
-				getBoundingBox().setRectangle(getBounds());
 		}
 	}
 
@@ -417,68 +402,10 @@ public class DrawPolygon extends Drawable implements Previewable {
 	}
 
 	@Override
-	public BoundingBox<GEllipse2DDouble> getBoundingBox() {
-		if (boundingBox == null) {
-			boundingBox = createBoundingBox(true);
-		}
-		boundingBox.updateFrom(geo);
-		return boundingBox;
-	}
-
-	/**
-	 * method to update points of poly after mouse release
-	 * 
-	 */
-	@Override
-	public void updateGeo() {
-		if (prewPolygon != null) {
-			updateRealPointsOfPolygon();
-			prewPolygon = null;
-		}
-		poly.updateCascade(true);
-		poly.getParentAlgorithm().update();
-		for (GeoSegmentND geoSeg : poly.getSegments()) {
-			geoSeg.getParentAlgorithm().update();
-		}
-		for (GeoPointND geoPoint : poly.getPoints()) {
-			geoPoint.update();
-		}
-		poly.setEuclidianVisible(true);
-		poly.updateRepaint();
-		this.update();
-		view.setShapePolygon(null);
-		view.setShapeRectangle(null);
-		view.repaintView();
-	}
-
-	@Override
 	public void fromPoints(ArrayList<GPoint2D> pts) {
-		if (prewPolygon == null) {
-			prewPolygon = AwtFactory.getPrototype().newGeneralPath();
-		}
-
-		// init poly
-		prewPolygon.reset();
-		// move to start point
-		prewPolygon.moveTo(pts.get(0).getX(), pts.get(0).getY());
-		// draw segments
-		for (int i = 1; i < pts.size(); i++) {
-			prewPolygon.lineTo(pts.get(i).getX(), pts.get(i).getY());
-		}
-		prewPolygon.closePath();
-		updateGeo();
-	}
-
-	private void updateRealPointsOfPolygon() {
-		double[] coordArr = new double[6];
-		GPathIterator it = prewPolygon.getPathIterator(null);
-		int i = poly.getPoints().length;
-		while (!it.isDone() && i > 0) {
-			i--;
-			it.currentSegment(coordArr);
-			poly.getPoint(i).setCoords(view.toRealWorldCoordX(coordArr[0]),
-					view.toRealWorldCoordY(coordArr[1]), 1);
-			it.next();
+		for (int i = 0; i < pts.size(); i++) {
+			poly.getPoint(i).setCoords(view.toRealWorldCoordX(pts.get(i).getX()),
+					view.toRealWorldCoordY(pts.get(i).getY()), 1);
 		}
 	}
 

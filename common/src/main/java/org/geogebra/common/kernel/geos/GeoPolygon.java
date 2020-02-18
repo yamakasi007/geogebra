@@ -2838,4 +2838,17 @@ public class GeoPolygon extends GeoElement implements GeoNumberValue,
 	public void setShowLineProperties(boolean showLineProperties) {
 		this.showLineProperties = showLineProperties;
 	}
+
+	/**
+	 * Used for synchronizing polygons in old notes files with current
+	 * (no labeled edges) polygons
+	 */
+	public void hideSegments() {
+		if (getSegments() != null) {
+			for (GeoSegmentND segment : getSegments()) {
+				segment.setEuclidianVisible(false);
+			}
+		}
+		setInitLabelsCalled(false);
+	}
 }

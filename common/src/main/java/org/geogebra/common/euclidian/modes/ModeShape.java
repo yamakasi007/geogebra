@@ -22,8 +22,8 @@ import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.geos.GeoPolygon;
 import org.geogebra.common.kernel.geos.GeoSegment;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
-import org.geogebra.common.kernel.kernelND.GeoSegmentND;
 import org.geogebra.common.main.GeoGebraColorConstants;
+import org.geogebra.common.plugin.EuclidianStyleConstants;
 
 /**
  * Mouse handlers for shape tools
@@ -390,7 +390,7 @@ public class ModeShape {
 
 	private static void createPolygon(AlgoPolygon algo) {
 		GeoPolygon poly = algo.getPoly();
-		poly.setLineThickness(5);
+		poly.setLineThickness(EuclidianStyleConstants.DEFAULT_LINE_THICKNESS);
 		poly.setIsShape(true);
 		poly.setLabelVisible(false);
 		poly.setAlphaValue(0);
