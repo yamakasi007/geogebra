@@ -1,6 +1,5 @@
 package org.geogebra.common.main.saveLoad.group;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -16,13 +15,10 @@ import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.algos.AlgoJoinPoints;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoPoint;
-import org.geogebra.common.kernel.geos.groups.Group;
-import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.main.TestArticleElement;
 import org.geogebra.web.test.AppMocker;
 import org.geogebra.web.util.file.FileIO;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,17 +51,17 @@ public class GroupSaveTest {
         String pathString = "src/test/java/org/geogebra/common/main/saveLoad/group" +
                 "/consWithGroupXML.txt";
         String fileContent = FileIO.load(pathString);
-        StringBuilder sb = new StringBuilder();
-        app.getKernel().getConstruction().getConstructionXML(sb, false);
-       assertEquals(sb.toString(), fileContent);
+        StringBuilder consXMLStrBuilder = new StringBuilder();
+        app.getKernel().getConstruction().getConstructionXML(consXMLStrBuilder, false);
+       assertEquals(consXMLStrBuilder.toString(), fileContent);
     }
 
     @Test
     public void testLoadGroup() {
         String pathString = "src/test/java/org/geogebra/common/main/saveLoad/group" +
-                "/ggbWithGroupXML.txt";
+                "/consWithGroupXML.txt";
         String fileContent = FileIO.load(pathString);
-        app.setXML(fileContent, true);
+        app.getGgbApi().evalXML(fileContent);
         ArrayList<GeoElement> groupedGeos = cons.getGroups().get(0).getGroupedGeos();
         assertThat(groupedGeos.size(), equalTo(2));
         assertThat(groupedGeos.get(0).getLabelSimple(), equalTo("A"));
