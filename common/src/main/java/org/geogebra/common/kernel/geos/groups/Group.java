@@ -2,7 +2,6 @@ package org.geogebra.common.kernel.geos.groups;
 
 import java.util.ArrayList;
 
-import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.geos.GeoElement;
 
 /**
