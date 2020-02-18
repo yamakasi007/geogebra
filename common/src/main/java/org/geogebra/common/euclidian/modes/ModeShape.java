@@ -390,23 +390,21 @@ public class ModeShape {
 
 	private static void createPolygon(AlgoPolygon algo) {
 		GeoPolygon poly = algo.getPoly();
-		// do not show segment labels
-		hideSegments(poly);
+		poly.setLineThickness(5);
 		poly.setIsShape(true);
 		poly.setLabelVisible(false);
 		poly.setAlphaValue(0);
 		poly.setBackgroundColor(GColor.WHITE);
 		poly.setObjColor(GColor.BLACK);
-		poly.initLabels(null);
+		poly.setLabel(null);
 	}
 
 	private static void createMask(AlgoPolygon algo) {
 		GeoPolygon polygon = algo.getPoly();
-		hideSegments(polygon);
 		polygon.setIsMask(true);
 		polygon.setBackgroundColor(GeoGebraColorConstants.MEBIS_MASK);
 		polygon.setObjColor(GeoGebraColorConstants.MEBIS_MASK);
-		polygon.initLabels(null);
+		polygon.setLabel(null);
 	}
 
 	/**
@@ -438,13 +436,6 @@ public class ModeShape {
 				view.setShapePolygon(polygon);
 				view.repaintView();
 			}
-		}
-	}
-
-	private static void hideSegments(GeoPolygon poly) {
-		for (GeoSegmentND geoSeg : poly.getSegments()) {
-			geoSeg.setLabelVisible(false);
-			geoSeg.setSelectionAllowed(false);
 		}
 	}
 

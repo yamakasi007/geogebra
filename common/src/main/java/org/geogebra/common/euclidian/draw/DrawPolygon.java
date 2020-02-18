@@ -222,7 +222,7 @@ public class DrawPolygon extends Drawable implements Previewable {
 
 			// polygons (e.g. in GeoLists) that don't have labeled segments
 			// should also draw their border
-			else if (!poly.wasInitLabelsCalled()
+			if (!poly.wasInitLabelsCalled()
 					&& poly.getLineThickness() > 0) {
 				g2.setPaint(getObjectColor());
 				g2.setStroke(objStroke);
@@ -301,10 +301,6 @@ public class DrawPolygon extends Drawable implements Previewable {
 							double y1 = intersection.y / intersection.z;
 
 							double d = MyMath.length(x1 - xRW, y1 - yRW);
-							// Log.debug("angle = "+angle+"\nang2 =
-							// "+ang2+"\n("+x1+","+y1+")");//
-							// "+xRW+","+yRW);
-							// Application.debug(x1+","+y1);
 							if (d < dist) {
 								nearestX = x1;
 								nearestY = y1;
@@ -360,46 +356,30 @@ public class DrawPolygon extends Drawable implements Previewable {
 		// do nothing
 	}
 
-	/**
-	 * 
-	 * @return true if it has to check it's on filling
-	 */
-	protected boolean checkIsOnFilling() {
-		return geo.isFilled();
-	}
-
 	@Override
 	final public boolean hit(int x, int y, int hitThreshold) {
-		GShape t = geo.isInverseFill() ? getShape() : gp;
-		
-		// needed for MOW-114
-		GeoSegmentND[] segmentsOfPoly = poly.getSegments();
-		boolean wasSegmentHit = false;
+		if (geo.isShape()) {
+			boolean contains = gp.contains(x - hitThreshold,
+					y - hitThreshold, 2 * hitThreshold, 2 * hitThreshold);
 
-		if (segmentsOfPoly != null) {
-			// check if one of sides was hit
-			for (GeoSegmentND geoSegmentND : segmentsOfPoly) {
-				DrawableND d = view.getDrawableFor(geoSegmentND);
-				if (d instanceof DrawSegment
-						&& ((DrawSegment) d).hit(x, y, hitThreshold)) {
-					wasSegmentHit = true;
-					break;
-				}
+			boolean intersects = gp.intersects(x - hitThreshold,
+					y - hitThreshold, 2 * hitThreshold, 2 * hitThreshold);
+
+			if (geo.isFilled() && contains) {
+				poly.setLastHitType(HitType.ON_FILLING);
+				return true;
 			}
-		}
-		// no filling
-		if (!checkIsOnFilling()) {
-			// draggable only from sides of poly
-			// or from sides of boundingBox
-			if (wasSegmentHit) {
+
+			if (intersects && !contains) {
 				poly.setLastHitType(HitType.ON_BOUNDARY);
 				return true;
-			} 
+			}
+
 			poly.setLastHitType(HitType.NONE);
 			return false;
 		}
 
-		// also check for boundingBox is has filling
+		GShape t = geo.isInverseFill() ? getShape() : gp;
 		return (t != null
 				&& (t.contains(x, y) || t.intersects(x - hitThreshold,
 						y - hitThreshold, 2 * hitThreshold, 2 * hitThreshold)));
