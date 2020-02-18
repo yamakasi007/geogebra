@@ -3010,4 +3010,9 @@ public class GeoFunction extends GeoElement implements VarString, Translateable,
 	public double getY() {
 		return -1;
 	}
+
+	@Override
+	protected boolean canBeFunctionOrEquationFromUser() {
+		return true;
+	}
 }
