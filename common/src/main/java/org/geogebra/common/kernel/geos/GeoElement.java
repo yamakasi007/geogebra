@@ -81,6 +81,7 @@ import org.geogebra.common.kernel.arithmetic.Traversing;
 import org.geogebra.common.kernel.arithmetic.ValueType;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.commands.EvalInfo;
+import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.geos.properties.Auxiliary;
 import org.geogebra.common.kernel.geos.properties.EquationType;
 import org.geogebra.common.kernel.geos.properties.FillType;
@@ -327,6 +328,8 @@ public abstract class GeoElement extends ConstructionElement
 
 	private TeXFormula teXFormula;
 	private TeXAtomSerializer texAtomSerializer;
+
+	private Group parentGroup;
 
 	private static Comparator<AlgoElement> algoComparator = new Comparator<AlgoElement>() {
 
@@ -1648,6 +1651,7 @@ public abstract class GeoElement extends ConstructionElement
 	/**
 	 * @return true if fixed property can be set
 	 */
+
 	public boolean isFixable() {
 		return true; // deleting objects with fixed descendents makes them
 						// undefined
@@ -7760,5 +7764,13 @@ public abstract class GeoElement extends ConstructionElement
 
 	public List<GeoElement> getPartialSelection(boolean removeOriginal) {
 		return Collections.singletonList(this);
+	}
+
+	public void setParentGroup(Group parentGroup) {
+		this.parentGroup = parentGroup;
+	}
+
+	public Group getParentGroup() {
+		return parentGroup;
 	}
 }
