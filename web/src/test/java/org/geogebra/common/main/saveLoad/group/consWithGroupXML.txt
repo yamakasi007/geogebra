@@ -42,5 +42,5 @@
 	<lineStyle thickness="5" type="0" typeHidden="1" opacity="178"/>
 	<eqnStyle style="implicit"/>
 </element>
-<group size="2" l0="A" l1="g" />
+<group l0="A" l1="g" />
 </construction>

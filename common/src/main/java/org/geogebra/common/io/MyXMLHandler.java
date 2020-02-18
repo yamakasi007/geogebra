@@ -2917,7 +2917,6 @@ public class MyXMLHandler implements DocHandler {
 				constMode = MODE_CONST_CAS_CELL;
 				casMode = MODE_CONST_CAS_CELL;
 			} else if ("group".equals(eName)) {
-				constMode = MODE_CONST_GEO_ELEMENT;
 				geoHandler.handleGroup(attrs);
 			} else if ("worksheetText".equals(eName)) {
 				handleWorksheetText(attrs);

@@ -52,9 +52,6 @@ public class Group {
      */
     public void getXML(StringBuilder sb) {
         sb.append("<group ");
-        sb.append("size=\"");
-        sb.append(getGroupedGeos().size());
-        sb.append("\" ");
         for (int i = 0; i < getGroupedGeos().size(); i++) {
             sb.append("l");
             sb.append(i);

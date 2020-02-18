@@ -2512,13 +2512,9 @@ public class ConsElementXMLHandler {
 	 * @param attrs - labels of geos in the group
 	 */
 	public void handleGroup(LinkedHashMap<String, String> attrs) {
-		String groupSize = attrs.get("size");
-		int groupLength = Integer.parseInt(groupSize);
 		ArrayList<GeoElement> geosInGroup = new ArrayList<>();
-		for (int i = 0; i < groupLength; i++) {
-			String label = "l" + i;
-			String geoLabel = attrs.get(label);
-			GeoElement geo = xmlHandler.kernel.lookupLabel(geoLabel);
+		for (String label : attrs.values()) {
+			GeoElement geo = xmlHandler.kernel.lookupLabel(label);
 			if (geo != null) {
 				geosInGroup.add(geo);
 			}
