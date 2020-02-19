@@ -60,7 +60,6 @@ import org.geogebra.common.kernel.algos.AlgoDependentText;
 import org.geogebra.common.kernel.algos.AlgoElement;
 import org.geogebra.common.kernel.algos.AlgoIntegralODE;
 import org.geogebra.common.kernel.algos.AlgoJoinPointsSegment;
-import org.geogebra.common.kernel.algos.AlgoMacroInterface;
 import org.geogebra.common.kernel.algos.AlgoName;
 import org.geogebra.common.kernel.algos.AlgorithmSet;
 import org.geogebra.common.kernel.algos.ConstructionElement;
@@ -1078,25 +1077,22 @@ public abstract class GeoElement extends ConstructionElement
 	}
 
 	@Override
-	public void setLayer(int layer2) {
-		int newlayer = layer2;
-
-		if (layer2 == this.layer
-		// layer valid only for Drawable objects
-		// DON'T check this: eg angles on file load are not yet isDrawable()
-		// || !isDrawable()
-		) {
+	public void setLayer(int newLayer) {
+		if (newLayer == this.layer) {
 			return;
 		}
-		if (newlayer > EuclidianStyleConstants.MAX_LAYERS) {
-			newlayer = EuclidianStyleConstants.MAX_LAYERS;
-		} else if (newlayer < 0) {
-			newlayer = 0;
+
+		int oldLayer = this.layer;
+
+		if (newLayer > EuclidianStyleConstants.MAX_LAYERS) {
+			this.layer = EuclidianStyleConstants.MAX_LAYERS;
+		} else if (newLayer < 0) {
+			this.layer = 0;
+		} else {
+			this.layer = newLayer;
 		}
 
-		kernel.notifyChangeLayer(this, this.layer, newlayer);
-
-		this.layer = newlayer;
+		kernel.notifyChangeLayer(this, oldLayer, this.layer);
 	}
 
 	@Override

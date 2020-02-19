@@ -5196,6 +5196,12 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		}
 	}
 
+	/**
+	 * GeoPriorityComparators are used to decide the drawing
+	 * and selection orders of Geos
+	 * @return the default comparator (layer -> type -> construction order) in every
+	 * app except notes, where the geo's `ordering` is used
+	 */
 	public GeoPriorityComparator getGeoPriorityComparator() {
 		if (isWhiteboardActive()) {
 			return new NotesPriorityComparator();

@@ -13,11 +13,17 @@ public class LayerManager {
 		return drawingOrder.size();
 	}
 
+	/**
+	 * Add geo on the last position and set its ordering
+	 */
 	public void addGeo(GeoElement geo) {
 		geo.setOrdering(getNextOrder());
 		drawingOrder.add(geo);
 	}
 
+	/**
+	 * Remove the geo and update the ordering of all other elements
+	 */
 	public void removeGeo(GeoElement geo) {
 		drawingOrder.remove(geo);
 		for (int i = 0; i < drawingOrder.size(); i++) {

@@ -1703,13 +1703,11 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 	}
 
+	/**
+	 * Called when the drawing priorities of the objects in the view have changed
+	 */
 	public void invalidateDrawableList() {
-		allDrawableList.clear();
-
-		for (DrawableND drawable : drawableMap.values()) {
-			allDrawableList.add((Drawable) drawable);
-		}
-
+		allDrawableList.sort();
 		repaintView();
 	}
 
@@ -1723,6 +1721,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			return;
 		}
 		for (Drawable d : allDrawableList) {
+			d.updateForView();
+		}
+		for (Drawable d : bgImageList) {
 			d.updateForView();
 		}
 		if (repaint) {
@@ -1963,7 +1964,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	protected boolean createAndAddDrawable(GeoElement geo) {
 		DrawableND d = createDrawable(geo);
 		if (d != null) {
-			allDrawableList.add((Drawable) d);
+			if (!bgImageList.contains(d)) {
+				allDrawableList.add((Drawable) d);
+			}
 			return true;
 		}
 		return false;
@@ -2103,11 +2106,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			return;
 		}
 
-		if (app.isWhiteboardActive()) {
-			app.getActiveEuclidianView().invalidateDrawableList();
-		} else {
-			allDrawableList.remove(d);
-		}
+		allDrawableList.remove(d);
 
 		if (d instanceof RemoveNeeded) {
 			((RemoveNeeded) d).remove();
@@ -6289,6 +6288,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		g2.drawString(text, x, y);
 	}
 
+	/**
+	 * Invalidate cached graphics
+	 */
 	public void invalidateCache() {
 		maxCachedDrawable = null;
 		cacheGraphics = null;
@@ -6301,7 +6303,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (getCacheGraphics() != null && allDrawableList.size() > 0) {
 			cacheGraphics = getCacheGraphics().createGraphics();
 			drawGeometricObjects(cacheGraphics);
-			maxCachedDrawable = allDrawableList.last();
+			maxCachedDrawable = allDrawableList.get(allDrawableList.size() - 1);
 		}
 	}
 

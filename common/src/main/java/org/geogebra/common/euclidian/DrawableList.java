@@ -12,9 +12,9 @@ the Free Software Foundation.
 
 package org.geogebra.common.euclidian;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -24,33 +24,35 @@ import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 /**
  * List to store Drawable objects for fast drawing.
  */
-public class DrawableList extends TreeSet<Drawable> {
+public class DrawableList extends ArrayList<Drawable> {
 
+	private Comparator<Drawable> comparator;
+
+	/**
+	 * Create a DrawableList with the given GeoPriorityComparator
+	 */
 	public DrawableList(final GeoPriorityComparator comparator) {
-		super(new Comparator<Drawable>() {
+		this.comparator = new Comparator<Drawable>() {
 			@Override
 			public int compare(Drawable a, Drawable b) {
 				return comparator.compare(a.geo, b.geo, false);
 			}
-		});
+		};
 	}
 
 	@Override
 	public final boolean add(Drawable d) {
-		if (d != null) {
-			return super.add(d);
+		if (d == null) {
+			return false;
 		}
 
-		return false;
-	}
-
-	@Override
-	public final boolean remove(Object o) {
-		if (o != null) {
-			return super.remove(o);
+		int i = 0;
+		while (i < size() && comparator.compare(get(i), d) < 0) {
+			i++;
 		}
 
-		return false;
+		add(i, d);
+		return true;
 	}
 
 	/**
@@ -60,9 +62,8 @@ public class DrawableList extends TreeSet<Drawable> {
 	 *            Graphic to be used
 	 */
 	public final void drawAll(GGraphics2D g2, Drawable maxCache) {
-		Set<Drawable> toDraw = maxCache != null && contains(maxCache) ? tailSet(maxCache) : this;
-
-		for (Drawable d : toDraw) {
+		for (int i = indexOf(maxCache) + 1; i < size(); i++) {
+			Drawable d = get(i);
 			GeoElement geo = d.getGeoElement();
 			if (geo.isDefined()
 					&& !(geo.isGeoList() && ((GeoList) geo).drawAsComboBox())
@@ -80,5 +81,9 @@ public class DrawableList extends TreeSet<Drawable> {
 		for (Drawable d : this) {
 			d.update();
 		}
+	}
+
+	public void sort() {
+		Collections.sort(this, comparator);
 	}
 }

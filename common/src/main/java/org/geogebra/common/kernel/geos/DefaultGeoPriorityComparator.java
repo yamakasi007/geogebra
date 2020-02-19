@@ -40,7 +40,6 @@ public class DefaultGeoPriorityComparator implements GeoPriorityComparator {
 		return (int) (a.getID() - b.getID());
 	}
 
-
 	/**
 	 * @return drawing priority (lower = drawn first)
 	 */
