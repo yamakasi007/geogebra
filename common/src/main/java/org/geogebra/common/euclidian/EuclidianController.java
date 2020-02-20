@@ -31,11 +31,11 @@ import org.geogebra.common.euclidian.draw.DrawBoolean;
 import org.geogebra.common.euclidian.draw.DrawConic;
 import org.geogebra.common.euclidian.draw.DrawConicPart;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
-import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.DrawPoint;
 import org.geogebra.common.euclidian.draw.DrawPolyLine;
 import org.geogebra.common.euclidian.draw.DrawPolygon;
 import org.geogebra.common.euclidian.draw.DrawSlider;
+import org.geogebra.common.euclidian.draw.DrawText;
 import org.geogebra.common.euclidian.event.AbstractEvent;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.modes.ModeDeleteLocus;
@@ -96,7 +96,6 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoFunctionable;
 import org.geogebra.common.kernel.geos.GeoImage;
-import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoList;
@@ -202,14 +201,16 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public static final int MOVE_X_AXIS = 116;
 	public static final int MOVE_Y_AXIS = 117;
 	protected static final int MOVE_BOOLEAN = 118;
-	private static final int MOVE_WIDGET = 119;
+	protected static final int MOVE_BUTTON = 119;
 	protected static final int MOVE_VECTOR_NO_GRID = 122;
 	protected static final int MOVE_POINT_WITH_OFFSET = 123;
 	protected static final int MOVE_FREEHAND = 124;
 	protected static final int MOVE_ATTACH_DETACH = 125;
 	protected static final int MOVE_IMPLICIT_CURVE = 127;
 	public static final int MOVE_Z_AXIS = 128;
+	public static final int MOVE_STROKE = 129;
 	public static final int MOVE_AUDIO_SLIDER = 130;
+	protected static final int MOVE_MEDIA = 131;
 	protected static final double MINIMAL_PIXEL_DIFFERENCE_FOR_ZOOM = 10;
 	private static final float ZOOM_RECTANGLE_SNAP_RATIO = 1.2f;
 	private static final int ZOOM_RECT_THRESHOLD = 30;
@@ -252,7 +253,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected GeoFunction movedGeoFunction;
 	protected GeoNumeric movedGeoNumeric;
 	protected GeoBoolean movedGeoBoolean;
-	private GeoWidget movedGeoWidget;
+	protected AbsoluteScreenLocateable movedGeoButton;
+	protected GeoWidget movedGeoMedia;
 	protected GeoElement movedLabelGeoElement;
 	protected GeoElement movedGeoElement;
 	protected Drawable resizedShape = null;
@@ -348,7 +350,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	/**
 	 * preview rectangle shape for text tool
 	 */
-	private GRectangle textRectangleShape;
+	GRectangle textRectangleShape;
 
 	protected Object detachFrom;
 	protected boolean freehandModePrepared = false;
@@ -406,8 +408,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 	private SnapController snapController = new SnapController();
 	private ArrayList<GeoElement> splitPartsToRemove = new ArrayList<>();
-
-	private GeoInlineText lastInlineText;
 
 	/**
 	 * state for selection tool over press/release
@@ -745,7 +745,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 
 		} else {
-			boolean clear = !EuclidianConstants.isMoveOrSelectionMode(mode)
+			boolean clear = !moveMode(mode)
 					|| !EuclidianConstants.keepSelectionWhenSet(newMode);
 			if (!temporaryMode && clear) {
 				selection.clearSelectedGeos(false);
@@ -763,7 +763,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			ge.setAppName("cas");
 		}
 		ge.initPosition(view);
-		ge.setEmbedId(app.getEmbedManager().nextID());
+		app.getEmbedManager().initAppEmbed(ge);
 		ge.setLabel(null);
 		app.storeUndoInfo();
 		app.invokeLater(new Runnable() {
@@ -3205,8 +3205,17 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	protected final boolean text(Hits hits, boolean selPreview) {
+		if (getTextController() != null && getTextController().getHit() != null
+				&& !app.has(Feature.MOW_TEXT_TOOL)) {
+			return false;
+		}
+
 		GeoPointND loc = null; // location
 		boolean rw = true;
+
+		// threshold for custom or default size
+		boolean customSize = app.has(Feature.MOW_TEXT_TOOL)
+				&& textRectangleShape != null;
 
 		if (hits.isEmpty()) {
 			if (selPreview) {
@@ -3214,8 +3223,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 
 			// create new Point
-			loc = new GeoPoint(kernel.getConstruction());
-			rw = companion.setCoordsToMouseLoc(loc);
+			if (customSize) {
+				loc = customTextPosition();
+			} else {
+				loc = new GeoPoint(kernel.getConstruction());
+				rw = companion.setCoordsToMouseLoc(loc);
+			}
 		} else {
 			// points needed
 			addSelectedPoint(hits, 1, false, selPreview);
@@ -3224,17 +3237,51 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				GeoPointND[] points = getSelectedPointsND();
 				loc = points[0];
 			} else if (!selPreview) {
-				loc = new GeoPoint(kernel.getConstruction());
-				rw = companion.setCoordsToMouseLoc(loc);
+				if (customSize) {
+					loc = customTextPosition();
+				} else {
+					loc = new GeoPoint(kernel.getConstruction());
+					rw = companion.setCoordsToMouseLoc(loc);
+				}
 			}
 		}
 
+		// got location
+		if (loc != null && app.has(Feature.MOW_TEXT_TOOL)) {
+			if (wasBoundingBoxHit) {
+				return false;
+			}
+
+			GeoText t = getTextController().createText(loc);
+			memorizeJustCreatedGeos(t.asArray());
+
+			if (textRectangleShape != null) {
+				if (customSize) {
+					getTextController().resizeEditor(
+							Math.max(DrawText.MIN_EDITOR_WIDTH,
+									(int) textRectangleShape.getWidth()),
+							Math.max(DrawText.MIN_EDITOR_HEIGHT,
+									(int) textRectangleShape.getHeight()));
+				}
+				textRectangleShape = null;
+				view.setShapeRectangle(null);
+				view.repaintView();
+			}
+			return true;
+		}
 		if (loc != null && getDialogManager() != null) {
 			getDialogManager().showTextCreationDialog(loc, rw);
 			return true;
 		}
 
 		return false;
+	}
+
+	private GeoPointND customTextPosition() {
+		return new GeoPoint(kernel.getConstruction(), textRectangleShape.getX(),
+				textRectangleShape.getY() + app.getFontSize()
+						+ EuclidianStatic.EDITOR_MARGIN,
+				1);
 	}
 
 	/**
@@ -3250,6 +3297,13 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void setAltDown(boolean altDown) {
 		this.altDown = altDown;
+	}
+
+	/**
+	 * @return the controller for in-place editing texts.
+	 */
+	public TextController getTextController() {
+		return null;
 	}
 
 	protected final boolean slider(boolean selPreview) {
@@ -5224,14 +5278,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			break;
 
 		// new text
+
+		case EuclidianConstants.MODE_MEDIA_TEXT:
 		case EuclidianConstants.MODE_TEXT:
 			changedKernel = text(
 					hits.getOtherHits(TestGeo.GEOIMAGE, tempArrayList),
 					selectionPreview);
-			break;
-
-		case EuclidianConstants.MODE_MEDIA_TEXT:
-			inlineText(selectionPreview);
 			break;
 
 		case EuclidianConstants.MODE_AUDIO:
@@ -5885,16 +5937,28 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 	}
 
-	private final void moveWidget(boolean repaint) {
+	protected final void moveButton(boolean repaint) {
 		// part of snap to grid code
-		movedGeoWidget.setAbsoluteScreenLoc(
+		movedGeoButton.setAbsoluteScreenLoc(
 				view.toScreenCoordX(xRW - getStartPointX()),
 				view.toScreenCoordY(yRW - getStartPointY()));
 
 		if (repaint) {
-			movedGeoWidget.updateRepaint();
+			movedGeoButton.updateRepaint();
 		} else {
-			movedGeoWidget.updateCascade();
+			movedGeoButton.updateCascade();
+		}
+	}
+
+	protected final void moveMedia(boolean repaint) {
+		// part of snap to grid code
+		movedGeoMedia.setAbsoluteScreenLoc(view.toScreenCoordX(xRW - getStartPointX()),
+				view.toScreenCoordY(yRW - getStartPointY()));
+
+		if (repaint) {
+			movedGeoMedia.updateRepaint();
+		} else {
+			movedGeoMedia.updateCascade();
 		}
 	}
 
@@ -6004,7 +6068,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	protected final void moveAudioSlider(boolean repaint) {
-		GeoAudio audio = (GeoAudio) movedGeoWidget;
+		GeoAudio audio = (GeoAudio) movedGeoMedia;
 		setAudioTimeValue(audio);
 		audio.updateRepaint();
 	}
@@ -6258,39 +6322,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return changedKernel;
 	}
 
-	private void inlineText(boolean selPreview) {
-		if (selPreview) {
-			return;
-		}
-
-		GeoInlineText inlineText;
-
-		if (textRectangleShape != null) {
-			int width = Math.max(GeoInlineText.DEFAULT_WIDTH,
-					(int) textRectangleShape.getWidth());
-
-			int height = Math.max(GeoInlineText.DEFAULT_HEIGHT,
-					(int) textRectangleShape.getHeight());
-
-			GPoint2D initPoint = AwtFactory.getPrototype()
-					.newPoint2D(view.toRealWorldCoordX(textRectangleShape.getX()),
-							view.toRealWorldCoordY(textRectangleShape.getY()));
-
-			inlineText = new GeoInlineText(kernel.getConstruction(), initPoint, width, height);
-
-			textRectangleShape = null;
-			view.setShapeRectangle(null);
-			view.repaintView();
-		} else {
-			GPoint2D initPoint = AwtFactory.getPrototype().newPoint2D(xRW, yRW);
-			inlineText = new GeoInlineText(kernel.getConstruction(), initPoint);
-		}
-
-		inlineText.setLabel(null);
-		selectAndShowBoundingBox(inlineText);
-		((DrawInlineText) view.getDrawableFor(inlineText)).toForeground(0, 0);
-	}
-
 	protected void hitCheckBox(GeoBoolean bool) {
 		if (app.has(Feature.SELECT_TOOL_NEW_BEHAVIOUR)
 				&& mode == EuclidianConstants.MODE_SELECT) {
@@ -6311,7 +6342,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return hits;
 	}
 
-	protected boolean moveMode(int evMode) {
+	private boolean moveMode(int evMode) {
 		return EuclidianConstants.isMoveOrSelectionMode(evMode);
 	}
 
@@ -7144,15 +7175,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				tempFunction = new GeoFunction(kernel.getConstruction());
 			}
 			tempFunction.set(movedGeoFunction);
-		} else if (movedGeoElement instanceof GeoLocusStroke
-				|| movedGeoElement instanceof GeoInlineText) {
+		} else if (movedGeoElement instanceof GeoLocusStroke) {
 			if (translationVec == null) {
 				translationVec = new Coords(2);
 			}
 			translateableGeos = new ArrayList<>(1);
 			translateableGeos.add(movedGeoElement);
 			setStartPointLocation(xRW, yRW);
-			moveMode = MOVE_DEPENDENT;
+			moveMode = MOVE_STROKE;
 		}
 
 		// free number
@@ -7259,9 +7289,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}
 
 				// ie Button Mode is really selected
-				movedGeoWidget = (GeoWidget) movedGeoElement;
+				movedGeoButton = (AbsoluteScreenLocateable) movedGeoElement;
 				// move button
-				moveAbsoluteLocatable(movedGeoWidget);
+				moveAbsoluteLocatable(movedGeoButton, MOVE_BUTTON);
 
 			} else {
 				// need to trigger scripts
@@ -7272,14 +7302,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}
 			}
 		} else if (movedGeoElement instanceof GeoWidget) {
-			movedGeoWidget = (GeoWidget) movedGeoElement;
-			if (movedGeoWidget.isGeoAudio()
+			movedGeoMedia = (GeoWidget) movedGeoElement;
+			if (movedGeoMedia.isGeoAudio()
 					&& !isMoveAudioExpected(app.getCapturingThreshold(type))) {
 				moveMode = MOVE_AUDIO_SLIDER;
 				moveAudioSlider(true);
 				return;
 			}
-			moveAbsoluteLocatable(movedGeoWidget);
+			moveAbsoluteLocatable(movedGeoMedia, MOVE_MEDIA);
 		}
 
 		// image
@@ -7327,8 +7357,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 	}
 
-	private void moveAbsoluteLocatable(AbsoluteScreenLocateable geo) {
-		moveMode = MOVE_WIDGET;
+	private void moveAbsoluteLocatable(AbsoluteScreenLocateable geo, int absMoveMode) {
+		moveMode = absMoveMode;
 		startLoc = mouseLoc;
 		if (geo instanceof GeoWidget) {
 			((GeoWidget) geo).updateAbsLocation(view);
@@ -7374,7 +7404,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	protected boolean isMoveAudioExpected(int hitThreshold) {
-		DrawAudio da = (DrawAudio) view.getDrawableFor(movedGeoWidget);
+		DrawAudio da = (DrawAudio) view.getDrawableFor(movedGeoMedia);
 		boolean hitSlider = da.isSliderHit(mouseLoc.x, mouseLoc.y, hitThreshold);
 		return (tempRightClick()) || !hitSlider;
 	}
@@ -7679,10 +7709,15 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			moveBoolean(repaint);
 			break;
 
-		case MOVE_WIDGET:
-			moveWidget(repaint);
+		case MOVE_BUTTON:
+			moveButton(repaint);
 			break;
-
+		case MOVE_MEDIA:
+			moveMedia(repaint);
+			break;
+		case MOVE_STROKE:
+			moveDependent(repaint);
+			break;
 		case MOVE_DEPENDENT:
 			if (Algos.isUsedFor(Commands.AttachCopyToView, movedGeoElement)) {
 				moveAttached(repaint);
@@ -7734,10 +7769,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (startBoundingBoxState == null) {
 			startBoundingBoxState = new BoundingBoxResizeState(
 					view.getBoundingBox().getRectangle(),
-					selection.getSelectedGeos(), view);
+					selection.getSelectedGeos(), view, handler.isDiagonal());
 		}
-		startBoundingBoxState.updateThresholds();
-
 		GPoint2D mouseDistance = getMouseDistance(event, handler);
 
 		// calc boundingbox width/height
@@ -7778,13 +7811,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		for (int i = 0; i < selection.getSelectedGeos().size(); i++) {
 			GeoElement geo = selection.getSelectedGeos().get(i);
 			Drawable dr = (Drawable) view.getDrawableFor(geo);
-
-			if (dr == null) {
-				continue;
-			}
-
 			// calculate new positions relative to bounding box
-			ArrayList<GPoint2D> pts = startBoundingBoxState.getRatios(geo);
+			ArrayList<GPoint2D> pts = startBoundingBoxState.getRatios(i);
 			ArrayList<GPoint2D> transformedPts = new ArrayList<>();
 			for (GPoint2D pt : pts) {
 				transformedPts.add(
@@ -7883,11 +7911,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 		if (app.getMaskWidgets() != null) {
 			app.getMaskWidgets().clearMasks();
-		}
-		for (Drawable dr : view.allDrawableList) {
-			if (dr instanceof DrawInlineText) {
-				((DrawInlineText) dr).toBackground();
-			}
 		}
 	}
 
@@ -8304,9 +8327,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}
 			}
 		}
-
 		// preview shape for mow text tool
-		if (mode == EuclidianConstants.MODE_MEDIA_TEXT) {
+		if (mode == EuclidianConstants.MODE_MEDIA_TEXT
+				&& app.has(Feature.MOW_TEXT_TOOL)) {
 			view.setBoundingBox(null);
 			updateTextRectangle(event);
 			view.setShapeRectangle(textRectangleShape);
@@ -8341,10 +8364,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			textRectangleShape = AwtFactory.getPrototype().newRectangle();
 		}
 
-		int left = Math.min(event.getX(), startPosition.getX());
-		int top = Math.min(event.getY(), startPosition.getY());
 		int width = Math.abs(event.getX() - startPosition.getX());
 		int height = Math.abs(event.getY() - startPosition.getY());
+		int left = Math.min(startPosition.getX(), event.getX());
+		int top = Math.min(startPosition.getY(), event.getY());
 
 		textRectangleShape.setBounds(left, top, width, height);
 	}
@@ -8372,7 +8395,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 		scriptsHaveRun = false;
 
-		if (isTextfieldHasFocus() && moveMode != MOVE_WIDGET) {
+		if (isTextfieldHasFocus() && moveMode != MOVE_BUTTON) {
 			return;
 		}
 		if (circleRadiusDrag(event)) {
@@ -9204,6 +9227,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				&& view.getBoundingBox().hitSideOfBoundingBox(event.getX(),
 						event.getY(), app.getCapturingThreshold(event.getType()));
 
+		if (wasBoundingBoxHit && getTextController() != null) {
+			getTextController().stopEditing();
+		}
+
 		Drawable d = view.getBoundingBoxHandlerHit(
 				new GPoint(event.getX(), event.getY()), event.getType());
 
@@ -9374,7 +9401,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	private boolean handleVideoEmbedReleased() {
-		if (draggingOccured || view.getHits().isEmpty()) {
+		if (!moveMode(mode)
+			|| draggingOccured || view.getHits().isEmpty()) {
 			return false;
 		}
 
@@ -9751,7 +9779,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (selectedGeos.size() == 1) {
 			GeoElement geoElement = selectedGeos.get(0);
 			return geoElement.isGeoSegment()
-					|| geoElement instanceof GeoInlineText
 					|| (geoElement.isGeoImage() && !geoElement.isLocked() && crop);
 		}
 		return false;
@@ -9890,39 +9917,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return draggingOccured && draggingBeyondThreshold;
 	}
 
-	private boolean handleInlineTextHit() {
-		if (view.getHits().isEmpty()) {
-			lastInlineText = null;
-			return false;
-		}
-
-		GeoElement topGeo = view.getHits().get(view.getHits().size() - 1);
-
-		if (topGeo == lastInlineText && !draggingOccured) {
-			showDynamicStylebar();
-			((DrawInlineText) view.getDrawableFor(topGeo)).toForeground(mouseLoc.x, mouseLoc.y);
-
-			// Fix weird multiselect bug.
-			setResizedShape(null);
-
-			return true;
-		} else if (topGeo instanceof GeoInlineText) {
-			lastInlineText = (GeoInlineText) topGeo;
-			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(lastInlineText));
-			String hyperlinkURL = drInlineText.urlByCoordinate(mouseLoc.x, mouseLoc.y);
-			if (hyperlinkURL != null && !draggingOccured) {
-				showDynamicStylebar();
-				drInlineText.toForeground(mouseLoc.x, mouseLoc.y);
-				app.showURLinBrowser(hyperlinkURL);
-				return true;
-			}
-		} else {
-			lastInlineText = null;
-		}
-
-		return false;
-	}
-
 	/**
 	 * Handle pointer release.
 	 * 
@@ -9930,8 +9924,19 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            pointer event
 	 */
 	public void wrapMouseReleased(AbstractEvent event) {
-		if (handleInlineTextHit()) {
-			return;
+		if (getTextController() != null) {
+			GeoElement topText = view.getHits().getFirstHit(TestGeo.GEOTEXT);
+			if (moveMode(mode)) {
+				if (getTextController().handleTextPressed((GeoText) topText,
+						event.getX(), event.getY(), draggingOccured)) {
+					// Fix weird multiselect bug. Even if you hit the resize dot
+					// (very likely on touch devices), you probably want to edit the text
+					setResizedShape(null);
+					return;
+				}
+			} else {
+				getTextController().stopEditing();
+			}
 		}
 
 		// will be reset in wrapMouseReleased
@@ -10012,7 +10017,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		// after finished drag switch back mode
 		// also ignore drag start point
-		if (EuclidianConstants.isMoveOrSelectionMode(mode) && shapeDragged) {
+		if (moveMode(mode) && shapeDragged) {
 			shapeDragged = false;
 			mode = oldShapeMode;
 			getShapeMode().setDragStartPointSet(false);
@@ -10579,7 +10584,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			// prevent objects created by a script
 			if (app.isUsingFullGui() && app.getGuiManager() != null) {
 				app.getGuiManager().mouseReleasedForPropertiesView(
-						!EuclidianConstants.isMoveOrSelectionMode(mode)
+						!moveMode(mode)
 								&& mode != EuclidianConstants.MODE_MOVE_ROTATE);
 			}
 		}
@@ -10655,8 +10660,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 		} else {
 			// there are hits
-			if (selection.selectedGeosSize() > 0
-					&& EuclidianConstants.isMoveOrSelectionMode(mode)) {
+			if (selection.selectedGeosSize() > 0 && moveMode(mode)) {
 				// only for move mode
 				// right click on already selected geos -> show menu for them
 				// right click on object(s) not selected -> clear
@@ -10722,6 +10726,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void wrapMouseWheelMoved(int x, int y, double delta,
 			boolean shiftOrMeta, boolean alt) {
+		if (getTextController() != null) {
+			getTextController().stopEditing();
+		}
+
 		if (isTextfieldHasFocus()) {
 			return;
 		}
@@ -11939,7 +11947,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		// store undo info and state if we use the tool once again
 		int m = temporaryMode ? oldMode : mode;
 		app.storeUndoInfoAndStateForModeStarting(
-				!EuclidianConstants.isMoveOrSelectionMode(m));
+				!moveMode(m));
 	}
 
 	protected GeoElement[] extremum(Hits hits, boolean selPreview) {
@@ -12353,7 +12361,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		for (GeoElement geo : geos) {
 			Drawable dr = ((Drawable) view.getDrawableFor(geo));
 			if (dr != null) {
-				if (!(geo instanceof PointRotateable)) {
+				if (!dr.hasRotationHandler()) {
 					hasRotationHandler = false;
 				}
 				GRectangle2D bounds = dr.getBoundsClipped();
