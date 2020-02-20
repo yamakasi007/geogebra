@@ -6,14 +6,10 @@ import org.geogebra.web.html5.gui.util.FormLabel;
 import org.geogebra.web.html5.main.AppW;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -21,7 +17,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-public class MediaInputPanel extends FlowPanel {
+public class MediaInputPanel extends FlowPanel implements ProcessInput {
 
 	private AppW app;
 	private OptionDialog parentDialog;
@@ -148,40 +144,24 @@ public class MediaInputPanel extends FlowPanel {
 		}
 	}
 
-	/**
-	 * Input changed (paste or key event happened)
-	 */
-	protected void onInput() {
+	@Override
+	public void onInput() {
 		resetError();
 		addStyleName("focusState");
 		removeStyleName("emptyState");
+	}
+
+	@Override
+	public void processInput() {
+		parentDialog.processInput();
 	}
 
 	/**
 	 * Add handler for input event
 	 */
 	private void addInputHandler() {
-		inputField.getTextComponent().getTextBox().addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeEvent()
-						.getKeyCode() == KeyCodes.KEY_ENTER) {
-					parentDialog.processInput();
-				} else {
-					onInput();
-				}
-			}
-		});
-
-		nativeOn(inputField.getTextComponent().getInputElement());
+		new MediaInputKeyHandler(inputField.getTextComponent(), this);
 	}
-
-	private native void nativeOn(Element img) /*-{
-		var that = this;
-		img.addEventListener("input", function () {
-			that.@org.geogebra.web.full.gui.dialog.MediaInputPanel::onInput()();
-		});
-	}-*/;
 
 	/**
 	 * Add mouse over/ out handlers
