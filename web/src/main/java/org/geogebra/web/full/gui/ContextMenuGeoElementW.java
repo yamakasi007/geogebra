@@ -1,10 +1,7 @@
 package org.geogebra.web.full.gui;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.resources.client.ResourcePrototype;
-import com.google.gwt.user.client.Command;
+import java.util.ArrayList;
+
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.gui.ContextMenuGeoElement;
 import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
@@ -47,7 +44,11 @@ import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.CopyPasteW;
 
-import java.util.ArrayList;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.resources.client.ResourcePrototype;
+import com.google.gwt.user.client.Command;
 
 /**
  * @author gabor
@@ -171,6 +172,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addFixForUnbundledOrNotes();
 		} else if (app.isWhiteboardActive()) {
 			addCutCopyPaste();
+			addGroupItems();
 			addFixForUnbundledOrNotes();
 		}
 
@@ -205,6 +207,11 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		// DELETE
 		addDeleteItem();
 		addPropertiesItem();
+	}
+
+	private void addGroupItems() {
+		GroupItems items = new GroupItems(app);
+		items.addAvailable(wrappedPopup);
 	}
 
 	private void addPropertiesItem() {
