@@ -160,7 +160,7 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 * Add handler for input event
 	 */
 	private void addInputHandler() {
-		MediaInputKeyHandler keyHandler = new MediaInputKeyHandler(inputField.getTextComponent(),
+		new MediaInputKeyHandler(inputField.getTextComponent(),
 				this);
 	}
 
