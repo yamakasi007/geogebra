@@ -112,12 +112,41 @@ public class Browser {
 	}-*/;
 
 	/**
+	 * @param workerpath
+	 *            JS folder with workers
 	 * @return whether workers are supported
 	 */
-	public static boolean checkWorkerSupport() {
-		return !"tablet".equals(GWT.getModuleName())
-				&& !"tabletWin".equals(GWT.getModuleName());
+	public static boolean checkWorkerSupport(String workerpath) {
+		if ("tablet".equals(GWT.getModuleName())
+				|| "tabletWin".equals(GWT.getModuleName())) {
+			return false;
+		}
+		return nativeCheckWorkerSupport(workerpath);
 	}
+
+	private static native boolean nativeCheckWorkerSupport(
+			String workerpath) /*-{
+		// Web workers are not supported in cross domain situations, and the
+		// following check only correctly detects them in chrome, so this
+		// condition must stay here until the end of times.
+		if (navigator.userAgent.toLowerCase().indexOf("firefox") != -1
+			|| navigator.userAgent.toLowerCase().indexOf("safari") != -1
+			&& navigator.userAgent.toLowerCase().indexOf("chrome") == -1) {
+			@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: workers might not be supported");
+			return false;
+		}
+
+		try {
+			var worker = new $wnd.Worker(workerpath+"js/workercheck.js");
+		} catch (e) {
+			@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: workers are not supported (no worker at " + workerpath + "), fallback for simple js");
+			return false;
+		}
+
+		@org.geogebra.common.util.debug.Log::debug(Ljava/lang/String;)("INIT: workers are supported");
+		worker.terminate();
+		return true;
+	}-*/;
 
 	public static native boolean zipjsLoadedWithoutWebWorkers() /*-{
 		return !!($wnd.zip && $wnd.zip.useWebWorkers === false);
