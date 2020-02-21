@@ -19,17 +19,21 @@ public class MediaInputKeyHandler implements KeyUpHandler, KeyDownHandler {
 	private final ProcessInput input;
 
 	/**
-	 *
-	 * @param field to check
 	 * @param processInput the process, input change code.
 	 */
-	public MediaInputKeyHandler(AutoCompleteTextFieldW field,
-								ProcessInput processInput) {
+	public MediaInputKeyHandler(ProcessInput processInput) {
 		this.input = processInput;
+	}
 
+	/**
+	 *
+	 * @param field to attach the handlers to.
+	 */
+	void attachTo(AutoCompleteTextFieldW field) {
 		field.getTextBox().addKeyUpHandler(this);
 		field.getTextBox().addKeyDownHandler(this);
 		addNativeInputHandler(field.getInputElement());
+
 	}
 
 	private native void addNativeInputHandler(Element elem) /*-{

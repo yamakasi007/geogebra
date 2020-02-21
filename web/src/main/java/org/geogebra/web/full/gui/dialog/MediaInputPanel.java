@@ -140,8 +140,12 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 		addStyleName("emptyState");
 		removeStyleName("errorState");
 		if (required) {
-			parentDialog.setPrimaryButtonEnabled(!StringUtil.emptyTrim(inputField.getText()));
+			parentDialog.setPrimaryButtonEnabled(!isInputEmpty());
 		}
+	}
+
+	private boolean isInputEmpty() {
+		return StringUtil.emptyTrim(inputField.getText());
 	}
 
 	@Override
@@ -153,6 +157,10 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 
 	@Override
 	public void processInput() {
+		if (required && isInputEmpty()) {
+			return;
+		}
+
 		parentDialog.processInput();
 	}
 
@@ -160,7 +168,7 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 * Add handler for input event
 	 */
 	private void addInputHandler() {
-		new MediaInputKeyHandler(inputField.getTextComponent(), this);
+		new MediaInputKeyHandler(this).attachTo(inputField.getTextComponent());
 	}
 
 	/**
