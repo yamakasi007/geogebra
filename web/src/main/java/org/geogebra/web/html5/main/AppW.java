@@ -146,7 +146,6 @@ import org.geogebra.web.html5.util.debug.LoggerW;
 import org.geogebra.web.html5.util.keyboard.KeyboardManagerInterface;
 import org.geogebra.web.plugin.WebsocketLogger;
 
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -207,7 +206,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	protected final ArticleElementInterface articleElement;
 
 	protected EuclidianPanelWAbstract euclidianViewPanel;
-	protected Canvas canvas;
 
 	private final GLookAndFeelI laf;
 
@@ -516,13 +514,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			ggbapi = new GgbAPIW(this);
 		}
 		return ggbapi;
-	}
-
-	/**
-	 * @return {@link Canvas}
-	 */
-	public Canvas getCanvas() {
-		return canvas;
 	}
 
 	@Override

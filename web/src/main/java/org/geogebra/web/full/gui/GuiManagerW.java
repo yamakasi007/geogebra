@@ -1984,8 +1984,10 @@ public class GuiManagerW extends GuiManager
 	public void addStylebar(EuclidianView ev,
 			EuclidianStyleBar dynamicStylebar) {
 		DockPanelW dp = getLayout().getDockManager().getPanel(ev.getViewID());
-		((EuclidianDockPanelWAbstract) dp).getAbsolutePanel()
-		.add((DynamicStyleBar) dynamicStylebar);
+		AbsolutePanel absolutePanel = ((EuclidianDockPanelWAbstract) dp).getAbsolutePanel();
+		if (absolutePanel != null) {
+			absolutePanel.add((DynamicStyleBar) dynamicStylebar);
+		}
 	}
 
 	@Override

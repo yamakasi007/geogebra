@@ -242,13 +242,6 @@ public class AppWFull extends AppW implements HasKeyboard {
 
 		this.euclidianViewPanel = new EuclidianDockPanelW(this,
 				allowStylebar());
-		this.canvas = this.euclidianViewPanel.getCanvas();
-		if (canvas != null) {
-			canvas.setWidth("1px");
-			canvas.setHeight("1px");
-			canvas.setCoordinateSpaceHeight(1);
-			canvas.setCoordinateSpaceWidth(1);
-		}
 		initCoreObjects();
 		checkExamPerspective();
 		afterCoreObjectsInited();

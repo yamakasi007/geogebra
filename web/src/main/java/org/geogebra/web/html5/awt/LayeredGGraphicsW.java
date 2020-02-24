@@ -21,7 +21,14 @@ public class LayeredGGraphicsW extends GGraphics2DW {
 	public LayeredGGraphicsW(Canvas canvas, Panel canvasParent) {
 		super(canvas);
 		this.canvasParent = canvasParent;
+		applyStyle(canvas.getCanvasElement());
 		layers.add(getContext());
+	}
+
+	private void applyStyle(CanvasElement canvasElement) {
+		Style style = canvasElement.getStyle();
+		style.setPosition(Style.Position.ABSOLUTE);
+		style.setZIndex(2 * layers.size());
 	}
 
 	/**
@@ -50,9 +57,7 @@ public class LayeredGGraphicsW extends GGraphics2DW {
 		nextLayer.addStyleName("layer" + layers.size()); // only for debugging purposes
 		nextLayer.setCoordinateSpaceHeight(currentCanvas.getHeight());
 		nextLayer.setCoordinateSpaceWidth(currentCanvas.getWidth());
-		Style style = nextLayer.getCanvasElement().getStyle();
-		style.setPosition(Style.Position.ABSOLUTE);
-		style.setZIndex(2 * layers.size());
+		applyStyle(nextLayer.getCanvasElement());
 		canvasParent.add(nextLayer);
 		JLMContext2d nextContext = JLMContext2d.forCanvas(nextLayer);
 		layers.add(nextContext);

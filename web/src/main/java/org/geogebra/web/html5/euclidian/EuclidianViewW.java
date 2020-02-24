@@ -793,7 +793,7 @@ public class EuclidianViewW extends EuclidianView implements
 		registerDragDropHandlers(euclidianViewPanel,
 				(EuclidianControllerW) euclidiancontroller);
 
-		updateFirstAndLast(true, true);
+		updateFirstAndLast(true);
 		if (canvas == null) {
 			return;
 		}
@@ -802,25 +802,7 @@ public class EuclidianViewW extends EuclidianView implements
 			public void onAttachOrDetach(AttachEvent ae) {
 				if (ae.isAttached()) {
 					// canvas just attached
-					// if (canvas.isVisible()) {
-						// if the canvas is set to visible,
-						// we're also going to call this
-					// but it seems the canvas is never
-					// made invisible now (otherwise
-					// we would need to override it maybe)
-
-					// ... it is a good question whether the
-					// respective methods of DockManagerW, i.e.
-					// show, hide, maximize and drop call this?
-					updateFirstAndLast(true, false);
-					// }
-				} else {
-					// canvas just detached
-					// here lazy update shall happen!
-					// i.e. focus handler shall update
-					// firstInstance and lastInstance
-					// BUT also we shall make them null now
-					updateFirstAndLast(false, false);
+					updateFirstAndLast(false);
 				}
 			}
 		});
@@ -911,16 +893,14 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	public void updateFirstAndLast(boolean attach, boolean anyway) {
-		if (attach) {
-			if ((evNo == 1) || (evNo == 2) || isViewForPlane()) {
-				updateFirstAndLast(this, anyway);
-			} else {
-				// is this the best?
-				getCanvasElement()
-						.setTabIndex(
-						GeoGebraFrameW.GRAPHICS_VIEW_TABINDEX - 1);
-			}
+	public void updateFirstAndLast(boolean anyway) {
+		if ((evNo == 1) || (evNo == 2) || isViewForPlane()) {
+			updateFirstAndLast(this, anyway);
+		} else {
+			// is this the best?
+			getCanvasElement()
+					.setTabIndex(
+					GeoGebraFrameW.GRAPHICS_VIEW_TABINDEX - 1);
 		}
 	}
 
@@ -969,6 +949,11 @@ public class EuclidianViewW extends EuclidianView implements
 		Widget absPanel = euclidianViewPanel.getAbsolutePanel();
 		absPanel.addDomHandler(euclidiancontroller, MouseWheelEvent.getType());
 		if (!Browser.supportsPointerEvents(true)) {
+			pointerHandler = new PointerEventHandler((IsEuclidianController) euclidianController,
+					euclidiancontroller.getOffsets());
+			PointerEventHandler.attachTo(absPanel.getElement(), pointerHandler);
+			CancelEventTimer.killTouch(absPanel);
+		} else {
 			absPanel.addDomHandler(euclidiancontroller,
 					MouseMoveEvent.getType());
 			absPanel.addDomHandler(euclidiancontroller,
@@ -979,30 +964,20 @@ public class EuclidianViewW extends EuclidianView implements
 				absPanel.addDomHandler(euclidiancontroller,
 						MouseDownEvent.getType());
 			}
-		}
-
-		if (Browser.supportsPointerEvents(true)) {
-			pointerHandler = new PointerEventHandler((IsEuclidianController) euclidianController,
-					euclidiancontroller.getOffsets());
-			PointerEventHandler.attachTo(absPanel.getElement(), pointerHandler);
-			CancelEventTimer.killTouch(absPanel);
-			return;
-		}
-
-		if (appW.getLAF() != null) {
-			if (appW.getLAF().registerHandlers(absPanel, euclidiancontroller)) {
-				return;
+			if (appW.getLAF() != null) {
+				if (appW.getLAF().registerHandlers(absPanel, euclidiancontroller)) {
+					return;
+				}
 			}
+
+			absPanel.addBitlessDomHandler(euclidiancontroller, TouchStartEvent.getType());
+			absPanel.addBitlessDomHandler(euclidiancontroller, TouchEndEvent.getType());
+			absPanel.addBitlessDomHandler(euclidiancontroller, TouchMoveEvent.getType());
+			absPanel.addBitlessDomHandler(euclidiancontroller, TouchCancelEvent.getType());
+			absPanel.addDomHandler(euclidiancontroller, GestureStartEvent.getType());
+			absPanel.addDomHandler(euclidiancontroller, GestureChangeEvent.getType());
+			absPanel.addDomHandler(euclidiancontroller, GestureEndEvent.getType());
 		}
-
-		absPanel.addBitlessDomHandler(euclidiancontroller, TouchStartEvent.getType());
-		absPanel.addBitlessDomHandler(euclidiancontroller, TouchEndEvent.getType());
-		absPanel.addBitlessDomHandler(euclidiancontroller, TouchMoveEvent.getType());
-		absPanel.addBitlessDomHandler(euclidiancontroller, TouchCancelEvent.getType());
-		absPanel.addDomHandler(euclidiancontroller, GestureStartEvent.getType());
-		absPanel.addDomHandler(euclidiancontroller, GestureChangeEvent.getType());
-		absPanel.addDomHandler(euclidiancontroller, GestureEndEvent.getType());
-
 	}
 
 	private static void registerDragDropHandlers(
@@ -1135,11 +1110,12 @@ public class EuclidianViewW extends EuclidianView implements
 	private void setCursorClass(String className) {
 		// IMPORTANT: do nothing if we already have the classname,
 		// app.resetCursor is VERY expensive in IE
-		if (g2p.getElement() != null
-				&& !g2p.getElement().hasClassName(className)) {
+		Element cursorElement = getAbsolutePanel() == null ? null : getAbsolutePanel().getElement();
+		if (cursorElement != null
+				&& !cursorElement.hasClassName(className)) {
 			this.appW.resetCursor();
-			g2p.getElement().setClassName("");
-			g2p.getElement().addClassName(className);
+			cursorElement.setClassName("");
+			cursorElement.addClassName(className);
 		}
 	}
 
@@ -1513,6 +1489,8 @@ public class EuclidianViewW extends EuclidianView implements
 	public void setCursor(EuclidianCursor cursor) {
 		switch (cursor) {
 		case HIT:
+		case DEFAULT:
+		default:
 			setHitCursor();
 			return;
 		case DRAG:
@@ -1520,9 +1498,6 @@ public class EuclidianViewW extends EuclidianView implements
 			return;
 		case MOVE:
 			setMoveCursor();
-			return;
-		case DEFAULT:
-			setHitCursor();
 			return;
 		case RESIZE_X:
 			setResizeXAxisCursor();
@@ -1599,7 +1574,7 @@ public class EuclidianViewW extends EuclidianView implements
 
 	/**
 	 * Focus next view on page.
-	 * 
+	 *
 	 * @param from
 	 *            current view
 	 */
