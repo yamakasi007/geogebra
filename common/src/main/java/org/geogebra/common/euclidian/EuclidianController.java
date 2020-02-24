@@ -7909,14 +7909,15 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public void widgetsToBackground() {
 		if (app.getVideoManager() != null) {
 			app.getVideoManager().backgroundAll();
+
 		}
 		if (app.getEmbedManager() != null) {
 			app.getEmbedManager().backgroundAll();
+			view.repaintView();
 		}
 		if (app.getMaskWidgets() != null) {
 			app.getMaskWidgets().clearMasks();
 		}
-		app.getActiveEuclidianView().repaintView();
 	}
 
 	private void moveView() {

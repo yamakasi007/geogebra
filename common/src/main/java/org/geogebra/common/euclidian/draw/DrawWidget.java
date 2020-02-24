@@ -71,6 +71,9 @@ public interface DrawWidget {
 	 */
 	public boolean isFixedRatio();
 
+	/**
+	 * @return embed ID
+	 */
 	int getEmbedID();
 
 	boolean isBackground();

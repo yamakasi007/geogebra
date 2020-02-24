@@ -1094,7 +1094,6 @@ public class AppWFull extends AppW implements HasKeyboard {
 		}
 		if (isUnbundledOrWhiteboard()) {
 			boolean justClosed = menuShowing;
-			Log.error(justClosed+"closed");
 			hideMenu();
 			justClosed = justClosed || closePageControlPanel();
 			if (justClosed) {

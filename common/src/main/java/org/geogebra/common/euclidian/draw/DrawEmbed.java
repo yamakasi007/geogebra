@@ -154,9 +154,7 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 		return getView().toScreenCoordX(geoEmbed.getCorner(0).getInhomX());
 	}
 
-	/**
-	 * @return embed ID
-	 */
+	@Override
 	public int getEmbedID() {
 		return geoEmbed.getEmbedID();
 	}
