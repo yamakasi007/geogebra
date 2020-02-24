@@ -19,6 +19,7 @@ import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.main.MyImageW;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
@@ -63,14 +64,6 @@ public class VideoManagerW implements VideoManager {
 
 		playerOf(video).setBackground(false);
 		app.getMaskWidgets().masksToForeground();
-	}
-
-	@Override
-	public void background(GeoVideo video) {
-		if (video == null || !hasPlayer(video)) {
-			return;
-		}
-		playerOf(video).setBackground(true);
 	}
 
 	@Override
@@ -219,19 +212,8 @@ public class VideoManagerW implements VideoManager {
 
 	@Override
 	public void backgroundAll() {
-		if (players.isEmpty()) {
-			return;
-		}
-		App app = null;
 		for (AbstractVideoPlayer player : players.values()) {
-			background(player.getVideo());
-			if (app == null) {
-				app = player.getVideo().getKernel().getApplication();
-			}
-		}
-
-		if (app != null) {
-			app.getActiveEuclidianView().repaintView();
+			player.setBackground(true);
 		}
 	}
 
@@ -268,5 +250,9 @@ public class VideoManagerW implements VideoManager {
 	@Override
 	public boolean isPlayerOffline(GeoVideo video) {
 		return playerOf(video).isOffline();
+	}
+
+	public Element getElement(GeoVideo geoElement) {
+		return playerOf(geoElement).asWidget().getElement();
 	}
 }

@@ -70,4 +70,10 @@ public interface DrawWidget {
 	 * @return whether aspect ratio is fixed for this widget
 	 */
 	public boolean isFixedRatio();
+
+	int getEmbedID();
+
+	boolean isBackground();
+
+	void setBackground(boolean b);
 }

@@ -7916,6 +7916,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (app.getMaskWidgets() != null) {
 			app.getMaskWidgets().clearMasks();
 		}
+		app.getActiveEuclidianView().repaintView();
 	}
 
 	private void moveView() {

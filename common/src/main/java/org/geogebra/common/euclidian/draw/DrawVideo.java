@@ -85,13 +85,10 @@ public class DrawVideo extends Drawable implements DrawWidget {
 		}
 	}
 
-	private boolean isPreviewNeeded() {
-		return app.getVideoManager() != null && app.getVideoManager().isPreviewOnly();
-	}
-
 	@Override
 	public void draw(GGraphics2D g2) {
-		if (!isPreviewNeeded()) {
+		if (view.getApplication().getExportType() == App.ExportType.NONE) {
+			view.embed(g2, this);
 			return;
 		}
 		MyImage preview = video.getPreview();
@@ -216,6 +213,21 @@ public class DrawVideo extends Drawable implements DrawWidget {
 	@Override
 	public boolean isFixedRatio() {
 		return video.getFormat() != MediaFormat.VIDEO_YOUTUBE;
+	}
+
+	@Override
+	public int getEmbedID() {
+		return -1;
+	}
+
+	@Override
+	public boolean isBackground() {
+		return video.isBackground();
+	}
+
+	@Override
+	public void setBackground(boolean b) {
+		video.setBackground(b);
 	}
 
 }

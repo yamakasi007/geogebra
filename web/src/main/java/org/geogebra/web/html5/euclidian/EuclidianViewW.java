@@ -18,8 +18,8 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.PenPreviewLine;
 import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.background.BackgroundType;
-import org.geogebra.common.euclidian.draw.DrawEmbed;
 import org.geogebra.common.euclidian.draw.DrawVideo;
+import org.geogebra.common.euclidian.draw.DrawWidget;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.io.MyXMLio;
@@ -211,10 +211,11 @@ public class EuclidianViewW extends EuclidianView implements
     }-*/;
 
 	private void initClickStartHandler() {
-		if (g2p.getCanvas() == null) {
+		AbsolutePanel panel = getAbsolutePanel();
+		if (panel == null) {
 			return;
 		}
-		ClickStartHandler.init(g2p.getCanvas(), new ClickStartHandler() {
+		ClickStartHandler.init(panel, new ClickStartHandler() {
 			@Override
 			public void onClickStart(final int x, final int y,
 					PointerEventType type) {
@@ -1831,7 +1832,7 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	public void embed(GGraphics2D g2, DrawEmbed e) {
+	public void embed(GGraphics2D g2, DrawWidget e) {
 		int layer = ((GGraphics2DWI) g2).embed();
 		getApplication().getEmbedManager().setLayer(e, layer);
 	}

@@ -137,17 +137,6 @@ public class GeoVideo extends GeoMedia {
 		});
 	}
 
-	/**
-	 * Refresh the video 
-	 */
-	public void refresh() {
-		if (!changed) {
-			return;
-		}
-		app.getVideoManager().updatePlayer(this);
-		changed = false;
-	}
-
 	private void initStartTime() {
 		String url = getSrc();
 

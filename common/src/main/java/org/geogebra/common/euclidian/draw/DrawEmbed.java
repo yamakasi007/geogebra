@@ -160,7 +160,17 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 	public int getEmbedID() {
 		return geoEmbed.getEmbedID();
 	}
-	
+
+	@Override
+	public boolean isBackground() {
+		return geoEmbed.isBackground();
+	}
+
+	@Override
+	public void setBackground(boolean b) {
+		geoEmbed.setBackground(b);
+	}
+
 	private void updateOriginalRatio() {
 		double width = getWidth();
 		double height = getHeight();

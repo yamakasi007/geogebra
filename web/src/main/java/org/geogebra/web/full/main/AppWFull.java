@@ -39,7 +39,6 @@ import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.OpenFileListener;
 import org.geogebra.common.main.SaveController;
 import org.geogebra.common.main.ShareController;
-import org.geogebra.common.media.VideoManager;
 import org.geogebra.common.move.events.BaseEvent;
 import org.geogebra.common.move.events.StayLoggedOutEvent;
 import org.geogebra.common.move.ggtapi.TubeAvailabilityCheckEvent;
@@ -1095,6 +1094,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 		}
 		if (isUnbundledOrWhiteboard()) {
 			boolean justClosed = menuShowing;
+			Log.error(justClosed+"closed");
 			hideMenu();
 			justClosed = justClosed || closePageControlPanel();
 			if (justClosed) {
@@ -2122,7 +2122,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	}
 
 	@Override
-	public final VideoManager getVideoManager() {
+	public final VideoManagerW getVideoManager() {
 		if (videoManager == null) {
 			videoManager = new VideoManagerW(this);
 		}

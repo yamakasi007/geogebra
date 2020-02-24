@@ -52,6 +52,9 @@ public abstract class AbstractVideoPlayer implements IsWidget {
 	public void setBackground(boolean background) {
 		video.setBackground(background);
 		update();
+		if (!background) {
+			asWidget().getElement().getStyle().clearZIndex();
+		}
 	}
 
 	/**

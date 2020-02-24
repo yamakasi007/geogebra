@@ -2,6 +2,7 @@ package org.geogebra.common.euclidian;
 
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.draw.DrawEmbed;
+import org.geogebra.common.euclidian.draw.DrawWidget;
 import org.geogebra.common.io.file.ZipFile;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.geos.GeoEmbed;
@@ -137,5 +138,5 @@ public interface EmbedManager {
 	 * @param embed drawable
 	 * @param layer z-index
 	 */
-	void setLayer(DrawEmbed embed, int layer);
+	void setLayer(DrawWidget embed, int layer);
 }
