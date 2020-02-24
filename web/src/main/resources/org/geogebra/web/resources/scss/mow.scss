@@ -388,34 +388,7 @@
 				box-shadow: $shadow-elevation-8;
 			}
 		}
-	
-		/*.AutoCompleteTextFieldW {
-    				margin: 0px !important;
-    				padding: 8px 0px;
-    				border-radius: 2px;	
-    				width: calc(100% + 12px) !important;
-    				
-    				.TextField {
-    					padding: 8px 0px 8px 0px;
-    					border: none;
-    					border-bottom: none;
-    					background: transparent;
-    					box-shadow: none;
-    					border-radius: 0px !important;
-    					
-    					&:focus {
-    						border: none;
-    						border-bottom: 2px solid $mow_primary;
-  							padding: 8px 0px 6px 0px;
-    						width: calc(100% + 12px) !important;
-    						transition: width 0.2s;
-    						caret-color: $mow_primary;
-    					}
-    				}
-    			}
-	}*/
-	
-	
+
 	.mowPagePreviewCardDivider {
 		width: 240px;
 		height: 16px;
@@ -502,23 +475,7 @@
 			position: absolute; 
 			top: 0px;
 			bottom: 0px;
-		}	
-
-		.cursor_pen,
-		.cursor_highlighter,
-		.cursor_eraser,
-		.cursor_rotation,
-		.cursor_hit,
-		.cursor_drag,
-		.cursor_resizeEW,
-		.cursor_resizeNS,
-		.cursor_resizeNESW,
-		.cursor_resizeNWSE,
-		.cursor_transparent {
-			position: absolute; 
-			top: 0px;
-			bottom: 0px;
-		 }
+		}
 	}
 
 	.mowMenuSeparator {
