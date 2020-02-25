@@ -102,7 +102,6 @@ public class GeoVideo extends GeoMedia {
 		}
 		constructIds();
 		createPreview();
-		app.getVideoManager().loadGeoVideo(this);
 		changed = true;
 	}
 
@@ -341,24 +340,6 @@ public class GeoVideo extends GeoMedia {
 	 */
 	public void setBackground(boolean background) {
 		this.background = background;
-	}
-
-	/**
-	 * @return if video is online.
-	 */
-	public boolean isOnline() {
-		if (!hasVideoManager()) {
-			return false;
-		}
-		return app.getVideoManager().isOnline(this);
-	}
-
-	@Override
-	public void remove() {
-		if (hasVideoManager()) {
-			app.getVideoManager().removePlayer(this);
-		}
-		super.remove();
 	}
 
 	/**

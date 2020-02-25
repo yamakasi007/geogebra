@@ -36,6 +36,7 @@ import org.geogebra.common.euclidian.draw.DrawPolyLine;
 import org.geogebra.common.euclidian.draw.DrawPolygon;
 import org.geogebra.common.euclidian.draw.DrawSlider;
 import org.geogebra.common.euclidian.draw.DrawText;
+import org.geogebra.common.euclidian.draw.DrawVideo;
 import org.geogebra.common.euclidian.event.AbstractEvent;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.modes.ModeDeleteLocus;
@@ -9409,12 +9410,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		GeoElement topHit = view.getHits().get(view.getHits().size() - 1);
 
 		if (topHit instanceof GeoVideo) {
-			if (videoHasError((GeoVideo) topHit)) {
+			DrawVideo drawVideo = (DrawVideo) view.getDrawableFor(topHit);
+			if (videoHasError(drawVideo)) {
 				return false;
 			}
 
 			selectAndShowBoundingBox(topHit);
-			app.getVideoManager().play((GeoVideo) topHit);
+
+			app.getVideoManager().play(drawVideo);
 			return true;
 		}
 
@@ -9427,7 +9430,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return false;
 	}
 
-	private boolean videoHasError(GeoVideo video) {
+	private boolean videoHasError(DrawVideo video) {
 		return app.getVideoManager().isPlayerOffline(video);
 	}
 

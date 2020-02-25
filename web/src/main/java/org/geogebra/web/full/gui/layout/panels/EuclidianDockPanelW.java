@@ -80,10 +80,7 @@ public class EuclidianDockPanelW extends EuclidianDockPanelWAbstract
 			euclidianpanel = new EuclidianPanel(this);
 			eview1 = Canvas.createIfSupported();
 			TestHarness.setAttr(eview1, "euclidianView");
-			if (eview1 != null) {
-				eview1.addStyleName("mowForeground");
-			}
-			euclidianpanel.addStyleName("mowDoubleCanvas");
+			euclidianpanel.addStyleName("layeredCanvas");
 			addCanvas(eview1);
 		}
 		return euclidianpanel;

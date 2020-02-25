@@ -10,12 +10,14 @@ import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.BoundingBox;
 import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.RemoveNeeded;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoElement.HitType;
 import org.geogebra.common.kernel.geos.GeoVideo;
 import org.geogebra.common.main.App;
 import org.geogebra.common.media.MediaFormat;
+import org.geogebra.common.media.VideoManager;
 
 /**
  * Drawable class for GeoVideo
@@ -25,7 +27,7 @@ import org.geogebra.common.media.MediaFormat;
  * @author laszlo
  *
  */
-public class DrawVideo extends Drawable implements DrawWidget {
+public class DrawVideo extends Drawable implements DrawWidget, RemoveNeeded {
 	private GeoVideo video;
 	private App app;
 	private GRectangle bounds;
@@ -50,13 +52,17 @@ public class DrawVideo extends Drawable implements DrawWidget {
 		this.geo = geo;
 		this.app = geo.getKernel().getApplication();
 		setMetrics();
+		VideoManager videoManager = app.getVideoManager();
+		if (videoManager!=null) {
+			videoManager.loadGeoVideo(this);
+		}
 	}
 
 	@Override
 	public void update() {
 		video.zoomIfNeeded();
 		if (app.getVideoManager() != null) {
-			app.getVideoManager().updatePlayer(video);
+			app.getVideoManager().updatePlayer(this);
 		}
 		setMetrics();
 	}
@@ -230,4 +236,15 @@ public class DrawVideo extends Drawable implements DrawWidget {
 		video.setBackground(b);
 	}
 
+	public GeoVideo getVideo() {
+		return video;
+	}
+
+	@Override
+	public void remove() {
+		VideoManager videoManager = app.getVideoManager();
+		if (videoManager != null) {
+			videoManager.removePlayer(this);
+		}
+	}
 }

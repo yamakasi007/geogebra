@@ -1125,7 +1125,7 @@ public class GuiManagerW extends GuiManager
 			if (!getApp().isIniting()) {
 				updateFrameSize(); // checks internally if frame is available
 				if (getApp().needsSpreadsheetTableModel()) {
-					(getApp()).getSpreadsheetTableModel(); // ensure create one if
+					getApp().getSpreadsheetTableModel(); // ensure create one if
 					// not already done
 				}
 			}

@@ -17,7 +17,6 @@ import org.geogebra.common.io.file.ZipFile;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoEmbed;
-import org.geogebra.common.kernel.geos.GeoVideo;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.OpenFileListener;
 import org.geogebra.common.move.ggtapi.models.Material;
@@ -98,7 +97,7 @@ public class EmbedManagerW implements EmbedManager {
 	public void setLayer(DrawWidget embed, int layer) {
 		Element element;
 		if (embed instanceof DrawVideo) {
-			element = app.getVideoManager().getElement((GeoVideo) embed.getGeoElement());
+			element = app.getVideoManager().getElement((DrawVideo) embed);
 		} else {
 			element = widgets.get(embed).getGreatParent().getElement();
 		}
