@@ -10,9 +10,9 @@ import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 public class LayeredGGraphicsW extends GGraphics2DW {
 	private final Panel canvasParent;
-	ArrayList<JLMContext2d> layers = new ArrayList<>();
-	int currentLayer = 0;
-	int previewLayer = 0;
+	private ArrayList<JLMContext2d> layers = new ArrayList<>();
+	private int currentLayer = 0;
+	private int previewLayer = 0;
 
 	/**
 	 * @param canvas Primary canvas

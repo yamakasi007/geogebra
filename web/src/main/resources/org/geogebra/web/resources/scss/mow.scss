@@ -441,6 +441,9 @@
 			width: 100%;
 			height: 100%;
 		}
+		&.mowVideo {
+			border-style: none;
+		}
 	}
 
 	.mowWidget.background {
@@ -463,12 +466,6 @@
 		border: 1px solid;
 	}
 
-	.layeredCanvas {
-		.mowVideo {
-			position: absolute;
-			border-style: none;
-		}
-	}
 
 	.mowMenuSeparator {
 		background-color: #dedede;

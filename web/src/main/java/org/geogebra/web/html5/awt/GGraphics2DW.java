@@ -758,7 +758,7 @@ public class GGraphics2DW implements GGraphics2DWI {
 	public void setPreferredSize(GDimension preferredSize) {
 		int width = Math.max(0, preferredSize.getWidth());
 		int height = Math.max(0, preferredSize.getHeight());
-		setPixelSize(width,	height);
+		setPixelSize(width, height);
 
 		// do not use getOffsetWidth here,
 		// as it is prepared by the browser and not yet ready...

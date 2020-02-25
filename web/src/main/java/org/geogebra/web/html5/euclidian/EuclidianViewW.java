@@ -949,7 +949,7 @@ public class EuclidianViewW extends EuclidianView implements
 	        EuclidianControllerW euclidiancontroller) {
 		Widget absPanel = euclidianViewPanel.getAbsolutePanel();
 		absPanel.addDomHandler(euclidiancontroller, MouseWheelEvent.getType());
-		if (!Browser.supportsPointerEvents(true)) {
+		if (Browser.supportsPointerEvents(true)) {
 			pointerHandler = new PointerEventHandler((IsEuclidianController) euclidianController,
 					euclidiancontroller.getOffsets());
 			PointerEventHandler.attachTo(absPanel.getElement(), pointerHandler);
