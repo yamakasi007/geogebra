@@ -350,6 +350,40 @@ public abstract class GlobalKeyDispatcher {
 		default:
 			// do nothing
 			break;
+		//// TESTING CODE
+		case A:
+			app.getEuclidianController().splitSelectedStrokes(true);
+			app.getKernel().getConstruction().getLayerManager().moveBackward(
+					app.getSelectionManager().getSelectedGeos()
+			);
+			app.getActiveEuclidianView().invalidateDrawableList();
+			app.storeUndoInfo();
+			break;
+		case D:
+			app.getEuclidianController().splitSelectedStrokes(true);
+			app.getKernel().getConstruction().getLayerManager().moveForward(
+					app.getSelectionManager().getSelectedGeos()
+			);
+			app.getActiveEuclidianView().invalidateDrawableList();
+			app.storeUndoInfo();
+			break;
+		case W:
+			app.getEuclidianController().splitSelectedStrokes(true);
+			app.getKernel().getConstruction().getLayerManager().moveToFront(
+					app.getSelectionManager().getSelectedGeos()
+			);
+			app.getActiveEuclidianView().invalidateDrawableList();
+			app.storeUndoInfo();
+			break;
+		case S:
+			app.getEuclidianController().splitSelectedStrokes(true);
+			app.getKernel().getConstruction().getLayerManager().moveToBack(
+					app.getSelectionManager().getSelectedGeos()
+			);
+			app.getActiveEuclidianView().invalidateDrawableList();
+			app.storeUndoInfo();
+			break;
+		//// TESTING CODE END
 		case ESCAPE:
 
 			// ESC: set move mode
@@ -446,19 +480,6 @@ public abstract class GlobalKeyDispatcher {
 			}
 			break;
 		}
-
-		/*
-		 * // make sure Ctrl-1/2/3 works on the Numeric Keypad even with Numlock
-		 * // off // **** NB if NumLock on, event.isShiftDown() always returns
-		 * false with // Numlock on!!! (Win 7) if (event.getKeyLocation() ==
-		 * KeyEvent.KEY_LOCATION_NUMPAD) { String keyText =
-		 * KeyEvent.getKeyText(keyCode); if ("End".equals(keyText)) { keyCode =
-		 * KeyEvent.VK_1; } else if ("Down".equals(keyText)) { keyCode =
-		 * KeyEvent.VK_2; } else if ("Page Down".equals(keyText)) { keyCode =
-		 * KeyEvent.VK_3; }
-		 * 
-		 * }
-		 */
 
 		// Ctrl key down (and not Alt, so that AltGr works for special
 		// characters)
