@@ -1,5 +1,9 @@
 package org.geogebra.web.html5.main;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.annotation.CheckForNull;
 
 import org.geogebra.common.GeoGebraConstants.Platform;
@@ -142,7 +146,6 @@ import org.geogebra.web.html5.util.debug.LoggerW;
 import org.geogebra.web.html5.util.keyboard.KeyboardManagerInterface;
 import org.geogebra.web.plugin.WebsocketLogger;
 
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -163,10 +166,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public static final String STORAGE_MACRO_KEY = "storedMacro";
@@ -207,7 +206,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	protected final ArticleElementInterface articleElement;
 
 	protected EuclidianPanelWAbstract euclidianViewPanel;
-	protected Canvas canvas;
 
 	private final GLookAndFeelI laf;
 
@@ -518,13 +516,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		return ggbapi;
 	}
 
-	/**
-	 * @return {@link Canvas}
-	 */
-	public Canvas getCanvas() {
-		return canvas;
-	}
-
 	@Override
 	public final NormalizerMinimal getNormalizer() {
 		if (normalizerMinimal == null) {
@@ -821,7 +812,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			getArticleElement().attr("appName", "notes");
 			getAppletFrame().initPageControlPanel(this);
 			if (getPageController() != null) {
-				getEuclidianView1().initBgCanvas();
 				getPageController().loadSlides(archiveContent);
 				return;
 			}

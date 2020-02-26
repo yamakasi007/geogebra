@@ -36,6 +36,7 @@ import org.geogebra.common.euclidian.draw.DrawPolyLine;
 import org.geogebra.common.euclidian.draw.DrawPolygon;
 import org.geogebra.common.euclidian.draw.DrawSlider;
 import org.geogebra.common.euclidian.draw.DrawText;
+import org.geogebra.common.euclidian.draw.DrawVideo;
 import org.geogebra.common.euclidian.event.AbstractEvent;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.modes.ModeDeleteLocus;
@@ -7909,9 +7910,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public void widgetsToBackground() {
 		if (app.getVideoManager() != null) {
 			app.getVideoManager().backgroundAll();
+
 		}
 		if (app.getEmbedManager() != null) {
 			app.getEmbedManager().backgroundAll();
+			view.repaintView();
 		}
 		if (app.getMaskWidgets() != null) {
 			app.getMaskWidgets().clearMasks();
@@ -9244,7 +9247,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				// clear selection to be able to drag created shape with shape
 				// tool
 				selection.clearSelectedGeos();
-				view.setDefaultShapeStyle();
 				getShapeMode().handleMousePressedForShapeMode(event);
 			} else {
 				if (d != null && view.getBoundingBox() != null
@@ -9264,7 +9266,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 						mode = EuclidianConstants.MODE_MOVE;
 					} else {
 						selection.clearSelectedGeos();
-						view.setDefaultShapeStyle();
 						getShapeMode().handleMousePressedForShapeMode(event);
 					}
 				} else if (selection.getSelectedGeos().size() == 1
@@ -9280,7 +9281,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				// shape hit but not selected
 				} else {
 					selection.clearSelectedGeos();
-					view.setDefaultShapeStyle();
 					getShapeMode().handleMousePressedForShapeMode(event);
 				}
 			}
@@ -9410,12 +9410,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		GeoElement topHit = view.getHits().get(view.getHits().size() - 1);
 
 		if (topHit instanceof GeoVideo) {
-			if (videoHasError((GeoVideo) topHit)) {
+			DrawVideo drawVideo = (DrawVideo) view.getDrawableFor(topHit);
+			if (videoHasError(drawVideo)) {
 				return false;
 			}
 
 			selectAndShowBoundingBox(topHit);
-			app.getVideoManager().play((GeoVideo) topHit);
+
+			app.getVideoManager().play(drawVideo);
 			return true;
 		}
 
@@ -9428,7 +9430,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return false;
 	}
 
-	private boolean videoHasError(GeoVideo video) {
+	private boolean videoHasError(DrawVideo video) {
 		return app.getVideoManager().isPlayerOffline(video);
 	}
 

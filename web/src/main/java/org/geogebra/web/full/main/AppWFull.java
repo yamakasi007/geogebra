@@ -39,7 +39,6 @@ import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.OpenFileListener;
 import org.geogebra.common.main.SaveController;
 import org.geogebra.common.main.ShareController;
-import org.geogebra.common.media.VideoManager;
 import org.geogebra.common.move.events.BaseEvent;
 import org.geogebra.common.move.events.StayLoggedOutEvent;
 import org.geogebra.common.move.ggtapi.TubeAvailabilityCheckEvent;
@@ -242,13 +241,6 @@ public class AppWFull extends AppW implements HasKeyboard {
 
 		this.euclidianViewPanel = new EuclidianDockPanelW(this,
 				allowStylebar());
-		this.canvas = this.euclidianViewPanel.getCanvas();
-		if (canvas != null) {
-			canvas.setWidth("1px");
-			canvas.setHeight("1px");
-			canvas.setCoordinateSpaceHeight(1);
-			canvas.setCoordinateSpaceWidth(1);
-		}
 		initCoreObjects();
 		checkExamPerspective();
 		afterCoreObjectsInited();
@@ -2123,7 +2115,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	}
 
 	@Override
-	public final VideoManager getVideoManager() {
+	public final VideoManagerW getVideoManager() {
 		if (videoManager == null) {
 			videoManager = new VideoManagerW(this);
 		}
