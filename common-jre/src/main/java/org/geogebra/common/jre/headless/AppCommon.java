@@ -735,10 +735,6 @@ public class AppCommon extends App {
 		this.casFactory = casFactory;
 	}
 
-	public void setScriptManager(ScriptManager scriptManager) {
-		this.scriptManager = scriptManager;
-	}
-
 	/**
 	 * Sets Graphing config and reinitializes the app.
 	 */
