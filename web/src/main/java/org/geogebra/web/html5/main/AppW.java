@@ -1,5 +1,9 @@
 package org.geogebra.web.html5.main;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.annotation.CheckForNull;
 
 import org.geogebra.common.GeoGebraConstants.Platform;
@@ -163,10 +167,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public static final String STORAGE_MACRO_KEY = "storedMacro";
@@ -2061,7 +2061,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	/**
 	 * @return active material
 	 */
-	public Material getActiveMaterial() {
+	public @CheckForNull Material getActiveMaterial() {
 		return this.activeMaterial;
 	}
 
@@ -3438,13 +3438,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	public void showPerspectivesPopup() {
 		// overridden in AppWFull
-	}
-
-	/**
-	 * Hide perspective picker
-	 */
-	public void closePerspectivesPopup() {
-		// only for GUI
 	}
 
 	/**

@@ -542,8 +542,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 
 	@Override
 	public final void checkSaved(AsyncOperation<Boolean> runnable) {
-		getDialogManager().getSaveDialog()
-				.showIfNeeded(runnable);
+		getSaveController().showDialogIfNeeded(runnable);
 	}
 
 	@Override
@@ -740,10 +739,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	@Override
 	public final void examWelcome() {
 		if (isExam() && getExam().getStart() < 0) {
-			this.closePerspectivesPopup();
-
 			resetViewsEnabled();
-
 			new ExamDialog(this).show();
 		}
 	}
@@ -1021,13 +1017,6 @@ public class AppWFull extends AppW implements HasKeyboard {
 			}
 		}
 		removeSplash();
-	}
-
-	@Override
-	public final void closePerspectivesPopup() {
-		if (this.perspectivesPopup != null) {
-			// getPerspectivesPopup().closePerspectivesPopup();
-		}
 	}
 
 	@Override
@@ -1565,7 +1554,6 @@ public class AppWFull extends AppW implements HasKeyboard {
 			}
 		}
 
-		closePerspectivesPopup();
 		if (!getLAF().isSmart()) {
 			removeSplash();
 		}
