@@ -54,7 +54,6 @@ public class LayeredGGraphicsW extends GGraphics2DW {
 	private void addLayer() {
 		CanvasElement currentCanvas = getContext().getCanvas();
 		Canvas nextLayer = Canvas.createIfSupported();
-		nextLayer.addStyleName("layer" + layers.size()); // only for debugging purposes
 		nextLayer.setCoordinateSpaceHeight(currentCanvas.getHeight());
 		nextLayer.setCoordinateSpaceWidth(currentCanvas.getWidth());
 		applyStyle(nextLayer.getCanvasElement());
