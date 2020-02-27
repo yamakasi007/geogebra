@@ -86,9 +86,11 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 			return;
 		}
 
-		g2.setColor(GColor.BLACK);
 		int sx = getWidth();
 		int sy = getHeight();
+		g2.setColor(GColor.WHITE);
+		g2.fillRect(getLeft(), getTop(), sx, sy);
+		g2.setColor(GColor.BLACK);
 		g2.drawRect(getLeft(), getTop(), sx, sy);
 
 		int s = Math.min(sx, sy);

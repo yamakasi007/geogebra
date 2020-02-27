@@ -325,6 +325,7 @@ public class GgbAPIW extends GgbAPI {
 			HashMap<String, Integer> usage = new HashMap<>();
 			GgbFile shared = new GgbFile("");
 			for (int i = 0; i < pageController.getSlideCount(); i++) {
+				pageController.refreshSlide(i);
 				countShared(pageController.getSlide(i), usage, shared);
 			}
 			for (int i = 0; i < pageController.getSlideCount(); i++) {

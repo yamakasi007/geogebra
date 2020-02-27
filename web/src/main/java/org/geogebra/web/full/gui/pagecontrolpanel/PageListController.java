@@ -100,11 +100,15 @@ public class PageListController implements PageListControllerInterface,
 	}
 
 	@Override
-	public GgbFile getSlide(int index) {
+	public void refreshSlide(int index) {
 		if (selectedCard == slides.get(index)) {
-			return app.getGgbApi().createArchiveContent(true,
+			app.getGgbApi().createArchiveContent(true,
 					slides.get(index).getFile());
 		}
+	}
+
+	@Override
+	public GgbFile getSlide(int index) {
 		return slides.get(index).getFile();
 	}
 

@@ -249,7 +249,7 @@ public class GGraphics2DE implements GGraphics2DWI {
 
 	@Override
 	public void drawImage(MyImage img, int sx, int sy, int sw, int sh, int dx,
-			int dy) {
+			int dy, int dw, int dh) {
 		// not needed
 	}
 
