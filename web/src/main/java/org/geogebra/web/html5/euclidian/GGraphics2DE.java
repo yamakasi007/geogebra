@@ -20,7 +20,7 @@ import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 public class GGraphics2DE implements GGraphics2DWI {
 
-	private com.google.gwt.user.client.Element element;
+	private Element element;
 
 	public GGraphics2DE() {
 		element = DOM.createElement("canvas");

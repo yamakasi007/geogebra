@@ -652,7 +652,6 @@ public class EuclidianView3DW extends EuclidianView3D implements
 		return EuclidianViewW.dataURL(canv, null);
 	}
 
-
 	@Override
 	public void setPixelRatio(double pixelRatio) {
 		if (DoubleUtil.isEqual(g2p.getDevicePixelRatio(), pixelRatio)

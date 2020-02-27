@@ -11,6 +11,7 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.CoordSystemAnimation;
 import org.geogebra.common.euclidian.Drawable;
+import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianCursor;
 import org.geogebra.common.euclidian.EuclidianStyleBar;
@@ -1791,7 +1792,10 @@ public class EuclidianViewW extends EuclidianView implements
 	@Override
 	public void embed(GGraphics2D g2, DrawWidget e) {
 		int layer = ((GGraphics2DWI) g2).embed();
-		getApplication().getEmbedManager().setLayer(e, layer);
+		EmbedManager embedManager = getApplication().getEmbedManager();
+		if (embedManager != null) {
+			embedManager.setLayer(e, layer);
+		}
 	}
 
 	@Override

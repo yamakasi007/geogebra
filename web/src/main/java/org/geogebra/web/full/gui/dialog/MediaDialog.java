@@ -6,8 +6,8 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.main.error.ErrorHandler;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.web.full.gui.view.algebra.InputPanelW;
+import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.gui.util.FormLabel;
-import org.geogebra.web.html5.main.AppW;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -40,7 +40,7 @@ public abstract class MediaDialog extends OptionDialog implements ErrorHandler {
 	/**
 	 * application
 	 */
-	protected AppW appW;
+	protected AppWFull appW;
 	private FlowPanel mainPanel;
 	private FormLabel inputLabel;
 	private Label errorLabel;
@@ -55,7 +55,7 @@ public abstract class MediaDialog extends OptionDialog implements ErrorHandler {
 	 * @param app
 	 *            app
 	 */
-	public MediaDialog(Panel root, AppW app) {
+	public MediaDialog(Panel root, AppWFull app) {
 		super(root, app);
 		this.appW = app;
 		initGui();

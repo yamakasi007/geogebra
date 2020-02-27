@@ -2107,7 +2107,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	}
 
 	@Override
-	public EmbedManager getEmbedManager() {
+	public @Nonnull EmbedManager getEmbedManager() {
 		if (embedManager == null && isWhiteboardActive()) {
 			embedManager = new EmbedManagerW(this);
 		}
@@ -2115,7 +2115,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	}
 
 	@Override
-	public final VideoManagerW getVideoManager() {
+	public final @Nonnull VideoManagerW getVideoManager() {
 		if (videoManager == null) {
 			videoManager = new VideoManagerW(this);
 		}
@@ -2128,6 +2128,15 @@ public class AppWFull extends AppW implements HasKeyboard {
 			maskWidgets = new MaskWidgetListW(this);
 		}
 		return maskWidgets;
+	}
+
+	/**
+	 * Remove all widgets for videos and embeds.
+	 */
+	@Override
+	public void clearMedia() {
+		getVideoManager().removePlayers();
+		getEmbedManager().removeAll();
 	}
 
 	private int getSpHeight() {

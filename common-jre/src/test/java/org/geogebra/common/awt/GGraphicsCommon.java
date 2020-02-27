@@ -223,7 +223,12 @@ public class GGraphicsCommon implements GGraphics2D {
     }
 
     @Override
-    public void drawImage(MyImage img, int sx, int sy, int sw, int sh, int dx, int dy) {
+    public void drawImage(MyImage img, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh) {
+        // ignore empty method
+    }
+
+    @Override
+    public void drawImage(MyImage img, int dx, int dy, int dw, int dh) {
         // ignore empty method
     }
 }

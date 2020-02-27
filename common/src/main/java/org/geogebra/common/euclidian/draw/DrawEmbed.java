@@ -24,6 +24,7 @@ import org.geogebra.common.main.App.ExportType;
  * Drawable for embedded apps
  */
 public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
+	private final EmbedManager embedManager;
 	private BoundingBox<GEllipse2DDouble> boundingBox;
 	private GRectangle2D bounds;
 	private double originalRatio = Double.NaN;
@@ -41,23 +42,22 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 		this.view = ev;
 		this.geo = geo;
 		this.geoEmbed = geo;
+		embedManager = view.getApplication().getEmbedManager();
 		update();
-	}
-
-	private EmbedManager getEmbedManager() {
-		return view.getApplication().getEmbedManager();
+		if (embedManager != null) {
+			preview = embedManager.getPreview(this);
+		}
 	}
 
 	@Override
 	public void update() {
-		if (geoEmbed.getEmbedID() >= 0 && getEmbedManager() != null) {
-			getEmbedManager().add(this);
+		if (geoEmbed.getEmbedID() >= 0 && embedManager != null) {
+			embedManager.add(this);
 		}
-		if (getEmbedManager() != null) {
-			getEmbedManager().update(this);
+		if (embedManager != null) {
+			embedManager.update(this);
 		}
 		setMetrics();
-		preview = view.getApplication().getEmbedManager().getPreview(this);
 	}
 
 	private void setMetrics() {
@@ -239,7 +239,9 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 
 	@Override
 	public void remove() {
-		view.getApplication().getEmbedManager().remove(this);
+		if (embedManager != null) {
+			embedManager.remove(this);
+		}
 	}
 
 	@Override

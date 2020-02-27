@@ -15,6 +15,7 @@ import org.geogebra.common.move.ggtapi.operations.URLChecker;
 import org.geogebra.common.move.ggtapi.operations.URLStatus;
 import org.geogebra.common.move.ggtapi.requests.MaterialCallbackI;
 import org.geogebra.common.util.AsyncOperation;
+import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.shared.ggtapi.models.GeoGebraTubeAPIW;
 
@@ -35,7 +36,7 @@ public class EmbedInputDialog extends MediaDialog
 	 * @param app
 	 *            see {@link AppW}
 	 */
-	EmbedInputDialog(AppW app, URLChecker urlChecker) {
+	EmbedInputDialog(AppWFull app, URLChecker urlChecker) {
 		super(app.getPanel(), app);
 		this.urlChecker = urlChecker;
 		updateInfo();
@@ -94,7 +95,7 @@ public class EmbedInputDialog extends MediaDialog
 		ge.setUrl(url);
 		ge.setAppName("extension");
 		ge.initPosition(app.getActiveEuclidianView());
-		ge.setEmbedId(app.getEmbedManager().nextID());
+		ge.setEmbedId(appW.getEmbedManager().nextID());
 		ge.setLabel(null);
 		app.storeUndoInfo();
 
@@ -102,8 +103,8 @@ public class EmbedInputDialog extends MediaDialog
 	}
 
 	private void embedGeoGebraAndHide(Material material) {
-		getApplication().getEmbedManager().embed(material);
-		app.storeUndoInfo();
+		appW.getEmbedManager().embed(material);
+		appW.storeUndoInfo();
 		hide();
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewInterfaceCommon;
 import org.geogebra.common.io.MyXMLio;
@@ -534,8 +535,9 @@ public class GgbAPIW extends GgbAPI {
 		// GGB-1758 write images at the end
 		((ImageManagerW) app.getImageManager())
 				.writeConstructionImages(getConstruction(), "", archiveContent);
-		if (app.getEmbedManager() != null) {
-			app.getEmbedManager().writeEmbeds(getConstruction(),
+		EmbedManager embedManager = app.getEmbedManager();
+		if (embedManager != null) {
+			embedManager.writeEmbeds(getConstruction(),
 					archiveContent);
 		}
 		// write construction thumbnails

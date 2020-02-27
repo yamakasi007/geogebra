@@ -445,9 +445,11 @@ public class EmbedManagerW implements EmbedManager {
 	}
 
 	private SVGResource getSvgPlaceholder(DrawEmbed drawEmbed) {
-		switch(drawEmbed.getGeoEmbed().getAppName()){
-			case "graphing": return SvgPerspectiveResources.INSTANCE.menu_icon_algebra_transparent();
-			case "cas": return SvgPerspectiveResources.INSTANCE.menu_icon_cas_transparent();
+		switch (drawEmbed.getGeoEmbed().getAppName()) {
+			case "graphing":
+				return SvgPerspectiveResources.INSTANCE.menu_icon_algebra_transparent();
+			case "cas":
+				return SvgPerspectiveResources.INSTANCE.menu_icon_cas_transparent();
 			default: return ToolbarSvgResourcesSync.INSTANCE.mode_extension();
 		}
 	}

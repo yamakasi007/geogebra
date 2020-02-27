@@ -57,7 +57,7 @@ public class PageListController implements PageListControllerInterface,
 	/**
 	 * application {@link AppW}
 	 */
-	protected AppW app;
+	protected AppWFull app;
 	/**
 	 * list of slides (pages)
 	 */
@@ -74,7 +74,7 @@ public class PageListController implements PageListControllerInterface,
 	 * @param listener
 	 *            the card listener.
 	 */
-	public PageListController(AppW app, CardListInterface listener) {
+	public PageListController(AppWFull app, CardListInterface listener) {
 		this.app = app;
 		slides = new ArrayList<>();
 		this.listener = listener;
