@@ -211,6 +211,11 @@ public class CarotaEditor implements Editor {
 		}
 	}
 
+	@Override
+	public String getHyperLinkURL() {
+		return getFormatNative(editor.selectedRange().getFormatting(), "url", "");
+	}
+
 	private boolean isEditing() {
 		return !getWidget().getElement().hasClassName(INVISIBLE);
 	}
