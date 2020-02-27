@@ -649,28 +649,34 @@ public class GeoLocusStroke extends GeoLocus
 	private void appendBezierCurve(ArrayList<MyPoint> data) {
 		int index = 0;
 		while (index <= data.size()) {
-			List<MyPoint> partOfStroke = getPartOfPenStroke(index, data);
+			index += appendBezierPart(index, data);
+		}
+	}
 
-			// if we found single point
-			// just add it to the list without control points
-			if (partOfStroke.size() > 0) {
-				getPoints().add(partOfStroke.get(0).withType(SegmentType.MOVE_TO));
-			}
+	private int appendBezierPart(int index, ArrayList<MyPoint> data) {
+		List<MyPoint> partOfStroke = getPartOfPenStroke(index, data);
 
-			if (partOfStroke.size() == 1) {
-				getPoints().add(partOfStroke.get(0).withType(SegmentType.LINE_TO));
-			} else if (partOfStroke.size() == 2) {
-				getPoints().add(partOfStroke.get(1).withType(SegmentType.LINE_TO));
-			} else if (partOfStroke.size() > 2) {
-				addBezierCurveWithControlPoints(partOfStroke, data);
+		// if we found single point
+		// just add it to the list without control points
+		addBezierStartPoint(data);
 
-			}
+		int partSize = partOfStroke.size();
+		if (partSize == 1 || partSize == 2) {
+			getPoints().add(partOfStroke.get(partSize - 1).withType(SegmentType.LINE_TO));
+		} else if (partSize > 2) {
+			addBezierCurveWithControlPoints(partOfStroke, data);
+		}
 
-			if (index < data.size()) {
-				ensureTrailingNaN(getPoints());
-			}
+		if (index < data.size()) {
+			ensureTrailingNaN(getPoints());
+		}
 
-			index = index + Math.max(partOfStroke.size(), 1);
+		return index + Math.max(partSize, 1);
+	}
+
+	private void addBezierStartPoint(ArrayList<MyPoint> partOfStroke) {
+		if (partOfStroke.size() > 0) {
+			getPoints().add(partOfStroke.get(0).withType(SegmentType.MOVE_TO));
 		}
 	}
 
