@@ -29,6 +29,7 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 	private double originalRatio = Double.NaN;
 	private GeoEmbed geoEmbed;
 	private final static int EMBED_SIZE_THRESHOLD = 100;
+	private MyImage preview;
 
 	/**
 	 * @param ev
@@ -56,6 +57,7 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 			getEmbedManager().update(this);
 		}
 		setMetrics();
+		preview = view.getApplication().getEmbedManager().getPreview(this);
 	}
 
 	private void setMetrics() {
@@ -83,22 +85,16 @@ public class DrawEmbed extends Drawable implements DrawWidget, RemoveNeeded {
 			view.embed(g2, this);
 			return;
 		}
-		MyImage preview = view.getApplication().getEmbedManager().getPreview(this);
 
-		// if (preview != null) {
 		g2.setColor(GColor.BLACK);
 		int sx = getWidth();
 		int sy = getHeight();
 		g2.drawRect(getLeft(), getTop(), sx, sy);
-		g2.saveTransform();
 
-		double s = Math.min(sx, sy);
-		g2.translate(getLeft() + Math.max((sx - s) / 2, 0), getTop() + Math.max((sy - s) / 2, 0));
-		g2.scale(s / preview.getWidth(), s / preview.getHeight());
-
-		g2.drawImage(preview, 0, 0);
-		g2.restoreTransform();
-
+		int s = Math.min(sx, sy);
+		int iconLeft = getLeft() + Math.max((sx - s) / 2, 0);
+		int iconTop = getTop() + Math.max((sy - s) / 2, 0);
+		g2.drawImage(preview, iconLeft, iconTop, s, s);
 	}
 
 	@Override

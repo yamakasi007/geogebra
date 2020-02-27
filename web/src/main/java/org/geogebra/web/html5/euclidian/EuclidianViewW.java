@@ -453,7 +453,12 @@ public class EuclidianViewW extends EuclidianView implements
 		return dataUrl;
 	}
 
-	private static String dataURL(Canvas c, ExportType format) {
+	/**
+	 * @param c canvas
+	 * @param format export format
+	 * @return canvas as data url of a PNG or WEBP
+	 */
+	public static String dataURL(Canvas c, ExportType format) {
 		try {
 			return c == null ? ""
 				: c.toDataUrl(
@@ -665,56 +670,8 @@ public class EuclidianViewW extends EuclidianView implements
 
 	@Override
 	public String getCanvasBase64WithTypeString() {
-		if (g2p.getCanvas() == null) {
-			return "";
-		}
-		return getCanvasBase64WithTypeString(g2p.getCoordinateSpaceWidth(),
-		        g2p.getCoordinateSpaceHeight(), bgGraphics == null ? null
-		                : ((GGraphics2DW) bgGraphics).getCanvas(),
-		        g2p.getCanvas());
-	}
-
-	/**
-	 * 
-	 * @param width
-	 *            width
-	 * @param height
-	 *            height
-	 * @param background
-	 *            background objects
-	 * @param foreground
-	 *            foreground objects
-	 * @return base64 encoded PNG
-	 */
-	public static String getCanvasBase64WithTypeString(double width,
-	        double height, Canvas background, Canvas foreground) {
-
-		// TODO: make this more perfect, like in Desktop
-
-		double ratio = width / height;
-		double thx = MyXMLio.THUMBNAIL_PIXELS_X;
-		double thy = MyXMLio.THUMBNAIL_PIXELS_Y;
-		if (ratio < 1) {
-			thx *= ratio;
-		} else if (ratio > 1) {
-			thy /= ratio;
-		}
-
-		Canvas canv = Canvas.createIfSupported();
-		canv.setCoordinateSpaceHeight((int) thy);
-		canv.setCoordinateSpaceWidth((int) thx);
-		canv.setWidth((int) thx + "px");
-		canv.setHeight((int) thy + "px");
-		Context2d c2 = canv.getContext2d();
-
-		if (background != null) {
-			c2.drawImage(background.getCanvasElement(), 0, 0, (int) thx,
-			        (int) thy);
-		}
-		c2.drawImage(foreground.getCanvasElement(), 0, 0, (int) thx,
-		        (int) thy);
-
-		return dataURL(canv, null);
+		int size = Math.min(g2p.getCoordinateSpaceWidth(), g2p.getCoordinateSpaceHeight());
+		return getExportImageDataUrl(MyXMLio.THUMBNAIL_PIXELS_X / size, false, false);
 	}
 
 	@Override

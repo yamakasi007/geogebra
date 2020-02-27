@@ -254,6 +254,11 @@ public class GGraphics2DE implements GGraphics2DWI {
 	}
 
 	@Override
+	public void drawImage(MyImage img, int dx, int dy, int dw, int dh) {
+		// not needed
+	}
+
+	@Override
 	public int getOffsetWidth() {
 		return 0;
 	}
