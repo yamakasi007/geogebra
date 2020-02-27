@@ -657,11 +657,7 @@ public class GeoLocusStroke extends GeoLocus
 				getPoints().add(partOfStroke.get(0).withType(SegmentType.MOVE_TO));
 			}
 
-			if (partOfStroke.size() == 1) {
-				getPoints().add(partOfStroke.get(0).withType(SegmentType.LINE_TO));
-			} else if (partOfStroke.size() == 2) {
-				getPoints().add(partOfStroke.get(1).withType(SegmentType.LINE_TO));
-			} else if (partOfStroke.size() > 2) {
+			if (partOfStroke.size() > 2) {
 				ArrayList<double[]> controlPoints = getControlPoints(partOfStroke);
 				for (int i = 1; i < partOfStroke.size(); i++) {
 					MyPoint ctrl1 = new MyPoint(controlPoints.get(0)[i - 1],
@@ -683,7 +679,10 @@ public class GeoLocusStroke extends GeoLocus
 						getPoints().add(endpoint.withType(SegmentType.LINE_TO));
 					}
 				}
+			} else if (partOfStroke.size() > 0) {
+				getPoints().add(partOfStroke.get(partOfStroke.size() - 1).withType(SegmentType.LINE_TO));
 			}
+
 
 			if (index < data.size()) {
 				ensureTrailingNaN(getPoints());
