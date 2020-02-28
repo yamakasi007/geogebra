@@ -680,9 +680,9 @@ public class GeoLocusStroke extends GeoLocus
 					}
 				}
 			} else if (partOfStroke.size() > 0) {
-				getPoints().add(partOfStroke.get(partOfStroke.size() - 1).withType(SegmentType.LINE_TO));
+				getPoints().add(partOfStroke.get(partOfStroke.size() - 1)
+						.withType(SegmentType.LINE_TO));
 			}
-
 
 			if (index < data.size()) {
 				ensureTrailingNaN(getPoints());
