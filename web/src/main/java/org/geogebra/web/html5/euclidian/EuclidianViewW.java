@@ -1781,8 +1781,7 @@ public class EuclidianViewW extends EuclidianView implements
 		}
 	}
 
-	@Override
-	public void createSVGBackgroundIfNeeded() {
+	private void createSVGBackgroundIfNeeded() {
 		SVGResource res = getSVGRulingResource();
 		if (res != null) {
 			String uri = ImgResourceHelper.safeURI(res);
@@ -1796,6 +1795,7 @@ public class EuclidianViewW extends EuclidianView implements
 
 	@Override
 	public MyImage getSVGBackground() {
+		createSVGBackgroundIfNeeded();
 		return svgBackground;
 	}
 

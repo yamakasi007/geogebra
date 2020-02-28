@@ -3624,18 +3624,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (drawBg == null) {
 			drawBg = new DrawBackground(this, settings);
 		}
-		if (settings.getBackgroundType().isSVG()) {
-			createSVGBackgroundIfNeeded();
-		}
-
 		drawBg.draw(g2);
-	}
-
-	/**
-	 * create an SVG as background.
-	 */
-	protected void createSVGBackgroundIfNeeded() {
-		// implemented on web
 	}
 
 	/**
@@ -4018,8 +4007,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	private GPoint2D[] getTmpClipPoints() {
 		if (tmpClipPoints == null) {
 			tmpClipPoints = new GPoint2D[2];
-			tmpClipPoints[0] = AwtFactory.getPrototype().newPoint2D();
-			tmpClipPoints[1] = AwtFactory.getPrototype().newPoint2D();
+			tmpClipPoints[0] = new GPoint2D();
+			tmpClipPoints[1] = new GPoint2D();
 		}
 
 		return tmpClipPoints;

@@ -1156,6 +1156,14 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			getGoogleDriveOperation().resetStorageInfo();
 		}
 		resetUI();
+		resetPages();
+	}
+
+	private void resetPages() {
+		if (pageController == null) {
+			return;
+		}
+		pageController.resetPageControl();
 	}
 
 	/**
