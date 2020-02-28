@@ -650,36 +650,17 @@ public class GeoLocusStroke extends GeoLocus
 		int index = 0;
 		while (index <= data.size()) {
 			List<MyPoint> partOfStroke = getPartOfPenStroke(index, data);
+			int strokeSize = partOfStroke.size();
 
-			// if we found single point
-			// just add it to the list without control points
-			if (partOfStroke.size() > 0) {
+			if (strokeSize > 0) {
 				getPoints().add(partOfStroke.get(0).withType(SegmentType.MOVE_TO));
 			}
 
-			if (partOfStroke.size() > 2) {
-				ArrayList<double[]> controlPoints = getControlPoints(partOfStroke);
-				for (int i = 1; i < partOfStroke.size(); i++) {
-					MyPoint ctrl1 = new MyPoint(controlPoints.get(0)[i - 1],
-							controlPoints.get(1)[i - 1],
-							SegmentType.CONTROL);
-					MyPoint ctrl2 = new MyPoint(controlPoints.get(2)[i - 1],
-							controlPoints.get(3)[i - 1],
-							SegmentType.CONTROL);
-
-					MyPoint startpoint = partOfStroke.get(i - 1);
-					MyPoint endpoint = partOfStroke.get(i);
-
-					if (angle(startpoint, ctrl1, endpoint) > MIN_CURVE_ANGLE
-							|| angle(startpoint, ctrl2, endpoint) > MIN_CURVE_ANGLE) {
-						getPoints().add(ctrl1);
-						getPoints().add(ctrl2);
-						getPoints().add(endpoint.withType(SegmentType.CURVE_TO));
-					} else {
-						getPoints().add(endpoint.withType(SegmentType.LINE_TO));
-					}
-				}
-			} else if (partOfStroke.size() > 0) {
+			if (strokeSize > 2) {
+				addBezierCurveWithControlPoints(partOfStroke);
+			} else if (strokeSize > 0) {
+				// if we found single point
+				// just add it to the list without control points
 				getPoints().add(partOfStroke.get(partOfStroke.size() - 1)
 						.withType(SegmentType.LINE_TO));
 			}
@@ -692,13 +673,36 @@ public class GeoLocusStroke extends GeoLocus
 		}
 	}
 
+	private void addBezierCurveWithControlPoints(List<MyPoint> partOfStroke) {
+		ArrayList<double[]> controlPoints = getControlPoints(partOfStroke);
+		for (int i = 1; i < partOfStroke.size(); i++) {
+			MyPoint ctrl1 = new MyPoint(controlPoints.get(0)[i - 1],
+					controlPoints.get(1)[i - 1],
+					SegmentType.CONTROL);
+			MyPoint ctrl2 = new MyPoint(controlPoints.get(2)[i - 1],
+					controlPoints.get(3)[i - 1],
+					SegmentType.CONTROL);
+
+			MyPoint startPoint = partOfStroke.get(i - 1);
+			MyPoint endPoint = partOfStroke.get(i);
+
+			if (angle(startPoint, ctrl1, endPoint) > MIN_CURVE_ANGLE
+					|| angle(startPoint, ctrl2, endPoint) > MIN_CURVE_ANGLE) {
+				getPoints().add(ctrl1);
+				getPoints().add(ctrl2);
+				getPoints().add(endPoint.withType(SegmentType.CURVE_TO));
+			} else {
+				getPoints().add(endPoint.withType(SegmentType.LINE_TO));
+			}
+		}
+	}
+
 	private void addNonBezierPoints(ArrayList<MyPoint> data) {
 		for (int i = 0; i < data.size(); i++) {
 			getPoints().add(new MyPoint(data.get(i).getX(), data.get(i).getY(),
 					i == 0 ? SegmentType.MOVE_TO : SegmentType.LINE_TO));
 		}
 		ensureTrailingNaN(getPoints());
-
 	}
 
 	private static double angle(MyPoint a, MyPoint b, MyPoint c) {
