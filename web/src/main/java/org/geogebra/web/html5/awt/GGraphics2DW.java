@@ -959,6 +959,7 @@ public class GGraphics2DW implements GGraphics2DWI {
 				dw, dh);
 	}
 
+	@Override
 	public void drawImage(MyImage img, int dx, int dy, int dw, int dh) {
 		context.drawImage(((MyImageW) img).getImage(), dx, dy, dw, dh);
 	}
