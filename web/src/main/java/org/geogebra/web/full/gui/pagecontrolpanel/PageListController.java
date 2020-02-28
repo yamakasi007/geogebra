@@ -3,6 +3,7 @@ package org.geogebra.web.full.gui.pagecontrolpanel;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.euclidian.TextController;
 import org.geogebra.common.kernel.AppState;
 import org.geogebra.common.main.App.ExportType;
@@ -16,7 +17,6 @@ import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventListener;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.pagecontrolpanel.DragController.Cards;
 import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.Browser;
@@ -218,8 +218,9 @@ public class PageListController implements PageListControllerInterface,
 	public void savePreviewCard(PagePreviewCard card) {
 		if (card != null) {
 			app.getGgbApi().createArchiveContent(true, card.getFile());
-			if (app.getEmbedManager() != null) {
-				app.getEmbedManager().persist();
+			EmbedManager embedManager = app.getEmbedManager();
+			if (embedManager != null) {
+				embedManager.persist();
 			}
 		}
 	}
@@ -318,7 +319,7 @@ public class PageListController implements PageListControllerInterface,
 		// clear preview card list
 		slides.clear();
 		// clear gui
-		((GeoGebraFrameFull) app.getAppletFrame()).getPageControlPanel()
+		app.getAppletFrame().getPageControlPanel()
 				.reset();
 	}
 	
@@ -370,7 +371,7 @@ public class PageListController implements PageListControllerInterface,
 			}
 			app.loadFileWithoutErrorHandling(slides.get(0).getFile(), false);
 			/// TODO this breaks MVC
-			((GeoGebraFrameFull) app.getAppletFrame()).getPageControlPanel()
+			app.getAppletFrame().getPageControlPanel()
 					.update();
 			setCardSelected(0);
 		} catch (Exception e) {
@@ -485,7 +486,7 @@ public class PageListController implements PageListControllerInterface,
 	public void loadNewPage(int index) {
 		saveMaterialProperties();
 		savePreviewCard(selectedCard);
-		((AppWFull) app).loadEmptySlide();
+		app.loadEmptySlide();
 		setCardSelected(index);
 		updatePreviewImage();
 		restoreMaterialProperties();
@@ -614,7 +615,7 @@ public class PageListController implements PageListControllerInterface,
 			idx = Math.max(idx, 0);
 			if (file.isEmpty()) {
 				// new file
-				((AppWFull) app).loadEmptySlide();
+				app.loadEmptySlide();
 
 			} else {
 				String perspXML = app.getGgbApi().getPerspectiveXML();
@@ -642,8 +643,8 @@ public class PageListController implements PageListControllerInterface,
 		} else if (action == EventType.MOVE_SLIDE) {
 			doReorder(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		}
-		((AppWFull) app).getAppletFrame().getPageControlPanel().update();
-		((AppWFull) app).getAppletFrame().getPageControlPanel().open();
+		app.getAppletFrame().getPageControlPanel().update();
+		app.getAppletFrame().getPageControlPanel().open();
 	}
 
 	private int indexOfId(String slideID) {

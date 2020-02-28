@@ -1326,8 +1326,8 @@ public class AppWFull extends AppW implements HasKeyboard {
 
 	@Override
 	public void executeAction(EventType action, AppState state, String[] args) {
-		if (action == EventType.EMBEDDED_STORE_UNDO) {
-			getEmbedManager().executeAction(EventType.REDO,
+		if (action == EventType.EMBEDDED_STORE_UNDO && embedManager != null) {
+			embedManager.executeAction(EventType.REDO,
 					Integer.parseInt(args[0]));
 		} else if (getPageController() != null) {
 			getPageController().executeAction(action, state, args);
@@ -2107,7 +2107,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 	}
 
 	@Override
-	public @Nonnull EmbedManager getEmbedManager() {
+	public EmbedManager getEmbedManager() {
 		if (embedManager == null && isWhiteboardActive()) {
 			embedManager = new EmbedManagerW(this);
 		}
@@ -2135,8 +2135,12 @@ public class AppWFull extends AppW implements HasKeyboard {
 	 */
 	@Override
 	public void clearMedia() {
-		getVideoManager().removePlayers();
-		getEmbedManager().removeAll();
+		if (videoManager != null) {
+			videoManager.removePlayers();
+		}
+		if (embedManager != null) {
+			embedManager.removeAll();
+		}
 	}
 
 	private int getSpHeight() {
