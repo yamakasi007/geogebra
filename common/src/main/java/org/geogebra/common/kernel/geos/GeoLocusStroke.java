@@ -650,18 +650,18 @@ public class GeoLocusStroke extends GeoLocus
 		int index = 0;
 		while (index <= data.size()) {
 			List<MyPoint> partOfStroke = getPartOfPenStroke(index, data);
+
 			int strokeSize = partOfStroke.size();
 
-			if (strokeSize > 0) {
+			if (!partOfStroke.isEmpty()) {
 				addPointMoveTo(partOfStroke.get(0));
-			}
-
-			if (strokeSize > 2) {
-				addBezierCurveWithControlPoints(partOfStroke);
-			} else if (strokeSize > 0) {
-				// if we found single point
-				// just add it to the list without control points
-				addPointLineTo(partOfStroke.get(partOfStroke.size() - 1));
+				if (strokeSize < 3) {
+					// if we found single point
+					// just add it to the list without control points
+					addPointLineTo(partOfStroke.get(partOfStroke.size() - 1));
+				} else {
+					addBezierCurveWithControlPoints(partOfStroke);
+				}
 			}
 
 			if (index < data.size()) {
@@ -697,11 +697,15 @@ public class GeoLocusStroke extends GeoLocus
 					|| angle(startPoint, ctrl2, endPoint) > MIN_CURVE_ANGLE) {
 				getPoints().add(ctrl1);
 				getPoints().add(ctrl2);
-				getPoints().add(endPoint.withType(SegmentType.CURVE_TO));
+				addPointCurveTo(endPoint);
 			} else {
-				getPoints().add(endPoint.withType(SegmentType.LINE_TO));
+				addPointLineTo(endPoint);
 			}
 		}
+	}
+
+	private void addPointCurveTo(MyPoint point) {
+		getPoints().add(point.withType(SegmentType.CURVE_TO));
 	}
 
 	private void addNonBezierPoints(ArrayList<MyPoint> data) {
