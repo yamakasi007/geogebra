@@ -1168,8 +1168,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		pageController.resetPageControl();
 	}
 
-
-
 	/**
 	 * Reset the UI.
 	 */
