@@ -25,8 +25,8 @@ public class HyperlinkDialog extends OptionDialog {
 		super(app.getPanel(), app);
 		this.inlineText = inlineText;
 
-		textInputPanel = new MediaInputPanel(app, this,	"Text", false);
-		linkInputPanel = new MediaInputPanel(app, this, "Link", true);
+		textInputPanel = new MediaInputPanel(app, this,	"Text", false, false);
+		linkInputPanel = new MediaInputPanel(app, this, "Link", true, true);
 
 		linkInputPanel.addPlaceholder(app.getLocalization().getMenu("pasteLink"));
 		updateButtonLabels("OK");
@@ -48,7 +48,7 @@ public class HyperlinkDialog extends OptionDialog {
 	}
 
 	private String getSelectionUrl() {
-		return inlineText.getFormat("url", "");
+		return inlineText.getHyperLinkURL();
 	}
 
 	@Override

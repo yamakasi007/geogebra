@@ -1117,7 +1117,6 @@ $duration: 0.2s;
 			}
 			.linkBox::selection {
   				background: rgba($mow_primary, 0.2)
-
   			}
   		}
 
@@ -1530,5 +1529,13 @@ $duration: 0.2s;
         .DialogButtonPanel {
             padding-top: 28px;
         }
+   	}
+
+   	.MaterialDialogBox.mediaDialog.mebis {
+   	    .urlInput {
+   	        .TextField::selection {
+                background: rgba($mow_primary, 0.2)
+            }
+   	    }
    	}
 }

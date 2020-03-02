@@ -26,6 +26,8 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	protected InputPanelW inputField;
 	private Label errorLabel;
 	private Label infoLabel;
+	private boolean isURLInput;
+	private boolean isFocued;
 
 	/**
 	 * @param app
@@ -36,14 +38,20 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 *         label translation key
 	 * @param required
 	 *         whether nonempty string is expected
+	 * @param isURLInput
+	 * 		   whether it should behave as link input box
 	 */
 	public MediaInputPanel(AppW app, OptionDialog parentDialog,
-						   String labelTransKey, boolean required) {
+						   String labelTransKey, boolean required, boolean isURLInput) {
 		this.app = app;
 		this.parentDialog = parentDialog;
 		this.required = required;
+		this.isURLInput = isURLInput;
 
 		setStyleName("mowMediaDialogContent");
+		if (isURLInput) {
+			addStyleName("urlInput");
+		}
 		addStyleName("emptyState");
 
 		inputField = new InputPanelW("", app, 1, 25, false);
@@ -73,6 +81,10 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 			@Override
 			public void execute() {
 				inputField.getTextComponent().setFocus(true);
+				if (isURLInput) {
+					inputField.getTextComponent().selectAll();
+					isFocued = true;
+				}
 			}
 		});
 	}
@@ -119,6 +131,9 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 */
 	public void showError(String msg) {
 		setStyleName("mowMediaDialogContent");
+		if (isURLInput) {
+			addStyleName("urlInput");
+		}
 		addStyleName("errorState");
 		errorLabel.setText(app.getLocalization().getMenu("Error") + ": "
 				+ app.getLocalization().getError(msg));
@@ -137,6 +152,9 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 */
 	public void resetError() {
 		setStyleName("mowMediaDialogContent");
+		if (isURLInput) {
+			addStyleName("urlInput");
+		}
 		addStyleName("emptyState");
 		removeStyleName("errorState");
 		if (required) {
@@ -195,6 +213,16 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 			@Override
 			public void onFocus(FocusEvent event) {
 				setFocusState();
+				if (isURLInput) {
+					if (isFocued) {
+						inputField.getTextComponent().setSelection(0, 0);
+					} else {
+						inputField.getTextComponent().setFocus(true);
+						inputField.getTextComponent().setSelection(0, 0);
+						inputField.getTextComponent().selectAll();
+						isFocued = true;
+					}
+				}
 			}
 		});
 
@@ -202,6 +230,9 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 			@Override
 			public void onBlur(BlurEvent event) {
 				resetInputField();
+				if (isURLInput) {
+					isFocued = false;
+				}
 			}
 		});
 	}
@@ -211,6 +242,9 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 */
 	private void setFocusState() {
 		setStyleName("mowMediaDialogContent");
+		if (isURLInput) {
+			addStyleName("urlInput");
+		}
 		addStyleName("focusState");
 	}
 
