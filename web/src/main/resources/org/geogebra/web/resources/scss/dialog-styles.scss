@@ -425,7 +425,7 @@ $duration: 0.2s;
 	}
 
 	.MaterialDialogBox.mediaDialog {
-   		.mowMediaDialogContent {
+   		.mowInputPanelContent {
    			.AutoCompleteTextFieldW {
    				margin: 8px 16px 8px 0px;
    			}
@@ -1136,14 +1136,14 @@ $duration: 0.2s;
  	.MaterialDialogBox.saveDialogMow {
 		@extend .mediaDialog;
 
-		.mowMediaDialogContent {
+		.mowInputPanelContent {
 				.AutoCompleteTextFieldW {
    					margin: 8px 16px 16px 0px !important;
    				}
    		}
 
-		.mowMediaDialogContent.hoverState,
-			.mowMediaDialogContent.focusState {
+		.mowInputPanelContent.hoverState,
+			.mowInputPanelContent.focusState {
 				.AutoCompleteTextFieldW {
    					margin: 8px 16px 15px 0px !important;
    				}
@@ -1531,11 +1531,9 @@ $duration: 0.2s;
         }
    	}
 
-   	.MaterialDialogBox.mediaDialog.mebis {
-   	    .urlInput {
-   	        .TextField::selection {
-                background: rgba($mow_primary, 0.2)
-            }
-   	    }
+   	.mowInputPanelContent  {
+   	    .TextField::selection {
+            background: rgba($mow_primary, 0.2)
+        }
    	}
 }
