@@ -231,18 +231,7 @@ public class OpenFileView extends MyHeaderPanel
 
 			@Override
 			public void callback(Boolean active) {
-				app.setWaitCursor();
-				app.fileNew();
-				app.setDefaultCursor();
-
-				if (!app.isUnbundledOrWhiteboard()) {
-					app.showPerspectivesPopup();
-				}
-				if (app.isWhiteboardActive()
-						&& app.getPageController() != null) {
-					app.getPageController().resetPageControl();
-				}
-
+				app.tryLoadTemplatesOnFileNew();
 			}
 		};
 		app.getArticleElement().attr("perspective", "");
