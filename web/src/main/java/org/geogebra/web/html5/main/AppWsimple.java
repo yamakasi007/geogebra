@@ -12,7 +12,6 @@ import org.geogebra.web.html5.euclidian.EuclidianSimplePanelW;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.gui.zoompanel.ZoomPanel;
-import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.ArticleElementInterface;
 
 import com.google.gwt.dom.client.Element;
@@ -65,8 +64,8 @@ public class AppWsimple extends AppW {
 		setUndoActive(undoActive);
 		afterCoreObjectsInited();
 		getSettingsUpdater().getFontSettingsUpdater().resetFonts();
-		Browser.removeDefaultContextMenu(this.getArticleElement().getElement());
-		if (Browser.runningLocal() && ArticleElement.isEnableUsageStats()) {
+		Browser.removeDefaultContextMenu(ae.getElement());
+		if (Browser.runningLocal() && ae.isEnableApiPing()) {
 			new GeoGebraTubeAPIWSimple(has(Feature.TUBE_BETA), ae)
 			        .checkAvailable(null);
 		}
@@ -97,6 +96,7 @@ public class AppWsimple extends AppW {
 			                        .getWidth(),
 			                getSettings().getEuclidian(1).getPreferredSize()
 			                        .getHeight());
+			updateVoiceover();
 		}
 	}
 
@@ -140,16 +140,13 @@ public class AppWsimple extends AppW {
 
 	@Override
 	public void focusLost(View v, Element el) {
-		super.focusLost(v, el);
 		frame.useDataParamBorder();
 		this.getGlobalKeyDispatcher().setFocused(false);
 	}
 
 	@Override
 	public void focusGained(View v, Element el) {
-		super.focusGained(v, el);
 		frame.useFocusedBorder();
-		Log.debug("AppWsimple_focusGained");
 
 		// if focusLost sets this to false, it is probably
 		// right to set this to true again here! Otherwise

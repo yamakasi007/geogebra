@@ -535,6 +535,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	private boolean showBackground = true;
 	private DrawBackground drawBg = null;
 	private final HitDetector hitDetector;
+	private boolean isResetIconSelected = false;
 
 	/** @return line types */
 	public static final Integer[] getLineTypes() {
@@ -3747,18 +3748,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (drawBg == null) {
 			drawBg = new DrawBackground(this, settings);
 		}
-		if (settings.getBackgroundType().isSVG()) {
-			createSVGBackgroundIfNeeded();
-		}
-
 		drawBg.draw(g2);
-	}
-
-	/**
-	 * create an SVG as background.
-	 */
-	protected void createSVGBackgroundIfNeeded() {
-		// implemented on web
 	}
 
 	/**
@@ -4134,8 +4124,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	private GPoint2D[] getTmpClipPoints() {
 		if (tmpClipPoints == null) {
 			tmpClipPoints = new GPoint2D[2];
-			tmpClipPoints[0] = AwtFactory.getPrototype().newPoint2D();
-			tmpClipPoints[1] = AwtFactory.getPrototype().newPoint2D();
+			tmpClipPoints[0] = new GPoint2D();
+			tmpClipPoints[1] = new GPoint2D();
 		}
 
 		return tmpClipPoints;
@@ -6532,6 +6522,27 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public HitDetector getHitDetector() {
 		return hitDetector;
+	}
+
+	/**
+	 * @return whether the reset icon is selected
+	 */
+	public boolean isResetIconSelected() {
+		return isResetIconSelected;
+	}
+
+	/**
+	 * Sets whether the reset icon should be selected.
+	 * It changes the reset icon appearance.
+	 *
+	 * @param selected true if the reset icon is selected
+	 */
+	protected void setResetIconSelected(boolean selected) {
+		if (isResetIconSelected != selected) {
+			isResetIconSelected = selected;
+			invalidateBackground();
+			repaint();
+		}
 	}
 
 	/**

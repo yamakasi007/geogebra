@@ -6,6 +6,8 @@ import com.google.gwt.user.client.ui.Widget;
 /** The interface to the Carota editor */
 public interface Editor {
 
+	void reload();
+
 	interface EditorChangeListener {
 
 		/**
@@ -76,6 +78,12 @@ public interface Editor {
 	 * @return format property value
 	 */
 	<T> T getFormat(String key, T fallback);
+
+	/**
+	 * @return if part is selected, then hyperlink of selection,
+	 * 		otherwise hyperlink at the end of text
+	 */
+	String getHyperLinkURL();
 
 	void insertHyperlink(String url, String text);
 

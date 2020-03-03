@@ -155,6 +155,7 @@ import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.MyMath;
+import org.geogebra.common.util.StringUtil;
 
 public abstract class EuclidianController implements SpecialPointsListener {
 
@@ -295,7 +296,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected GPoint startLoc;
 	protected GPoint lastMouseLoc;
 	protected GPoint oldLoc = new GPoint();
-	protected GPoint2D.Double lineEndPoint = null;
+	protected GPoint2D lineEndPoint = null;
 	protected GPoint selectionStartPoint = new GPoint();
 	protected ArrayList<Double> tempDependentPointX;
 	protected ArrayList<Double> tempDependentPointY;
@@ -359,7 +360,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private double vertexY = Double.NaN;
 	private ModeDeleteLocus deleteMode;
 	private ModeShape shapeMode;
-	private GPoint2D.Double startPoint = new GPoint2D.Double();
+	private GPoint2D startPoint = new GPoint2D();
 	private boolean externalHandling;
 	private long lastMouseRelease;
 	private long lastTouchRelease;
@@ -745,7 +746,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 
 		} else {
-			boolean clear = !EuclidianConstants.isMoveOrSelectionMode(mode)
+			boolean clear = !moveMode(mode)
 					|| !EuclidianConstants.keepSelectionWhenSet(newMode);
 			if (!temporaryMode && clear) {
 				selection.clearSelectedGeos(false);
@@ -763,7 +764,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			ge.setAppName("cas");
 		}
 		ge.initPosition(view);
-		ge.setEmbedId(app.getEmbedManager().nextID());
+		app.getEmbedManager().initAppEmbed(ge);
 		ge.setLabel(null);
 		app.storeUndoInfo();
 		app.invokeLater(new Runnable() {
@@ -6272,8 +6273,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			int height = Math.max(GeoInlineText.DEFAULT_HEIGHT,
 					(int) textRectangleShape.getHeight());
 
-			GPoint2D initPoint = AwtFactory.getPrototype()
-					.newPoint2D(view.toRealWorldCoordX(textRectangleShape.getX()),
+			GPoint2D initPoint = new GPoint2D(view.toRealWorldCoordX(textRectangleShape.getX()),
 							view.toRealWorldCoordY(textRectangleShape.getY()));
 
 			inlineText = new GeoInlineText(kernel.getConstruction(), initPoint, width, height);
@@ -6282,7 +6282,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			view.setShapeRectangle(null);
 			view.repaintView();
 		} else {
-			GPoint2D initPoint = AwtFactory.getPrototype().newPoint2D(xRW, yRW);
+			GPoint2D initPoint = new GPoint2D(xRW, yRW);
 			inlineText = new GeoInlineText(kernel.getConstruction(), initPoint);
 		}
 
@@ -6311,7 +6311,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return hits;
 	}
 
-	protected boolean moveMode(int evMode) {
+	private boolean moveMode(int evMode) {
 		return EuclidianConstants.isMoveOrSelectionMode(evMode);
 	}
 
@@ -7574,8 +7574,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				// resize selected geo
 				if (getResizedShape().getGeoElement().isSelected()) {
 					dontClearSelection = true;
-					GPoint2D p = AwtFactory.getPrototype()
-							.newPoint2D(event.getX(), event.getY());
+					GPoint2D p = new GPoint2D(event.getX(), event.getY());
 					getResizedShape().updateByBoundingBoxResize(p,
 							view.getHitHandler());
 				}
@@ -7868,7 +7867,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		default:
 			break;
 		}
-		return AwtFactory.getPrototype().newPoint2D(distX, distY);
+		return new GPoint2D(distX, distY);
 	}
 
 	/**
@@ -9374,7 +9373,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	}
 
 	private boolean handleVideoEmbedReleased() {
-		if (draggingOccured || view.getHits().isEmpty()) {
+		if (!moveMode(mode)
+			|| draggingOccured || view.getHits().isEmpty()) {
 			return false;
 		}
 
@@ -9890,8 +9890,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return draggingOccured && draggingBeyondThreshold;
 	}
 
-	private boolean handleInlineTextHit() {
-		if (view.getHits().isEmpty()) {
+	private boolean handleInlineTextHit(AbstractEvent event) {
+		if (!moveMode(mode) || app.isRightClick(event) || view.getHits().isEmpty()) {
 			lastInlineText = null;
 			return false;
 		}
@@ -9910,7 +9910,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			lastInlineText = (GeoInlineText) topGeo;
 			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(lastInlineText));
 			String hyperlinkURL = drInlineText.urlByCoordinate(mouseLoc.x, mouseLoc.y);
-			if (hyperlinkURL != null && !draggingOccured) {
+			if (!StringUtil.emptyOrZero(hyperlinkURL) && !draggingOccured) {
 				showDynamicStylebar();
 				drInlineText.toForeground(mouseLoc.x, mouseLoc.y);
 				app.showURLinBrowser(hyperlinkURL);
@@ -9930,7 +9930,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            pointer event
 	 */
 	public void wrapMouseReleased(AbstractEvent event) {
-		if (handleInlineTextHit()) {
+		if (handleInlineTextHit(event)) {
 			return;
 		}
 
@@ -9974,7 +9974,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		if (getResizedShape() != null) { // resize, single selection
 			view.setHitHandler(EuclidianBoundingBoxHandler.UNDEFINED);
-			getResizedShape().updateGeo();
 			selection.addSelectedGeo(getResizedShape().getGeoElement());
 			if (!isDraggingOccuredBeyondThreshold()) {
 				showDynamicStylebar();
@@ -9983,9 +9982,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			setResizedShape(null);
 		} else if (isMultiResize) { // resize, multi selection
 			view.setHitHandler(EuclidianBoundingBoxHandler.UNDEFINED);
-			for (GeoElement geo : selection.getSelectedGeos()) {
-				((Drawable) view.getDrawableFor(geo)).updateGeo();
-			}
 			storeUndoInfo();
 			isMultiResize = false;
 			setBoundingBoxFromList(selection.getSelectedGeos());
@@ -10012,7 +10008,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		// after finished drag switch back mode
 		// also ignore drag start point
-		if (EuclidianConstants.isMoveOrSelectionMode(mode) && shapeDragged) {
+		if (moveMode(mode) && shapeDragged) {
 			shapeDragged = false;
 			mode = oldShapeMode;
 			getShapeMode().setDragStartPointSet(false);
@@ -10579,7 +10575,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			// prevent objects created by a script
 			if (app.isUsingFullGui() && app.getGuiManager() != null) {
 				app.getGuiManager().mouseReleasedForPropertiesView(
-						!EuclidianConstants.isMoveOrSelectionMode(mode)
+						!moveMode(mode)
 								&& mode != EuclidianConstants.MODE_MOVE_ROTATE);
 			}
 		}
@@ -10655,8 +10651,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 		} else {
 			// there are hits
-			if (selection.selectedGeosSize() > 0
-					&& EuclidianConstants.isMoveOrSelectionMode(mode)) {
+			if (selection.selectedGeosSize() > 0 && moveMode(mode)) {
 				// only for move mode
 				// right click on already selected geos -> show menu for them
 				// right click on object(s) not selected -> clear
@@ -10777,21 +10772,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 						&& (app.hasFocus() || shiftOrMeta));
 	}
 
-	/**
-	 * Update preview line endpoint. FIXME duplicate method
-	 * 
-	 * @param p
-	 *            line endpoint
-	 */
-	public void setLineEndPoint(GPoint2D p) {
-		if (p == null) {
-			lineEndPoint = null;
-		} else {
-			lineEndPoint = new GPoint2D.Double(p.getX(), p.getY());
-		}
-		useLineEndPoint = true;
-	}
-
 	public Hits getHighlightedgeos() {
 		return highlightedGeos.cloneHits();
 	}
@@ -10833,7 +10813,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 * @param point
 	 *            line endpoint
 	 */
-	public void setLineEndPoint(GPoint2D.Double point) {
+	public void setLineEndPoint(GPoint2D point) {
 		lineEndPoint = point;
 		useLineEndPoint = true;
 	}
@@ -11939,7 +11919,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		// store undo info and state if we use the tool once again
 		int m = temporaryMode ? oldMode : mode;
 		app.storeUndoInfoAndStateForModeStarting(
-				!EuclidianConstants.isMoveOrSelectionMode(m));
+				!moveMode(m));
 	}
 
 	protected GeoElement[] extremum(Hits hits, boolean selPreview) {

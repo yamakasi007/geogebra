@@ -10,7 +10,6 @@ import org.geogebra.common.gui.dialog.options.model.AngleArcSizeModel;
 import org.geogebra.common.gui.dialog.options.model.ConicEqnModel;
 import org.geogebra.common.gui.dialog.options.model.ObjectNameModel;
 import org.geogebra.common.gui.dialog.options.model.ReflexAngleModel;
-import org.geogebra.common.gui.view.algebra.AlgebraItem;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.arithmetic.EquationValue;
 import org.geogebra.common.kernel.arithmetic.TextValue;
@@ -33,9 +32,11 @@ import org.geogebra.common.main.Localization;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.AsyncOperation;
+import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.dialog.HyperlinkDialog;
+import org.geogebra.web.full.gui.fontmenu.FontMenuItem;
 import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.menubar.MainMenu;
 import org.geogebra.web.full.html5.AttachedToDOM;
@@ -58,7 +59,7 @@ import com.google.gwt.user.client.Command;
 
 /**
  * @author gabor
- * 
+ *
  *         ContextMenuGeoElement for Web
  *
  */
@@ -77,7 +78,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 	/**
 	 * Creates new context menu
-	 * 
+	 *
 	 * @param app
 	 *            application
 	 */
@@ -90,7 +91,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 	/**
 	 * Creates new MyPopupMenu for GeoElement
-	 * 
+	 *
 	 * @param app
 	 *            application
 	 * @param geos
@@ -221,6 +222,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		addInlineTextToolbar();
+		addFontItem();
 		addHyperlinkItems();
 		wrappedPopup.addSeparator();
 
@@ -233,10 +235,14 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		wrappedPopup.addItem(toolbar, false);
 	}
 
+	private void addFontItem() {
+		wrappedPopup.addItem(new FontMenuItem((AppW) app, getTextController()));
+	}
+
 	private void addHyperlinkItems() {
 		DrawInlineText inlineText = (DrawInlineText) app.getActiveEuclidianView()
 				.getDrawableFor(getGeo());
-		if ("".equals(inlineText.getFormat("url", ""))) {
+		if (StringUtil.emptyOrZero(inlineText.getHyperLinkURL())) {
 			addHyperlinkItem("Link");
 		} else {
 			addHyperlinkItem("editLink");
@@ -614,9 +620,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 							loc.getMenu("PinToScreen")),
 					MaterialDesignResources.INSTANCE.check_black(),
 					pinned);
-			
+
 			Command cmdPin = new Command() {
-				
+
 				@Override
 				public void execute() {
 					pinCmd(pinned);
@@ -632,7 +638,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		final GeoElement geo = getGeo();
 		// change back to old name-> Fix instead of Lock
 		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
-				|| !AlgebraItem.isFunctionOrEquationFromUser(geo))
+				|| !geo.isFunctionOrEquationFromUser())
 				&& app.getSelectionManager().getSelectedGeos().size() <= 1) {
 
 			String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
