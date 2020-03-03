@@ -66,12 +66,26 @@ public class EvaluateInput {
 		evaluate(true, false, createEvaluationCallback(afterCb));
 	}
 
+	private GeoElementND[] evaluate(String input, ErrorHandler handler,
+									AsyncOperation<GeoElementND[]> cbEval,
+									boolean withSliders) {
+		EvalInfo info = EvalInfoFactory.getEvalInfoForAV(app, withSliders);
+		// undo point stored in callback
+		return app.getKernel().getAlgebraProcessor()
+				.processAlgebraCommandNoExceptionHandling(input, false, handler,
+						info, cbEval);
+	}
+
 	/**
 	 * Just evaulate input.
 	 * @return the evaulated geo.
 	 */
 	public GeoElementND evaluateToGeo() {
-		return app.getKernel().getAlgebraProcessor().evaluateToGeoElement(item.getText(), false);
+		GeoElementND[] elements = evaluate(item.getText(), null, null, app.getConfig().hasAutomaticSliders());
+		if (elements == null || elements.length != 1) {
+			return null;
+		}
+		return elements[0];
 	}
 
 	private String getUserInput() {
@@ -105,12 +119,8 @@ public class EvaluateInput {
 			err = item.getErrorHandler(valid, keepFocus, withSliders);
 			err.resetError();
 		}
-		EvalInfo info = EvalInfoFactory.getEvalInfoForAV(app, withSliders);
-
 		// undo point stored in callback
-		app.getKernel().getAlgebraProcessor()
-				.processAlgebraCommandNoExceptionHandling(input, false, err,
-						info, cbEval);
+		evaluate(input, err, cbEval, withSliders);
 		if (!keepFocus) {
 			item.setFocus(false);
 		}
