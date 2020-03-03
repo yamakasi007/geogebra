@@ -81,7 +81,8 @@ public class EvaluateInput {
 	 * @return the evaulated geo.
 	 */
 	public GeoElementND evaluateToGeo() {
-		GeoElementND[] elements = evaluate(item.getText(), null, null, app.getConfig().hasAutomaticSliders());
+		GeoElementND[] elements = evaluate(item.getText(), null, null, 
+				app.getConfig().hasAutomaticSliders());
 		if (elements == null || elements.length != 1) {
 			return null;
 		}
