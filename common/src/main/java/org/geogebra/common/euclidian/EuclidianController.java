@@ -9131,7 +9131,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			this.hideDynamicStylebar();
 		}
 
-		app.getAccessibilityManager().setTabOverGeos(true);
 		// if we need label hit, it will be recomputed
 		view.setLabelHitNeedsRefresh();
 
@@ -9936,12 +9935,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			} else {
 				getTextController().stopEditing();
 			}
-		}
-
-		// will be reset in wrapMouseReleased
-		AccessibilityManagerInterface am = app.getAccessibilityManager();
-		if (am != null && !app.getKernel().getConstruction().isEmpty()) {
-			am.setTabOverGeos(true);
 		}
 
 		GeoPointND p = this.selPoints() == 1 ? getSelectedPointList().get(0)
