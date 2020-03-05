@@ -2009,7 +2009,7 @@ public class GeoNumeric extends GeoElement
 	private void addAuralSliderValue(ScreenReaderBuilder sb) {
 		if (!addAuralCaption(sb)) {
 			sb.append(getLabelSimple());
-			sb.append(getLabelDelimiterWithSpace());
+			sb.append(getLabelDelimiterWithSpace(StringTemplate.screenReader));
 			sb.append(toValueString(StringTemplate.defaultTemplate));
 		}
 	}
