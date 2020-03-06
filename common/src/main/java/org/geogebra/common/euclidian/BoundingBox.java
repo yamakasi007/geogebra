@@ -21,9 +21,12 @@ import org.geogebra.common.main.GeoGebraColorConstants;
  *
  */
 public abstract class BoundingBox<T extends GShape> {
+
+	protected static final int ROTATION_HANDLER_DISTANCE = 25;
+
 	protected GRectangle2D rectangle;
 	protected final ArrayList<T> handlers;
-	private GColor color;
+	protected GColor color;
 	private boolean fixed;
 
 	/**
@@ -89,14 +92,10 @@ public abstract class BoundingBox<T extends GShape> {
 	protected abstract void createHandlers();
 
 	/**
-<<<<<<< HEAD
 	 * Initialize the array of handlers, don't specify positions
 	 *
 	 * @param nrHandlers
 	 *            rebuild the list of handlers
-=======
-	 * @return crop handlers
->>>>>>> parent of bc2985a2c7... Merge branch 'mow-817' into dev
 	 */
 	protected void initHandlers(int nrHandlers) {
 		handlers.clear();
@@ -278,12 +277,10 @@ public abstract class BoundingBox<T extends GShape> {
 	 */
 	public static void resize(DrawWidget video, GPoint2D p,
 			GPoint2D p2) {
-		int newWidth = 1;
-		int newHeight = 1;
 		boolean fixRatio = video.isFixedRatio();
 
-		newWidth = (int) Math.abs(p.getX() - p2.getX());
-		newHeight = (int) Math.abs(p.getY() - p2.getY());
+		int newWidth = (int) Math.abs(p.getX() - p2.getX());
+		int newHeight = (int) Math.abs(p.getY() - p2.getY());
 		if (fixRatio) {
 			newHeight = (int) (video.getOriginalRatio() * newWidth);
 		}
@@ -295,12 +292,12 @@ public abstract class BoundingBox<T extends GShape> {
 	}
 
 	/**
-	 * @param nrHandler
+	 * @param handler
 	 *            handler
 	 * @return resizing cursor or null
 	 */
-	public EuclidianCursor getCursor(EuclidianBoundingBoxHandler nrHandler) {
-		switch (nrHandler) {
+	public EuclidianCursor getCursor(EuclidianBoundingBoxHandler handler) {
+		switch (handler) {
 		case TOP_LEFT:
 		case BOTTOM_RIGHT:
 			return EuclidianCursor.RESIZE_NWSE;
