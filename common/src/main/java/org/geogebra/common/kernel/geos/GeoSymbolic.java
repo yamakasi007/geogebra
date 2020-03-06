@@ -18,7 +18,9 @@ import org.geogebra.common.kernel.arithmetic.FunctionNVar;
 import org.geogebra.common.kernel.arithmetic.FunctionVarCollector;
 import org.geogebra.common.kernel.arithmetic.FunctionVariable;
 import org.geogebra.common.kernel.arithmetic.MyArbitraryConstant;
+import org.geogebra.common.kernel.arithmetic.Traversing;
 import org.geogebra.common.kernel.arithmetic.ValueType;
+import org.geogebra.common.kernel.commands.AlgebraProcessor;
 import org.geogebra.common.kernel.geos.properties.DelegateProperties;
 import org.geogebra.common.kernel.geos.properties.EquationType;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
@@ -57,7 +59,7 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	 * @param value
 	 *            output expression
 	 */
-	public void setValue(ExpressionValue value) {
+	private void setValue(ExpressionValue value) {
 		this.value = value;
 	}
 
@@ -273,9 +275,8 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		if (twinUpToDate) {
 			return twinGeo;
 		}
-		GeoElementND newTwin = casOutputString == null ? null
-				: kernel.getAlgebraProcessor()
-						.evaluateToGeoElement(casOutputString, false);
+
+		GeoElementND newTwin = createTwinGeo();
 
 		if (newTwin instanceof EquationValue) {
 			((EquationValue) newTwin).setToUser();
@@ -306,6 +307,31 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		return twinGeo;
 	}
 
+	private GeoElementND createTwinGeo() {
+		if (value == null) {
+			return null;
+		}
+		boolean isSuppressLabelsActive = cons.isSuppressLabelsActive();
+		try {
+			cons.setSuppressLabelCreation(true);
+			ExpressionNode expressionNode = kernel.getParser().parseGiac(casOutputString).wrap();
+			return process(expressionNode);
+		} catch (Throwable exception) {
+			return null;
+		} finally {
+			cons.setSuppressLabelCreation(isSuppressLabelsActive);
+		}
+	}
+
+	private GeoElement process(ExpressionNode expressionNode) throws Exception {
+		expressionNode.traverse(Traversing.GgbVectRemover.getInstance());
+		AlgebraProcessor algebraProcessor = kernel.getAlgebraProcessor();
+		if (algebraProcessor.hasVectorLabel(this)) {
+			expressionNode.setForceVector();
+		}
+		GeoElement[] elements = algebraProcessor.processValidExpression(expressionNode);
+		return elements[0];
+	}
 	/**
 	 * Check if this is an Integral command.
 	 *
