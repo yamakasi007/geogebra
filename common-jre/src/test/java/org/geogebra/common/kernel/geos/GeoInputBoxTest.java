@@ -8,7 +8,9 @@ import static org.junit.Assert.assertTrue;
 import org.geogebra.common.AppCommonFactory;
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.jre.headless.AppCommon;
+import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.Kernel;
+import org.geogebra.common.kernel.UndoManager;
 import org.geogebra.common.kernel.geos.properties.TextAlignment;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.main.App;
@@ -17,6 +19,12 @@ import org.geogebra.common.util.TextObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.himamis.retex.editor.share.util.Unicode;
 
@@ -427,5 +435,39 @@ public class GeoInputBoxTest extends BaseUnitTest {
 		assertEquals(assertDefined, element.isDefined());
 		assertEquals(keepType, element.getGeoClassType());
 		element.remove();
+	}
+
+	@Test
+	public void testUserInputNullAfterUpdatingLinkedGeoToValidInput() {
+		addAvInput("f(x) = x");
+		GeoInputBox inputBox = addAvInput("a = InputBox(f)");
+		inputBox.updateLinkedGeo("xx");
+		assertThat(inputBox.getTempUserEvalInput(), is(nullValue()));
+	}
+
+	@Test
+	public void testUserInputNonNullAfterUpdatingLinkedGeoToInvalidInput() {
+		addAvInput("f(x) = x");
+		GeoInputBox inputBox = addAvInput("a = InputBox(f)");
+		inputBox.updateLinkedGeo("x+()");
+		assertThat(inputBox.getTempUserEvalInput(), is(notNullValue()));
+	}
+
+	@Test
+	public void testUndoRedo() {
+		App app = getApp();
+		Construction construction = app.getKernel().getConstruction();
+		UndoManager undoManager = construction.getUndoManager();
+		app.setUndoActive(true);
+		addAvInput("f(x) = x");
+		GeoInputBox inputBox = addAvInput("a = InputBox(f)");
+		app.storeUndoInfo();
+		inputBox.updateLinkedGeo("x+()");
+		undoManager.undo();
+		inputBox = (GeoInputBox) construction.lookupLabel("a");
+		assertThat(inputBox.getText(), equalTo("x"));
+		undoManager.redo();
+		inputBox = (GeoInputBox) construction.lookupLabel("a");
+		assertThat(inputBox.getText(), equalTo("x+()"));
 	}
 }
