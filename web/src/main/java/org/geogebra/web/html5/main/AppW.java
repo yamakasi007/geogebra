@@ -2612,11 +2612,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public abstract GeoGebraFrameW getAppletFrame();
 
 	@Override
-	public void loseFocus() {
-		getGlobalKeyDispatcher().setFocused(false);
-	}
-
-	@Override
 	public boolean isScreenshotGenerator() {
 		return this.articleElement.getDataParamScreenshotGenerator();
 	}
