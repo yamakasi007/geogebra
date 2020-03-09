@@ -281,8 +281,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 		this.loc = new LocalizationW(dimension);
 		this.articleElement = articleElement;
-		NativeFocusHandler.addNativeFocusHandler(articleElement.getElement(),
-				this);
 		this.laf = laf;
 
 		getTimerSystem();
@@ -557,19 +555,9 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	final public GlobalKeyDispatcherW getGlobalKeyDispatcher() {
 		if (globalKeyDispatcher == null) {
-			globalKeyDispatcher = newGlobalKeyDispatcher();
-			if (articleElement != null && articleElement.getDataParamApp()) {
-				globalKeyDispatcher.setFocused(true);
-			}
+			globalKeyDispatcher = new GlobalKeyDispatcherW(this);
 		}
 		return globalKeyDispatcher;
-	}
-
-	/**
-	 * @return a new instance of {@link GlobalKeyDispatcherW}
-	 */
-	private GlobalKeyDispatcherW newGlobalKeyDispatcher() {
-		return new GlobalKeyDispatcherW(this);
 	}
 
 	@Override
@@ -3317,13 +3305,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	public void setActivePerspective(int index) {
 		// only for GUI
-	}
-
-	/**
-	 * Focus this app
-	 */
-	public void addFocusToApp() {
-		globalKeyDispatcher.setFocused(true);
 	}
 
 	/**
