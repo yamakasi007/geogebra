@@ -261,7 +261,6 @@ public class MarblePanel extends FlowPanel
 		
 		btnPlus.getUpHoveringFace().setImage(hoverImg);
 		btnPlus.getDownHoveringFace().setImage(hoverImg);
-		btnPlus.setIgnoreTab();
 		btnPlus.addKeyDownHandler(this);
 		btnPlus.setAltText(btnPlus.getTitle());
 		AriaHelper.setHidden(btnPlus, true);
