@@ -349,6 +349,7 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		GeoElement[] elements = algebraProcessor.processValidExpression(expressionNode);
 		return elements[0];
 	}
+
 	/**
 	 * Check if this is an Integral command.
 	 *
