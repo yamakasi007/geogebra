@@ -1014,7 +1014,7 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		app.getSpecialPointsManager()
 				.updateSpecialPoints(app.getKernel().lookupLabel(string));
 	}
-    
+
 	/**
 	 * Emulate file reload
 	 */

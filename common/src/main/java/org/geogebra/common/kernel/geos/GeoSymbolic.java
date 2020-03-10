@@ -286,13 +286,6 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 			newTwin.setEuclidianVisible(true);
 		}
 
-		if (newTwin instanceof GeoNumeric) {
-			GeoNumeric numeric = (GeoNumeric) newTwin;
-			if (isIntegral() || isIntegralBetween()) {
-				numeric.setDrawable(true, true);
-			}
-		}
-
 		if (twinGeo != null && newTwin != null) {
 			newTwin.setVisualStyle(this);
 			twinGeo = newTwin.toGeoElement();
