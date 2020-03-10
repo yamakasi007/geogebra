@@ -11,7 +11,6 @@ import org.geogebra.common.main.settings.AppConfigCas;
 import org.geogebra.test.TestErrorHandler;
 import org.geogebra.test.commands.AlgebraTestHelper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 public class BaseSymbolicTest {
     protected AppCommon app;
