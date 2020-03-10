@@ -43,8 +43,4 @@ public class BaseSymbolicTest {
 		AlgebraTestHelper.assertOneOf(result, expected,
 				StringTemplate.testTemplate);
 	}
-
-	protected<T extends GeoElement> T add(String text) {
-		return (T) ap.processAlgebraCommandNoExceptionHandling(text, false, null, false, null)[0];
-	}
 }
