@@ -14,7 +14,6 @@ package org.geogebra.common.euclidian.draw;
 
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GRectangle;
-import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianStatic;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.plot.CurvePlotter;
@@ -34,8 +33,9 @@ import org.geogebra.common.kernel.geos.GeoNumeric;
  * 
  * @author Markus Hohenwarter
  */
-public class DrawIntegralFunctions extends Drawable {
+public class DrawIntegralFunctions extends DrawFunctionArea {
 
+	private GeoNumeric n;
 	private GeoFunction f;
 	private GeoFunction g;
 	private NumberValue a;
@@ -59,46 +59,20 @@ public class DrawIntegralFunctions extends Drawable {
 	public DrawIntegralFunctions(EuclidianView view, GeoNumeric n,
 			boolean casObject) {
 		this.view = view;
+		this.n = n;
 		geo = n;
 		isCasObject = casObject;
 
 		n.setDrawable(true);
 
-		init(n);
+		init();
+
 		update();
 	}
 
-	/**
-	 * Creates drawable for integral between two functions
-	 *
-	 * @param view
-	 *            view
-	 * @param geo
-	 *            geo
-	 * @param f
-	 *            first function
-	 * @param g
-	 *            second function
-	 * @param a
-	 *            start point
-	 * @param b
-	 *            end point
-	 */
-	public DrawIntegralFunctions(EuclidianView view, GeoElement geo,
-								 GeoFunction f, GeoFunction g, NumberValue a, NumberValue b) {
-		this.view = view;
-		this.geo = geo;
-		isCasObject = false;
-		this.f = f;
-		this.g = g;
-		this.a = a;
-		this.b = b;
-		update();
-	}
-
-	private void init(GeoNumeric n) {
+	private void init() {
 		if (isCasObject) {
-			initFromCasObject(n);
+			initFromCasObject();
 			return;
 		}
 		AlgoIntegralFunctions algo = (AlgoIntegralFunctions) n
@@ -109,16 +83,15 @@ public class DrawIntegralFunctions extends Drawable {
 		b = algo.getB();
 	}
 
-	private void initFromCasObject(GeoNumeric n) {
+	private void initFromCasObject() {
 		AlgoCasCellInterface algo = (AlgoCasCellInterface) n.getDrawAlgorithm();
 		GeoCasCell cell = algo.getCasCell();
 		Command cmd = cell.getInputVE().getTopLevelCommand();
-		SymbolicGeoHelper helper = new SymbolicGeoHelper(view, geo);
 
-		f = helper.asFunction(cmd, 0);
-		g = helper.asFunction(cmd, 1);
-		a = helper.asDouble(cmd, 2);
-		b = helper.asDouble(cmd, 3);
+		f = asFunction(cmd, 0);
+		g = asFunction(cmd, 1);
+		a = asDouble(cmd, 2);
+		b = asDouble(cmd, 3);
 	}
 
 	@Override
@@ -128,10 +101,10 @@ public class DrawIntegralFunctions extends Drawable {
 			return;
 		}
 		labelVisible = geo.isLabelVisible();
-		updateStrokes(geo);
+		updateStrokes(n);
 
-		if (geo.isAlgoMacroOutput() || isCasObject) {
-			init((GeoNumeric) geo);
+		if (n.isAlgoMacroOutput() || isCasObject) {
+			init();
 		}
 
 		// init gp
@@ -195,7 +168,7 @@ public class DrawIntegralFunctions extends Drawable {
 	final public void draw(GGraphics2D g2) {
 		if (isVisible) {
 			if (isHighlighted()) {
-				g2.setPaint(geo.getSelColor());
+				g2.setPaint(n.getSelColor());
 				g2.setStroke(selStroke);
 				g2.draw(gp);
 			}

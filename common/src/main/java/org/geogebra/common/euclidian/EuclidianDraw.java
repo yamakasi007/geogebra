@@ -29,7 +29,6 @@ import org.geogebra.common.euclidian.draw.DrawSegment;
 import org.geogebra.common.euclidian.draw.DrawSlider;
 import org.geogebra.common.euclidian.draw.DrawSlope;
 import org.geogebra.common.euclidian.draw.DrawSurface;
-import org.geogebra.common.euclidian.draw.DrawSymbolic;
 import org.geogebra.common.euclidian.draw.DrawText;
 import org.geogebra.common.euclidian.draw.DrawTurtle;
 import org.geogebra.common.euclidian.draw.DrawUpperLowerSum;

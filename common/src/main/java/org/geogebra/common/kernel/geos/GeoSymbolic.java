@@ -286,13 +286,6 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 			newTwin.setEuclidianVisible(true);
 		}
 
-		if (newTwin instanceof GeoNumeric) {
-			GeoNumeric numeric = (GeoNumeric) newTwin;
-			if (isIntegral() || isIntegralBetween()) {
-				numeric.setDrawable(true, true);
-			}
-		}
-
 		if (twinGeo != null && newTwin != null) {
 			newTwin.setVisualStyle(this);
 			twinGeo = newTwin.toGeoElement();
@@ -305,40 +298,6 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		twinUpToDate = true;
 
 		return twinGeo;
-	}
-
-	/**
-	 * Check if this is an Integral command.
-	 *
-	 * @return true if command is Integral
-	 */
-	public boolean isIntegral() {
-		return isTopCommand("Integral", 3) || isTopCommand("Integral", 4);
-	}
-
-	/**
-	 * Check if this is an IntegralBetween top command.
-	 *
-	 * @return true if command is IntegralBetween.
-	 */
-	public boolean isIntegralBetween() {
-		return isTopCommand("IntegralBetween", 3) || isTopCommand("IntegralBetween", 4);
-	}
-
-	/**
-	 * Test if this geo was created from a command.
-	 * @param name name
-	 * @param arguments number of args
-	 * @return true if top level is a command
-	 */
-	public boolean isTopCommand(String name, int arguments) {
-		ExpressionNode node = getDefinition();
-		if (node == null || node.getTopLevelCommand() == null) {
-			return false;
-		}
-		Command command = node.getTopLevelCommand();
-		String commandName = command.getName();
-		return name.equals(commandName) && command.getArgumentNumber() == arguments;
 	}
 
 	@Override
