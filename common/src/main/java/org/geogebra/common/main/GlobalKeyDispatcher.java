@@ -382,7 +382,7 @@ public abstract class GlobalKeyDispatcher {
 
 		case TAB:
 			if (app.isDesktop()) {
-				consumed = handleTab(isControlDown, isShiftDown);
+				consumed = handleTabDesktop(isControlDown, isShiftDown);
 			}
 
 			break;
@@ -454,6 +454,10 @@ public abstract class GlobalKeyDispatcher {
 		}
 
 		return consumed;
+	}
+
+	protected boolean handleTabDesktop(boolean isControlDown, boolean isShiftDown) {
+		return false; // overridden in desktop
 	}
 
 	/**
@@ -967,28 +971,6 @@ public abstract class GlobalKeyDispatcher {
 	 */
 	protected void handleCopyCut(boolean cut) {
 		// overridden in desktop, in web, we listen to paste events
-	}
-
-	/**
-	 * @param isControlDown
-	 *            whether control is down
-	 * @param isShiftDown
-	 *            whether shift is down
-	 * @return whether key was consumed
-	 */
-	public boolean handleTab(boolean isControlDown, boolean isShiftDown) {
-
-		EuclidianView ev = app.getActiveEuclidianView();
-
-		ev.closeDropdowns();
-
-		if (isShiftDown) {
-			selection.selectLastGeo(ev);
-		} else {
-			selection.selectNextGeo(ev);
-		}
-
-		return true;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package org.geogebra.web.full.gui.toolbar.mow;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.event.PointerEventType;
+import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.gui.dialog.handler.ColorChangeHandler;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.web.full.css.MaterialDesignResources;
@@ -15,6 +16,7 @@ import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.ImageOrText;
 import org.geogebra.web.html5.gui.util.LayoutUtilW;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
+import org.geogebra.web.html5.gui.zoompanel.FocusableWidget;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.sliderPanel.SliderPanelW;
 
@@ -78,6 +80,11 @@ public class PenSubMenu extends SubMenuPanel {
 		select = new ToolButton(EuclidianConstants.MODE_SELECT_MOW, app,
 				this);
 		penPanel.add(LayoutUtilW.panelRow(select, pen, eraser, highlighter));
+		new FocusableWidget(select, AccessibilityGroup.NOTES_TOOL_SELECT, -1).attachTo(app);
+		new FocusableWidget(pen, AccessibilityGroup.NOTES_TOOL_PEN, -1).attachTo(app);
+		new FocusableWidget(eraser, AccessibilityGroup.NOTES_TOOL_ERASER, -1).attachTo(app);
+		new FocusableWidget(highlighter,
+				AccessibilityGroup.NOTES_TOOL_HIGHLIGHTER, -1).attachTo(app);
 	}
 
 	/**
@@ -128,6 +135,8 @@ public class PenSubMenu extends SubMenuPanel {
 		colorPanel.add(LayoutUtilW.panelRow(btnColor[0], btnColor[1],
 				btnColor[2], btnColor[3], btnColor[4], btnColor[5], btnColor[6],
 				btnColor[7], btnColor[8], btnCustomColor));
+		//new FocusableWidget(colorPanel,
+		//		AccessibilityGroup.NOTES_COLOR_PANEL, -1).attachTo(app);
 	}
 
 	/**
@@ -150,6 +159,8 @@ public class PenSubMenu extends SubMenuPanel {
 				sliderValueChanged(event.getValue());
 			}
 		});
+		new FocusableWidget(slider.getSlider(),
+				AccessibilityGroup.NOTES_PEN_THICKNESS_SLIDER, -1).attachTo(app);
 	}
 
 	private void setSliderRange(boolean isPen) {
