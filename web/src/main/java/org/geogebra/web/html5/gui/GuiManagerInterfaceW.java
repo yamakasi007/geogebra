@@ -6,6 +6,7 @@ import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.euclidian.EuclidianStyleBar;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.SymbolicEditor;
+import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.gui.layout.DockPanel;
 import org.geogebra.common.gui.view.algebra.AlgebraView;
@@ -169,7 +170,7 @@ public interface GuiManagerInterfaceW extends GuiManagerInterface {
 	 *
 	 * @return the editor
 	 */
-	SymbolicEditor createSymbolicEditor(EuclidianViewW view);
+	SymbolicEditor createSymbolicEditor(EuclidianViewW view, DrawInputBox drawInputBox);
 
 	/**
 	 *

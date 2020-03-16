@@ -20,6 +20,7 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.EuclidianStatic;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.event.FocusListenerDelegate;
 import org.geogebra.common.euclidian.event.KeyEvent;
 import org.geogebra.common.euclidian.event.KeyHandler;
@@ -32,12 +33,6 @@ import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.util.StringUtil;
 
 import com.himamis.retex.editor.share.util.Unicode;
-
-/**
- * Checkbox for free GeoBoolean object.
- * 
- * @author Michael
- */
 
 public class DrawInputBox extends CanvasDrawable {
 	// TODO: examine these two, why are they needed and why these values.
@@ -63,6 +58,8 @@ public class DrawInputBox extends CanvasDrawable {
 	private TextRenderer textRenderer;
 	private GDimension labelDimension = null;
 
+	private SymbolicEditor symbolicEditor;
+
 	/**
 	 * @param view
 	 *            view
@@ -77,10 +74,12 @@ public class DrawInputBox extends CanvasDrawable {
 		if (getTextField() != null) {
 			getTextField().addFocusListener(new InputFieldListener());
 			getTextField().addKeyHandler(new InputFieldKeyListener());
-
 		}
+
 		textFont = view.getFont();
 		update();
+
+		symbolicEditor = view.createSymbolicEditor(this);
 	}
 
 	/**
@@ -258,8 +257,6 @@ public class DrawInputBox extends CanvasDrawable {
 
 		view.getViewTextField().revalidateBox();
 
-		// xLabel = geo.labelOffsetX;
-		// yLabel = geo.labelOffsetY;
 		xLabel = getGeoInputBox().getScreenLocX(view);
 		yLabel = getGeoInputBox().getScreenLocY(view);
 		labelRectangle.setBounds(xLabel, yLabel, getPreferredWidth(), getPreferredHeight());
@@ -565,7 +562,7 @@ public class DrawInputBox extends CanvasDrawable {
 	 */
 	public void attachMathField() {
 		hideTextField();
-		view.attachSymbolicEditor(geoInputBox, getInputFieldBounds());
+		symbolicEditor.attach(getInputFieldBounds());
 		geoInputBox.updateRepaint();
 	}
 
@@ -586,7 +583,7 @@ public class DrawInputBox extends CanvasDrawable {
 	}
 
 	private void hideSymbolicField() {
-		view.hideSymbolicEditor();
+		symbolicEditor.hide();
 	}
 
 	private void hideTextField() {
@@ -610,7 +607,7 @@ public class DrawInputBox extends CanvasDrawable {
 	/**
 	 * @return input box
 	 */
-	GeoInputBox getGeoInputBox() {
+	public GeoInputBox getGeoInputBox() {
 		return geoInputBox;
 	}
 

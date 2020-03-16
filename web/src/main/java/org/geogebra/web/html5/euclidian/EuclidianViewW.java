@@ -7,7 +7,6 @@ import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint;
-import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.CoordSystemAnimation;
 import org.geogebra.common.euclidian.Drawable;
@@ -18,6 +17,7 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.PenPreviewLine;
 import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.background.BackgroundType;
+import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.euclidian.draw.DrawVideo;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.text.InlineTextController;
@@ -1464,21 +1464,13 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	public boolean isSymbolicEditorClicked(GPoint mouseLoc) {
-		if (symbolicEditor == null) {
-			return false;
-		}
-		return symbolicEditor.isClicked(mouseLoc);
-	}
-
-	@Override
-	protected SymbolicEditor createSymbolicEditor() {
+	public SymbolicEditor createSymbolicEditor(DrawInputBox drawInputBox) {
 		GuiManagerInterfaceW gm = ((AppW) app).getGuiManager();
 		if (gm == null) {
 			return null;
 		}
 
-		return gm.createSymbolicEditor(this);
+		return gm.createSymbolicEditor(this, drawInputBox);
 	}
 
 	@Override
@@ -1872,10 +1864,6 @@ public class EuclidianViewW extends EuclidianView implements
 	 * @return keyboard listener for active symbolic editor
 	 */
 	public MathKeyboardListener getKeyboardListener() {
-		if (symbolicEditor != null) {
-			return ((HasMathKeyboardListener) symbolicEditor).getKeyboardListener();
-		}
-
 		return null;
 	}
 

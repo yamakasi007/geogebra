@@ -4,7 +4,6 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.euclidian.draw.LaTeXTextRenderer;
-import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.main.App;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
@@ -32,8 +31,12 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	 * @param app
 	 *            The application.
 	 */
-	public SymbolicEditorW(App app, EuclidianViewW view) {
+	public SymbolicEditorW(App app, EuclidianViewW view, DrawInputBox drawInputBox) {
 		super(app, view);
+
+		this.drawInputBox = drawInputBox;
+		this.geoInputBox = drawInputBox.getGeoInputBox();
+
 		editor = new MathFieldEditor(app, this);
 		editor.addBlurHandler(this);
 		editor.getMathField().setChangeListener(this);
@@ -48,9 +51,7 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	}
 
 	@Override
-	public void attach(GeoInputBox geoInputBox, GRectangle bounds) {
-		this.geoInputBox = geoInputBox;
-		this.drawInputBox = (DrawInputBox) view.getDrawableFor(geoInputBox);
+	public void attach(GRectangle bounds) {
 		this.bounds = bounds;
 
 		resetChanges();
