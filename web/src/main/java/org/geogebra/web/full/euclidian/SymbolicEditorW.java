@@ -1,6 +1,5 @@
 package org.geogebra.web.full.euclidian;
 
-import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.SymbolicEditor;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
@@ -23,27 +22,18 @@ import com.himamis.retex.editor.share.editor.MathFieldInternal;
 import com.himamis.retex.editor.share.event.MathFieldListener;
 import com.himamis.retex.editor.share.model.MathFormula;
 import com.himamis.retex.editor.share.model.MathSequence;
-import com.himamis.retex.editor.share.serializer.TeXSerializer;
 
 /**
  * MathField-capable editor for EV, Web implementation.
  *
  * @author Laszlo
  */
-public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
+public class SymbolicEditorW extends SymbolicEditor implements MathFieldListener,
 		InputBoxWidget, BlurHandler, ChangeHandler {
 
-	private final App app;
-	private final EuclidianViewW view;
-
-	private GeoInputBox geoInputBox;
-	private DrawInputBox drawInputBox;
-
-	private GRectangle bounds;
 	private String text;
 	private MathFieldEditor editor;
 	private final SymbolicEditorDecorator decorator;
-	private TeXSerializer serializer;
 
 	/**
 	 * Constructor
@@ -52,8 +42,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 	 *            The application.
 	 */
 	public SymbolicEditorW(App app, EuclidianViewW view) {
-		this.app = app;
-		this.view = view;
+		super(app, view);
 		editor = new MathFieldEditor(app, this);
 		editor.addBlurHandler(this);
 		editor.getMathField().setChangeListener(this);
@@ -63,7 +52,6 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 				.getFontSettings().getAppFontSize() + 3;
 
 		decorator = new SymbolicEditorDecorator(editor, baseFontSize);
-		serializer = new TeXSerializer();
 	}
 
 	@Override
@@ -108,11 +96,6 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 	}
 
 	@Override
-	public boolean isClicked(GPoint point) {
-		return drawInputBox.isEditing() && bounds.contains(point.getX(), point.getY());
-	}
-
-	@Override
 	public void hide() {
 		if (!drawInputBox.isEditing()) {
 			return;
@@ -124,7 +107,7 @@ public class SymbolicEditorW implements SymbolicEditor, MathFieldListener,
 				.requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
 			@Override
 			public void execute(double timestamp) {
-				view.doRepaint2();
+				((EuclidianViewW) view).doRepaint2();
 				editor.setVisible(false);
 				editor.setKeyboardVisibility(false);
 			}

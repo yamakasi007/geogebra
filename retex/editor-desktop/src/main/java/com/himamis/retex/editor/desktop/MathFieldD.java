@@ -172,11 +172,6 @@ public class MathFieldD extends JLabel implements MathField {
 
 	}
 
-	public void hideCopyButton() {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public void fireInputChangedEvent() {
 		// TODO Auto-generated method stub

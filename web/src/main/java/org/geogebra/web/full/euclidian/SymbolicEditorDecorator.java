@@ -3,9 +3,9 @@ package org.geogebra.web.full.euclidian;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
-import org.geogebra.web.full.gui.components.MathFieldEditorDecoratorBase;
+import org.geogebra.web.full.gui.components.MathFieldEditorDecorator;
 
-public class SymbolicEditorDecorator extends MathFieldEditorDecoratorBase {
+public class SymbolicEditorDecorator extends MathFieldEditorDecorator {
 	private int baseline;
 	private double fontSize;
 
@@ -21,12 +21,7 @@ public class SymbolicEditorDecorator extends MathFieldEditorDecoratorBase {
 		editor.setFontSize(fontSize);
 	}
 
-	@Override
 	public void update() {
-		updateSize();
-	}
-
-	private void updateSize() {
 		setTop(baseline - getHeight() / 2);
 	}
 
@@ -42,7 +37,6 @@ public class SymbolicEditorDecorator extends MathFieldEditorDecoratorBase {
 		setForegroundColor(geoInputBox.getObjectColor());
 		setBackgroundColor(geoInputBox.getBackgroundColor());
 		setFontSize(fontSize * geoInputBox.getFontSizeMultiplier());
-
 	}
 
 	private void updateBounds(GRectangle bounds) {
