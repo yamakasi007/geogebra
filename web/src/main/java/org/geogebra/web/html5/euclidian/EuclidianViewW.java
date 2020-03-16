@@ -26,7 +26,6 @@ import org.geogebra.common.io.MyXMLio;
 import org.geogebra.common.kernel.geos.GeoAxis;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineText;
-import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.main.App;
@@ -124,7 +123,6 @@ public class EuclidianViewW extends EuclidianView implements
 	private int waitForRepaint = TimerSystemW.SLEEPING_FLAG;
 	private String svgBackgroundUri = null;
 	private MyImageW svgBackground = null;
-	private SymbolicEditor symbolicEditor = null;
 
 	private AnimationCallback repaintCallback = new AnimationCallback() {
 		@Override
@@ -1466,18 +1464,6 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	public void attachSymbolicEditor(GeoInputBox geoInputBox,
-			GRectangle bounds) {
-		if (symbolicEditor == null) {
-			symbolicEditor = createSymbolicEditor();
-		}
-		if (symbolicEditor instanceof InputBoxWidget) {
-			((InputBoxWidget) symbolicEditor).attach(geoInputBox, bounds,
-					getAbsolutePanel());
-		}
-	}
-
-	@Override
 	public boolean isSymbolicEditorClicked(GPoint mouseLoc) {
 		if (symbolicEditor == null) {
 			return false;
@@ -1485,7 +1471,8 @@ public class EuclidianViewW extends EuclidianView implements
 		return symbolicEditor.isClicked(mouseLoc);
 	}
 
-	private SymbolicEditor createSymbolicEditor() {
+	@Override
+	protected SymbolicEditor createSymbolicEditor() {
 		GuiManagerInterfaceW gm = ((AppW) app).getGuiManager();
 		if (gm == null) {
 			return null;
@@ -1885,9 +1872,10 @@ public class EuclidianViewW extends EuclidianView implements
 	 * @return keyboard listener for active symbolic editor
 	 */
 	public MathKeyboardListener getKeyboardListener() {
-		if (symbolicEditor instanceof InputBoxWidget) {
-			return ((InputBoxWidget) symbolicEditor).getKeyboardListener();
+		if (symbolicEditor != null) {
+			return ((HasMathKeyboardListener) symbolicEditor).getKeyboardListener();
 		}
+
 		return null;
 	}
 

@@ -47,12 +47,7 @@ import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
-import org.geogebra.common.euclidian.EuclidianConstants;
-import org.geogebra.common.euclidian.EuclidianController;
-import org.geogebra.common.euclidian.EuclidianCursor;
-import org.geogebra.common.euclidian.EuclidianStyleBar;
-import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.ScreenReaderAdapter;
+import org.geogebra.common.euclidian.*;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.EVProperty;
 import org.geogebra.common.main.App.ExportType;
@@ -1018,4 +1013,7 @@ public class EuclidianViewD extends EuclidianView
 		super.drawStringWithOutline(g2c, text, x, y, col);
 	}
 
+	protected SymbolicEditor createSymbolicEditor() {
+		return new SymbolicEditorD(app, this);
+	}
 }
