@@ -1,5 +1,9 @@
 package org.geogebra.web.html5.main;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.annotation.CheckForNull;
 
 import org.geogebra.common.GeoGebraConstants.Platform;
@@ -105,7 +109,6 @@ import org.geogebra.web.html5.gui.LoadingApplication;
 import org.geogebra.web.html5.gui.ToolBarInterface;
 import org.geogebra.web.html5.gui.accessibility.AccessibilityManagerW;
 import org.geogebra.web.html5.gui.accessibility.AccessibilityView;
-import org.geogebra.web.html5.gui.accessibility.PerspectiveAccessibilityAdapter;
 import org.geogebra.web.html5.gui.laf.GLookAndFeelI;
 import org.geogebra.web.html5.gui.laf.GgbSettings;
 import org.geogebra.web.html5.gui.laf.MebisSettings;
@@ -162,10 +165,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public static final String STORAGE_MACRO_KEY = "storedMacro";
@@ -3729,17 +3728,9 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	public final AccessibilityManagerInterface getAccessibilityManager() {
 		if (accessibilityManager == null) {
-			accessibilityManager = new AccessibilityManagerW(this,
-					createPerspectiveAccessibilityAdapter());
+			accessibilityManager = new AccessibilityManagerW(this);
 		}
 		return accessibilityManager;
-	}
-
-	/**
-	 * @return adapter for tabbing through views
-	 */
-	protected PerspectiveAccessibilityAdapter createPerspectiveAccessibilityAdapter() {
-		return new SinglePanelAccessibilityAdapter(this);
 	}
 
 	public ZoomPanel getZoomPanel() {
