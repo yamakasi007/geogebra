@@ -80,11 +80,8 @@ public class PenSubMenu extends SubMenuPanel {
 		select = new ToolButton(EuclidianConstants.MODE_SELECT_MOW, app,
 				this);
 		penPanel.add(LayoutUtilW.panelRow(select, pen, eraser, highlighter));
-		new FocusableWidget(select, AccessibilityGroup.NOTES_TOOL_SELECT, -1).attachTo(app);
-		new FocusableWidget(pen, AccessibilityGroup.NOTES_TOOL_PEN, -1).attachTo(app);
-		new FocusableWidget(eraser, AccessibilityGroup.NOTES_TOOL_ERASER, -1).attachTo(app);
-		new FocusableWidget(highlighter,
-				AccessibilityGroup.NOTES_TOOL_HIGHLIGHTER, -1).attachTo(app);
+		new FocusableWidget(AccessibilityGroup.NOTES_TOOL_SELECT, -1,
+				select, pen, eraser, highlighter).attachTo(app);
 	}
 
 	/**
@@ -98,6 +95,7 @@ public class PenSubMenu extends SubMenuPanel {
 		ImageOrText color = GeoGebraIconW.createColorSwatchIcon(1, null,
 				aColor);
 		Label label = new Label();
+		label.getElement().setTabIndex(0);
 		color.applyToLabel(label);
 		label.addStyleName("mowColorButton");
 		ClickStartHandler.init(label, new ClickStartHandler() {
@@ -132,11 +130,14 @@ public class PenSubMenu extends SubMenuPanel {
 				openColorDialog();
 			}
 		});
-		colorPanel.add(LayoutUtilW.panelRow(btnColor[0], btnColor[1],
+		FlowPanel colorPanelContent = LayoutUtilW.panelRow(btnColor[0], btnColor[1],
 				btnColor[2], btnColor[3], btnColor[4], btnColor[5], btnColor[6],
-				btnColor[7], btnColor[8], btnCustomColor));
-		//new FocusableWidget(colorPanel,
-		//		AccessibilityGroup.NOTES_COLOR_PANEL, -1).attachTo(app);
+				btnColor[7], btnColor[8], btnCustomColor);
+		colorPanel.add(colorPanelContent);
+		new FocusableWidget(
+				AccessibilityGroup.NOTES_COLOR_PANEL, -1, btnColor).attachTo(app);
+		new FocusableWidget(
+				AccessibilityGroup.NOTES_COLOR_CUSTOM, -1, btnCustomColor).attachTo(app);
 	}
 
 	/**
@@ -159,8 +160,8 @@ public class PenSubMenu extends SubMenuPanel {
 				sliderValueChanged(event.getValue());
 			}
 		});
-		new FocusableWidget(slider.getSlider(),
-				AccessibilityGroup.NOTES_PEN_THICKNESS_SLIDER, -1).attachTo(app);
+		new FocusableWidget(AccessibilityGroup.NOTES_PEN_THICKNESS_SLIDER,
+				-1, slider.getSlider()).attachTo(app);
 	}
 
 	private void setSliderRange(boolean isPen) {
