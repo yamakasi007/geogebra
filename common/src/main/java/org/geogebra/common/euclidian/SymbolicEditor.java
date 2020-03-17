@@ -25,8 +25,6 @@ public abstract class SymbolicEditor implements MathFieldListener {
 
 	protected TeXSerializer serializer;
 
-	protected GRectangle bounds;
-
 	protected MathFieldInternal mathField;
 
 	/**
@@ -40,16 +38,6 @@ public abstract class SymbolicEditor implements MathFieldListener {
 		this.view = view;
 		this.serializer = new TeXSerializer();
 	}
-
-	/**
-	 * @param point
-	 *            mouse coordinates
-	 * @return if editor is clicked.
-	 */
-	public boolean isClicked(GPoint point) {
-		return drawInputBox.isEditing() && bounds.contains(point.getX(), point.getY());
-	}
-
 
 	@Override
 	public void onCursorMove() {

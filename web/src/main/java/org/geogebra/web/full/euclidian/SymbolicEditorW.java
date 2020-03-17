@@ -52,13 +52,16 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 
 	@Override
 	public void attach(GRectangle bounds) {
-		this.bounds = bounds;
+		drawInputBox.setEditing(true);
+
+		mathField.parse(geoInputBox.getTextForEditor());
 		decorator.update(bounds, geoInputBox);
+
 		editor.setKeyboardVisibility(true);
 		editor.setLabel(geoInputBox.getAuralText());
 		editor.attach(((EuclidianViewW) view).getAbsolutePanel());
-		mathField.parse(geoInputBox.getTextForEditor());
 		editor.setVisible(true);
+		editor.focus();
 	}
 
 	@Override
