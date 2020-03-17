@@ -2145,25 +2145,22 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (getEuclidianController().isDraggingBeyondThreshold()) {
 			return false;
 		}
+
+		boolean found = false;
 		for (Drawable d : allDrawableList) {
-			if ((d.isCanvasDrawable())
-					&& (d.hit(x, y, app.getCapturingThreshold(type))
-					|| d.hitLabel(x, y))) {
+			if (d.isCanvasDrawable()
+					&& (d.hit(x, y, app.getCapturingThreshold(type)) || d.hitLabel(x, y))) {
 				GeoElement geo = d.getGeoElement();
-				if (geo.isEuclidianVisible() && geo.isSelectionAllowed(this)) {
-					if (geo instanceof GeoInputBox) {
-						focusTextField((GeoInputBox) geo);
-					}
+				if (!found && geo.isEuclidianVisible() && geo.isSelectionAllowed(this)) {
 					((CanvasDrawable) d).setWidgetVisible(true);
-					return true;
+					found = true;
+				} else {
+					((CanvasDrawable) d).setWidgetVisible(false);
 				}
-
-				((CanvasDrawable) d).setWidgetVisible(false);
-
 			}
 		}
 
-		return false;
+		return found;
 	}
 
 	/**
@@ -6502,15 +6499,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
         // settings should have been reset before
         settingsChanged(getSettings());
     }
-
-	/**
-	 * @param mouseLoc
-	 *            mouse coordinates
-	 * @return whether symbolic editor was clicked
-	 */
-	public boolean isSymbolicEditorClicked(GPoint mouseLoc) {
-		return false;
-	}
 
 	public SymbolicEditor createSymbolicEditor(DrawInputBox drawInputBox) {
 		return null;

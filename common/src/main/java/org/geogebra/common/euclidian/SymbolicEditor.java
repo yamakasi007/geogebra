@@ -10,6 +10,7 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.main.App;
+import org.geogebra.common.util.debug.Log;
 
 /**
  * MathField-capable editor for input boxes on EuclidianView.
@@ -27,8 +28,6 @@ public abstract class SymbolicEditor implements MathFieldListener {
 	protected GRectangle bounds;
 
 	protected MathFieldInternal mathField;
-
-	protected String text;
 
 	/**
 	 * Constructor
@@ -79,7 +78,7 @@ public abstract class SymbolicEditor implements MathFieldListener {
 
 	@Override
 	public boolean onEscape() {
-		resetChanges();
+		hide();
 		return true;
 	}
 
@@ -91,12 +90,10 @@ public abstract class SymbolicEditor implements MathFieldListener {
 		app.getSelectionManager().nextFromInputBox();
 	}
 
-	protected void applyChanges() {
+	public void applyChanges() {
 		setTempUserDisplayInput();
 		String editedText = mathField.getText();
-		if (!editedText.trim().equals(text)) {
-			geoInputBox.updateLinkedGeo(editedText);
-		}
+		geoInputBox.updateLinkedGeo(editedText);
 	}
 
 	protected void setTempUserDisplayInput() {
@@ -105,20 +102,8 @@ public abstract class SymbolicEditor implements MathFieldListener {
 		geoInputBox.setTempUserDisplayInput(latex);
 	}
 
-	protected void resetChanges() {
-		boolean wasEditing = drawInputBox.isEditing();
-		this.drawInputBox.setEditing(true);
-
-		if (!wasEditing) {
-			updateText();
-		}
-
-		mathField.parse(text);
-	}
-
 	protected void updateText() {
-		text = geoInputBox.getTextForEditor().trim();
-		mathField.parse(text);
+		mathField.parse(geoInputBox.getTextForEditor());
 	}
 
 	/**

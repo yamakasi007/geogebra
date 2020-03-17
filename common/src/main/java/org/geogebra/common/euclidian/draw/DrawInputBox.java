@@ -520,6 +520,7 @@ public class DrawInputBox extends CanvasDrawable {
 		}
 
 		view.cancelBlur();
+		view.getViewTextField().focusTo(this);
 		view.getViewTextField().revalidateBox();
 		view.getViewTextField().setBoxVisible(true);
 		attachTextField();
@@ -583,6 +584,7 @@ public class DrawInputBox extends CanvasDrawable {
 	}
 
 	private void hideSymbolicField() {
+		symbolicEditor.applyChanges();
 		symbolicEditor.hide();
 	}
 

@@ -36,17 +36,6 @@ public interface EuclidianViewWInterface extends EuclidianViewInterfaceSlim {
 
 	int getViewWidth();
 
-	/**
-	 * @param x
-	 *            event x-coord
-	 * @param y
-	 *            event y-coord
-	 * @param type
-	 *            event type
-	 * @return whether textfield was clicked
-	 */
-	boolean textfieldClicked(int x, int y, PointerEventType type);
-
 	@Override
 	int getViewID();
 

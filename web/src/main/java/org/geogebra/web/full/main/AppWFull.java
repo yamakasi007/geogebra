@@ -2187,9 +2187,7 @@ public class AppWFull extends AppW implements HasKeyboard {
 
 	@Override
 	public HasLastItem getLastItemProvider() {
-		if (!getConfig().hasAnsButtonInAv()
-				|| getActiveEuclidianView().getEuclidianController()
-				.isSymbolicEditorSelected()) {
+		if (!getConfig().hasAnsButtonInAv()) {
 			return null;
 		}
 		return new ConstructionItemProvider(getKernel().getConstruction(), getAlgebraView(),

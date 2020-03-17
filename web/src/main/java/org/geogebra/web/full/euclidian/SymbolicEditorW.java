@@ -53,9 +53,12 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	@Override
 	public void attach(GRectangle bounds) {
 		this.bounds = bounds;
-
-		resetChanges();
+		decorator.update(bounds, geoInputBox);
+		editor.setKeyboardVisibility(true);
+		editor.setLabel(geoInputBox.getAuralText());
 		editor.attach(((EuclidianViewW) view).getAbsolutePanel());
+		mathField.parse(geoInputBox.getTextForEditor());
+		editor.setVisible(true);
 	}
 
 	@Override
@@ -64,22 +67,7 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	}
 
 	@Override
-	protected void resetChanges() {
-		super.resetChanges();
-
-		editor.setVisible(true);
-		decorator.update(bounds, geoInputBox);
-		editor.setKeyboardVisibility(true);
-		editor.setLabel(geoInputBox.getAuralText());
-	}
-
-	@Override
 	public void hide() {
-		if (!drawInputBox.isEditing()) {
-			return;
-		}
-
-		applyChanges();
 		drawInputBox.setEditing(false);
 		AnimationScheduler.get()
 				.requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
@@ -107,6 +95,7 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 
 	@Override
 	public void onBlur(BlurEvent event) {
+		applyChanges();
 		hide();
 	}
 
