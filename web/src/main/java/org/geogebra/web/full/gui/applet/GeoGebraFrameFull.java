@@ -276,14 +276,10 @@ public class GeoGebraFrameFull
 			keyboardState = KeyboardState.HIDDEN;
 		}
 
-		// this.mainPanel.add(this.dockPanel);
-
 		Timer timer = new Timer() {
 			@Override
 			public void run() {
-
 				scrollToInputField();
-
 			}
 		};
 		timer.schedule(0);
@@ -533,7 +529,7 @@ public class GeoGebraFrameFull
 		}
 
 		return app.isKeyboardNeeded()
-				&& (textField != null && textField.hasFocus()
+				&& (textField != null
 				|| keyboardListener != null && keyboardListener.hasFocus());
 	}
 

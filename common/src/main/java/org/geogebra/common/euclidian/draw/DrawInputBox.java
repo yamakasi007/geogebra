@@ -440,10 +440,12 @@ public class DrawInputBox extends CanvasDrawable {
 				drawLabel(g2, getGeoInputBox(), labelDesc);
 			}
 
-			String text = getGeoInputBox().getText();
-			g2.setFont(textFont.deriveFont(GFont.PLAIN));
+			if (!editing) {
+				String text = getGeoInputBox().getText();
+				g2.setFont(textFont.deriveFont(GFont.PLAIN));
 
-			drawText(g2, text);
+				drawText(g2, text);
+			}
 		}
 
 		g2.setFont(font);
@@ -571,20 +573,14 @@ public class DrawInputBox extends CanvasDrawable {
 	 * Hide the widget.
 	 */
 	protected void hideWidget() {
-		if (!isSelectedForInput()) {
-			return;
-		}
-
 		if (geoInputBox.isSymbolicMode()) {
 			hideSymbolicField();
-		} else {
+		} else if (isSelectedForInput()) {
 			hideTextField();
 		}
-
 	}
 
 	private void hideSymbolicField() {
-		symbolicEditor.applyChanges();
 		symbolicEditor.hide();
 	}
 
@@ -615,7 +611,7 @@ public class DrawInputBox extends CanvasDrawable {
 
 	/**
 	 *
-	 * @return if the GeoInputBox is under editing.
+	 * @return if the GeoInputBox is being edited
 	 */
 	public boolean isEditing() {
 		return editing;

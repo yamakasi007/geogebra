@@ -2142,18 +2142,21 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return whether textfield was clicked
 	 */
 	public boolean textfieldClicked(int x, int y, PointerEventType type) {
+		Log.debug("in here");
+
 		if (getEuclidianController().isDraggingBeyondThreshold()) {
 			return false;
 		}
 
 		boolean found = false;
 		for (Drawable d : allDrawableList) {
-			if (d.isCanvasDrawable()
-					&& (d.hit(x, y, app.getCapturingThreshold(type)) || d.hitLabel(x, y))) {
-				GeoElement geo = d.getGeoElement();
-				if (!found && geo.isEuclidianVisible() && geo.isSelectionAllowed(this)) {
-					((CanvasDrawable) d).setWidgetVisible(true);
-					found = true;
+			if (d.isCanvasDrawable()) {
+				if (!found && (d.hit(x, y, app.getCapturingThreshold(type)) || d.hitLabel(x, y))) {
+					GeoElement geo = d.getGeoElement();
+					if (geo.isEuclidianVisible() && geo.isSelectionAllowed(this)) {
+						((CanvasDrawable) d).setWidgetVisible(true);
+						found = true;
+					}
 				} else {
 					((CanvasDrawable) d).setWidgetVisible(false);
 				}

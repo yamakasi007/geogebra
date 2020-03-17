@@ -48,6 +48,7 @@ import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.*;
+import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.EVProperty;
 import org.geogebra.common.main.App.ExportType;
@@ -1013,7 +1014,8 @@ public class EuclidianViewD extends EuclidianView
 		super.drawStringWithOutline(g2c, text, x, y, col);
 	}
 
-	protected SymbolicEditor createSymbolicEditor() {
-		return new SymbolicEditorD(app, this);
+	@Override
+	public SymbolicEditor createSymbolicEditor(DrawInputBox drawInputBox) {
+		return new SymbolicEditorD(app, this, drawInputBox);
 	}
 }

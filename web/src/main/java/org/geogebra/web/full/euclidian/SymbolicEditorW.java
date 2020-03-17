@@ -32,10 +32,7 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	 *            The application.
 	 */
 	public SymbolicEditorW(App app, EuclidianViewW view, DrawInputBox drawInputBox) {
-		super(app, view);
-
-		this.drawInputBox = drawInputBox;
-		this.geoInputBox = drawInputBox.getGeoInputBox();
+		super(app, view, drawInputBox);
 
 		editor = new MathFieldEditor(app, this);
 		editor.addBlurHandler(this);
@@ -57,11 +54,10 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 		mathField.parse(geoInputBox.getTextForEditor());
 		decorator.update(bounds, geoInputBox);
 
-		editor.setKeyboardVisibility(true);
 		editor.setLabel(geoInputBox.getAuralText());
 		editor.attach(((EuclidianViewW) view).getAbsolutePanel());
 		editor.setVisible(true);
-		editor.focus();
+		editor.requestFocus();
 	}
 
 	@Override

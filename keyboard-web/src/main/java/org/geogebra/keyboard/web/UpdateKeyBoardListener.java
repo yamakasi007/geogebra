@@ -6,7 +6,7 @@ import org.geogebra.web.html5.gui.util.MathKeyboardListener;
  * handle add keyboard btn and show keyboard interface
  */
 public interface UpdateKeyBoardListener {
-	// public void showInputField();
+
 	/**
 	 * @param show
 	 *            true if show
