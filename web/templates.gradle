@@ -56,8 +56,6 @@ ext.appHtml = { app, prerelease, offline = false ->
     header = headerPartials(header, app.partials)
     def platformSpecific = offline ? "<script src=\"platform.js\"></script>" : "<!--LANGUAGE LINKS-->"
     def startscreenStyle = "startscreen " + appID + (offline ? " offline" : "")
-    def appStoreBanner = app.appStoreId ? "<meta name=\"apple-itunes-app\" " +
-            "content=\"app-id=${app.appStoreId}\"><link rel=\"manifest\" href=\"https://www.geogebra.org/apps/manifest/${appID}.json\">" : ""
     def splashContent = template("${app.id}-splash.html")
     return replaceVendor(html, vendor)
             .replace("<!--SPLASH-->", header + "<div class=\"$startscreenStyle\">$splashContent</div>")
@@ -66,8 +64,18 @@ ext.appHtml = { app, prerelease, offline = false ->
             .replace("<!--ICON-->", "https://www.geogebra.org/apps/icons/${appID}.ico")
             .replace("<!--APP ID-->", appID)
             .replace("<!--APP TRANSKEY-->", appTransKey)
-            .replace("<!--APPSTORE BANNER-->", appStoreBanner)
+            .replace("<!--APPSTORE BANNER-->", appStoreBanner(app, appID))
             .replace("\r\n", "\n") // generate the same on Win and Unix
+}
+
+ext.appStoreBanner = { app, appID ->
+    if (["graphing", "suite"].contains(appID)) {
+        return "";
+    }
+
+    return app.appStoreId ? "<meta name=\"apple-itunes-app\" " +
+            "content=\"app-id=${app.appStoreId}\">" +
+            "<link rel=\"manifest\" href=\"https://www.geogebra.org/apps/manifest/${appID}.json\">" : ""
 }
 
 ext.solverHtml = { ->
