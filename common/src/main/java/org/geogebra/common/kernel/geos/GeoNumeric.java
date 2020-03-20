@@ -112,8 +112,6 @@ public class GeoNumeric extends GeoElement
 
 	private int slopeTriangleSize = 1;
 
-	private boolean shouldShowInEuclidianView;
-
 	// for slider
 	private NumberValue intervalMin;
 	private NumberValue intervalMax;
@@ -387,10 +385,27 @@ public class GeoNumeric extends GeoElement
 
 	@Override
 	public boolean showInEuclidianView() {
-		if (shouldShowInEuclidianView) {
+		if (!showExtendedAV || !isDrawable() || !isDefined() || Double.isInfinite(value)) {
+			return false;
+		}
+
+		if (intervalMin == null) {
 			return true;
 		}
-		return hasValidIntervals() && isDrawable() && isDefined() && !Double.isInfinite(value);
+
+		if (intervalMax == null) {
+			return true;
+		}
+
+		if (!isIntervalMinActive()) {
+			return false;
+		}
+
+		if (!isIntervalMaxActive()) {
+			return false;
+		}
+
+		return (getIntervalMin() < getIntervalMax());
 	}
 
 	@Override
@@ -771,7 +786,7 @@ public class GeoNumeric extends GeoElement
 	private boolean hasValidIntervals() {
 		return isIntervalMinActive()
 				&& isIntervalMaxActive()
-				&& getIntervalMin() < getIntervalMax();
+				&& getIntervalMin() <= getIntervalMax();
 	}
 
 	@Override
@@ -2082,29 +2097,5 @@ public class GeoNumeric extends GeoElement
 	@Override
 	public boolean showLineProperties() {
 		return isDrawable() && !isSlider();
-	}
-
-	/**
-	 * Creates slider.
-	 */
-	public void createSlider() {
-		setShowExtendedAV(true);
-		initAlgebraSlider();
-	}
-
-	/**
-	 * Removes the slider.
-	 */
-	public void removeSlider() {
-		setShowExtendedAV(false);
-		intervalMax = null;
-		intervalMin = null;
-	}
-
-	/**
-	 * Ensures visibility on the euclidian view.
-	 */
-	public void ensureVisibilityOnEuclidianView() {
-		this.shouldShowInEuclidianView = true;
 	}
 }
