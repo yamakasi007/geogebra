@@ -186,7 +186,7 @@ public class MowBAPITest {
 
 			@Override
 			public void onLoaded(List<Material> result,
-					ArrayList<Chapter> meta) {
+								 ArrayList<Chapter> meta) {
 				deleteCallback.setExpectedCount(result.size());
 				for (int i = 0; i < result.size(); i++) {
 					api.deleteMaterial(result.get(i), deleteCallback);

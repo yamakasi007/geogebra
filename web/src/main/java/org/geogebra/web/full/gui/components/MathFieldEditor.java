@@ -52,8 +52,8 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 	private RetexKeyboardListener retexListener;
 	private boolean preventBlur;
 	private List<BlurHandler> blurHandlers;
-	private String label = "";
 	private boolean useKeyboardButton = true;
+	private String label = "";
 
 	/**
 	 * Constructor
@@ -279,6 +279,20 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 	}
 
 	/**
+	 * @return keyboard listener
+	 */
+	public MathKeyboardListener getKeyboardListener() {
+		return retexListener;
+	}
+
+	/**
+	 * sets whether the editor should use the show keyboard button logic
+	 */
+	public void setUseKeyboardButton(boolean useKeyboardButton) {
+		this.useKeyboardButton = useKeyboardButton;
+	}
+
+	/**
 	 * Update screen reader description
 	 */
 	public void updateAriaLabel() {
@@ -300,19 +314,5 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 	public void setLabel(String label) {
 		this.label = label;
 		updateAriaLabel();
-	}
-
-	/**
-	 * @return keyboard listener
-	 */
-	public MathKeyboardListener getKeyboardListener() {
-		return retexListener;
-	}
-
-	/**
-	 * sets whether the editor should use the show keyboard button logic
-	 */
-	public void setUseKeyboardButton(boolean useKeyboardButton) {
-		this.useKeyboardButton = useKeyboardButton;
 	}
 }

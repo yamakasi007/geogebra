@@ -42,7 +42,7 @@ public class AppsSubmenu extends Submenu {
 				SvgPerspectiveResources.INSTANCE.menu_icon_graphics3D_transparent());
 		addMenuItem("cas", "CASCalculator",
 				SvgPerspectiveResources.INSTANCE.menu_icon_cas_transparent());
-		addMenuItem("calculator", "ScientificCalculator",
+		addMenuItem("scientific", "ScientificCalculator",
 				MaterialDesignResources.INSTANCE.scientific());
 		addMenuItem("notes", "Notes",
 				SvgPerspectiveResources.INSTANCE.menu_icon_whiteboard_transparent());
@@ -79,7 +79,7 @@ public class AppsSubmenu extends Submenu {
 			public void callback(Boolean active) {
 				app.fileNew();
 				app.getLAF().toggleFullscreen(true);
-				ExamStartDialog examStartDialog = new ExamStartDialog(getApp());
+				ExamStartDialog examStartDialog = new ExamStartDialog((AppWFull) getApp());
 				examStartDialog.show();
 				examStartDialog.center();
 			}

@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.himamis.retex.editor.share.util.Unicode;
+
 public class GeoInputBoxTest extends BaseUnitTest {
 
 	private static final String POINT_2D = "(1,2)";

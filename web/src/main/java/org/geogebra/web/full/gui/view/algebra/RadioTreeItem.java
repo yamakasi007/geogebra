@@ -455,7 +455,6 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	 *            preview from input bar
 	 */
 	public void previewValue(GeoElement previewGeo) {
-
 		if ((previewGeo
 				.getDescriptionMode() != DescriptionMode.DEFINITION_VALUE
 				|| getController().isInputAsText())) {

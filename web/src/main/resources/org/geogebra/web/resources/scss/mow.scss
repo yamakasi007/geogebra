@@ -607,8 +607,8 @@
 		}
 	}
 
-	 // unit rectangle for mask to transform with matrix
-	 .maskWidget {
+	// unit rectangle for mask to transform with matrix
+	.maskWidget {
 	    position: absolute;
 	    z-index: $z_mask;
 	    top: 0;
