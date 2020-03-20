@@ -2461,7 +2461,20 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			getActiveEuclidianView().getEuclidianController()
 					.setObjectMenuActive(false);
 		}
-		//hideSymbolicEditors();
+		applyChangedInputs();
+	}
+
+	/**
+	 * Applying pending text to inputboxes, if any.
+	 */
+	public void applyChangedInputs() {
+		if (getEuclidianView1() != null) {
+			getEuclidianView1().applyChangedInputs();
+		}
+		if (hasEuclidianView2(1)) {
+			getEuclidianView2(1).applyChangedInputs();
+		}
+
 	}
 
 	/**

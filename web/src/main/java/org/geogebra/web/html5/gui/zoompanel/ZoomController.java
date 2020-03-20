@@ -131,6 +131,7 @@ public class ZoomController {
 		if (app.isMenuShowing()) {
 			app.toggleMenu();
 		}
+		app.applyChangedInputs();
 		view.getEuclidianController().zoomInOut(false,
 				false);
 	}
@@ -140,6 +141,7 @@ public class ZoomController {
 		if (app.isMenuShowing()) {
 			app.toggleMenu();
 		}
+		app.applyChangedInputs();
 		view.getEuclidianController().zoomInOut(false,
 				true);
 	}
@@ -285,6 +287,8 @@ public class ZoomController {
 		if (app.isMenuShowing()) {
 			app.toggleMenu();
 		}
+
+		app.applyChangedInputs();
 		final Element container;
 		emulated = useEmulatedFullscreen(app, eventType);
 		if (app.getArticleElement().getDataParamFitToScreen()) {

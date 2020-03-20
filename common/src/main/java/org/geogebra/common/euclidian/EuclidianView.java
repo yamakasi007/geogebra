@@ -6626,4 +6626,15 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			}
 		}
 	}
+
+	/**
+	 * Applying changes in current showing input field, if any.
+	 */
+	public void applyChangedInputs() {
+		if (viewTextField == null) {
+			return;
+		}
+
+		viewTextField.applyChanges();
+	}
 }

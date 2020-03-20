@@ -39,7 +39,7 @@ public abstract class ViewTextField {
 	/**
 	 * Apply the edited text to the corresponding GeoInputBox
 	 */
-	protected void applyChanges() {
+	public void applyChanges() {
 		AutoCompleteTextField textField = getTextField();
 		if (textField == null) {
 			return;
