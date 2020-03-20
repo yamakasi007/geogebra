@@ -33,7 +33,7 @@ import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.gui.GuiManagerW;
 import org.geogebra.web.full.gui.inputbar.WarningErrorHandler;
 import org.geogebra.web.full.gui.layout.DockSplitPaneW;
-import org.geogebra.web.full.gui.layout.GUITabs;
+import org.geogebra.web.html5.gui.accessibility.GUITabs;
 import org.geogebra.web.full.gui.layout.panels.AlgebraPanelInterface;
 import org.geogebra.web.full.gui.layout.panels.AlgebraStyleBarW;
 import org.geogebra.web.html5.Browser;
@@ -234,7 +234,7 @@ public class AlgebraViewW extends Tree implements LayerView, AlgebraView,
 
 		// needed to have an element with tabindex > 0 with focus to catch
 		// keyboard events
-		getElement().setTabIndex(GUITabs.AV_TREE);
+		GUITabs.setTabIndex(getElement(), GUITabs.AV_TREE);
 		addKeyDownHandler(this.app.getGlobalKeyDispatcher());
 		addKeyUpHandler(this.app.getGlobalKeyDispatcher());
 		addKeyPressHandler(this.app.getGlobalKeyDispatcher());
@@ -273,12 +273,6 @@ public class AlgebraViewW extends Tree implements LayerView, AlgebraView,
 					event.preventDefault();
 					return;
 				}
-
-				// TODO: check this ----
-				break;
-			case KeyCodes.KEY_TAB:
-				event.preventDefault();
-				return;
 			}
 			break;
 		case Event.ONMOUSEDOWN:
@@ -360,7 +354,6 @@ public class AlgebraViewW extends Tree implements LayerView, AlgebraView,
 		case GWTKeycodes.KEY_RIGHT:
 		case GWTKeycodes.KEY_UP:
 		case GWTKeycodes.KEY_DOWN:
-		case GWTKeycodes.KEY_TAB:
 			getActiveTreeItem().getMathField().getKeyListener()
 					.onKeyPressed(new KeyEvent(keyCode, 0,
 							(char) event.getCharCode()));

@@ -1,6 +1,6 @@
 package org.geogebra.web.html5.gui;
 
-import org.geogebra.common.GeoGebraConstants;
+import com.google.gwt.dom.client.LinkElement;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.gui.laf.GLookAndFeelI;
@@ -19,9 +19,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.OutlineStyle;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -34,7 +31,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The main frame containing every view / menu bar / .... This Panel (Frame is
@@ -54,15 +50,11 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 	 */
 	private SplashDialog splash;
 
-	private static SpanElement firstDummy = null;
-	private static SpanElement lastDummy = null;
-	/** Tab index for graphics */
-	public static final int GRAPHICS_VIEW_TABINDEX = 10000;
+	private LinkElement lastDummy = null;
 
 	private static final int LOGO_WIDTH = 427;
 
 	private static final int LOGO_HEIGHT = 120;
-	private static HashMap<String, AppW> articleMap = new HashMap<>();
 
 	/** Article element */
 	private ArticleElementInterface articleElement;
@@ -104,75 +96,19 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 	}
 
 	/**
-	 * @return map article id -&gt; article
+	 * Add a dummy element to the frame
 	 */
-	public static HashMap<String, AppW> getArticleMap() {
-		return articleMap;
-	}
-
-	/**
-	 * Add a dummy element to the parent
-	 *
-	 * @param parentElement
-	 *            parent
-	 */
-	protected static void tackleLastDummy(Element parentElement) {
+	protected void tackleLastDummy(Element element) {
 		if (!Browser.needsAccessibilityView()) {
 			lastDummy = DOM.createSpan().cast();
+			lastDummy.setTabIndex(0);
 			lastDummy.addClassName("geogebraweb-dummy-invisible");
-			lastDummy.setTabIndex(GeoGebraFrameW.GRAPHICS_VIEW_TABINDEX);
-			parentElement.appendChild(lastDummy);
+			element.appendChild(lastDummy);
 		}
 	}
 
-	/**
-	 * @param el
-	 *            ArticleElement to be used as dummy parent, if it's the last
-	 *            one
-	 */
-	public static void reCheckForDummies(Element el) {
-
-		if ((firstDummy != null) && (lastDummy != null)) {
-			return;
-		}
-
-		NodeList<Element> nodes = Dom
-				.getElementsByClassName(GeoGebraConstants.GGM_CLASS_NAME);
-
-		if (nodes.getLength() == 0) {
-			// it would be better for the article tags to always have
-			// GeoGebraConstants.GGM_CLASS_NAME, but in case they do not,
-			// then they are probably child elements of class name
-			// "applet_container"
-			nodes = Dom.getElementsByClassName("applet_scaler");
-			Log.debug(nodes.getLength() + " scalers found");
-			// so "nodes" is meaning something else here actually
-			if (nodes.getLength() > 0) {
-				// no need to get the first node with articleElement
-
-				checkForDummiesInScaler(nodes, el);
-
-			}
-		}
-	}
-
-	private static void checkForDummiesInScaler(NodeList<Element> nodes,
-			Element el) {
-		// get the last node that really contains an articleElement
-		for (int i = nodes.getLength() - 1; i >= 0; i--) {
-			Element ell = nodes.getItem(i);
-			for (int j = 0; j < ell.getChildCount(); j++) {
-				Node elChild = ell.getChild(j);
-				if (elChild != null
-						&& Element.as(elChild).hasTagName("ARTICLE")) {
-					// found!!
-					if (elChild == el && lastDummy == null) {
-						tackleLastDummy(el);
-					}
-					return;
-				}
-			}
-		}
+	public Element getLastElement() {
+		return lastDummy;
 	}
 
 	/**
@@ -537,28 +473,22 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 	 * Splash screen callback
 	 */
 	public void runAsyncAfterSplash() {
-		final GeoGebraFrameW inst = this;
-
-		// GWT.runAsync(new RunAsyncCallback() {
-
-		// public void onSuccess() {
-		ResourcesInjector
-				.injectResources(articleElement);
+		ResourcesInjector.injectResources(articleElement);
 		ResourcesInjector.loadFont(articleElement.getDataParamFontsCssUrl());
-		// More testing is needed how can we use
-		// createApplicationSimple effectively
-		// if (articleElement.getDataParamGuiOff())
-		// inst.app = inst.createApplicationSimple(articleElement, inst);
-		// else
-		inst.app = inst.createApplication(articleElement, this.laf);
-		inst.app.setCustomToolBar();
+
+		app = createApplication(articleElement, this.laf);
+		app.setCustomToolBar();
+
+		Event.sinkEvents(articleElement.getElement(), Event.ONKEYPRESS | Event.ONKEYDOWN);
+		Event.setEventListener(articleElement.getElement(),
+				app.getGlobalKeyDispatcher().getGlobalShortcutHandler());
 
 		if (app.isPerspectivesPopupVisible()) {
 			app.showPerspectivesPopup();
 		}
 		// need to call setLabels here
 		// to print DockPanels' titles
-		inst.app.setLabels();
+		app.setLabels();
 		fitSizeToScreen();
 	}
 

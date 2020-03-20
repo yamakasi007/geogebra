@@ -1,4 +1,8 @@
-package org.geogebra.web.full.gui.layout;
+package org.geogebra.web.html5.gui.accessibility;
+
+import org.geogebra.web.html5.Browser;
+
+import com.google.gwt.dom.client.Element;
 
 /**
  * 
@@ -41,4 +45,14 @@ public class GUITabs {
 	 * AV Tree tab index (for keyboard events only, no tab key should go there.
 	 */
 	public static final int AV_TREE = 6000;
+
+	/**
+	 * Tab indices are unhealthy, so let's avoid them, whenever
+	 * possible
+	 */
+	public static void setTabIndex(Element e, int index) {
+		if (Browser.isMobile()) {
+			e.setTabIndex(index);
+		}
+	}
 }

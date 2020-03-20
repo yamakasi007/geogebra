@@ -56,7 +56,6 @@ import org.geogebra.keyboard.web.HasKeyboard;
 import org.geogebra.keyboard.web.TabbedKeyboard;
 import org.geogebra.web.full.euclidian.EuclidianStyleBarW;
 import org.geogebra.web.full.gui.CustomizeToolbarGUI;
-import org.geogebra.web.full.gui.DockManagerAccessibilityAdapter;
 import org.geogebra.web.full.gui.GuiManagerW;
 import org.geogebra.web.full.gui.MyHeaderPanel;
 import org.geogebra.web.full.gui.SaveControllerW;
@@ -114,7 +113,6 @@ import org.geogebra.web.html5.gui.GPopupPanel;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.gui.HasKeyboardPopup;
 import org.geogebra.web.html5.gui.ToolBarInterface;
-import org.geogebra.web.html5.gui.accessibility.PerspectiveAccessibilityAdapter;
 import org.geogebra.web.html5.gui.laf.GLookAndFeelI;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW.ToolTipLinkType;
@@ -582,21 +580,6 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 		}
 		focusedView = v;
 		frame.useFocusedBorder();
-
-		// we really need to set it to true
-		switch (v.getViewID()) {
-		case App.VIEW_ALGEBRA:
-		case App.VIEW_EUCLIDIAN:
-		case App.VIEW_EUCLIDIAN2:
-			this.getGlobalKeyDispatcher().setFocusedIfNotTab();
-			break;
-		default:
-			if (App.isView3D(v.getViewID()) || ((v
-					.getViewID() >= App.VIEW_EUCLIDIAN_FOR_PLANE_START)
-					&& (v.getViewID() <= App.VIEW_EUCLIDIAN_FOR_PLANE_END))) {
-				this.getGlobalKeyDispatcher().setFocusedIfNotTab();
-			}
-		}
 	}
 
 	@Override
@@ -1284,14 +1267,6 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	/**
-	 * @return adapter for tabbing through views
-	 */
-	@Override
-	protected PerspectiveAccessibilityAdapter createPerspectiveAccessibilityAdapter() {
-		return new DockManagerAccessibilityAdapter(this);
-	}
-
-	/**
 	 * Closes the page control panel
 	 *
 	 * @return whether it was closed
@@ -1726,9 +1701,6 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 		}
 		focusedView = null;
 		frame.useDataParamBorder();
-
-		// if it is there in focusGained, why not put it here?
-		this.getGlobalKeyDispatcher().setFocused(false);
 	}
 
 	@Override

@@ -50,7 +50,7 @@ import org.geogebra.web.full.gui.inputbar.InputBarHelpPanelW;
 import org.geogebra.web.full.gui.inputbar.InputBarHelpPopup;
 import org.geogebra.web.full.gui.inputbar.WarningErrorHandler;
 import org.geogebra.web.full.gui.inputfield.MathFieldInputSuggestions;
-import org.geogebra.web.full.gui.layout.GUITabs;
+import org.geogebra.web.html5.gui.accessibility.GUITabs;
 import org.geogebra.web.full.gui.layout.panels.AlgebraPanelInterface;
 import org.geogebra.web.full.gui.util.Resizer;
 import org.geogebra.web.full.main.AppWFull;
@@ -1666,9 +1666,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		FactoryProvider.setInstance(new FactoryProviderGWT());
 
 		mf = new MathFieldW(new FormatConverterImpl(kernel), latexItem, canvas,
-				getLatexController(),
-				app.has(Feature.MOW_DIRECT_FORMULA_CONVERSION),
-				app.getGlobalKeyDispatcher().getFocusHandler());
+				getLatexController(), app.has(Feature.MOW_DIRECT_FORMULA_CONVERSION));
 		TestHarness.setAttr(mf.getInputTextArea(), "avInputTextArea");
 		mf.setExpressionReader(ScreenReader.getExpressionReader(app));
 		updateEditorAriaLabel("");
@@ -1975,7 +1973,6 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		inputControl.hideInputMoreButton();
 		prepareEdit(text);
 		getMathField().requestViewFocus();
-		app.getGlobalKeyDispatcher().setFocused(true);
 		// canvas.addBlurHandler(getLatexController());
 		CancelEventTimer.keyboardSetVisible();
 		ClickStartHandler.init(main, new ClickStartHandler(false, false) {
@@ -2102,7 +2099,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		getWidget().addStyleName("latexEditor");
 		content.addStyleName("noPreview");
 		renderLatex("", false);
-		content.getElement().setTabIndex(GUITabs.AV_INPUT);
+		GUITabs.setTabIndex(content.getElement(), GUITabs.AV_INPUT);
 		getHelpToggle().setIndex(1);
 		inputControl.addInputControls();
  		return this;
