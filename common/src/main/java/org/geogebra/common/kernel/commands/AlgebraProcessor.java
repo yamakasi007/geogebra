@@ -1022,9 +1022,17 @@ public class AlgebraProcessor {
 				&& !info.isLabelRedefinitionAllowedFor(label)) {
 			throw new MyError(kernel.getLocalization(), "LabelAlreadyUsed");
 		}
-		sym.getDefinition().setLabel(label);
+		setLabel(sym.getDefinition(), label);
 		sym.setLabel(label);
 		return sym;
+	}
+
+	private void setLabel(ExpressionNode node, String label) {
+		node.setLabel(label);
+		ExpressionValue unwrapped = node.unwrap();
+		if (unwrapped instanceof ValidExpression) {
+			((ValidExpression) unwrapped).setLabel(label);
+		}
 	}
 
 	/**
@@ -1844,35 +1852,56 @@ public class AlgebraProcessor {
 	public GeoElement[] processValidExpression(ValidExpression ve,
 			EvalInfo info) throws MyError, Exception {
 
+		ValidExpression expression = ve;
 		// check for existing labels
-		String[] labels = ve.getLabels();
+		String[] labels = expression.getLabels();
 		GeoElement replaceable = getReplaceable(labels);
 
 		GeoElement[] ret;
 		boolean oldMacroMode = cons.isSuppressLabelsActive();
 		if (replaceable != null) {
-			cons.setSuppressLabelCreation(true);
-		}
+            cons.setSuppressLabelCreation(true);
+			if (replaceable.isGeoVector()) {
+				expression = getTraversedCopy(labels, expression);
+			}
+        }
 
 		// we have to make sure that the macro mode is
 		// set back at the end
 		try {
-			ret = doProcessValidExpression(ve, info);
+			ret = doProcessValidExpression(expression, info);
 
 			if (ret == null) { // eg (1,2,3) running in 2D
-				if (isFreehandFunction(ve)) {
-					return kernel.lookupLabel(ve.getLabel()).asArray();
+				if (isFreehandFunction(expression)) {
+					return kernel.lookupLabel(expression.getLabel()).asArray();
 				}
 				throw new MyError(loc,
-						loc.getInvalidInputError() + ":\n" + ve);
+						loc.getInvalidInputError() + ":\n" + expression);
 			}
 		} finally {
 			cons.setSuppressLabelCreation(oldMacroMode);
 		}
 
-		processReplace(replaceable, ret, ve, info);
+		processReplace(replaceable, ret, expression, info);
 
 		return ret;
+	}
+
+	private ValidExpression getTraversedCopy(String[] labels, ValidExpression expression) {
+		boolean isForceVector = expression.wrap().isForcedVector();
+		boolean isForcePoint = expression.wrap().isForcedPoint();
+		ValidExpression copy = expression.deepCopy(kernel);
+		copy = copy.traverse(new Traversing.ListVectorReplacer(kernel)).wrap();
+		copy.setLabels(labels);
+
+		if (isForceVector) {
+			copy.wrap().setForceVector();
+		}
+		if (isForcePoint) {
+			copy.wrap().setForcePoint();
+		}
+
+		return copy;
 	}
 
 	private boolean isFreehandFunction(ValidExpression expression) {
@@ -2040,7 +2069,14 @@ public class AlgebraProcessor {
 		if (type.equals(GeoClass.NUMERIC) && type2.equals(GeoClass.ANGLE)) {
 			return true;
 		}
-		return false;
+        if (type2.equals(GeoClass.LIST) && type.equals(GeoClass.VECTOR)) {
+            return true;
+        }
+        if (type.equals(GeoClass.LIST) && type2.equals(GeoClass.VECTOR)) {
+            return true;
+        }
+
+        return false;
 	}
 
 	/**
@@ -3363,6 +3399,7 @@ public class AlgebraProcessor {
 			vector.updateRepaint();
 		}
 		ret[0] = vector;
+
 		return ret;
 	}
 
