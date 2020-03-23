@@ -112,8 +112,6 @@ public class GeoNumeric extends GeoElement
 
 	private int slopeTriangleSize = 1;
 
-	private boolean shouldShowInEuclidianView;
-
 	// for slider
 	private NumberValue intervalMin;
 	private NumberValue intervalMax;
@@ -260,6 +258,7 @@ public class GeoNumeric extends GeoElement
 		// number with given min and max
 		if (isIndependent()) {
 			if (visible) { // TODO: Remove cast from GeoNumeric
+				isDrawable = true;
 				GeoNumeric num = kernel.getAlgoDispatcher()
 						.getDefaultNumber(isAngle());
 				// make sure the slider value is not fixed
@@ -387,10 +386,7 @@ public class GeoNumeric extends GeoElement
 
 	@Override
 	public boolean showInEuclidianView() {
-		if (shouldShowInEuclidianView) {
-			return true;
-		}
-		return hasValidIntervals() && isDrawable() && isDefined() && !Double.isInfinite(value);
+		return isDrawable && isDefined() && !Double.isInfinite(value);
 	}
 
 	@Override
@@ -1844,7 +1840,7 @@ public class GeoNumeric extends GeoElement
 			return;
 		}
 		SliderPosition old = sliderPos;
-		setEuclidianVisible(true);
+		setDrawable(true);
 		setEuclidianVisible(false);
 		sliderPos = old;
 
@@ -2097,14 +2093,8 @@ public class GeoNumeric extends GeoElement
 	 */
 	public void removeSlider() {
 		setShowExtendedAV(false);
+		setDrawable(false);
 		intervalMax = null;
 		intervalMin = null;
-	}
-
-	/**
-	 * Ensures visibility on the euclidian view.
-	 */
-	public void ensureVisibilityOnEuclidianView() {
-		this.shouldShowInEuclidianView = true;
 	}
 }
