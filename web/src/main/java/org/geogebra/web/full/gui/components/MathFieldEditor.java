@@ -124,10 +124,6 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 		setKeyboardVisibility(true);
 	}
 
-	public void focus() {
-		mathField.setFocus(true);
-	}
-
 	/**
 	 * Scroll content horizontally if needed.
 	 */
