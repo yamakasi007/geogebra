@@ -144,7 +144,13 @@ public class AlgoBarChart extends AlgoUsingUniqueAndFrequency
 		this.list1 = list1;
 
 		// output
-		sum = createSum();
+		sum = new GeoNumeric(cons) {
+			@Override
+			public String getTooltipText(final boolean colored,
+					final boolean alwaysOn) {
+				return toolTipText;
+			}
+		};
 
 		setInputOutput(); // for AlgoElement
 		compute();
@@ -389,7 +395,13 @@ public class AlgoBarChart extends AlgoUsingUniqueAndFrequency
 
 		this.scale = scale;
 
-		sum = createSum();
+		sum = new GeoNumeric(cons) {
+			@Override
+			public String getTooltipText(final boolean colored,
+					final boolean alwaysOn) {
+				return toolTipText;
+			}
+		};
 
 		setInputOutput(); // for AlgoElement
 		compute();
@@ -433,7 +445,13 @@ public class AlgoBarChart extends AlgoUsingUniqueAndFrequency
 		}
 		this.isCumulative = isCumulative;
 
-		sum = createSum();
+		sum = new GeoNumeric(cons) {
+			@Override
+			public String getTooltipText(final boolean colored,
+					final boolean alwaysOn) {
+				return toolTipText;
+			}
+		};
 
 		setInputOutput(); // for AlgoElement
 		compute();
@@ -537,18 +555,6 @@ public class AlgoBarChart extends AlgoUsingUniqueAndFrequency
 		this.leftBorder = borders;
 		this.N = N;
 
-	}
-
-	private GeoNumeric createSum() {
-		GeoNumeric sum = new GeoNumeric(cons) {
-			@Override
-			public String getTooltipText(final boolean colored,
-										 final boolean alwaysOn) {
-				return toolTipText;
-			}
-		};
-		sum.ensureVisibilityOnEuclidianView();
-		return sum;
 	}
 
 	// ======================================================

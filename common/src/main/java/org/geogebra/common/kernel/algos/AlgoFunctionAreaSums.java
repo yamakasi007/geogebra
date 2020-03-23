@@ -209,7 +209,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		bgeo = b.toGeoElement();
 		ngeo = n.toGeoElement();
 
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 		sum.setDrawable(true);
@@ -243,7 +243,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		bgeo = b.toGeoElement();
 		ngeo = n.toGeoElement();
 
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 		sum.setDrawable(true);
@@ -285,7 +285,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		bgeo = b.toGeoElement();
 		ngeo = n.toGeoElement();
 
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 		sum.setDrawable(true);
@@ -369,7 +369,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		this.list1 = list1;
 		this.list2 = list2;
 
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 
@@ -472,7 +472,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 
 		this.useDensityGeo = useDensity;
 
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 		if (isCumulative != null && isCumulative.getBoolean()) {
@@ -537,7 +537,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		p1geo = p1.toGeoElement();
 
 		this.isCumulative = isCumulative;
-		sum = createSum(cons); // output
+		sum = new GeoNumeric(cons); // output
 		setInputOutput(); // for AlgoElement
 		compute();
 		sum.setDrawable(true);
@@ -567,12 +567,6 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 
 		this.leftBorder = borders;
 		this.N = N;
-	}
-
-	private GeoNumeric createSum(Construction construction) {
-		GeoNumeric sum = new GeoNumeric(construction);
-		sum.ensureVisibilityOnEuclidianView();
-		return sum;
 	}
 
 	/**
@@ -765,7 +759,7 @@ public abstract class AlgoFunctionAreaSums extends AlgoElement
 		// problem with Sequence[LowerSum[x^2, i, i + 1, 1], i, 1, 5] on file
 		// load
 		if (sum == null) {
-			sum = createSum(cons);
+			sum = new GeoNumeric(cons);
 		}
 
 		switch (type) {
