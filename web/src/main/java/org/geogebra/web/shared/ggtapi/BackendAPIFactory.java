@@ -1,7 +1,10 @@
 package org.geogebra.web.shared.ggtapi;
 
 import org.geogebra.common.main.Feature;
-import org.geogebra.common.move.ggtapi.models.MowBAPI;
+import org.geogebra.common.move.ggtapi.models.GeoGebraTubeAPI;
+import org.geogebra.common.move.ggtapi.models.MarvlService;
+import org.geogebra.common.move.ggtapi.models.MaterialRestAPI;
+import org.geogebra.common.move.ggtapi.models.MowService;
 import org.geogebra.common.move.ggtapi.operations.BackendAPI;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.html5.main.AppW;
@@ -15,23 +18,20 @@ import org.geogebra.web.shared.ggtapi.models.GeoGebraTubeAPIW;
  * @author laszlo
  */
 public class BackendAPIFactory {
+
 	private AppW app;
 	private ArticleElementInterface articleElement;
 	private BackendAPI api = null;
-	private String backendURL;
 
 	/**
-	 *
-	 * @param app The appication.
+	 * @param app The application.
 	 */
-	BackendAPIFactory(AppW app) {
+	public BackendAPIFactory(AppW app) {
 		this.app = app;
 		articleElement = app.getArticleElement();
-		backendURL = articleElement.getParamBackendURL();
 	}
 
 	/**
-	 *
 	 * @return the backend API suitable for the applicaion.
 	 */
 	public BackendAPI get() {
@@ -44,15 +44,21 @@ public class BackendAPIFactory {
 		if (api != null) {
 			return;
 		}
-		api = hasBackendURL() ? newMowBAPI() : newTubeAPI();
+		api = app.isMebis() ? newMaterialRestAPI() : newTubeAPI();
 	}
 
-	private boolean hasBackendURL() {
-		return !StringUtil.empty(backendURL);
-	}
+	/**
+	 * Create an appropriate MaterialRestApi
+	 * @return a MaterialRestApi based on the backend-url data-param
+	 */
+	public BackendAPI newMaterialRestAPI() {
+		String backendURL = articleElement.getParamBackendURL();
 
-	private BackendAPI newMowBAPI() {
-		return new MowBAPI(backendURL, new MarvlURLChecker());
+		if (StringUtil.empty(backendURL)) {
+			return new MaterialRestAPI(GeoGebraTubeAPI.marvlUrl, new MarvlService());
+		} else {
+			return new MaterialRestAPI(backendURL, new MowService());
+		}
 	}
 
 	private GeoGebraTubeAPIW newTubeAPI() {

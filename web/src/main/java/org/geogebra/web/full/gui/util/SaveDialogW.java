@@ -91,7 +91,7 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 		this.getCaption().setText(loc.getMenu("Save"));
 		VerticalPanel p = new VerticalPanel();
 		p.add(getTitelPanel());
-		if (app.isWhiteboardActive() && !"".equals(app.getVendorSettings().getAPIBaseUrl())) {
+		if (app.isWhiteboardActive()) {
 			p.add(getCheckboxPanel());
 		}
 		p.add(getButtonPanel());
@@ -270,7 +270,7 @@ public class SaveDialogW extends DialogBoxW implements PopupMenuHandler,
 	public void onSave() {
 		if (templateCheckbox != null) {
 			setSaveType(templateCheckbox.isSelected()
-					? appW.getVendorSettings().getTemplateType() : MaterialType.ggs);
+					? MaterialType.ggsTemplate : MaterialType.ggs);
 		}
 		appW.getSaveController().saveAs(title.getText(),
 				getSelectedVisibility(), this);
