@@ -853,6 +853,18 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		assertThat(lastGeoElement, instanceOf(GeoText.class));
 	}
 
+	@Test
+	public void testSimplificationShowsBothRows1() {
+		GeoSymbolic symbolic = add("x + x");
+		assertThat(symbolic.getDescriptionMode(), is(DescriptionMode.DEFINITION_VALUE));
+	}
+
+	@Test
+	public void testSimplificationShowsBothRows2() {
+		GeoSymbolic symbolic = add("(x + 1) * (x - 1)");
+		assertThat(symbolic.getDescriptionMode(), is(DescriptionMode.DEFINITION_VALUE));
+	}
+
 	private void shouldFail(String string, String errorMsg) {
 		AlgebraTestHelper.shouldFail(string, errorMsg, app);
 	}
