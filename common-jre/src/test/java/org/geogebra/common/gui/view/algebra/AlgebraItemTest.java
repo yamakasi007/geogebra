@@ -1,9 +1,12 @@
 package org.geogebra.common.gui.view.algebra;
 
 import org.geogebra.common.BaseUnitTest;
+import org.geogebra.common.kernel.StringTemplate;
+import org.geogebra.common.kernel.geos.GeoAngle;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoVector;
 import org.geogebra.common.main.settings.AlgebraStyle;
+import org.geogebra.common.util.IndexHTMLBuilder;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -59,5 +62,22 @@ public class AlgebraItemTest extends BaseUnitTest {
         String latexString =
                 AlgebraItem.getLatexString(vector, LATEX_MAX_EDIT_LENGHT, false);
         assertThat(latexString, equalTo("v\\, \\text{undefined} "));
+    }
+
+    @Test
+    public void buildPlainTextItemSimple() {
+        getApp().setGeometryConfig();
+        getApp().getSettings().getAlgebra().setStyle(AlgebraStyle.DESCRIPTION);
+
+        addAvInput("A = (0, 0)");
+        addAvInput("B = (1, 1)");
+        addAvInput("C = (1, -1)");
+        GeoAngle angle = addAvInput("a = Angle(A, B, C)");
+        boolean hasOneRow =
+                AlgebraItem.buildPlainTextItemSimple(
+                        angle,
+                        new IndexHTMLBuilder(false),
+                        StringTemplate.defaultTemplate);
+        assertThat(hasOneRow, is(false));
     }
 }
