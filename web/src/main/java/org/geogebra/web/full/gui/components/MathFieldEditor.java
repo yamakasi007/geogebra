@@ -144,14 +144,6 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 	}
 
 	/**
-	 *
-	 * @return the text of the editor.
-	 */
-	public String getText() {
-		return mathField.getText();
-	}
-
-	/**
 	 * Sets editor text.
 	 * @param text to set.
 	 */

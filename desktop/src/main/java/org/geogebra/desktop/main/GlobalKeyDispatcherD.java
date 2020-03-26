@@ -12,6 +12,7 @@ import javax.swing.JRootPane;
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
+import com.himamis.retex.editor.desktop.MathFieldD;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.gui.inputfield.AutoCompleteTextField;
 import org.geogebra.common.kernel.StringTemplate;
@@ -63,7 +64,8 @@ public class GlobalKeyDispatcherD extends GlobalKeyDispatcher
 		// text areas)
 		// or key events coming from popups (source class = JRootPane)
 		if (event.isConsumed() || event.getSource() instanceof JTextComponent
-				|| event.getSource() instanceof JRootPane) {
+				|| event.getSource() instanceof JRootPane
+				|| event.getSource() instanceof MathFieldD) {
 			return false;
 		}
 

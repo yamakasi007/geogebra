@@ -9126,11 +9126,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			view.requestFocusInWindow();
 		}
 
-		if (isSymbolicEditorSelected()) {
-			resetSelectionFlags();
-			return;
-		}
-
 		altCopy = true;
 
 		DrawDropDownList dl = getComboBoxHit();
@@ -9153,6 +9148,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 
 		widgetsToBackground();
+		view.hideSymbolicEditor();
 
 		lastMousePressedTime = System.currentTimeMillis();
 
