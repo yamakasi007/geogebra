@@ -96,6 +96,7 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoFunctionable;
 import org.geogebra.common.kernel.geos.GeoImage;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
@@ -706,6 +707,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 				case EuclidianConstants.MODE_EXTENSION:
 					getDialogManager().showEmbedDialog();
+					break;
+				case EuclidianConstants.MODE_TABLE:
+					GeoInlineTable table = new GeoInlineTable(kernel.getConstruction());
+					table.ensureSize(3, 3);
+					table.setLabel(null);
 					break;
 					
 				default:

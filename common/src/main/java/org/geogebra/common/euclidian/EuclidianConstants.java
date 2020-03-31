@@ -434,6 +434,7 @@ public final class EuclidianConstants {
 	public static final int MODE_MEDIA_TEXT = 121;
 	/** Mask */
 	public static final int MODE_MASK = 122;
+	public static final int MODE_TABLE = 123;
 	/** macro tools ID offset */
 	public static final int MACRO_MODE_ID_OFFSET = 100001;
 	/** max delay between taps of a doublecklick */
@@ -915,6 +916,8 @@ public final class EuclidianConstants {
 			return "PDF";
 		case EuclidianConstants.MODE_EXTENSION:
 			return "Web";
+		case EuclidianConstants.MODE_TABLE:
+				return "Table";
 		case EuclidianConstants.MODE_SELECT:
 			return "Select";
 		case EuclidianConstants.MODE_SELECT_MOW:

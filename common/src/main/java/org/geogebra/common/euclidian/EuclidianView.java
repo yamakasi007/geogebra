@@ -28,6 +28,7 @@ import org.geogebra.common.euclidian.draw.DrawAudio;
 import org.geogebra.common.euclidian.draw.DrawConic;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.draw.DrawImage;
+import org.geogebra.common.euclidian.draw.DrawInlineTable;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.DrawInputBox;
 import org.geogebra.common.euclidian.draw.DrawLine;
@@ -56,6 +57,7 @@ import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoCurveCartesian;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
@@ -6619,11 +6621,15 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	/**
 	 * Remove all widgets for inline texts
 	 */
-	public void resetInlineTexts() {
+	public void resetInlineTextsAndTables() {
 		for (Drawable dr : allDrawableList) {
-			if (dr instanceof DrawInlineText) {
-				((DrawInlineText) dr).remove();
+			if (dr instanceof DrawInlineText || dr instanceof DrawInlineTable) {
+				((RemoveNeeded) dr).remove();
 			}
 		}
+	}
+
+	public TableController createTableController(GeoInlineTable table) {
+		return null;
 	}
 }

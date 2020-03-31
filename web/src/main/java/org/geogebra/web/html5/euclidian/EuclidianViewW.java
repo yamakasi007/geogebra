@@ -17,6 +17,7 @@ import org.geogebra.common.euclidian.EuclidianStyleBar;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.PenPreviewLine;
 import org.geogebra.common.euclidian.SymbolicEditor;
+import org.geogebra.common.euclidian.TableController;
 import org.geogebra.common.euclidian.background.BackgroundType;
 import org.geogebra.common.euclidian.draw.DrawVideo;
 import org.geogebra.common.euclidian.event.PointerEventType;
@@ -25,6 +26,7 @@ import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.io.MyXMLio;
 import org.geogebra.common.kernel.geos.GeoAxis;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoText;
@@ -360,7 +362,7 @@ public class EuclidianViewW extends EuclidianView implements
 
 	@Override
 	public void clearView() {
-		resetInlineTexts();
+		resetInlineTextsAndTables();
 		resetLists();
 		updateBackgroundImage(); // clear traces and images
 		// resetMode();
@@ -1900,5 +1902,10 @@ public class EuclidianViewW extends EuclidianView implements
 	public InlineTextController createInlineTextController(GeoInlineText geo) {
 		Element parentElement = getAbsolutePanel().getParent().getElement();
 		return new InlineTextControllerW(geo, parentElement, this);
+	}
+
+	@Override
+	public TableController createTableController(GeoInlineTable table) {
+		return new TableControllerW(this, table);
 	}
 }

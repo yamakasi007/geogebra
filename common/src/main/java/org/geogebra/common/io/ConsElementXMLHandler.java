@@ -35,6 +35,7 @@ import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoImage;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
@@ -911,7 +912,7 @@ public class ConsElementXMLHandler {
 		}
 	}
 
-	private boolean handleTable(LinkedHashMap<String, String> attrs) {
+	private boolean handleTableView(LinkedHashMap<String, String> attrs) {
 		try {
 			((GeoEvaluatable) geo).setTableColumn(
 					(int) MyXMLHandler.parseDoubleNaN(attrs.get("column")));
@@ -2171,8 +2172,11 @@ public class ConsElementXMLHandler {
 			case "selectedIndex":
 				handleSelectedIndex(attrs);
 				break;
+			case "table":
+				handleTableContent(attrs);
+				break;
 			case "tableview":
-				handleTable(attrs);
+				handleTableView(attrs);
 				break;
 			case "trace":
 				handleTrace(attrs);
@@ -2206,6 +2210,22 @@ public class ConsElementXMLHandler {
 			}
 		}
 
+	}
+
+	private void handleTableContent(LinkedHashMap<String, String> attrs) {
+		GeoInlineTable table = (GeoInlineTable) geo;
+		int columns = Integer.parseInt(attrs.remove("columns"));
+		table.ensureSize(columns, attrs.size() / columns);
+		int col = 0;
+		int row = 0;
+		for (String cell: attrs.values()) {
+			table.setContents(row, col, cell);
+			col++;
+			if (col == columns) {
+				col = 0;
+				row++;
+			}
+		}
 	}
 
 	private void handleParentLabel(LinkedHashMap<String, String> attrs) {
