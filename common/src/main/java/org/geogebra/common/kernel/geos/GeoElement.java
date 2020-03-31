@@ -5677,7 +5677,7 @@ public abstract class GeoElement extends ConstructionElement
 
 	@Override
 	public boolean isEqual(GeoElementND geo) {
-		return this == geo;
+		return geo == this;
 	}
 
 	/**
