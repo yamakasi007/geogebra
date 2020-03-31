@@ -9169,7 +9169,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				setMode(EuclidianConstants.MODE_MOVE, ModeSetter.TOOLBAR);
 			}
 		} else if (app.isHTML5Applet()) {
-			if (!textfieldHasFocus) {
+			if (!isComboboxFocused() && !textfieldHasFocus) {
 				view.requestFocus();
 			}
 		}
@@ -11849,6 +11849,15 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public GeoElement getMovedGeoElement() {
 		return movedGeoElement;
+	}
+
+	/**
+	 * necessary for webSimple, to exclude new focus
+	 *
+	 * @return whether dropdown list is focused
+	 */
+	public boolean isComboboxFocused() {
+		return false;
 	}
 
 	protected void switchModeForMousePressed(AbstractEvent e) {
