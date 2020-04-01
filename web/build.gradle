@@ -85,6 +85,8 @@ ext.appSpecs = [
         exe:'GeoGebraCAS', pkg:'GeoGebra_CAS',  releases: 'Releases-cas', icon: 'CAS.ico', appStoreId:'1436278267'],
     [id:'calculator', title:'Scientific Calculator', transKey:'ScientificCalculator',
         partials:["undo-redo"], appStoreId:'1412748754'],
+    [id:'scientific', title:'Scientific Calculator', transKey:'ScientificCalculator',
+     partials:["undo-redo"], appStoreId:'1412748754'],
     [id:'geometry', title:'Geometry', transKey:'Geometry',
         exe:'GeoGebraGeometry', pkg:'GeoGebra_Geometry',  releases: 'Releases-geometry', icon: 'Geometry.ico', appStoreId:'1232591335'],
     [id:'suite', title:'Graphing Calculator', transKey:'GraphingCalculator'],
