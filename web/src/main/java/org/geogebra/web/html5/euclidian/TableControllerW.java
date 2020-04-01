@@ -8,6 +8,7 @@ import org.geogebra.web.html5.js.ResourcesInjector;
 import org.geogebra.web.html5.util.ScriptLoadCallback;
 import org.geogebra.web.richtext.impl.Carota;
 import org.geogebra.web.richtext.impl.CarotaDocument;
+import org.geogebra.web.richtext.impl.CarotaRange;
 import org.geogebra.web.richtext.impl.CarotaUtil;
 
 import com.google.gwt.core.client.JsArrayMixed;
@@ -28,7 +29,7 @@ public class TableControllerW implements TableController {
 	private Element elemR;
 	private Element elemE;
 	private CarotaDocument exampleRenderer;
-	private CarotaDocument exampleEditor;
+	private CarotaDocument editor;
 
 	/**
 	 *
@@ -55,6 +56,14 @@ public class TableControllerW implements TableController {
 		}
 	}
 
+	@Override
+	public void format(String key, Object val) {
+		CarotaRange selection = editor.selectedRange();
+		CarotaRange range = selection.getStart() == selection.getEnd() ? editor.documentRange()
+				: selection;
+		range.setFormatting(key, val);
+	}
+
 	private void prepareCarota() {
 		this.elemR = DOM.createDiv();
 		RootPanel.getBodyElement().appendChild(elemR);
@@ -66,7 +75,7 @@ public class TableControllerW implements TableController {
 		elemE = DOM.createDiv();
 		elemE.getStyle().setWidth(200, Style.Unit.PX);
 		elemE.getStyle().setHeight(200, Style.Unit.PX);
-		this.exampleEditor = Carota.get().getEditor().create(elemE);
+		this.editor = Carota.get().getEditor().create(elemE);
 	}
 
 	private void load() {
@@ -102,7 +111,7 @@ public class TableControllerW implements TableController {
 			}
 			dataJ.push(rowJ);
 		}
-		initTable(dataJ, elemR, elemE, exampleEditor, exampleRenderer, new EditCallback() {
+		initTable(dataJ, elemR, elemE, editor, exampleRenderer, new EditCallback() {
 			@Override
 			public void onEdit(int x, int y, String value) {
 				table.setContents(y, x, value);
@@ -118,7 +127,7 @@ public class TableControllerW implements TableController {
 		s.setTop(150, Style.Unit.PX);
 		s.setLeft(50, Style.Unit.PX);
 		s.setZIndex(51);
-		s.setWidth(800, Style.Unit.PX);
+		s.setWidth(400, Style.Unit.PX);
 	}
 
 	private native void initTable(JsArrayMixed data,
@@ -129,7 +138,6 @@ public class TableControllerW implements TableController {
 		grid.properties.showHeaderRow=false;
 		grid.properties.rowHeaderNumbers=false;
 		grid.properties.rowHeaderCheckboxes=false;
-		console.log(data);
 		grid.setData(data);
 		for (var row = 0; row < data.length; row++) {
 			grid.setRowHeight(row, 100)
@@ -158,14 +166,10 @@ public class TableControllerW implements TableController {
 				this.el.firstChild.appendChild(elemE);
 			},
 			saveEditorValue: function(value) {
-				try {
 				var x = this.event.gridCell.x;
 				var y = this.event.gridCell.y;
 				callback(x, y, value);
 				this["super"].saveEditorValue.call(this, value);
-				}catch(e){
-					console.error(e);
-				}
 			},
 			setEditorValue: function(value) {
 				exampleEditor.load(JSON.parse(value || "[]"), true);

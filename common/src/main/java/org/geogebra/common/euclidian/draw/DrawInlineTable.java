@@ -9,7 +9,7 @@ import org.geogebra.common.euclidian.TableController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 
-public class DrawInlineTable extends Drawable implements RemoveNeeded {
+public class DrawInlineTable extends Drawable implements RemoveNeeded, HasFormat {
 
 	private final TableController tableController;
 
@@ -51,5 +51,10 @@ public class DrawInlineTable extends Drawable implements RemoveNeeded {
 	@Override
 	public void remove() {
 		tableController.removeFromDom();
+	}
+
+	@Override
+	public void format(String key, Object val) {
+		tableController.format(key, val);
 	}
 }

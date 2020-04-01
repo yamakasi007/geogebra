@@ -708,12 +708,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				case EuclidianConstants.MODE_EXTENSION:
 					getDialogManager().showEmbedDialog();
 					break;
-				case EuclidianConstants.MODE_TABLE:
-					GeoInlineTable table = new GeoInlineTable(kernel.getConstruction());
-					table.ensureSize(3, 3);
-					table.setLabel(null);
-					break;
-					
 				default:
 					break;
 				}	
@@ -5241,6 +5235,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			inlineText(selectionPreview);
 			break;
 
+		case EuclidianConstants.MODE_TABLE:
+			table(selectionPreview);
+			break;
+
 		case EuclidianConstants.MODE_AUDIO:
 			// addAudio();
 			break;
@@ -5381,6 +5379,15 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		return endOfSwitchModeForProcessMode(ret, changedKernel, callback,
 				selectionPreview);
+	}
+
+	protected void table(boolean selectionPreview) {
+		if (!selectionPreview) {
+			GeoInlineTable table = new GeoInlineTable(kernel.getConstruction());
+			table.ensureSize(2, 2);
+			table.setLabel(null);
+			selectAndShowBoundingBox(table);
+		}
 	}
 
 	public void showDynamicStylebar() {

@@ -22,7 +22,7 @@ import org.geogebra.common.util.debug.Log;
 /**
  * Class that handles drawing inline text elements.
  */
-public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget {
+public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget, HasFormat {
 
 	public static final int PADDING = 8;
 

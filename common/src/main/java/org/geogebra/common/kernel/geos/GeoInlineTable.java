@@ -2,6 +2,7 @@ package org.geogebra.common.kernel.geos;
 
 import java.util.ArrayList;
 
+import org.geogebra.common.awt.GFont;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -9,7 +10,7 @@ import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
 
-public class GeoInlineTable extends GeoElement {
+public class GeoInlineTable extends GeoElement implements TextStyle {
 
 	private ArrayList<ArrayList<String>> contents = new ArrayList<>();
 	private boolean defined = true;
@@ -132,5 +133,15 @@ public class GeoInlineTable extends GeoElement {
 				row.add("");
 			}
 		}
+	}
+
+	@Override
+	public int getFontStyle() {
+		return GFont.PLAIN;
+	}
+
+	@Override
+	public double getFontSizeMultiplier() {
+		return GeoText.getRelativeFontSize(GeoText.FONTSIZE_SMALL);
 	}
 }
