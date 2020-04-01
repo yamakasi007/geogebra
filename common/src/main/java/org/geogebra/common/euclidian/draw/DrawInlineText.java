@@ -368,12 +368,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		return Arrays.asList(corner0, corner1, corner3);
 	}
 
-	/**
-	 * @param key
-	 *            formatting option
-	 * @param val
-	 *            value (String, int or bool, depending on key)
-	 */
+	@Override
 	public void format(String key, Object val) {
 		if (textController != null) {
 			textController.format(key, val);
