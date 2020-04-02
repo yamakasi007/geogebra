@@ -1191,7 +1191,7 @@ public class SelectionManager {
 		for (String name : selectedGeosNames) {
 			GeoElement geo = kernel1.lookupLabel(name);
 			if (geo != null) {
-				if (geo.getParentGroup() != null) {
+				if (geo.hasGroup()) {
 					list.addAll(geo.getParentGroup().getGroupedGeos());
 				} else {
 					list.add(geo);
