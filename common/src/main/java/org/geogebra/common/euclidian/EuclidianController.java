@@ -708,15 +708,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 					getDialogManager().showEmbedDialog();
 					break;
 
-				case EuclidianConstants.MODE_TABLE:
-					// TODO add here table back-end
-					break;
-
-				case EuclidianConstants.MODE_EQUATION:
-					// TODO add here equation back-end
-					break;
-
-					default:
+				default:
 					break;
 				}	
 			}
@@ -5243,9 +5235,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			inlineText(selectionPreview);
 			break;
 
-		case EuclidianConstants.MODE_AUDIO:
-			// addAudio();
+		case EuclidianConstants.MODE_TABLE:
+			// TODO add here table back-end
 			break;
+
+		case EuclidianConstants.MODE_EQUATION:
+			// TODO add here equation back-end
+			break;
+
 		// new image
 		case EuclidianConstants.MODE_IMAGE:
 			break;

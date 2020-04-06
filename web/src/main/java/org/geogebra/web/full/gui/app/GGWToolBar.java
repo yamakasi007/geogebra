@@ -1010,7 +1010,7 @@ public class GGWToolBar extends Composite
 		case EuclidianConstants.MODE_EQUATION:
 			return resourceBundle.mode_equation();
 
-			default:
+		default:
 			return AppResources.INSTANCE.empty();
 		}
 
