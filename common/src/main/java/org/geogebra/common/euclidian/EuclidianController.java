@@ -5239,9 +5239,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			table(selectionPreview);
 			break;
 
-		case EuclidianConstants.MODE_AUDIO:
-			// addAudio();
+		case EuclidianConstants.MODE_EQUATION:
+			// TODO add here equation back-end
 			break;
+
 		// new image
 		case EuclidianConstants.MODE_IMAGE:
 			break;
