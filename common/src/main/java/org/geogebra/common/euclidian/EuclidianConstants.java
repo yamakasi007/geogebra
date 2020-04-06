@@ -928,7 +928,7 @@ public final class EuclidianConstants {
 		case EuclidianConstants.MODE_EQUATION:
 			return 	"Equation";
 
-			default:
+		default:
 			Log.error("Unknown mode " + mode);
 			return "";
 		}
