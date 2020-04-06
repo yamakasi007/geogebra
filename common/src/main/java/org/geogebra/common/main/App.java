@@ -25,6 +25,7 @@ import org.geogebra.common.euclidian.EuclidianHost;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.EuclidianViewInterfaceCommon;
 import org.geogebra.common.euclidian.MaskWidgetList;
+import org.geogebra.common.euclidian.TableController;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.event.AbstractEvent;
 import org.geogebra.common.euclidian.event.PointerEventType;
@@ -76,6 +77,7 @@ import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
 import org.geogebra.common.kernel.geos.GeoImage;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
@@ -5178,6 +5180,10 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 	public InlineFormulaController createInlineFormulaController(EuclidianView view,
 			GeoFormula geo) {
+		return null;
+	}
+
+	public TableController createTableController(EuclidianView view, GeoInlineTable table) {
 		return null;
 	}
 }
