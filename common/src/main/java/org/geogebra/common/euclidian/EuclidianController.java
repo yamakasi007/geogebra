@@ -707,8 +707,16 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				case EuclidianConstants.MODE_EXTENSION:
 					getDialogManager().showEmbedDialog();
 					break;
-					
-				default:
+
+				case EuclidianConstants.MODE_TABLE:
+					// TODO add here table back-end
+					break;
+
+				case EuclidianConstants.MODE_EQUATION:
+					// TODO add here equation back-end
+					break;
+
+					default:
 					break;
 				}	
 			}
