@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.geos;
 import static com.himamis.retex.editor.share.util.Unicode.EULER_STRING;
 import static com.himamis.retex.editor.share.util.Unicode.pi;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
