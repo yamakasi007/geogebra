@@ -403,4 +403,20 @@ public class XMLBuilder {
 			sb.append("\"/>\n");
 		}
 	}
+
+	public static void appendPosition(StringBuilder sb, GeoInline inline) {
+		sb.append("\t<startPoint x=\"");
+		sb.append(inline.getLocation().getX());
+		sb.append("\" y=\"");
+		sb.append(inline.getLocation().getY());
+		sb.append("\"/>\n");
+
+		sb.append("\t<dimensions width=\"");
+		sb.append(inline.getWidth());
+		sb.append("\" height=\"");
+		sb.append(inline.getHeight());
+		sb.append("\" angle=\"");
+		sb.append(inline.getAngle());
+		sb.append("\"/>\n");
+	}
 }

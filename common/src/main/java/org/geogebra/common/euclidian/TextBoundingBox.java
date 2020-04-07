@@ -7,11 +7,11 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.geos.GeoElement;
-import org.geogebra.common.kernel.geos.GeoInlineText;
+import org.geogebra.common.kernel.geos.GeoInline;
 
 public class TextBoundingBox extends BoundingBox<GEllipse2DDouble> {
 
-	private GeoInlineText text;
+	private GeoInline text;
 
 	private GPoint2D[] corners = new GPoint2D[9];
 
@@ -30,7 +30,7 @@ public class TextBoundingBox extends BoundingBox<GEllipse2DDouble> {
 	@Override
 	public void updateFrom(GeoElement geo) {
 		super.updateFrom(geo);
-		text = (GeoInlineText) geo;
+		text = (GeoInline) geo;
 	}
 
 	@Override

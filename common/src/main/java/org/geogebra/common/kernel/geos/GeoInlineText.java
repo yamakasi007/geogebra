@@ -23,7 +23,7 @@ import org.geogebra.common.util.debug.Log;
  * Inline Geo Text element.
  */
 public class GeoInlineText extends GeoElement
-		implements Translateable, TextStyle, PointRotateable {
+		implements Translateable, TextStyle, PointRotateable, GeoInline {
 
 	public static final int DEFAULT_WIDTH = 100;
 	public static final int DEFAULT_HEIGHT = 30;
@@ -48,21 +48,10 @@ public class GeoInlineText extends GeoElement
 	 *            on-screen location
 	 */
 	public GeoInlineText(Construction c, GPoint2D location) {
-		this(c, location, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	}
-
-	/**
-	 * Creates new GeoInlineText instance.
-	 * @param c construction
-	 * @param location location
-	 * @param width width
-	 * @param height height
-	 */
-	public GeoInlineText(Construction c, GPoint2D location, int width, int height) {
 		super(c);
 		this.location = location;
-		this.width = width;
-		this.height = height;
+		this.width = DEFAULT_WIDTH;
+		this.height = DEFAULT_HEIGHT;
 		this.contentDefaultSize = getCurrentFontSize();
 	}
 
@@ -83,11 +72,7 @@ public class GeoInlineText extends GeoElement
 				.getAppFontSize();
 	}
 
-	/**
-	 * Get the location of the text.
-	 *
-	 * @return location
-	 */
+	@Override
 	public GPoint2D getLocation() {
 		return location;
 	}
@@ -100,20 +85,12 @@ public class GeoInlineText extends GeoElement
 		this.location = location;
 	}
 
-	/**
-	 * Get the widht of the element.
-	 *
-	 * @return width
-	 */
+	@Override
 	public double getWidth() {
 		return width;
 	}
 
-	/**
-	 * Get the height of the element.
-	 *
-	 * @return height
-	 */
+	@Override
 	public double getHeight() {
 		return height;
 	}
@@ -195,19 +172,7 @@ public class GeoInlineText extends GeoElement
 		StringUtil.encodeXML(sb, content);
 		sb.append("\"/>\n");
 
-		sb.append("\t<startPoint x=\"");
-		sb.append(location.getX());
-		sb.append("\" y=\"");
-		sb.append(location.getY());
-		sb.append("\"/>\n");
-
-		sb.append("\t<dimensions width=\"");
-		sb.append(width);
-		sb.append("\" height=\"");
-		sb.append(height);
-		sb.append("\" angle=\"");
-		sb.append(angle);
-		sb.append("\"/>\n");
+		XMLBuilder.appendPosition(sb, this);
 	}
 
 	@Override
@@ -339,7 +304,10 @@ public class GeoInlineText extends GeoElement
 	@Override
 	public void rotate(NumberValue r, GeoPointND S) {
 		angle -= r.getDouble();
+		rotate(location, r, S);
+	}
 
+	protected static void rotate(GPoint2D location, NumberValue r, GeoPointND S) {
 		double phi = r.getDouble();
 		double cos = MyMath.cos(phi);
 		double sin = Math.sin(phi);
