@@ -57,6 +57,7 @@ public class MediaSubMenu extends SubMenuPanel {
 				|| mode == EuclidianConstants.MODE_PDF
 				|| mode == EuclidianConstants.MODE_EXTENSION
 				|| mode == EuclidianConstants.MODE_TABLE
+				|| mode == EuclidianConstants.MODE_EQUATION
 				|| mode == EuclidianConstants.MODE_GRASPABLE_MATH
 				|| mode == EuclidianConstants.MODE_CAS;
 	}
