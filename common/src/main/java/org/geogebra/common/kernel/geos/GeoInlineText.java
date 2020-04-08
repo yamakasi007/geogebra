@@ -77,10 +77,7 @@ public class GeoInlineText extends GeoElement
 		return location;
 	}
 
-	/**
-	 * @param location
-	 *            on-screen location
-	 */
+	@Override
 	public void setLocation(GPoint2D location) {
 		this.location = location;
 	}
@@ -95,24 +92,17 @@ public class GeoInlineText extends GeoElement
 		return height;
 	}
 
-	/**
-	 * Set the width of the element.
-	 *
-	 * @param width element width in pixels
-	 */
+	@Override
 	public void setWidth(double width) {
 		this.width = width;
 	}
 
-	/**
-	 * Set the height of the element.
-	 *
-	 * @param height height in pixels
-	 */
+	@Override
 	public void setHeight(double height) {
 		this.height = height;
 	}
 
+	@Override
 	public double getMinHeight() {
 		return Math.max(minHeight, DEFAULT_HEIGHT);
 	}
@@ -128,6 +118,7 @@ public class GeoInlineText extends GeoElement
 	 * @param content
 	 *            JSON representation of the document (used by Carota)
 	 */
+	@Override
 	public void setContent(String content) {
 		this.content = content;
 	}
@@ -321,10 +312,12 @@ public class GeoInlineText extends GeoElement
 				(x - qx) * sin + (y - qy) * cos + qy);
 	}
 
+	@Override
 	public double getAngle() {
 		return angle;
 	}
 
+	@Override
 	public void setAngle(double angle) {
 		this.angle = angle;
 	}

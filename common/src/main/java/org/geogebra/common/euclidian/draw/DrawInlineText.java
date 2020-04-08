@@ -14,7 +14,6 @@ import org.geogebra.common.euclidian.TextBoundingBox;
 import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineText;
-import org.geogebra.common.util.debug.Log;
 
 /**
  * Class that handles drawing inline text elements.
@@ -122,7 +121,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	 */
 	public String urlByCoordinate(int x, int y) {
 		if (textController != null) {
-			GPoint2D p = rectangle.getInversePoint(x-PADDING, y-PADDING);
+			GPoint2D p = rectangle.getInversePoint(x - PADDING, y - PADDING);
 			return textController.urlByCoordinate((int) p.getX(), (int) p.getY());
 		}
 

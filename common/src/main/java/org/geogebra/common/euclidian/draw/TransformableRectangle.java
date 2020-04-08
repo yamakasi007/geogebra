@@ -101,7 +101,7 @@ public class TransformableRectangle {
 	}
 
 	/**
-	 * Whether the rectangle was hit
+	 * @return whether the rectangle was hit
 	 */
 	public boolean hit(int x, int y) {
 		GPoint2D p = inverseTransform.transform(new GPoint2D(x, y), null);
@@ -117,6 +117,11 @@ public class TransformableRectangle {
 				getWidth(), getHeight());
 	}
 
+	/**
+	 * Resize the text or formula by dragging a handler (simple selection)
+	 * @param point new handler position
+	 * @param handler handler id
+	 */
 	public void updateByBoundingBoxResize(GPoint2D point, EuclidianBoundingBoxHandler handler) {
 		GPoint2D transformed = inverseTransform.transform(point, null);
 
@@ -168,6 +173,6 @@ public class TransformableRectangle {
 	}
 
 	public GPoint2D getInversePoint(int x, int y) {
-		return inverseTransform.transform(new GPoint2D(x , y ), null);
+		return inverseTransform.transform(new GPoint2D(x, y), null);
 	}
 }

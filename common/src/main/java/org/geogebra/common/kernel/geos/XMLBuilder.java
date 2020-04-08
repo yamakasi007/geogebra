@@ -398,12 +398,15 @@ public class XMLBuilder {
 		sb.append("\"/>\n");
 		if (!emphasizeRightAngle) {
 			// only store emphasizeRightAngle if "false"
-			sb.append("\t<emphasizeRightAngle val=\"");
-			sb.append(emphasizeRightAngle);
-			sb.append("\"/>\n");
+			sb.append("\t<emphasizeRightAngle val=\"false\"/>\n");
 		}
 	}
 
+	/**
+	 * Adds position and dimension for inline texts and formulas
+	 * @param sb XML builder
+	 * @param inline inline text or formula
+	 */
 	public static void appendPosition(StringBuilder sb, GeoInline inline) {
 		sb.append("\t<startPoint x=\"");
 		sb.append(inline.getLocation().getX());

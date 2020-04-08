@@ -18,6 +18,9 @@ public interface GeoInline extends GeoElementND {
 	 */
 	double getWidth();
 
+	/**
+	 * @return rotation angle in radians
+	 */
 	double getAngle();
 
 	/**
@@ -27,15 +30,38 @@ public interface GeoInline extends GeoElementND {
 	 */
 	GPoint2D getLocation();
 
-	void setWidth(double widthD);
+	/**
+	 * Set the width of the element.
+	 *
+	 * @param width element width in pixels
+	 */
+	void setWidth(double width);
 
-	void setHeight(double heightD);
+	/**
+	 * Set the height of the element.
+	 *
+	 * @param height height in pixels
+	 */
+	void setHeight(double height);
 
-	void setAngle(double angleD);
+	/**
+	 * @param angle rotation angle in radians
+	 */
+	void setAngle(double angle);
 
-	void setLocation(GPoint2D startPoint);
+	/**
+	 * @param location
+	 *            on-screen location
+	 */
+	void setLocation(GPoint2D location);
 
+	/**
+	 * @param content editor content; encoding depends on editor type
+	 */
 	void setContent(String content);
 
+	/**
+	 * @return min height in pixels, depends on content
+	 */
 	double getMinHeight();
 }

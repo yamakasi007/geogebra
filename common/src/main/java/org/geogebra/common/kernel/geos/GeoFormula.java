@@ -11,14 +11,23 @@ import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
 
+import com.himamis.retex.editor.share.io.latex.ParseException;
+import com.himamis.retex.editor.share.io.latex.Parser;
+import com.himamis.retex.editor.share.meta.MetaModel;
+import com.himamis.retex.editor.share.serializer.TeXSerializer;
+import com.himamis.retex.editor.share.util.Unicode;
+
 public class GeoFormula extends GeoElement implements GeoInline, Translateable, PointRotateable {
-	public static final String[] STRINGS = {"e^{\\pi i}+1=0", "E=mc^2", "\\lim_{\\pi\\to 3}5=7"};
+	private static final String[] STRINGS = {"e^("+ Unicode.PI_STRING+" i)+1=0", "E=mc^2",
+			"nroot(3,3)>nroot(5,5)"};
 	private GPoint2D position;
 	private boolean defined = true;
 	private String formula;
 	private double width = 200;
 	private double height = 200;
 	private double angle = 0;
+	private String latex;
+	private static Parser parser = new Parser(new MetaModel());
 
 	/**
 	 * Creates new GeoElement for given construction
@@ -28,7 +37,7 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 	 */
 	public GeoFormula(Construction c, GPoint2D initPoint) {
 		super(c);
-		formula = STRINGS[(int) (Math.random() * STRINGS.length)];
+		setContent(STRINGS[(int) (Math.random() * STRINGS.length)]);
 		this.position = initPoint;
 	}
 
@@ -66,7 +75,7 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 
 	@Override
 	public String toValueString(StringTemplate tpl) {
-		return formula;
+		return latex;
 	}
 
 	@Override
@@ -131,6 +140,11 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 	@Override
 	public void setContent(String content) {
 		formula = content;
+		try {
+			latex = new TeXSerializer().serialize(parser.parse(formula));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

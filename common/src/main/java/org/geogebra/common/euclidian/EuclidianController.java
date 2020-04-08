@@ -6312,6 +6312,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			((DrawInlineText) drawable).toForeground(0, 0);
 		} else {
 			drawable.update(); // TODO this just shows bounding box; start editing instead
+			app.storeUndoInfo();
 		}
 	}
 
