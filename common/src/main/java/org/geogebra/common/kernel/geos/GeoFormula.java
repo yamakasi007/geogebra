@@ -18,16 +18,18 @@ import com.himamis.retex.editor.share.serializer.TeXSerializer;
 import com.himamis.retex.editor.share.util.Unicode;
 
 public class GeoFormula extends GeoElement implements GeoInline, Translateable, PointRotateable {
-	private static final String[] STRINGS = {"e^("+ Unicode.PI_STRING+" i)+1=0", "E=mc^2",
+	private static final String[] STRINGS = {"e^(" + Unicode.PI_STRING + " i)+1=0", "E=mc^2",
 			"nroot(3,3)>nroot(5,5)"};
+	private static Parser parser = new Parser(new MetaModel());
+	private static TeXSerializer texSerializer = new TeXSerializer();
+
 	private GPoint2D position;
 	private boolean defined = true;
 	private String formula;
-	private double width = 200;
-	private double height = 200;
+	private double width = 250;
+	private double height = 48;
 	private double angle = 0;
 	private String latex;
-	private static Parser parser = new Parser(new MetaModel());
 
 	/**
 	 * Creates new GeoElement for given construction
@@ -43,7 +45,7 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 
 	@Override
 	public GeoClass getGeoClassType() {
-		return GeoClass.EQUATION;
+		return GeoClass.FORMULA;
 	}
 
 	@Override
@@ -141,7 +143,7 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 	public void setContent(String content) {
 		formula = content;
 		try {
-			latex = new TeXSerializer().serialize(parser.parse(formula));
+			latex = texSerializer.serialize(parser.parse(formula));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -171,5 +173,12 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 	@Override
 	public void rotate(NumberValue r) {
 		angle -= r.getDouble();
+	}
+
+	/**
+	 * @return formula, parseable by editor
+	 */
+	public String getContent() {
+		return formula;
 	}
 }

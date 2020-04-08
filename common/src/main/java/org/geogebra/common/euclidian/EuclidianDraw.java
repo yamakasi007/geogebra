@@ -300,7 +300,7 @@ public class EuclidianDraw {
 						.newDrawParametricCurve((ParametricCurve) geo);
 			}
 			break;
-		case EQUATION:
+		case FORMULA:
 			GeoFormula equation = (GeoFormula) geo;
 			d = new DrawFormula(ev, equation);
 			break;

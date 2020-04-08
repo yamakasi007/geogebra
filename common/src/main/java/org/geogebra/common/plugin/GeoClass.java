@@ -60,8 +60,8 @@ public enum GeoClass {
 	/** TEXT */
 	TEXT("Text", 150, false),
 
-	/** Equation */
-	EQUATION("Equation", 150, false),
+	/** Formula */
+	FORMULA("Formula", 150, false),
 
 	/** VECTOR */
 	VECTOR("Vector", 120, false),

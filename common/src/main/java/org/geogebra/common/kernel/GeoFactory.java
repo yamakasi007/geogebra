@@ -90,7 +90,7 @@ public class GeoFactory {
 			return new GeoCasCell(cons1);
 		case "embed":
 			return new GeoEmbed(cons1);
-		case "equation":
+		case "formula":
 			return new GeoFormula(cons1, null);
 		case "function":
 		case "functionconditional":
