@@ -184,6 +184,9 @@ public class TransformableRectangle {
 		return directTransform;
 	}
 
+	/**
+	 * Update the rectangle and the rotatable bounding box
+	 */
 	public void updateSelfAndBoundingBox() {
 		if (geo.getLocation() == null) {
 			return;
@@ -195,6 +198,9 @@ public class TransformableRectangle {
 		}
 	}
 
+	/**
+	 * Get the rotatable bounding box that is defined by this rectangle
+	 */
 	public RotatableBoundingBox getBoundingBox() {
 		if (boundingBox == null) {
 			boundingBox = new RotatableBoundingBox();
