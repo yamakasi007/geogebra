@@ -7,16 +7,15 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.TextBoundingBox;
+import org.geogebra.common.euclidian.RotatableBoundingBox;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
 
-public class DrawFormula extends Drawable {
+public class DrawFormula extends Drawable implements DrawMedia {
 
 	private final TransformableRectangle rectangle;
 	private GFont textFont;
-	private TextBoundingBox boundingBox;
 
 	/**
 	 * @param ev view
@@ -33,15 +32,7 @@ public class DrawFormula extends Drawable {
 	public void update() {
 		updateStrokes(geo);
 		labelDesc = geo.toValueString(StringTemplate.defaultTemplate);
-		rectangle.update();
-		updateBoundingBox();
-	}
-
-	private void updateBoundingBox() {
-		if (boundingBox != null) {
-			boundingBox.setRectangle(getBounds());
-			boundingBox.setTransform(rectangle.directTransform);
-		}
+		rectangle.updateSelfAndBoundingBox();
 	}
 
 	@Override
@@ -50,7 +41,7 @@ public class DrawFormula extends Drawable {
 		g2.setFont(textFont);
 		g2.setStroke(objStroke); // needed eg for \sqrt
 		g2.saveTransform();
-		g2.transform(rectangle.directTransform);
+		g2.transform(rectangle.getDirectTransform());
 		drawMultilineLaTeX(g2, textFont, geo.getObjectColor(),
 				view.getBackgroundCommon());
 		g2.restoreTransform();
@@ -68,7 +59,7 @@ public class DrawFormula extends Drawable {
 
 	@Override
 	public boolean isInside(GRectangle rect) {
-		return false;
+		return rect.contains(getBounds());
 	}
 
 	@Override
@@ -77,19 +68,23 @@ public class DrawFormula extends Drawable {
 	}
 
 	@Override
-	public TextBoundingBox getBoundingBox() {
-		if (boundingBox == null) {
-			boundingBox = new TextBoundingBox();
-			boundingBox.setRectangle(getBounds());
-			boundingBox.setColor(view.getApplication().getPrimaryColor());
-		}
-		boundingBox.updateFrom(geo);
-		return boundingBox;
+	public RotatableBoundingBox getBoundingBox() {
+		return rectangle.getBoundingBox();
 	}
 
 	@Override
 	public void updateByBoundingBoxResize(GPoint2D point, EuclidianBoundingBoxHandler handler) {
 		rectangle.updateByBoundingBoxResize(point, handler);
-		updateBoundingBox();
+	}
+
+	@Override
+	public void updateContent() {
+		// TODO update editor content
+	}
+
+	@Override
+	public void toForeground(int i, int i1) {
+		update(); // TODO this just shows bounding box; start editing instead
+		view.getApplication().storeUndoInfo();
 	}
 }

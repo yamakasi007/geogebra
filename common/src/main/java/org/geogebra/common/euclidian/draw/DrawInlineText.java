@@ -10,7 +10,7 @@ import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.RemoveNeeded;
-import org.geogebra.common.euclidian.TextBoundingBox;
+import org.geogebra.common.euclidian.RotatableBoundingBox;
 import org.geogebra.common.euclidian.text.InlineTextController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineText;
@@ -18,7 +18,7 @@ import org.geogebra.common.kernel.geos.GeoInlineText;
 /**
  * Class that handles drawing inline text elements.
  */
-public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget {
+public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget, DrawMedia {
 
 	public static final int PADDING = 8;
 
@@ -26,8 +26,6 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	private InlineTextController textController;
 
 	private TransformableRectangle rectangle;
-
-	private TextBoundingBox boundingBox;
 
 	/**
 	 * Create a new DrawInlineText instance.
@@ -54,17 +52,13 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	public void update() {
 		GPoint2D point = text.getLocation();
 
-		if (point == null) {
-			return;
-		}
-		rectangle.update();
-		updateBoundingBox();
+		rectangle.updateSelfAndBoundingBox();
 
 		double angle = text.getAngle();
 		double width = text.getWidth();
 		double height = text.getHeight();
 
-		if (textController != null) {
+		if (textController != null && point != null) {
 			textController.setLocation(view.toScreenCoordX(point.getX()),
 					view.toScreenCoordY(point.getY()));
 			textController.setHeight((int) (height - 2 * PADDING));
@@ -76,19 +70,10 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		}
 	}
 
-	/**
-	 * Update editor from geo
-	 */
+	@Override
 	public void updateContent() {
 		if (textController != null) {
 			textController.updateContent();
-		}
-	}
-
-	private void updateBoundingBox() {
-		if (boundingBox != null) {
-			boundingBox.setRectangle(getBounds());
-			boundingBox.setTransform(rectangle.directTransform);
 		}
 	}
 
@@ -101,11 +86,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		}
 	}
 
-	/**
-	 * Send this to foreground
-	 * @param x x mouse coordinates in pixels
-	 * @param y y mouse coordinates in pixels
-	 */
+	@Override
 	public void toForeground(int x, int y) {
 		if (textController != null) {
 			GPoint2D p = rectangle.getInversePoint(x - PADDING, y - PADDING);
@@ -134,14 +115,8 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	}
 
 	@Override
-	public TextBoundingBox getBoundingBox() {
-		if (boundingBox == null) {
-			boundingBox = new TextBoundingBox();
-			boundingBox.setRectangle(getBounds());
-			boundingBox.setColor(view.getApplication().getPrimaryColor());
-		}
-		boundingBox.updateFrom(geo);
-		return boundingBox;
+	public RotatableBoundingBox getBoundingBox() {
+		return rectangle.getBoundingBox();
 	}
 
 	@Override
@@ -161,7 +136,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	@Override
 	public void draw(GGraphics2D g2) {
 		if (textController != null) {
-			textController.draw(g2, rectangle.directTransform);
+			textController.draw(g2, rectangle.getDirectTransform());
 		}
 	}
 
@@ -246,7 +221,6 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	@Override
 	public void updateByBoundingBoxResize(GPoint2D point, EuclidianBoundingBoxHandler handler) {
 		rectangle.updateByBoundingBoxResize(point, handler);
-		updateBoundingBox();
 	}
 
 	@Override

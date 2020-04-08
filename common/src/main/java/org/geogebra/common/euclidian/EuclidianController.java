@@ -32,6 +32,7 @@ import org.geogebra.common.euclidian.draw.DrawConic;
 import org.geogebra.common.euclidian.draw.DrawConicPart;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
+import org.geogebra.common.euclidian.draw.DrawMedia;
 import org.geogebra.common.euclidian.draw.DrawPoint;
 import org.geogebra.common.euclidian.draw.DrawPolyLine;
 import org.geogebra.common.euclidian.draw.DrawPolygon;
@@ -6308,11 +6309,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		inlineText.setLabel(null);
 		selectAndShowBoundingBox(inlineText);
 		DrawableND drawable = view.getDrawableFor(inlineText);
-		if (drawable instanceof DrawInlineText) {
-			((DrawInlineText) drawable).toForeground(0, 0);
-		} else {
-			drawable.update(); // TODO this just shows bounding box; start editing instead
-			app.storeUndoInfo();
+		if (drawable instanceof DrawMedia) {
+			((DrawMedia) drawable).toForeground(0, 0);
 		}
 	}
 

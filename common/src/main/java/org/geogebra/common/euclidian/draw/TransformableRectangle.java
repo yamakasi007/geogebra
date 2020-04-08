@@ -8,6 +8,7 @@ import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.RotatableBoundingBox;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.geos.GeoInline;
 import org.geogebra.common.kernel.geos.GeoInlineText;
@@ -15,8 +16,9 @@ import org.geogebra.common.util.debug.Log;
 
 public class TransformableRectangle {
 	private final EuclidianView view;
-	private final GeoInline text;
-	protected GAffineTransform directTransform;
+	private final GeoInline geo;
+	private RotatableBoundingBox boundingBox;
+	private GAffineTransform directTransform;
 	private GAffineTransform inverseTransform;
 
 	private GPoint2D corner0;
@@ -30,18 +32,20 @@ public class TransformableRectangle {
 	 */
 	TransformableRectangle(EuclidianView view, GeoInline text) {
 		this.view = view;
-		this.text = text;
+		this.geo = text;
 	}
 
 	/**
 	 * Update transforms
 	 */
 	public void update() {
-		GPoint2D point = text.getLocation();
-
-		double angle = text.getAngle();
-		double width = text.getWidth();
-		double height = text.getHeight();
+		GPoint2D point = geo.getLocation();
+		if (point == null) {
+			return;
+		}
+		double angle = geo.getAngle();
+		double width = geo.getWidth();
+		double height = geo.getHeight();
 
 		directTransform = AwtFactory.getPrototype().newAffineTransform();
 		directTransform.translate(view.toScreenCoordXd(point.getX()),
@@ -105,8 +109,8 @@ public class TransformableRectangle {
 	 */
 	public boolean hit(int x, int y) {
 		GPoint2D p = inverseTransform.transform(new GPoint2D(x, y), null);
-		return 0 < p.getX() && p.getX() < text.getWidth()
-				&& 0 < p.getY() && p.getY() < text.getHeight();
+		return 0 < p.getX() && p.getX() < geo.getWidth()
+				&& 0 < p.getY() && p.getY() < geo.getHeight();
 	}
 
 	/**
@@ -127,52 +131,77 @@ public class TransformableRectangle {
 
 		double x = 0;
 		double y = 0;
-		double width = text.getWidth();
-		double height = text.getHeight();
+		double width = geo.getWidth();
+		double height = geo.getHeight();
 
 		if (handler.getDx() == 1) {
 			width = transformed.getX();
 		} else if (handler.getDx() == -1) {
-			width = text.getWidth() - transformed.getX();
+			width = geo.getWidth() - transformed.getX();
 			x = transformed.getX();
 		}
 
 		if (handler.getDy() == 1) {
 			height = transformed.getY();
 		} else if (handler.getDy() == -1) {
-			height = text.getHeight() - transformed.getY();
+			height = geo.getHeight() - transformed.getY();
 			y = transformed.getY();
 		}
 
-		if (height < text.getMinHeight() && width < text.getWidth()) {
+		if (height < geo.getMinHeight() && width < geo.getWidth()) {
 			return;
 		}
 
-		if (height < text.getMinHeight()) {
+		if (height < geo.getMinHeight()) {
 			if (y != 0) {
-				y = text.getHeight() - text.getMinHeight();
+				y = geo.getHeight() - geo.getMinHeight();
 			}
-			height = text.getMinHeight();
+			height = geo.getMinHeight();
 		}
 
 		if (width < GeoInlineText.DEFAULT_WIDTH) {
 			if (x != 0) {
-				x = text.getWidth() - GeoInlineText.DEFAULT_WIDTH;
+				x = geo.getWidth() - GeoInlineText.DEFAULT_WIDTH;
 			}
 			width = GeoInlineText.DEFAULT_WIDTH;
 		}
 
 		GPoint2D origin = directTransform.transform(new GPoint2D(x, y), null);
 
-		text.setLocation(new GPoint2D(view.toRealWorldCoordX(origin.getX()),
+		geo.setLocation(new GPoint2D(view.toRealWorldCoordX(origin.getX()),
 				view.toRealWorldCoordY(origin.getY())));
-		text.setWidth(width);
-		text.setHeight(height);
-		text.updateRepaint();
-		update();
+		geo.setWidth(width);
+		geo.setHeight(height);
+		geo.updateRepaint();
+		updateSelfAndBoundingBox();
 	}
 
 	public GPoint2D getInversePoint(int x, int y) {
 		return inverseTransform.transform(new GPoint2D(x, y), null);
+	}
+
+	public GAffineTransform getDirectTransform() {
+		return directTransform;
+	}
+
+	public void updateSelfAndBoundingBox() {
+		if (geo.getLocation() == null) {
+			return;
+		}
+		update();
+		if (boundingBox != null) {
+			boundingBox.setRectangle(getBounds());
+			boundingBox.setTransform(getDirectTransform());
+		}
+	}
+
+	public RotatableBoundingBox getBoundingBox() {
+		if (boundingBox == null) {
+			boundingBox = new RotatableBoundingBox();
+			boundingBox.setRectangle(getBounds());
+			boundingBox.setColor(view.getApplication().getPrimaryColor());
+		}
+		boundingBox.updateFrom(geo.toGeoElement());
+		return boundingBox;
 	}
 }
