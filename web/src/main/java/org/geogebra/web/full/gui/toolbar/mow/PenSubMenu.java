@@ -139,7 +139,7 @@ public class PenSubMenu extends SubMenuPanel {
 		addToColorMap(MOWToolbarColor.RED);
 		addToColorMap(MOWToolbarColor.ORANGE);
 		addToColorMap(MOWToolbarColor.YELLOW);
-		new FocusableWidget(AccessibilityGroup.NOTES_COLOR_PANEL, -1,
+		new FocusableWidget(AccessibilityGroup.NOTES_COLOR_PANEL, null,
 				colorMap.values().toArray(new Widget[0])).attachTo(app);
 	}
 
@@ -162,7 +162,7 @@ public class PenSubMenu extends SubMenuPanel {
 			}
 		});
 		new FocusableWidget(
-				AccessibilityGroup.NOTES_COLOR_CUSTOM, -1, btnCustomColor).attachTo(app);
+				AccessibilityGroup.NOTES_COLOR_CUSTOM, null, btnCustomColor).attachTo(app);
 	}
 
 	private void createColorPanel() {
@@ -202,7 +202,7 @@ public class PenSubMenu extends SubMenuPanel {
 			}
 		});
 		new FocusableWidget(AccessibilityGroup.NOTES_PEN_THICKNESS_SLIDER,
-				-1, slider.getSlider()).attachTo(app);
+				null, slider.getSlider()).attachTo(app);
 	}
 
 	private void setSliderRange(boolean isPen) {

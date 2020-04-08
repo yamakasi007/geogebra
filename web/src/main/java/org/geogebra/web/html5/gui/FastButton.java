@@ -150,6 +150,7 @@ public abstract class FastButton extends GCustomButton {
 		
 		switch (DOM.eventGetType(event)) {
 		case Event.ONTOUCHSTART: {
+			removeStyleName("keyboardFocus");
 			onTouchStart(event);
 			event.stopPropagation();
 			break;
@@ -170,6 +171,7 @@ public abstract class FastButton extends GCustomButton {
 			break;
 		}
 		case Event.ONMOUSEDOWN: {
+			removeStyleName("keyboardFocus");
 			event.stopPropagation();
 			break;
 		}

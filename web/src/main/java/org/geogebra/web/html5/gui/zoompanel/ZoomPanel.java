@@ -13,7 +13,6 @@ import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.css.ZoomPanelResources;
 import org.geogebra.web.html5.gui.FastClickHandler;
-import org.geogebra.web.html5.gui.accessibility.GUITabs;
 import org.geogebra.web.html5.gui.util.NoDragImage;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
@@ -116,7 +115,7 @@ public class ZoomPanel extends FlowPanel implements CoordSystemListener {
 		fullscreenBtn = new StandardButton(
 				ZoomPanelResources.INSTANCE.fullscreen_black18(), null, 24,
 				app);
-		registerFocusable(fullscreenBtn, AccessibilityGroup.FULL_SCREEN);
+		registerFocusable(fullscreenBtn, AccessibilityGroup.ViewControlId.FULL_SCREEN);
 		NoDragImage exitFullscreenImage = new NoDragImage(ZoomPanelResources.INSTANCE
 				.fullscreen_exit_black18(), 24);
 		exitFullscreenImage.setPresentation();
@@ -190,17 +189,17 @@ public class ZoomPanel extends FlowPanel implements CoordSystemListener {
 		};
 		homeBtn.addFastClickHandler(handlerHome);
 		add(homeBtn);
-		registerFocusable(homeBtn, AccessibilityGroup.ZOOM_PANEL_HOME);
+		registerFocusable(homeBtn, AccessibilityGroup.ViewControlId.ZOOM_PANEL_HOME);
 		if (!Browser.isMobile()) {
 			addZoomInButton();
-			registerFocusable(zoomInBtn, AccessibilityGroup.ZOOM_PANEL_PLUS);
+			registerFocusable(zoomInBtn, AccessibilityGroup.ViewControlId.ZOOM_PANEL_PLUS);
 			addZoomOutButton();
-			registerFocusable(zoomOutBtn, AccessibilityGroup.ZOOM_PANEL_MINUS);
+			registerFocusable(zoomOutBtn, AccessibilityGroup.ViewControlId.ZOOM_PANEL_MINUS);
 		}
 	}
 
-	private void registerFocusable(StandardButton btn, AccessibilityGroup group) {
-		new FocusableWidget(group, getViewID(), btn).attachTo(app);
+	private void registerFocusable(StandardButton btn, AccessibilityGroup.ViewControlId group) {
+		new FocusableWidget(AccessibilityGroup.getViewGroup(getViewID()), group, btn).attachTo(app);
 	}
 
 	private void addZoomOutButton() {
@@ -350,22 +349,6 @@ public class ZoomPanel extends FlowPanel implements CoordSystemListener {
 	 */
 	public static boolean neededFor(AppW app) {
 		return needsZoomButtons(app) || needsFullscreenButton(app);
-	}
-
-	/**
-	 * Sets tab order for header buttons.
-	 */
-	public void setTabIndexes() {
-		int tabIndex = GUITabs.ZOOM;
-		if (view != null) {
-			tabIndex += view.getViewID() + buttons.size();
-		}
-		for (StandardButton btn : buttons) {
-			if (btn != null) {
-				GUITabs.setTabIndex(btn.getElement(), tabIndex);
-				tabIndex++;
-			}
-		}
 	}
 
 	/** Focus the first available button on zoom panel. */
