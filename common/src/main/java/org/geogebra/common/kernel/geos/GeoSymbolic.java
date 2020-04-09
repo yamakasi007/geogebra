@@ -134,19 +134,9 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	}
 
 	@Override
-	public boolean showInAlgebraView() {
-		return true;
-	}
-
-	@Override
 	protected boolean showInEuclidianView() {
 		GeoElementND twin = getTwinGeo();
 		return twin != null && twin.isEuclidianShowable();
-	}
-
-	@Override
-	public boolean isEqual(GeoElementND geo) {
-		return geo == this;
 	}
 
 	@Override
