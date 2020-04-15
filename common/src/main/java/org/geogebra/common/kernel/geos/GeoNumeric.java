@@ -574,7 +574,13 @@ public class GeoNumeric extends GeoElement
 		setDefinition(null);
 		if (Double.isNaN(x)) {
 			value = Double.NaN;
-		} else if (isIntervalMinActive() && x < getIntervalMin()) {
+		} else {
+			setNumericValue(x, changeAnimationValue);
+		}
+	}
+
+	private synchronized void setNumericValue(double x, boolean changeAnimationValue) {
+		if (isIntervalMinActive() && x < getIntervalMin()) {
 			value = getIntervalMin();
 			if (getCorrespondingCasCell() != null) {
 				getCorrespondingCasCell().setInputFromTwinGeo(true, false);
@@ -593,8 +599,17 @@ public class GeoNumeric extends GeoElement
 			animationValue = value;
 		}
 
-		if (isLabelSet() && this.isSliderable() && isSelected()) {
+		if (isLabelSet() && isSliderable() && isSelected()) {
 			kernel.getApplication().readLater(this);
+		}
+	}
+
+	private synchronized void setSliderValue(double value) {
+		if (Double.isNaN(value)) {
+			setDefinition(null);
+			this.value = Double.NaN;
+		} else {
+			setNumericValue(value, true);
 		}
 	}
 
@@ -1312,7 +1327,7 @@ public class GeoNumeric extends GeoElement
 		boolean okMax = isIntervalMaxActive();
 		boolean ok = (getIntervalMin() <= getIntervalMax());
 		if (ok && okMin && okMax) {
-			setValue(isDefined() ? value : 1.0);
+			setSliderValue(isDefined() ? value : 1.0);
 			isDrawable = true;
 		} else if (okMin && okMax) {
 			setUndefined();
@@ -2088,5 +2103,6 @@ public class GeoNumeric extends GeoElement
 		setShowExtendedAV(false);
 		intervalMax = null;
 		intervalMin = null;
+		setEuclidianVisible(false);
 	}
 }
