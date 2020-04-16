@@ -1,17 +1,6 @@
 package org.geogebra.common.kernel;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
+import com.himamis.retex.editor.share.input.Character;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.io.MyXMLio;
@@ -59,7 +48,18 @@ import org.geogebra.common.plugin.ScriptManager;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 
-import com.himamis.retex.editor.share.input.Character;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Manages construction elements
@@ -127,6 +127,10 @@ public class Construction {
 
 	/** Table for (label, GeoElement) pairs, contains global variables */
 	protected HashMap<String, GeoElement> geoTable;
+
+	// List of GeoElements to store strong references to
+	// Used in the iOS app
+	private List<ConstructionElement> tempList;
 
 	// list of algorithms that need to be updated when EuclidianView changes
 	private ArrayList<EuclidianViewCE> euclidianViewCE;
@@ -228,6 +232,7 @@ public class Construction {
 		geoSetLabelOrder = new TreeSet<>(new LabelComparator());
 		geoSetsTypeMap = new HashMap<>();
 		euclidianViewCE = new ArrayList<>();
+		tempList = new ArrayList<>();
 
 		if (parentConstruction != null) {
 			consDefaults = parentConstruction.getConstructionDefaults();
@@ -907,6 +912,7 @@ public class Construction {
 	public void addToConstructionList(ConstructionElement ce,
 			boolean checkContains) {
 		if (supressLabelCreation) {
+			tempList.add(ce);
 			return;
 		}
 		if (checkContains && ce.isInConstructionList()) {
@@ -3046,6 +3052,7 @@ public class Construction {
 		intsM.clear();
 		ceList.clear();
 		algoList.clear();
+		tempList.clear();
 
 		geoSetConsOrder.clear();
 		geoSetWithCasCells.clear();
