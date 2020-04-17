@@ -28,4 +28,10 @@ public class GlobalFunctions {
 	 * @return string without escaped sequances
 	 */
 	public static native String unescape(String str);
+
+	/**
+	 * @param str input string
+	 * @return string with escaped sequances
+	 */
+	public static native String escape(String str);
 }

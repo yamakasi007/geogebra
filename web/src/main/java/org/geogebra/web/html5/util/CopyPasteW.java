@@ -1,6 +1,9 @@
 package org.geogebra.web.html5.util;
 
-import com.google.gwt.core.client.Scheduler;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle2D;
 import org.geogebra.common.euclidian.EuclidianView;
@@ -30,12 +33,9 @@ import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.main.AppW;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.storage.client.Storage;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CopyPasteW extends CopyPaste {
 
@@ -272,7 +272,8 @@ public class CopyPasteW extends CopyPaste {
 
 	private static void saveToClipboard(String toSave) {
 		if (!Browser.isiOS()) {
-			String encoded = pastePrefix + GlobalFunctions.btoa(toSave);
+			String escapedContent = GlobalFunctions.escape(toSave);
+			String encoded = pastePrefix + GlobalFunctions.btoa(escapedContent);
 			writeToExternalClipboard(encoded);
 		}
 		Storage.getLocalStorageIfSupported().setItem(pastePrefix, toSave);
@@ -340,7 +341,8 @@ public class CopyPasteW extends CopyPaste {
 	@ExternalAccess
 	private static void pasteText(App app, String text) {
 		if (text.startsWith(pastePrefix)) {
-			pasteGeoGebraXML(app, GlobalFunctions.atob(text.substring(pastePrefix.length())));
+			String escapedContent = GlobalFunctions.atob(text.substring(pastePrefix.length()));
+			pasteGeoGebraXML(app, GlobalFunctions.unescape(escapedContent));
 		} else {
 			pastePlainText(app, text);
 		}
