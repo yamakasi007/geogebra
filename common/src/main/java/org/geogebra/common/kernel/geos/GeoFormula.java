@@ -98,6 +98,11 @@ public class GeoFormula extends GeoElement implements GeoInline, Translateable, 
 	}
 
 	@Override
+	public HitType getLastHitType() {
+		return HitType.ON_FILLING;
+	}
+
+	@Override
 	public void getXMLtags(StringBuilder sb) {
 		super.getXMLtags(sb);
 		sb.append("\t<content val=\"");
