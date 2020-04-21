@@ -9928,7 +9928,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		GeoElement topGeo = view.getHits().get(view.getHits().size() - 1);
 
-		if (topGeo == lastInline && !draggingOccured
+		if (topGeo == lastInline && !draggingOccured && !wasBoundingBoxHit
 				&& view.getHitHandler() == EuclidianBoundingBoxHandler.UNDEFINED) {
 			showDynamicStylebar();
 			((DrawInline) view.getDrawableFor(topGeo)).toForeground(mouseLoc.x, mouseLoc.y);
