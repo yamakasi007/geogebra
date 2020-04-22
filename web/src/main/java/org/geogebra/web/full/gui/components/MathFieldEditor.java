@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.himamis.retex.editor.share.event.ClickListener;
 import com.himamis.retex.editor.share.event.MathFieldListener;
+import com.himamis.retex.editor.share.meta.MetaModel;
 import com.himamis.retex.editor.web.MathFieldScroller;
 import com.himamis.retex.editor.web.MathFieldW;
 
@@ -73,9 +74,11 @@ public class MathFieldEditor implements IsWidget, HasKeyboardPopup,
 		main = new KeyboardFlowPanel();
 		Canvas canvas = Canvas.createIfSupported();
 
+		MetaModel model = new MetaModel();
+		model.enableSubstitutions();
 		mathField = new MathFieldW(new SyntaxAdapterImpl(kernel), main,
 				canvas, listener,
-				directFormulaConversion);
+				directFormulaConversion, model);
 
 		mathField.setExpressionReader(ScreenReader.getExpressionReader(app));
 		mathField.setClickListener(this);
