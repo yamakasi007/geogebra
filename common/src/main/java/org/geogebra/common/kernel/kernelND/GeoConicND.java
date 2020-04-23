@@ -4536,7 +4536,7 @@ public abstract class GeoConicND extends GeoQuadricND
 	 *            parameter (for parametric form)
 	 * @return whether it was successful
 	 */
-	public boolean setTypeFromXML(String style, String parameter, boolean force) {
+	public boolean setTypeFromXML(String style, String parameter) {
 		if ("implicit".equals(style)) {
 			setToImplicit();
 		} else if ("specific".equals(style)) {
