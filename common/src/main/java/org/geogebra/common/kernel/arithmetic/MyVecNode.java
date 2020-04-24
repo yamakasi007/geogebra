@@ -374,15 +374,7 @@ public class MyVecNode extends ValidExpression
 		return mode;
 	}
 
-	@Override
-	public void setLabel(String label) {
-		super.setLabel(label);
-		if (isVectorLabel(label)) {
-			stringifier.setPrintingMode(VectorPrintingMode.Vector);
-		}
-	}
-
-	private boolean isVectorLabel(String label) {
-		return label != null && StringUtil.isLowerCase(label.charAt(0));
+	public void setVectorPrintingMode() {
+		stringifier.setPrintingMode(VectorPrintingMode.Vector);
 	}
 }
