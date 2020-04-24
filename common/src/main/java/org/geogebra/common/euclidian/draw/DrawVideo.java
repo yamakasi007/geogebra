@@ -79,13 +79,9 @@ public class DrawVideo extends Drawable implements DrawWidget {
 		bounds = AwtFactory.getPrototype().newRectangle(left, top, width, height);
 	}
 
-	private boolean isPreviewNeeded() {
-		return app.getVideoManager() != null && app.getVideoManager().isPreviewOnly();
-	}
-
 	@Override
 	public void draw(GGraphics2D g2) {
-		if (!isPreviewNeeded()) {
+		if (view.getApplication().getExportType() == App.ExportType.NONE) {
 			return;
 		}
 		MyImage preview = video.getPreview();

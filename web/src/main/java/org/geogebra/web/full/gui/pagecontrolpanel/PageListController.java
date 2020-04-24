@@ -163,7 +163,6 @@ public class PageListController implements PageListControllerInterface,
 			return "";
 		}
 
-		app.getVideoManager().setPreviewOnly(true);
 		app.setExporting(ExportType.PDF_HTML5, scale);
 
 		GGraphics2DW g4copy = new GGraphics2DW(ctx);
@@ -189,7 +188,6 @@ public class PageListController implements PageListControllerInterface,
 			}
 		}
 
-		app.getVideoManager().setPreviewOnly(false);
 		app.setExporting(ExportType.NONE, 1);
 		return PDFEncoderW.getPDF(ctx);
 
