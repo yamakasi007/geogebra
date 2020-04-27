@@ -30,7 +30,6 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoVec2D;
 import org.geogebra.common.kernel.printing.printer.vector.VectorPrinterMapBuilder;
 import org.geogebra.common.kernel.printing.printer.vector.VectorPrintingMode;
-import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 
 /**
