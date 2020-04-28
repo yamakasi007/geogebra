@@ -60,10 +60,10 @@ public class SymbolicVectorTest extends GeoSymbolicTest {
 		GeoSymbolic vector = add("v = (1, 2)");
 		assertThat(
 				vector.getDefinition(StringTemplate.editorTemplate),
-				is("{{1}, {2}}"));
+				equalTo("{{1}, {2}}"));
 		assertThat(
 				vector.getDefinition(StringTemplate.latexTemplate),
-				is("\\left( \\begin{align}1 \\\\ 2 \\end{align} \\right)"));
+				equalTo("\\left( \\begin{align}1 \\\\ 2 \\end{align} \\right)"));
 	}
 
 	@Test
@@ -72,9 +72,23 @@ public class SymbolicVectorTest extends GeoSymbolicTest {
 		GeoSymbolic vector = add("v = (a, 2)");
 		assertThat(
 				vector.getDefinition(StringTemplate.editorTemplate),
-				is("{{a}, {2}}"));
+				equalTo("{{a}, {2}}"));
 		assertThat(
 				vector.getDefinition(StringTemplate.latexTemplate),
-				is("\\left( \\begin{align}a \\\\ 2 \\end{align} \\right)"));
+				equalTo("\\left( \\begin{align}a \\\\ 2 \\end{align} \\right)"));
+	}
+
+	@Test
+	public void testIsGeoVector() {
+		GeoSymbolic vector = add("v = (a, 2)");
+		assertThat(vector.isGeoVector(), is(true));
+	}
+
+	@Test
+	public void testVectorLatexStringForDependent() {
+		GeoSymbolic vector = add("v = (a, 2)");
+		assertThat(
+				vector.toLaTeXString(false, StringTemplate.latexTemplate),
+				equalTo("\\binom{a}{2}"));
 	}
 }

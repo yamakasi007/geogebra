@@ -1035,10 +1035,19 @@ public class AlgebraProcessor {
 		if (unwrappedDefinition instanceof ValidExpression) {
 			((ValidExpression) unwrappedDefinition).setLabel(label);
 		}
-		if (element instanceof GeoSymbolic
-				&& unwrappedDefinition instanceof MyVecNode
-				&& isVectorLabel(label)) {
+		if (element instanceof GeoSymbolic && isVectorLabel(label)) {
+			setVectorPrintingModeFor((GeoSymbolic) element);
+		}
+	}
+
+	private void setVectorPrintingModeFor(GeoSymbolic element) {
+		ExpressionValue unwrappedDefinition = element.getDefinition().unwrap();
+		if (unwrappedDefinition instanceof MyVecNode) {
 			((MyVecNode) unwrappedDefinition).setVectorPrintingMode();
+		}
+		ExpressionValue unwrappedValue = element.getValue().unwrap();
+		if (unwrappedValue instanceof MyVecNode) {
+			((MyVecNode) unwrappedValue).setVectorPrintingMode();
 		}
 	}
 

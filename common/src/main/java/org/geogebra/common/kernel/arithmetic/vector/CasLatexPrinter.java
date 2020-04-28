@@ -15,7 +15,7 @@ class CasLatexPrinter implements Printer {
 
     @Override
     public String print(StringTemplate tpl, ExpressionPrinter expressionPrinter) {
-        return " \\binom{"
+        return "\\binom{"
                 + expressionPrinter.print(vector.getX(), tpl)
                 + "}{"
                 + expressionPrinter.print(vector.getY(), tpl)
