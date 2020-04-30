@@ -1170,8 +1170,8 @@ public class ExpressionNode extends ValidExpression
 		// this expression should be considered as a vector, not a point
 		forceVector = true;
 		ExpressionValue value = unwrap();
-		if (value instanceof MyVecNode) {
-			((MyVecNode) value).setVectorPrintingMode();
+		if (value instanceof MyVecNDNode) {
+			((MyVecNDNode) value).setVectorPrintingMode();
 		}
 	}
 

@@ -434,4 +434,9 @@ public class MyVec3DNode extends ValidExpression
 	private boolean isVectorLabel(String label) {
 		return label != null && StringUtil.isLowerCase(label.charAt(0));
 	}
+
+	@Override
+	public void setVectorPrintingMode() {
+		stringifier.setPrintingMode(VectorPrintingMode.Vector);
+	}
 }

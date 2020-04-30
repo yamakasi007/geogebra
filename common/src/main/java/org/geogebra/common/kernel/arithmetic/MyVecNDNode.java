@@ -39,4 +39,8 @@ public interface MyVecNDNode extends ExpressionValue, ReplaceChildrenByValues {
 	 */
 	public ExpressionValue getZ();
 
+	/**
+	 * Sets the printing mode to vector printing
+	 */
+	void setVectorPrintingMode();
 }

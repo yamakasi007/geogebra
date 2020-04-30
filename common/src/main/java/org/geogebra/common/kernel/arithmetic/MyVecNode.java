@@ -371,6 +371,7 @@ public class MyVecNode extends ValidExpression
 		return mode;
 	}
 
+	@Override
 	public void setVectorPrintingMode() {
 		stringifier.setPrintingMode(VectorPrintingMode.Vector);
 	}
