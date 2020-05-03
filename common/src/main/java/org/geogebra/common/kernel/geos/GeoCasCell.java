@@ -1,14 +1,6 @@
 package org.geogebra.common.kernel.geos;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Vector;
-
+import com.himamis.retex.editor.share.util.Unicode;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.cas.GeoGebraCAS;
@@ -66,7 +58,14 @@ import org.geogebra.common.plugin.script.GgbScript;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 
-import com.himamis.retex.editor.share.util.Unicode;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Vector;
 
 /**
  * Cell pair of input and output strings used in the CAS view. This needs to be
@@ -1602,10 +1601,10 @@ public class GeoCasCell extends GeoElement
 				ExpressionValue ve = outputVE.unwrap();
 				if (ve instanceof MyVecNode) {
 					MyVecNode node = (MyVecNode) ve;
-					node.setCASVector();
+					node.setupCASVector();
 				} else if (ve instanceof MyVec3DNode) {
 					MyVec3DNode node3d = (MyVec3DNode) ve;
-					node3d.setCASVector();
+					node3d.setupCASVector();
 				}
 			}
 		}

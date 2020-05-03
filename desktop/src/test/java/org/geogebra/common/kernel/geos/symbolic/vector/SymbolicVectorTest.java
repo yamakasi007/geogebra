@@ -1,6 +1,8 @@
 package org.geogebra.common.kernel.geos.symbolic.vector;
 
 import org.geogebra.common.kernel.StringTemplate;
+import org.geogebra.common.kernel.arithmetic.ExpressionValue;
+import org.geogebra.common.kernel.arithmetic.MyVecNDNode;
 import org.geogebra.common.kernel.geos.GeoSymbolic;
 import org.geogebra.common.kernel.geos.GeoSymbolicTest;
 import org.geogebra.common.kernel.geos.GeoVector;
@@ -90,5 +92,31 @@ public class SymbolicVectorTest extends GeoSymbolicTest {
 		assertThat(
 				vector.toLaTeXString(false, StringTemplate.latexTemplate),
 				equalTo("\\binom{a}{2}"));
+	}
+
+	@Test
+	public void testIsCasVectorAfterRedefinition() {
+		GeoSymbolic vector = add("v = (1, 2)");
+		vector.getTwinGeo();
+		vector = add("v = (2, 1)");
+		vector.getTwinGeo();
+		ExpressionValue unwrappedDefinition = vector.getDefinition().unwrap();
+		MyVecNDNode vecNode = (MyVecNDNode) unwrappedDefinition;
+		assertThat(vecNode.isCASVector(), is(true));
+	}
+
+	@Test
+	public void testAdditionAndRedefinition() {
+		add("u = (1, 2)");
+		add("v = (2, 1)");
+		GeoSymbolic sum = add("sum = u + v");
+		assertThat(
+				sum.getLaTeXDescriptionRHS(true, StringTemplate.latexTemplate),
+				equalTo("\\left( \\begin{align}3 \\\\ 3 \\\\ \\end{align} \\right)"));
+
+		add("u = (1, 2)");
+		assertThat(
+				sum.getLaTeXDescriptionRHS(true, StringTemplate.latexTemplate),
+				equalTo("\\left( \\begin{align}3 \\\\ 3 \\\\ \\end{align} \\right)"));
 	}
 }

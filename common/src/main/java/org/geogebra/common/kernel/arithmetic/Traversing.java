@@ -1,11 +1,6 @@
 package org.geogebra.common.kernel.arithmetic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.himamis.retex.editor.share.util.Unicode;
 import org.geogebra.common.gui.view.spreadsheet.RelativeCopy;
 import org.geogebra.common.kernel.CASGenericInterface;
 import org.geogebra.common.kernel.Kernel;
@@ -25,7 +20,11 @@ import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.DoubleUtil;
 
-import com.himamis.retex.editor.share.util.Unicode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Traversing objects are allowed to traverse through an Equation, MyList,
@@ -339,11 +338,11 @@ public interface Traversing {
 					ExpressionValue unwrapped = en.unwrap();
 					if (unwrapped instanceof MyVecNode) {
 						MyVecNode vecNode = (MyVecNode) unwrapped;
-						vecNode.setCASVector();
+						vecNode.setupCASVector();
 						return vecNode;
 					} else if (unwrapped instanceof MyVec3DNode) {
 						MyVec3DNode vec3DNode = (MyVec3DNode) unwrapped;
-						vec3DNode.setCASVector();
+						vec3DNode.setupCASVector();
 						return vec3DNode;
 					}
 				}

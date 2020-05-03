@@ -1,8 +1,5 @@
 package org.geogebra.common.kernel.geos;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.VarString;
@@ -31,6 +28,8 @@ import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Symbolic geo for CAS computations in AV
@@ -196,7 +195,7 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		if (value != null
 				&& value.unwrap() instanceof MyVecNDNode
 				&& algebraProcessor.hasVectorLabel(this)) {
-			((MyVecNDNode) value.unwrap()).setCASVector();
+			((MyVecNDNode) value.unwrap()).setupCASVector();
 		}
 	}
 

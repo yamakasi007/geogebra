@@ -14,7 +14,7 @@ public interface MyVecNDNode extends ExpressionValue, ReplaceChildrenByValues {
 	/**
 	 * Set this vector to CAS
 	 */
-	public void setCASVector();
+	public void setupCASVector();
 
 	/**
 	 * @return 2 or 3

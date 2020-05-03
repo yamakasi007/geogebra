@@ -18,19 +18,19 @@ the Free Software Foundation.
 
 package org.geogebra.common.kernel.arithmetic;
 
-import java.util.HashSet;
-
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.vector.VectorPrinterMapBuilder2D;
-import org.geogebra.common.kernel.printing.printable.vector.PrintableVector;
-import org.geogebra.common.kernel.printing.printer.vector.VectorNodeStringifier;
 import org.geogebra.common.kernel.commands.EvalInfo;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoVec2D;
+import org.geogebra.common.kernel.printing.printable.vector.PrintableVector;
+import org.geogebra.common.kernel.printing.printer.vector.VectorNodeStringifier;
 import org.geogebra.common.kernel.printing.printer.vector.VectorPrinterMapBuilder;
 import org.geogebra.common.kernel.printing.printer.vector.VectorPrintingMode;
 import org.geogebra.common.util.debug.Log;
+
+import java.util.HashSet;
 
 /**
  * 
@@ -88,7 +88,7 @@ public class MyVecNode extends ValidExpression
 				y.deepCopy(kernel1));
 		ret.setMode(mode);
 		if (isCASVector()) {
-			ret.setCASVector();
+			ret.setupCASVector();
 		}
 		return ret;
 	}
@@ -288,8 +288,9 @@ public class MyVecNode extends ValidExpression
 	}
 
 	@Override
-	public void setCASVector() {
+	public void setupCASVector() {
 		isCASVector = true;
+		setVectorPrintingMode();
 	}
 
 	@Override

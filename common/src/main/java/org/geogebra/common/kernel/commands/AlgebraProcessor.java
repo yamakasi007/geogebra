@@ -12,10 +12,9 @@ the Free Software Foundation.
 
 package org.geogebra.common.kernel.commands;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.TreeSet;
-
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
+import com.himamis.retex.editor.share.util.Unicode;
 import org.geogebra.common.io.MathMLParser;
 import org.geogebra.common.kernel.CircularDefinitionException;
 import org.geogebra.common.kernel.Construction;
@@ -126,9 +125,9 @@ import org.geogebra.common.util.MyMath;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
-import com.himamis.retex.editor.share.util.Unicode;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 /**
  * Processes algebra input as Strings and valid expressions into GeoElements
@@ -1044,11 +1043,11 @@ public class AlgebraProcessor {
 	private void setVectorPrintingModeFor(GeoSymbolic element) {
 		ExpressionValue unwrappedDefinition = element.getDefinition().unwrap();
 		if (unwrappedDefinition instanceof MyVecNode) {
-			((MyVecNode) unwrappedDefinition).setVectorPrintingMode();
+			((MyVecNode) unwrappedDefinition).setupCASVector();
 		}
 		ExpressionValue unwrappedValue = element.getValue().unwrap();
 		if (unwrappedValue instanceof MyVecNode) {
-			((MyVecNode) unwrappedValue).setVectorPrintingMode();
+			((MyVecNode) unwrappedValue).setupCASVector();
 		}
 	}
 
