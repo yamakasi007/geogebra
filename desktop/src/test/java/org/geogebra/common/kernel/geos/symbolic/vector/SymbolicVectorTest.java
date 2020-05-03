@@ -91,7 +91,7 @@ public class SymbolicVectorTest extends GeoSymbolicTest {
 		GeoSymbolic vector = add("v = (a, 2)");
 		assertThat(
 				vector.toLaTeXString(false, StringTemplate.latexTemplate),
-				equalTo("\\binom{a}{2}"));
+				equalTo("\\left( \\begin{align}a \\\\ 2 \\end{align} \\right)"));
 	}
 
 	@Test
