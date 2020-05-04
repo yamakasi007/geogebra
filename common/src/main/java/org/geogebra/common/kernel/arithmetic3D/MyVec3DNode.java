@@ -18,6 +18,8 @@ the Free Software Foundation.
 
 package org.geogebra.common.kernel.arithmetic3D;
 
+import java.util.HashSet;
+
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
@@ -44,8 +46,6 @@ import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.MyParseError;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
-
-import java.util.HashSet;
 
 /**
  * 
