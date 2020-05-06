@@ -6571,8 +6571,4 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			}
 		}
 	}
-
-	public TableController createTableController(GeoInlineTable table) {
-		return null;
-	}
 }
