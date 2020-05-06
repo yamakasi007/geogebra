@@ -11,6 +11,7 @@ import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.MaskWidgetList;
+import org.geogebra.common.euclidian.TableController;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.euclidian.inline.InlineTextController;
@@ -33,6 +34,7 @@ import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.kernel.View;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
+import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppConfig;
@@ -117,6 +119,7 @@ import org.geogebra.web.full.move.googledrive.operations.GoogleDriveOperationW;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.awt.GDimensionW;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
+import org.geogebra.web.html5.euclidian.TableControllerW;
 import org.geogebra.web.html5.gui.GPopupPanel;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.gui.HasKeyboardPopup;
@@ -2219,5 +2222,10 @@ public class AppWFull extends AppW implements HasKeyboard {
 		EuclidianDockPanelW panel = (EuclidianDockPanelW) getGuiManager().getLayout()
 				.getDockManager().getPanel(VIEW_EUCLIDIAN);
 		return new InlineFormulaControllerW(geo, this, panel.getEuclidianPanel());
+	}
+
+	@Override
+	public TableController createTableController(EuclidianView view, GeoInlineTable geo) {
+		return new TableControllerW(view, geo);
 	}
 }

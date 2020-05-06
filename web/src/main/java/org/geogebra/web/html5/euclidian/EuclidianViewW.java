@@ -1875,15 +1875,4 @@ public class EuclidianViewW extends EuclidianView implements
 	public AppW getApplication() {
 		return (AppW) super.getApplication();
 	}
-
-	@Override
-	public InlineTextController createInlineTextController(GeoInlineText geo) {
-		Element parentElement = getAbsolutePanel().getParent().getElement();
-		return new InlineTextControllerW(geo, parentElement, this);
-	}
-
-	@Override
-	public TableController createTableController(GeoInlineTable table) {
-		return new TableControllerW(this, table);
-	}
 }
