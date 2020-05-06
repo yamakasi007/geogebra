@@ -24,6 +24,7 @@ import org.geogebra.common.main.App.InputPosition;
 import org.geogebra.common.main.GeoElementSelectionListener;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.main.MyError.Errors;
+import org.geogebra.common.main.error.ErrorHandler;
 import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.common.main.settings.AlgebraSettings;
 import org.geogebra.common.main.settings.SettingListener;
@@ -1293,6 +1294,11 @@ public class AlgebraViewW extends Tree implements LayerView, AlgebraView,
 			inputPanelLatex.updateButtonPanelPosition();
 			inputPanelLatex.setIndexLast();
 		}
+	}
+
+	@Override
+	public ErrorHandler getAVErrorHandler() {
+		return getActiveTreeItem().getErrorHandler(true, true, false);
 	}
 
 	private int indexOf(TreeItem node) {

@@ -40,7 +40,7 @@ import org.geogebra.common.kernel.kernelND.GeoPlaneND;
 import org.geogebra.common.kernel.kernelND.GeoQuadricND;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.MyError.Errors;
-import org.geogebra.common.main.error.ErrorHelper;
+import org.geogebra.common.main.error.ErrorHandler;
 import org.geogebra.common.util.MaxSizeHashMap;
 import org.geogebra.common.util.debug.Log;
 
@@ -915,8 +915,10 @@ public class GeoGebraCAS implements GeoGebraCasInterface {
 						.withSymbolicMode(SymbolicMode.NONE);
 				GeoElementND[] ggbResult = null;
 				try {
+					ErrorHandler handler =
+							kern.getApplication().getAlgebraView().getAVErrorHandler();
 					ggbResult = processor.processAlgebraCommandNoExceptionHandling(command, false,
-							ErrorHelper.silent(), info, null);
+							handler, info, null);
 				} catch (Exception e) {
 					// ignore
 				}

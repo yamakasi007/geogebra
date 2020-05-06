@@ -50,6 +50,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
+import org.geogebra.common.main.error.ErrorHandler;
 import org.geogebra.common.main.settings.AbstractSettings;
 import org.geogebra.common.main.settings.AlgebraSettings;
 import org.geogebra.common.main.settings.SettingListener;
@@ -1239,6 +1240,11 @@ public class AlgebraViewD extends AlgebraTree
 	@Override
 	public void setShowAlgebraInput(boolean b) {
 		// only used in web
+	}
+
+	@Override
+	public ErrorHandler getAVErrorHandler() {
+		return null;
 	}
 
 	@Override

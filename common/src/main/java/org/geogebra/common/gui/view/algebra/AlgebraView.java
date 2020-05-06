@@ -15,6 +15,7 @@ package org.geogebra.common.gui.view.algebra;
 import org.geogebra.common.gui.Editing;
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.main.error.ErrorHandler;
 
 /**
  * Algebra view -- shows algebraic representation of the objects either as
@@ -132,5 +133,10 @@ public interface AlgebraView extends Editing, SetLabels {
      * @param geo geo
      */
     void doRemove(GeoElement geo);
+
+	/**
+	 * @return error handler for algebra input.
+	 */
+    ErrorHandler getAVErrorHandler();
 
 }
