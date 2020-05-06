@@ -134,6 +134,8 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 			}
 		}
 		sb.append("\"/>");
+
+		XMLBuilder.appendPosition(sb, this);
 	}
 
 	/**
