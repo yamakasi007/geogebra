@@ -12,6 +12,7 @@ import org.geogebra.common.kernel.geos.GeoAudio;
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
+import org.geogebra.common.kernel.geos.GeoFormula;
 import org.geogebra.common.kernel.geos.GeoSymbolic;
 import org.geogebra.common.kernel.geos.GeoVideo;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
@@ -51,7 +52,7 @@ public class DrawablesTest {
 				"Surface[(u,v,u+v),u,0,1,v,0,1]", "x^3=z^3",
 				"Cone[(0,0,0),(0,0,1),1]", "Side[Cone[(0,0,0),(0,0,1),1]]",
 				"IntersectRegion(x+y+0z=0,Cone[(0,0,0),(0,0,1),1])", "toolPic",
-				"audio", "video", "embed", "symbolic", "inlinetext", "table" };
+				"audio", "video", "embed", "symbolic", "formula", "inlinetext", "table" };
 		AlgebraProcessor ap = app.getKernel().getAlgebraProcessor();
 		ap.processAlgebraCommand("toolPic=ToolImage[2]", false);
 		Construction construction = app.getKernel().getConstruction();
@@ -63,6 +64,9 @@ public class DrawablesTest {
 		embed.setLabel("embed");
 		GeoSymbolic symbolic = new GeoSymbolic(construction);
 		symbolic.setLabel("symbolic");
+		GeoFormula formula = new GeoFormula(app.getKernel().getConstruction(), null);
+		formula.setContent("\\frac{a}{b}");
+		formula.setLabel("formula");
 		GeoInlineText text = new GeoInlineText(construction, new GPoint2D());
 		text.setLabel("inlinetext");
 		GeoInlineTable table = new GeoInlineTable(construction);

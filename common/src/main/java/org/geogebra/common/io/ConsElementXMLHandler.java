@@ -35,6 +35,7 @@ import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoImage;
+import org.geogebra.common.kernel.geos.GeoInline;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
@@ -244,10 +245,10 @@ public class ConsElementXMLHandler {
 			} else if (geo instanceof GeoEmbed) {
 				((GeoEmbed) geo).setContentWidth(widthD);
 				((GeoEmbed) geo).setContentHeight(heightD);
-			} else if (geo instanceof GeoInlineText) {
-				((GeoInlineText) geo).setWidth(widthD);
-				((GeoInlineText) geo).setHeight(heightD);
-				((GeoInlineText) geo).setAngle(angleD);
+			} else if (geo instanceof GeoInline) {
+				((GeoInline) geo).setWidth(widthD);
+				((GeoInline) geo).setHeight(heightD);
+				((GeoInline) geo).setAngle(angleD);
 			}
 
 			return true;
@@ -309,12 +310,12 @@ public class ConsElementXMLHandler {
 	}
 
 	private void handleContentParam(LinkedHashMap<String, String> attrs) {
-		if (!(geo instanceof GeoInlineText)) {
+		if (!(geo instanceof GeoInline)) {
 			Log.error("wrong element type for <content>: " + geo.getClass());
 			return;
 		}
 
-		GeoInlineText inlineText = (GeoInlineText) geo;
+		GeoInline inlineText = (GeoInline) geo;
 		inlineText.setContent(attrs.get("val"));
 	}
 
@@ -1085,7 +1086,7 @@ public class ConsElementXMLHandler {
 	 * @see #processStartPointList()
 	 */
 	private void handleStartPoint(LinkedHashMap<String, String> attrs) {
-		if (geo instanceof GeoInlineText) {
+		if (geo instanceof GeoInline) {
 			double x = 0;
 			double y = 0;
 
@@ -1098,7 +1099,7 @@ public class ConsElementXMLHandler {
 
 			GPoint2D startPoint = new GPoint2D(x, y);
 
-			((GeoInlineText) geo).setLocation(startPoint);
+			((GeoInline) geo).setLocation(startPoint);
 			return;
 		}
 
@@ -1270,7 +1271,7 @@ public class ConsElementXMLHandler {
 		String parameter = attrs.get("parameter");
 		if (geo instanceof EquationValue) {
 			// GeoConic handled here
-			if (!((EquationValue) geo).setTypeFromXML(style, parameter)) {
+			if (!((EquationValue) geo).setTypeFromXML(style, parameter, true)) {
 				Log.error("unknown style for conic in <eqnStyle>: " + style);
 			}
 		} else if (geo instanceof GeoLineND && "parametric".equals(style)) {

@@ -1861,7 +1861,9 @@ public abstract class GeoElement extends ConstructionElement
 	/**
 	 * @return whether this is shown in AV
 	 */
-	public abstract boolean showInAlgebraView();
+	public boolean showInAlgebraView() {
+		return true;
+	}
 
 	/**
 	 * @return whether this is shown in EV
@@ -4358,8 +4360,8 @@ public abstract class GeoElement extends ConstructionElement
 		}
 
 		// now handle non-GeoText prefixed with "="
-		else if (!geo.isGeoText()) {
-			if (includeLHS && algebraDesc.contains("=")) {
+		else if (algebraDesc.contains("=") && !geo.isGeoText()) {
+			if (includeLHS) {
 				sb.append(getAssignmentLHS(tpl)).append(tpl.getEqualsWithSpace());
 			}
 			sb.append(geo.getFormulaString(tpl, substituteNumbers));
@@ -4395,6 +4397,12 @@ public abstract class GeoElement extends ConstructionElement
 					sb.append("}");
 				}
 			}
+		}
+		else if (!geo.isGeoText()) {
+			if (includeLHS) {
+				sb.append(getAssignmentLHS(tpl)).append(tpl.getEqualsWithSpace());
+			}
+			sb.append(geo.getFormulaString(tpl, substituteNumbers));
 		}
 
 		// handle regular GeoText (and anything else we may have missed)
@@ -5674,7 +5682,7 @@ public abstract class GeoElement extends ConstructionElement
 
 	@Override
 	public boolean isEqual(GeoElementND geo) {
-		return geo == this;
+		return this == geo;
 	}
 
 	/**
@@ -6779,7 +6787,9 @@ public abstract class GeoElement extends ConstructionElement
 	/**
 	 * @return last hit type
 	 */
-	abstract public HitType getLastHitType();
+	public HitType getLastHitType() {
+		return HitType.ON_BOUNDARY;
+	}
 
 	/**
 	 * @return whether this evaluates to angle
@@ -6967,11 +6977,7 @@ public abstract class GeoElement extends ConstructionElement
 		return isLabelSet();
 	}
 
-	/**
-	 * @param cons1
-	 *            construction
-	 * @return reference to this
-	 */
+	@Override
 	public GeoElement toGeoElement(Construction cons1) {
 		return this;
 	}

@@ -343,7 +343,7 @@ public class ToolBar {
 		sb.append(app.has(Feature.MOW_TEXT_TOOL) ? EuclidianConstants.MODE_MEDIA_TEXT
 				: EuclidianConstants.MODE_TEXT);
 		sb.append(" ");
-		sb.append(EuclidianConstants.MODE_TABLE);
+		sb.append(EuclidianConstants.MODE_EQUATION);
 		sb.append(" ");
 		sb.append(EuclidianConstants.MODE_GRAPHING);
 		sb.append(" ");
