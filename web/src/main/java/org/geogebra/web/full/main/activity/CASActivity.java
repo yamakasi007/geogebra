@@ -49,13 +49,17 @@ public class CASActivity extends BaseActivity {
 				.addCommandFilter(CommandFilterFactory.createCasCommandFilter());
 		kernel.getParser().setHighPrecisionParsing(true);
 		CommandDispatcher dispatcher = kernel.getAlgebraProcessor().getCommandDispatcher();
-		tryLoadingCasDispatcher(dispatcher);
+
+		tryLoadingScriptingDispatcher(dispatcher);
 		tryLoadingAdvancedDispatcher(dispatcher);
+		tryLoadingStatsDispatcher(dispatcher);
+		tryLoadingProverDispatcher(dispatcher);
+		tryLoadingCasDispatcher(dispatcher);
 	}
 
-	private void tryLoadingCasDispatcher(CommandDispatcher dispatcher) {
+	private void tryLoadingScriptingDispatcher(CommandDispatcher dispatcher) {
 		try {
-			dispatcher.getCASDispatcher();
+			dispatcher.getScriptingDispatcher();
 		} catch (CommandNotLoadedError error) {
 			//ignore
 		}
@@ -66,6 +70,30 @@ public class CASActivity extends BaseActivity {
 			dispatcher.getAdvancedDispatcher();
 		} catch (CommandNotLoadedError e) {
 			// ignore
+		}
+	}
+
+	private void tryLoadingStatsDispatcher(CommandDispatcher dispatcher) {
+		try {
+			dispatcher.getStatsDispatcher();
+		} catch (CommandNotLoadedError e) {
+			// ignore
+		}
+	}
+
+	private void tryLoadingProverDispatcher(CommandDispatcher dispatcher) {
+		try {
+			dispatcher.getProverDispatcher();
+		} catch (CommandNotLoadedError error) {
+			//ignore
+		}
+	}
+
+	private void tryLoadingCasDispatcher(CommandDispatcher dispatcher) {
+		try {
+			dispatcher.getCASDispatcher();
+		} catch (CommandNotLoadedError error) {
+			//ignore
 		}
 	}
 
