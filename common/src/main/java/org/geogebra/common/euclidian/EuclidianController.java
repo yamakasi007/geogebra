@@ -5256,6 +5256,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 					return new GeoFormula(cons, location);
 				}
 			});
+			break;
 
 		// new image
 		case EuclidianConstants.MODE_IMAGE:
