@@ -16,8 +16,8 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 	private ArrayList<ArrayList<String>> contents = new ArrayList<>();
 	private boolean defined = true;
 
-	public static final int DEFAULT_WIDTH = 100;
-	public static final int DEFAULT_HEIGHT = 36;
+	public static final int DEFAULT_WIDTH = 200;
+	public static final int DEFAULT_HEIGHT = 72;
 
 	private GPoint2D location;
 	private double width;
@@ -134,7 +134,6 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 			}
 		}
 		sb.append("\"/>");
-
 		XMLBuilder.appendPosition(sb, this);
 	}
 
