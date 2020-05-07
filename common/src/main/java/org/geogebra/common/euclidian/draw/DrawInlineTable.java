@@ -78,16 +78,16 @@ public class DrawInlineTable extends Drawable implements DrawInline {
 
 	@Override
 	public void updateContent() {
-
+		// nothing for now
 	}
 
 	@Override
 	public void toForeground(int x, int y) {
-
+		// nothing for now
 	}
 
 	@Override
 	public void toBackground() {
-
+		// nothing for now
 	}
 }

@@ -2,7 +2,6 @@ package org.geogebra.web.html5.euclidian;
 
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.TableController;
-import org.geogebra.common.kernel.commands.CmdEllipseHyperbola;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.js.ResourcesInjector;
