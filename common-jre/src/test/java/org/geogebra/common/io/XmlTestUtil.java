@@ -30,7 +30,6 @@ public class XmlTestUtil {
 		try {
 
 			xml = application.getXML();
-			Log.debug("XML IS: " + xml);
 			Source xmlFile = new StreamSource(new StringReader(xml));
 			String url = System.getProperty("xsdUrl", "https://cdn.geogebra.org/apps/xsd/ggb.xsd");
 			getValidator(url).validate(xmlFile);
