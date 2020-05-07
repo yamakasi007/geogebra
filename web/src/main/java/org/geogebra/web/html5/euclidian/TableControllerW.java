@@ -53,10 +53,6 @@ public class TableControllerW implements TableController {
 		}
 	}
 
-	public boolean isHypergridLoaded() {
-		return hypergridLoaded;
-	}
-
 	@Override
 	public void removeFromDom() {
 		Element prev = DOM.getElementById("hypergrid");
@@ -75,18 +71,17 @@ public class TableControllerW implements TableController {
 
 	@Override
 	public void setLocation(int x, int y) {
-		style.setLeft(x, Style.Unit.PX);
-		style.setTop(y, Style.Unit.PX);
+		// nothing for now
 	}
 
 	@Override
 	public void setWidth(int width) {
-		style.setWidth(width, Style.Unit.PX);
+		// nothing for now
 	}
 
 	@Override
 	public void setHeight(int height) {
-		style.setHeight(height, Style.Unit.PX);
+		// nothing for now
 	}
 
 	@Override
@@ -95,7 +90,6 @@ public class TableControllerW implements TableController {
 	}
 
 	private void prepareCarota() {
-		this.elemR = DOM.createDiv();
 		this.elemR = DOM.createDiv();
 		RootPanel.getBodyElement().appendChild(elemR);
 		elemR.getStyle().setWidth(CELL_WIDTH, Style.Unit.PX);
@@ -155,6 +149,8 @@ public class TableControllerW implements TableController {
 	private void toFront() {
 		style = DOM.getElementById("hypergrid").getStyle();
 		style.setPosition(Style.Position.ABSOLUTE);
+		style.setLeft(view.toScreenCoordX(table.getLocation().x), Style.Unit.PX);
+		style.setTop(view.toScreenCoordY(table.getLocation().y), Style.Unit.PX);
 		style.setZIndex(51);
 		style.setWidth(2*CELL_WIDTH, Style.Unit.PX);
 		style.setHeight(2* CELL_HEIGHT, Style.Unit.PX);

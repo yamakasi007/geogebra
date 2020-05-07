@@ -28,7 +28,7 @@ public class DrawInlineTable extends Drawable implements DrawInline {
 	@Override
 	public void update() {
 		GPoint2D point = table.getLocation();
-		if (tableController != null && tableController.isHypergridLoaded() && point != null) {
+		if (tableController != null && point != null) {
 			double angle = table.getAngle();
 			double width = table.getWidth();
 			double height = table.getHeight();
@@ -83,6 +83,7 @@ public class DrawInlineTable extends Drawable implements DrawInline {
 
 	@Override
 	public void toForeground(int x, int y) {
+
 	}
 
 	@Override

@@ -123,6 +123,7 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 	@Override
 	public void getXMLtags(StringBuilder sb) {
 		super.getXMLtags(sb);
+
 		sb.append("\t<table columns=\"");
 		sb.append(getColumns());
 		int counter = 0;
@@ -133,7 +134,8 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 				counter++;
 			}
 		}
-		sb.append("\"/>");
+		sb.append("\"/>\n");
+
 		XMLBuilder.appendPosition(sb, this);
 	}
 

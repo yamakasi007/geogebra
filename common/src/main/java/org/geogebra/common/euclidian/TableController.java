@@ -28,6 +28,4 @@ public interface TableController {
 	void setHeight(int height);
 
 	void setAngle(double angle);
-
-	boolean isHypergridLoaded();
 }
