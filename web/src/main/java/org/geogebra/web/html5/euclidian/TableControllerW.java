@@ -151,8 +151,8 @@ public class TableControllerW implements TableController {
 		style.setLeft(view.toScreenCoordX(table.getLocation().x), Style.Unit.PX);
 		style.setTop(view.toScreenCoordY(table.getLocation().y), Style.Unit.PX);
 		style.setZIndex(51);
-		style.setWidth(2*CELL_WIDTH, Style.Unit.PX);
-		style.setHeight(2* CELL_HEIGHT, Style.Unit.PX);
+		style.setWidth(2 * CELL_WIDTH, Style.Unit.PX);
+		style.setHeight(2 * CELL_HEIGHT, Style.Unit.PX);
 	}
 
 	private native void initTable(JsArrayMixed data,
