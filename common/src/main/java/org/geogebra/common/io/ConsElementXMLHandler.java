@@ -2233,7 +2233,6 @@ public class ConsElementXMLHandler {
 		if (geo instanceof GeoLocusStroke) {
 			((GeoLocusStroke) geo).setSplitParentLabel(attrs.get("val"));
 		}
-
 	}
 
 	protected void initDefault(LinkedHashMap<String, String> attrs) {

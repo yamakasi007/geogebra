@@ -22,6 +22,7 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 	private GPoint2D location;
 	private double width;
 	private double height;
+	private double angle;
 
 	private double minHeight;
 
@@ -176,7 +177,7 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 
 	@Override
 	public double getAngle() {
-		return 0;
+		return angle;
 	}
 
 	@Override
@@ -196,7 +197,7 @@ public class GeoInlineTable extends GeoElement implements TextStyle, GeoInline {
 
 	@Override
 	public void setAngle(double angle) {
-		// nothing for now
+		this.angle = angle;
 	}
 
 	@Override

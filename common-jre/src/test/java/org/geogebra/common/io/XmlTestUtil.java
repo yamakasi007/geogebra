@@ -14,6 +14,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.geogebra.common.jre.headless.AppCommon;
+import org.geogebra.common.util.debug.Log;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -29,6 +30,7 @@ public class XmlTestUtil {
 		try {
 
 			xml = application.getXML();
+			Log.debug("XML IS: " + xml);
 			Source xmlFile = new StreamSource(new StringReader(xml));
 			String url = System.getProperty("xsdUrl", "https://cdn.geogebra.org/apps/xsd/ggb.xsd");
 			getValidator(url).validate(xmlFile);
