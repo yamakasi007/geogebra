@@ -8,11 +8,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.geogebra.common.cas.giac.CASgiac;
-import org.geogebra.common.kernel.CASException;
-import org.geogebra.common.kernel.CASGenericInterface;
-import org.geogebra.common.kernel.GeoGebraCasInterface;
-import org.geogebra.common.kernel.Kernel;
-import org.geogebra.common.kernel.StringTemplate;
+import org.geogebra.common.gui.view.algebra.AlgebraView;
+import org.geogebra.common.kernel.*;
 import org.geogebra.common.kernel.arithmetic.Command;
 import org.geogebra.common.kernel.arithmetic.Equation;
 import org.geogebra.common.kernel.arithmetic.EquationValue;
@@ -41,6 +38,7 @@ import org.geogebra.common.kernel.kernelND.GeoQuadricND;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.error.ErrorHandler;
+import org.geogebra.common.main.error.ErrorHelper;
 import org.geogebra.common.util.MaxSizeHashMap;
 import org.geogebra.common.util.debug.Log;
 
@@ -915,10 +913,15 @@ public class GeoGebraCAS implements GeoGebraCasInterface {
 						.withSymbolicMode(SymbolicMode.NONE);
 				GeoElementND[] ggbResult = null;
 				try {
-					ErrorHandler handler =
-							kern.getApplication().getAlgebraView().getAVErrorHandler();
+					AlgebraView algebraView = kern.getApplication().getAlgebraView();
+					ErrorHandler errorHandler;
+					if (algebraView != null) {
+						errorHandler = algebraView.getAVErrorHandler();
+					} else {
+						errorHandler = ErrorHelper.silent();
+					}
 					ggbResult = processor.processAlgebraCommandNoExceptionHandling(command, false,
-							handler, info, null);
+							errorHandler, info, null);
 				} catch (Exception e) {
 					// ignore
 				}
