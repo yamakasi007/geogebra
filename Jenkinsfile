@@ -6,7 +6,7 @@ def getChangelog() {
         def entries = changeLogSets[i].items
         for (int j = 0; j < entries.length; j++) {
             def entry = entries[j]
-            lines << "${entry}"
+            lines << "${entry.getAuthorName()}"
         }
     }
     return lines.join("\n").toString()
