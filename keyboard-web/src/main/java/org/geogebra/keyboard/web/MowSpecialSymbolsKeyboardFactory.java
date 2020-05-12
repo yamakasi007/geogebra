@@ -1,4 +1,4 @@
-package org.geogebra.keyboard.base.model.impl.factory;
+package org.geogebra.keyboard.web;
 
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.AMPERSAND;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.ANGLE;
@@ -34,9 +34,6 @@ import static org.geogebra.keyboard.base.model.impl.factory.Characters.THERE_EXI
 import static org.geogebra.keyboard.base.model.impl.factory.Util.addConstantCustomButton;
 import static org.geogebra.keyboard.base.model.impl.factory.Util.addConstantInputCommandButton;
 import static org.geogebra.keyboard.base.model.impl.factory.Util.addInputButton;
-import static org.geogebra.keyboard.base.model.impl.factory.Util.addTranslateInputCommandButton;
-
-import java.awt.*;
 
 import org.geogebra.keyboard.base.Action;
 import org.geogebra.keyboard.base.Resource;
@@ -44,6 +41,7 @@ import org.geogebra.keyboard.base.model.KeyboardModel;
 import org.geogebra.keyboard.base.model.KeyboardModelFactory;
 import org.geogebra.keyboard.base.model.impl.KeyboardModelImpl;
 import org.geogebra.keyboard.base.model.impl.RowImpl;
+import org.geogebra.keyboard.base.model.impl.factory.ButtonFactory;
 
 public class MowSpecialSymbolsKeyboardFactory implements KeyboardModelFactory {
 
@@ -93,7 +91,16 @@ public class MowSpecialSymbolsKeyboardFactory implements KeyboardModelFactory {
 				LEFT_FLOOR + "", 1.0f);
 		addConstantInputCommandButton(row, buttonFactory, Resource.CEIL,
 				LEFT_CEILING + "", 1.0f);
-
+		addConstantInputCommandButton(row, buttonFactory, Resource.DEFINITE_INTEGRAL,
+				"Integral", 1.0f);
+		addConstantInputCommandButton(row, buttonFactory, Resource.SUM,
+				"Sum", 1.0f);
+		addConstantInputCommandButton(row, buttonFactory, Resource.PRODUCT,
+				"Product", 1.0f);
+		addConstantInputCommandButton(row, buttonFactory, Resource.LIM,
+				"Limit", 1.0f);
+		addConstantInputCommandButton(row, buttonFactory, Resource.VECTOR,
+				"Vector", 1.0f);
 		addConstantCustomButton(row, buttonFactory, Resource.LEFT_ARROW,
 				Action.LEFT_CURSOR);
 		addConstantCustomButton(row, buttonFactory, Resource.RIGHT_ARROW,

@@ -14,7 +14,6 @@ import org.geogebra.keyboard.base.model.impl.factory.GreekKeyboardFactory;
 import org.geogebra.keyboard.base.model.impl.factory.LetterKeyboardFactory;
 import org.geogebra.keyboard.base.model.impl.factory.MathKeyboardFactory;
 import org.geogebra.keyboard.base.model.impl.factory.DefaultKeyboardFactory;
-import org.geogebra.keyboard.base.model.impl.factory.MowSpecialSymbolsKeyboardFactory;
 import org.geogebra.keyboard.base.model.impl.factory.SpecialSymbolsKeyboardFactory;
 
 /**
@@ -40,7 +39,7 @@ public class KeyboardFactory {
 		greekKeyboardFactory = new GreekKeyboardFactory();
 		functionKeyboardFactory = new FunctionKeyboardFactory();
 		letterKeyboardFactory = new LetterKeyboardFactory();
-		specialSymbolsKeyboardFactory = new MowSpecialSymbolsKeyboardFactory();
+		specialSymbolsKeyboardFactory = new SpecialSymbolsKeyboardFactory();
 	}
 
 	/**

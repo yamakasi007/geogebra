@@ -139,6 +139,7 @@ public class TabbedKeyboard extends FlowPanel
 		tabs = new FlowPanel();
 
 		KeyboardFactory factory = new KeyboardFactory();
+		factory.setSpecialSymbolsKeyboardFactory(new MowSpecialSymbolsKeyboardFactory());
 		createAnsMathKeyboard(factory);
 		createDefaultKeyboard(factory);
 		createFunctionsKeyboard(factory);
@@ -623,8 +624,34 @@ public class TabbedKeyboard extends FlowPanel
 					KeyboardResources.INSTANCE.floor(),
 					button.getPrimaryActionName(), bh, false, loc,
 					"altText.Floor");
+		} else if (resourceName.equals(Resource.DEFINITE_INTEGRAL.name())) {
+			return new KeyBoardButtonFunctionalBase(
+					KeyboardResources.INSTANCE.definite_integral(),
+					button.getPrimaryActionName(), bh, false, loc,
+					"altText.DefiniteIntegral");
+		} else if (resourceName.equals(Resource.LIM.name())) {
+			return new KeyBoardButtonFunctionalBase(
+					KeyboardResources.INSTANCE.lim(),
+					button.getPrimaryActionName(), bh, false, loc,
+					"altText.Lim");
+		} else if (resourceName.equals(Resource.PRODUCT.name())) {
+			return new KeyBoardButtonFunctionalBase(
+					KeyboardResources.INSTANCE.product(),
+					button.getPrimaryActionName(), bh, false, loc,
+					"altText.Product");
+		} else if (resourceName.equals(Resource.SUM.name())) {
+			return new KeyBoardButtonFunctionalBase(
+					KeyboardResources.INSTANCE.sum(),
+					button.getPrimaryActionName(), bh, false, loc,
+					"altText.Sum");
+		} else if (resourceName.equals(Resource.VECTOR.name())) {
+			return new KeyBoardButtonFunctionalBase(
+					KeyboardResources.INSTANCE.vector(),
+					button.getPrimaryActionName(), bh, false, loc,
+					"altText.Vector");
 		}
-		if (resourceName.equals(Resource.ROOT.name())) {
+
+  		if (resourceName.equals(Resource.ROOT.name())) {
 			return new KeyBoardButtonFunctionalBase(
 							KeyboardResources.INSTANCE.sqrt(),
 					button.getPrimaryActionName(), bh, false, loc,
