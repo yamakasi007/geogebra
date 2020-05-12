@@ -141,16 +141,14 @@ public class InlineTextControllerW implements InlineTextController {
 	}
 
 	@Override
-	public void toBackground() {
-		editor.deselect();
-		editor.getWidget().addStyleName(INVISIBLE);
-		geo.updateRepaint();
-	}
-
-	@Override
 	public void toForeground(int x, int y) {
 		editor.getWidget().removeStyleName(INVISIBLE);
 		editor.focus(x, y);
+	}
+
+	@Override
+	public void toBackground() {
+		editor.getWidget().addStyleName(INVISIBLE);
 	}
 
 	@Override
