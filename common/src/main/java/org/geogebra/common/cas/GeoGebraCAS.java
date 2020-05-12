@@ -885,50 +885,46 @@ public class GeoGebraCAS implements GeoGebraCasInterface {
 		boolean silent = kern.isSilentMode();
 		boolean suppressLabels = kern.getConstruction().isSuppressLabelsActive();
 		try {
-			Commands c = Commands.valueOf(name);
-			if (c != null) {
-
-				kern.setSilentMode(true);
-				StringBuilder sb = new StringBuilder(name);
-				sb.append('[');
-				for (int i = 0; i < args.size(); i++) {
-					if (i > 0) {
-						sb.append(',');
-					}
-					if (args.get(i).unwrap().isGeoElement()) {
-						sb.append(((GeoElement) args.get(i).unwrap())
-								.getLabel(StringTemplate.defaultTemplate));
-					} else {
-						sb.append(args.get(i).toOutputValueString(
+			kern.setSilentMode(true);
+			StringBuilder sb = new StringBuilder(name);
+			sb.append('[');
+			for (int i = 0; i < args.size(); i++) {
+				if (i > 0) {
+					sb.append(',');
+				}
+				if (args.get(i).unwrap().isGeoElement()) {
+					sb.append(((GeoElement) args.get(i).unwrap())
+							.getLabel(StringTemplate.defaultTemplate));
+				} else {
+					sb.append(args.get(i).toOutputValueString(
 							StringTemplate.maxPrecision));
-					}
 				}
-				sb.append(']');
+			}
+			sb.append(']');
 
-				String command = sb.toString();
-				AlgebraProcessor processor = kern.getAlgebraProcessor();
-				EvalInfo info = new EvalInfo(false, true)
-						.withSliders(false)
-						.addDegree(false)
-						.withSymbolicMode(SymbolicMode.NONE);
-				GeoElementND[] ggbResult = null;
-				try {
-					AlgebraView algebraView = kern.getApplication().getAlgebraView();
-					ErrorHandler errorHandler;
-					if (algebraView != null) {
-						errorHandler = algebraView.getAVErrorHandler();
-					} else {
-						errorHandler = ErrorHelper.silent();
-					}
-					ggbResult = processor.processAlgebraCommandNoExceptionHandling(command, false,
-							errorHandler, info, null);
-				} catch (Exception e) {
-					// ignore
+			String command = sb.toString();
+			AlgebraProcessor processor = kern.getAlgebraProcessor();
+			EvalInfo info = new EvalInfo(false, true)
+					.withSliders(false)
+					.addDegree(false)
+					.withSymbolicMode(SymbolicMode.NONE);
+			GeoElementND[] ggbResult = null;
+			try {
+				AlgebraView algebraView = kern.getApplication().getAlgebraView();
+				ErrorHandler errorHandler;
+				if (algebraView != null) {
+					errorHandler = algebraView.getAVErrorHandler();
+				} else {
+					errorHandler = ErrorHelper.silent();
 				}
-				if (ggbResult != null && ggbResult.length > 0
-						&& ggbResult[0] != null) {
-					return ggbResult[0];
-				}
+				ggbResult = processor.processAlgebraCommandNoExceptionHandling(command, false,
+						errorHandler, info, null);
+			} catch (Exception e) {
+				// ignore
+			}
+			if (ggbResult != null && ggbResult.length > 0
+					&& ggbResult[0] != null) {
+				return ggbResult[0];
 			}
 		} catch (Exception e) {
 			Log.info(name + " not known command or function");
