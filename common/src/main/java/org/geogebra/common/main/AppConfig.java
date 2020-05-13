@@ -83,11 +83,6 @@ public interface AppConfig {
 	String getForcedPerspective();
 
 	/**
-	 * @return whether to use scientific keyboard layout
-	 */
-	boolean hasScientificKeyboard();
-
-	/**
 	 * @return whether match structures (functions, equations, vectors) are
 	 *         enabled
 	 */

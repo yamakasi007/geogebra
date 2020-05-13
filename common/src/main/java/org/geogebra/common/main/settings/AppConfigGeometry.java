@@ -141,11 +141,6 @@ public class AppConfigGeometry implements AppConfig {
 	}
 
 	@Override
-	public boolean hasScientificKeyboard() {
-		return false;
-	}
-
-	@Override
 	public boolean isEnableStructures() {
 		return true;
 	}
