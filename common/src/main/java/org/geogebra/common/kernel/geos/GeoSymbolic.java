@@ -3,6 +3,8 @@ package org.geogebra.common.kernel.geos;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.annotation.Nullable;
+
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.VarString;
@@ -18,6 +20,7 @@ import org.geogebra.common.kernel.arithmetic.FunctionNVar;
 import org.geogebra.common.kernel.arithmetic.FunctionVarCollector;
 import org.geogebra.common.kernel.arithmetic.FunctionVariable;
 import org.geogebra.common.kernel.arithmetic.MyArbitraryConstant;
+import org.geogebra.common.kernel.arithmetic.MyList;
 import org.geogebra.common.kernel.arithmetic.MyVecNDNode;
 import org.geogebra.common.kernel.arithmetic.Traversing;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -29,8 +32,6 @@ import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.kernel.kernelND.GeoEvaluatable;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.StringUtil;
-
-import javax.annotation.Nullable;
 
 /**
  * Symbolic geo for CAS computations in AV
@@ -656,6 +657,21 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		return twinGeo != null
 				? twinGeo.isGeoVector()
 				: getDefinition() != null && getDefinition().unwrap() instanceof MyVecNDNode;
+	}
+
+	@Override
+	public boolean isMatrix() {
+		return twinGeo != null ? twinGeo.isMatrix() : hasMatrixDefinition();
+	}
+
+	private boolean hasMatrixDefinition() {
+		ExpressionNode definition = getDefinition();
+		if (definition == null) {
+			return false;
+		} else {
+			ExpressionValue unwrapped = getDefinition().unwrap();
+			return unwrapped instanceof MyList && ((MyList) unwrapped).isMatrix();
+		}
 	}
 
 	@Override
