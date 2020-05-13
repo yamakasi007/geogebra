@@ -5,7 +5,6 @@ import static org.geogebra.keyboard.base.model.impl.factory.Characters.ANGLE;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.AT;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.CIRCLED_TIMES;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.COLON;
-import static org.geogebra.keyboard.base.model.impl.factory.Characters.COMMA;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.ELEMENT_OF;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.FOR_ALL;
 import static org.geogebra.keyboard.base.model.impl.factory.Characters.HASHTAG;
