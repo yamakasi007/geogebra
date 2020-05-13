@@ -64,7 +64,7 @@ public class MediaFactory {
 				 if (dr != null) {
 				 	dr.update();
 				 }
-				ev.getEuclidianController().selectAndShowBoundingBox(video);
+				ev.getEuclidianController().selectAndShowSelectionUI(video);
 				app.storeUndoInfo();
 			}
 		});
