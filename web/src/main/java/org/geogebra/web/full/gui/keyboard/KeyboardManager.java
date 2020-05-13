@@ -190,18 +190,8 @@ public class KeyboardManager
 			boolean showMoreButton = app.getConfig().showKeyboardHelpButton()
 					&& !shouldDetach();
 			keyboard = new OnscreenTabbedKeyboard((HasKeyboard) app,
-					keyboardIsScientific(),
 					showMoreButton);
 		}
-	}
-
-	private boolean keyboardIsScientific() {
-		ArticleElementInterface articleElement = app.getArticleElement();
-		if ("evaluator".equals(articleElement.getDataParamAppName())) {
-			return "scientific"
-					.equals(articleElement.getParamKeyboardType("normal"));
-		}
-		return app.getConfig().hasScientificKeyboard();
 	}
 
 	@Override

@@ -260,6 +260,11 @@ public class AppConfigDefault implements AppConfig {
 	}
 
 	@Override
+	public AppKeyboardType getKeyboardType() {
+		return AppKeyboardType.GRAPHING;
+	}
+
+	@Override
 	public boolean isShowingErrorDialogForInputBox() {
 		return false;
 	}

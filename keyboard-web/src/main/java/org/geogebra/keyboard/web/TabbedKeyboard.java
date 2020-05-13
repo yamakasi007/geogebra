@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.keyboard.KeyboardRowDefinitionProvider;
+import org.geogebra.common.main.AppKeyboardType;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.util.lang.Language;
 import org.geogebra.keyboard.base.Accents;
@@ -78,7 +79,6 @@ public class TabbedKeyboard extends FlowPanel
 	 * true if keyboard wanted
 	 */
 	protected boolean keyboardWanted = false;
-	private boolean scientific;
 	private ButtonRepeater repeater;
 	private boolean hasMoreButton;
 
@@ -88,18 +88,14 @@ public class TabbedKeyboard extends FlowPanel
 	/**
 	 * @param appKeyboard
 	 *            {@link HasKeyboard}
-	 * @param scientific
-	 *            whether to use scientific layout
 	 * @param hasMoreButton
 	 *            whether to show help button
 	 */
-	public TabbedKeyboard(HasKeyboard appKeyboard,
-			boolean scientific, boolean hasMoreButton) {
+	public TabbedKeyboard(HasKeyboard appKeyboard, boolean hasMoreButton) {
 		this.hasKeyboard = appKeyboard;
 		this.locale = hasKeyboard.getLocalization();
 		this.keyboardLocale = locale.getLocaleStr();
 		this.switcher = new KeyboardSwitcher(this);
-		this.scientific = scientific;
 		this.hasMoreButton = hasMoreButton;
 		this.keyboardMap = new HashMap<>();
 	}
@@ -131,15 +127,22 @@ public class TabbedKeyboard extends FlowPanel
 				System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 365));
 	}
 
-	private void buildGUIGraphing() {
+	private void buildGUIGgb() {
 		// more button must be first because of float (Firefox)
 		if (hasMoreButton) {
 			switcher.addMoreButton();
 		}
 		tabs = new FlowPanel();
 
-		KeyboardFactory factory = new KeyboardFactory();
-		factory.setSpecialSymbolsKeyboardFactory(new MowSpecialSymbolsKeyboardFactory());
+		KeyboardFactory factory;
+		switch (hasKeyboard.getKeyboardType()) {
+			case MOW:
+				factory = new KeyboardMow();
+				break;
+			default:
+				factory = new KeyboardFactory();
+		}
+
 		createAnsMathKeyboard(factory);
 		createDefaultKeyboard(factory);
 		createFunctionsKeyboard(factory);
@@ -739,10 +742,10 @@ public class TabbedKeyboard extends FlowPanel
 	 * (Re)build the UI.
 	 */
 	public void buildGUI() {
-		if (scientific) {
+		if (hasKeyboard.getKeyboardType().equals(AppKeyboardType.SCIENTIFIC)) {
 			buildGUIScientific();
 		} else {
-			buildGUIGraphing();
+			buildGUIGgb();
 		}
 	}
 

@@ -252,5 +252,10 @@ public interface AppConfig {
 	 * @return whether the apps uses restricted dragging for certain objects or not
 	 */
 	boolean isObjectDraggingRestricted();
+
+	/**
+	 * @return type of keyboard based on the app
+	 */
+	AppKeyboardType getKeyboardType();
 }
 
