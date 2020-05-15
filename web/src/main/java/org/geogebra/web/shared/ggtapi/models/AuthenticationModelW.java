@@ -9,6 +9,8 @@ import org.geogebra.web.html5.main.AppW;
 import com.google.gwt.storage.client.Storage;
 import org.geogebra.web.html5.util.GlobalFunctions;
 
+import elemental2.dom.DomGlobal;
+
 /**
  * @author gabor
  *
@@ -103,6 +105,6 @@ public class AuthenticationModelW extends AuthenticationModel {
 		String secret = "ef1V8PNj";
 		String encrypted = MD5EncrypterGWTImpl
 				.encrypt(getLoginToken() + "T" + "1581341456" + secret);
-		return GlobalFunctions.btoa(getLoginToken()) + "|T|" + "1581341456" + "|" + encrypted;
+		return DomGlobal.btoa(getLoginToken()) + "|T|" + "1581341456" + "|" + encrypted;
 	}
 }
