@@ -34,6 +34,7 @@ import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppConfig;
 import org.geogebra.common.main.AppConfigDefault;
+import org.geogebra.common.main.AppKeyboardType;
 import org.geogebra.common.main.MaterialsManagerI;
 import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.OpenFileListener;
@@ -1012,8 +1013,8 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	@Override
-	public boolean attachedToEqEditor() {
-		return isWhiteboardActive();
+	public AppKeyboardType getKeyboardType() {
+		return getConfig().getKeyboardType();
 	}
 
 	@Override

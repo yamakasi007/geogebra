@@ -1,5 +1,6 @@
 package org.geogebra.keyboard.web;
 
+import org.geogebra.common.main.AppKeyboardType;
 import org.geogebra.common.main.Localization;
 
 /**
@@ -32,7 +33,7 @@ public interface HasKeyboard {
 	void updateViewSizes();
 
 	/**
-	 * @return true if in whiteboard, where keyboard is used for equation editor
+	 * @return the keyboard type based on the app, see {@link AppKeyboardType}
 	 */
-	boolean attachedToEqEditor();
+	AppKeyboardType getKeyboardType();
 }
