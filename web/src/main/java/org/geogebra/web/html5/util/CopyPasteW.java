@@ -43,6 +43,9 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.storage.client.Storage;
 
+import elemental2.core.Global;
+import elemental2.dom.DomGlobal;
+
 public class CopyPasteW extends CopyPaste {
 
 	private static final String pastePrefix = "ggbpastedata";
@@ -297,8 +300,8 @@ public class CopyPasteW extends CopyPaste {
 
 	private static void saveToClipboard(String toSave) {
 		if (!Browser.isiOS()) {
-			String escapedContent = GlobalFunctions.escape(toSave);
-			String encoded = pastePrefix + GlobalFunctions.btoa(escapedContent);
+			String escapedContent = Global.escape(toSave);
+			String encoded = pastePrefix + DomGlobal.btoa(escapedContent);
 			writeToExternalClipboard(encoded);
 		}
 		try {
@@ -370,8 +373,8 @@ public class CopyPasteW extends CopyPaste {
 	@ExternalAccess
 	private static void pasteText(AppW app, String text) {
 		if (text.startsWith(pastePrefix)) {
-			String escapedContent = GlobalFunctions.atob(text.substring(pastePrefix.length()));
-			pasteGeoGebraXML(app, GlobalFunctions.unescape(escapedContent));
+			String escapedContent = DomGlobal.atob(text.substring(pastePrefix.length()));
+			pasteGeoGebraXML(app, Global.unescape(escapedContent));
 		} else {
 			pastePlainText(app, text);
 		}
