@@ -136,6 +136,16 @@ public class GeoGebraSerializer implements Serializer {
 			serializeArgs(mathFunction, stringBuilder,
 					new int[] { 2, 0, 1 });
 			break;
+		case DEF_INT:
+			stringBuilder.append(Unicode.INTEGRAL);
+			stringBuilder.append('_');
+			serialize(mathFunction.getArgument(0), stringBuilder);
+			stringBuilder.append('^');
+			serialize(mathFunction.getArgument(1), stringBuilder);
+			stringBuilder.append('{');
+			serialize(mathFunction.getArgument(2), stringBuilder);
+			stringBuilder.append('}');
+			break;
 		case LIM:
 			stringBuilder.append("Limit");
 			serializeArgs(mathFunction, stringBuilder,
