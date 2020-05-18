@@ -1022,6 +1022,11 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	@Override
+	public boolean attachedToEqEditor() {
+		return isWhiteboardActive();
+	}
+
+	@Override
 	public final GImageIconW wrapGetModeIcon(int mode) {
 		GImageIconW icon = new GImageIconW("");
 		GGWToolBar.getImageResource(mode, this, icon);

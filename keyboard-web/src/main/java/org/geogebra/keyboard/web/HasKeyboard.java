@@ -33,6 +33,11 @@ public interface HasKeyboard {
 	void updateViewSizes();
 
 	/**
+	 * @return true if in whiteboard, where keyboard is used for equation editor
+	 */
+	boolean attachedToEqEditor();
+
+	/**
 	 * @return the keyboard type based on the app, see {@link AppKeyboardType}
 	 */
 	AppKeyboardType getKeyboardType();
