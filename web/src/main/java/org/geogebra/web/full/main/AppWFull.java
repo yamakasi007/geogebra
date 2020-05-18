@@ -1014,7 +1014,16 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 
 	@Override
 	public AppKeyboardType getKeyboardType() {
+		if ("evaluator".equals(articleElement.getDataParamAppName()) &&
+				"normal".equals(articleElement.getParamKeyboardType("normal"))) {
+			return AppKeyboardType.SUITE;
+		}
 		return getConfig().getKeyboardType();
+	}
+
+	@Override
+	public boolean attachedToEqEditor() {
+		return isWhiteboardActive();
 	}
 
 	@Override
