@@ -126,6 +126,11 @@ public class GeoGebraSerializer implements Serializer {
 			serialize(mathFunction.getArgument(0), stringBuilder);
 			serializeArgs(mathFunction, stringBuilder, 1);
 			break;
+		case VEC:
+			stringBuilder.append("vec(");
+			serialize(mathFunction.getArgument(0), stringBuilder);
+			stringBuilder.append(")");
+			break;
 		case ABS:
 			// empty abs() is just ||
 			if (mathFunction.getArgument(0).size() == 0) {

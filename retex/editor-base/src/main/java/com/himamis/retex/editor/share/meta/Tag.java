@@ -41,7 +41,9 @@ public enum Tag {
 
 	SUM("sum"),
 
-	APPLY_SQUARE;
+	APPLY_SQUARE,
+
+	VEC("vec");
 
 	private final String key;
 

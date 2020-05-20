@@ -97,6 +97,7 @@ PARSER_END(Parser)
 	| < NROOT : "nroot" >
 	| < LOG : "log" >
 	| < ABS : "abs" >
+	| < VEC : "vec" >
 	| < COMMA : "," >
 	| < SPACE : " " >
 	| < OPERATOR : ["*", "+", "-", "/", "=", ";", "<", ">", "\u2264", "\u2265",
@@ -128,6 +129,8 @@ void mathContainer(MathContainer currentField) : {}
 		log(currentField)
 	|
 		abs(currentField)
+	|
+		vec(currentField)
 	|
 		arrayParantheses(currentField)
 	|
@@ -310,6 +313,17 @@ void abs(MathContainer currentField) : { }
 		mathContainer(param1);
 		abs.setArgument(0, param1);
 		currentField.addArgument(abs);
+	} <PARANTHESES_CLOSE>
+}
+
+void vec(MathContainer currentField) : { }
+{
+	<VEC> <PARANTHESES_OPEN> {
+		MathFunction vec = new MathFunction(metaModel.getGeneral(Tag.VEC));
+		MathSequence param1 = new MathSequence();
+		mathContainer(param1);
+		vec.setArgument(0, param1);
+		currentField.addArgument(vec);
 	} <PARANTHESES_CLOSE>
 }
 
