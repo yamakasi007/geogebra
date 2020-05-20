@@ -96,6 +96,7 @@ PARSER_END(Parser)
 	| < SQRT : "sqrt" >
 	| < NROOT : "nroot" >
 	| < LOG : "log" >
+	| < LIM_EQ : "limeq" >
 	| < ABS : "abs" >
 	| < COMMA : "," >
 	| < SPACE : " " >
@@ -126,6 +127,8 @@ void mathContainer(MathContainer currentField) : {}
 		nroot(currentField)
 	|
 		log(currentField)
+	|
+		limeq(currentField)
 	|
 		abs(currentField)
 	|
@@ -301,6 +304,22 @@ void log(MathContainer currentField) : { }
 	  currentField.addArgument(nroot);
 	}
 }
+
+void limeq(MathContainer currentField) : {}
+{
+    <LIM_EQ> <PARANTHESES_OPEN> {
+        MathFunction limeq = new MathFunction(metaModel.getGeneral(Tag.LIM_EQ));
+        MathSequence param1 = new MathSequence();
+        mathContainer(param1);
+    } <COMMA> {
+        MathSequence param2 = new MathSequence();
+        mathContainer(param2);
+        limeq.setArgument(1, param1);
+        limeq.setArgument(0, param2);
+        currentField.addArgument(limeq);
+    } <PARANTHESES_CLOSE>
+}
+
 
 void abs(MathContainer currentField) : { }
 {

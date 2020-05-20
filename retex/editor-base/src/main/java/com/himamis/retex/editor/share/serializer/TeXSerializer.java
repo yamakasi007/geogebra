@@ -247,6 +247,15 @@ public class TeXSerializer extends SerializerAdapter {
 					addBraces);
 			stringBuilder.append('}');
 			break;
+		case LIM_EQ:
+			// lim not implemented in jmathtex
+			stringBuilder.append("\\lim_{");
+			serialize(function.getArgument(0), stringBuilder);
+			// jmathtex v0.7: incompatibility
+			stringBuilder.append("} " + ("\\nbsp") + " {");
+			serialize(function.getArgument(1), stringBuilder);
+			stringBuilder.append('}');
+			break;
 		case ABS:
 			stringBuilder.append("\\left|");
 			serialize(function.getArgument(0), stringBuilder);
