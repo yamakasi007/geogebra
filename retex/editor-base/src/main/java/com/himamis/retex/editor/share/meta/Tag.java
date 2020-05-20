@@ -35,7 +35,7 @@ public enum Tag {
 
 	LIM("lim"),
 
-	PROD_EQ("prod"),
+	PROD_EQ("prodeq"),
 
 	APPLY,
 

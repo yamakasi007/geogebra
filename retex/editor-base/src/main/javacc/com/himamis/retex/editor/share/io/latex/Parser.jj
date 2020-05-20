@@ -97,6 +97,7 @@ PARSER_END(Parser)
 	| < NROOT : "nroot" >
 	| < LOG : "log" >
 	| < ABS : "abs" >
+	| < PROD_EQ : "prodeq" >
 	| < COMMA : "," >
 	| < SPACE : " " >
 	| < OPERATOR : ["*", "+", "-", "/", "=", ";", "<", ">", "\u2264", "\u2265",
@@ -128,6 +129,8 @@ void mathContainer(MathContainer currentField) : {}
 		log(currentField)
 	|
 		abs(currentField)
+	|
+	    prodeq(currentField)
 	|
 		arrayParantheses(currentField)
 	|
@@ -311,6 +314,25 @@ void abs(MathContainer currentField) : { }
 		abs.setArgument(0, param1);
 		currentField.addArgument(abs);
 	} <PARANTHESES_CLOSE>
+}
+
+void prodeq(MathContainer currentField) : { }
+{
+    <PROD_EQ> <PARANTHESES_OPEN> {
+         MathFunction prodeq = new MathFunction(metaModel.getGeneral(Tag.PROD_EQ));
+         MathSequence param1 = new MathSequence();
+         mathContainer(param1);
+     } <COMMA> {
+         MathSequence param2 = new MathSequence();
+         mathContainer(param2);
+     } <COMMA> {
+         MathSequence param3 = new MathSequence();
+         mathContainer(param3);
+         prodeq.setArgument(2, param1);
+         prodeq.setArgument(1, param3);
+         prodeq.setArgument(0, param2);
+         currentField.addArgument(prodeq);
+     } <PARANTHESES_CLOSE>
 }
 
 void arrayParantheses(MathContainer currentField) :

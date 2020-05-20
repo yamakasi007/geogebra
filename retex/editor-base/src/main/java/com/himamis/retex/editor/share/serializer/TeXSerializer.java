@@ -248,6 +248,8 @@ public class TeXSerializer extends SerializerAdapter {
 			break;
 		case PROD_EQ:
 			stringBuilder.append(function.getTexName());
+			// this will force the limits to appear on the side
+			stringBuilder.append("\\nolimits");
 			stringBuilder.append('_');
 			serialize(function.getArgument(0), stringBuilder);
 			stringBuilder.append('^');
