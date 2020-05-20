@@ -93,17 +93,17 @@ PARSER_END(Parser)
 	| < LFLOOR : "\u230a" >
 	| < RFLOOR : "\u230b" >
     | < QUOTE_START : "\""> : IN_QUOTE
-    | < SQRT : "sqrt" >
-    | < NROOT : "nroot" >
-    | < DEF_INT : "defint" >
-    | < LOG : "log" >
-    | < ABS : "abs" >
-    | < COMMA : "," >
-    | < SPACE : " " >
-    | < OPERATOR : ["*", "+", "-", "/", "=", ";", "<", ">", "\u2264", "\u2265",
-                    "\u2227", "\u2228", "\u2192", "\u225f", "\u2208", "\u2286",
-                    "\u2282", "\u2297", "\u22c5", "\u2219", "\u00D7"] >
-    | < ELSE : ~[] >
+	| < SQRT : "sqrt" >
+	| < NROOT : "nroot" >
+	| < DEF_INT : "defint" >
+	| < LOG : "log" >
+	| < ABS : "abs" >
+	| < COMMA : "," >
+	| < SPACE : " " >
+	| < OPERATOR : ["*", "+", "-", "/", "=", ";", "<", ">", "\u2264", "\u2265",
+					"\u2227", "\u2228", "\u2192", "\u225f", "\u2208", "\u2286",
+					"\u2282", "\u2297", "\u22c5", "\u2219", "\u00D7"] >
+	| < ELSE : ~[] >
 }
 
 <IN_QUOTE> TOKEN : {
