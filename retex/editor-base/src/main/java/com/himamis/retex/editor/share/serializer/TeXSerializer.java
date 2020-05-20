@@ -239,9 +239,7 @@ public class TeXSerializer extends SerializerAdapter {
 			serialize(function.getArgument(0), stringBuilder);
 			stringBuilder.append('^');
 			serialize(function.getArgument(1), stringBuilder);
-			stringBuilder.append('{');
 			serialize(function.getArgument(2), stringBuilder);
-			stringBuilder.append('}');
 			break;
 		case LIM:
 			// lim not implemented in jmathtex
