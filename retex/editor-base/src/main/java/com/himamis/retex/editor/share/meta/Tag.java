@@ -37,6 +37,8 @@ public enum Tag {
 
 	PROD_EQ("prodeq"),
 
+	SUM_EQ("sumeq"),
+
 	APPLY,
 
 	ABS("abs"),

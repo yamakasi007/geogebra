@@ -129,6 +129,15 @@ public class GeoGebraSerializer implements Serializer {
 			serialize(mathFunction.getArgument(1), stringBuilder);
 			stringBuilder.append(')');
 			break;
+		case SUM_EQ:
+			stringBuilder.append("sumeq(");
+			serialize(mathFunction.getArgument(2), stringBuilder);
+			stringBuilder.append(",");
+			serialize(mathFunction.getArgument(0), stringBuilder);
+			stringBuilder.append(",");
+			serialize(mathFunction.getArgument(1), stringBuilder);
+			stringBuilder.append(')');
+			break;
 		case APPLY:
 		case APPLY_SQUARE:
 			maybeInsertTimes(mathFunction, stringBuilder);

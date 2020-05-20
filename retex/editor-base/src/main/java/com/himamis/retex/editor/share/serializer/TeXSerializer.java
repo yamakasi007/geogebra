@@ -246,6 +246,7 @@ public class TeXSerializer extends SerializerAdapter {
 					addBraces);
 			stringBuilder.append('}');
 			break;
+		case SUM_EQ:
 		case PROD_EQ:
 			stringBuilder.append(function.getTexName());
 			// this will force the limits to appear on the side

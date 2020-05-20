@@ -88,6 +88,12 @@ class MetaModelFunctions {
 						MetaParameter.BASIC, MetaParameter.BASIC
 				}));
 
+		functions.add(createFunctionInsert(Tag.SUM_EQ, "\\sum", 2,
+				new MetaParameter[] {
+						createParameterUp(1), createParameterDown(0),
+						MetaParameter.BASIC, MetaParameter.BASIC
+				}));
+
 		functions.add(createFunction(Tag.ABS));
 		functions.add(createFunction(Tag.FLOOR));
 		functions.add(createFunction(Tag.CEIL));

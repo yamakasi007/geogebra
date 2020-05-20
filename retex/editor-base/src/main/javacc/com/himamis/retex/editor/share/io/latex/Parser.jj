@@ -98,6 +98,7 @@ PARSER_END(Parser)
 	| < LOG : "log" >
 	| < ABS : "abs" >
 	| < PROD_EQ : "prodeq" >
+	| < SUM_EQ : "sumeq" >
 	| < COMMA : "," >
 	| < SPACE : " " >
 	| < OPERATOR : ["*", "+", "-", "/", "=", ";", "<", ">", "\u2264", "\u2265",
@@ -131,6 +132,8 @@ void mathContainer(MathContainer currentField) : {}
 		abs(currentField)
 	|
 	    prodeq(currentField)
+	|
+	    sumeq(currentField)
 	|
 		arrayParantheses(currentField)
 	|
@@ -332,6 +335,25 @@ void prodeq(MathContainer currentField) : { }
          prodeq.setArgument(1, param3);
          prodeq.setArgument(0, param2);
          currentField.addArgument(prodeq);
+     } <PARANTHESES_CLOSE>
+}
+
+void sumeq(MathContainer currentField) : { }
+{
+    <SUM_EQ> <PARANTHESES_OPEN> {
+         MathFunction sumeq = new MathFunction(metaModel.getGeneral(Tag.SUM_EQ));
+         MathSequence param1 = new MathSequence();
+         mathContainer(param1);
+     } <COMMA> {
+         MathSequence param2 = new MathSequence();
+         mathContainer(param2);
+     } <COMMA> {
+         MathSequence param3 = new MathSequence();
+         mathContainer(param3);
+         sumeq.setArgument(2, param1);
+         sumeq.setArgument(1, param3);
+         sumeq.setArgument(0, param2);
+         currentField.addArgument(sumeq);
      } <PARANTHESES_CLOSE>
 }
 
