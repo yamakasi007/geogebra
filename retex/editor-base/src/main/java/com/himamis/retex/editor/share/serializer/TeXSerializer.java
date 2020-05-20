@@ -201,7 +201,6 @@ public class TeXSerializer extends SerializerAdapter {
 			break;
 		case SUM:
 		case PROD:
-
 			stringBuilder.append(function.getTexName());
 			stringBuilder.append("_{");
 			serialize(function.getArgument(0), stringBuilder);
@@ -246,6 +245,14 @@ public class TeXSerializer extends SerializerAdapter {
 			this.addWithBraces(stringBuilder, function.getArgument(2),
 					addBraces);
 			stringBuilder.append('}');
+			break;
+		case PROD_EQ:
+			stringBuilder.append(function.getTexName());
+			stringBuilder.append('_');
+			serialize(function.getArgument(0), stringBuilder);
+			stringBuilder.append('^');
+			serialize(function.getArgument(1), stringBuilder);
+			serialize(function.getArgument(2), stringBuilder);
 			break;
 		case ABS:
 			stringBuilder.append("\\left|");

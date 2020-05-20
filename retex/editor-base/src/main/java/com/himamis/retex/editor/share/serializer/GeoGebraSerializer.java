@@ -120,6 +120,15 @@ public class GeoGebraSerializer implements Serializer {
 			serializeArgs(mathFunction, stringBuilder,
 					new int[] { 2, 0, 1 });
 			break;
+		case PROD_EQ:
+			stringBuilder.append("prodeq(");
+			stringBuilder.append(",");
+			serialize(mathFunction.getArgument(0), stringBuilder);
+			stringBuilder.append(",");
+			serialize(mathFunction.getArgument(1), stringBuilder);
+			stringBuilder.append(')');
+
+			break;
 		case APPLY:
 		case APPLY_SQUARE:
 			maybeInsertTimes(mathFunction, stringBuilder);
