@@ -173,6 +173,8 @@ void mathAtomOrPower(MathContainer currentField) : {
 		sqrt(currentField)
 	|
 		nroot(currentField)
+    |
+        defint(currentField)
 	|
 		log(currentField)
 	|
