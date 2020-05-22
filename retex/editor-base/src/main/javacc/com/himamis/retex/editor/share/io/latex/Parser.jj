@@ -173,8 +173,6 @@ void mathAtomOrPower(MathContainer currentField) : {
 		sqrt(currentField)
 	|
 		nroot(currentField)
-    |
-        defint(currentField)
 	|
 		log(currentField)
 	|
@@ -291,14 +289,14 @@ void nroot(MathContainer currentField) : {}
 
 void defint(MathContainer currentField) : {}
 {
-    <DEF_INT> <PARANTHESES_OPEN> <PARANTHESES_OPEN> {
+    <DEF_INT> <PARANTHESES_OPEN> {
         MathFunction defint = new MathFunction(metaModel.getGeneral(Tag.DEF_INT));
         MathSequence param1 = new MathSequence();
         mathContainer(param1);
-    } <PARANTHESES_CLOSE> <COMMA> <PARANTHESES_OPEN> {
+    } <COMMA> {
         MathSequence param2 = new MathSequence();
         mathContainer(param2);
-    } <PARANTHESES_CLOSE> <COMMA> <PARANTHESES_OPEN> {
+    } <COMMA> {
         MathSequence param3 = new MathSequence();
         mathContainer(param3);
         defint.setArgument(2, param1);
