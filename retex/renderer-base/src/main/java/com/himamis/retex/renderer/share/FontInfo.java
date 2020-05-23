@@ -46,6 +46,10 @@
 
 package com.himamis.retex.renderer.share;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.himamis.retex.renderer.share.platform.FontAdapter;
 import com.himamis.retex.renderer.share.platform.font.Font;
 
@@ -86,6 +90,19 @@ public class FontInfo {
 	protected CharFont[] nextLarger;
 	protected char[][] extensions;
 
+	public static ArrayList<FontInfo> fonts = new ArrayList<>();
+
+	public String c(char ch) {
+		return Integer.toString(ch);
+	}
+
+	public String i(double d) {
+		return Long.toString(Math.round(d * 1000));
+	}
+
+	String name = getClass().getName().substring(getClass().getName().lastIndexOf('.') + 1);
+	FileWriter myWriter;
+
 	public FontInfo(int size, String path, double xHeight, double space,
 			double quad, char skewChar) {
 		this.path = path;
@@ -95,6 +112,41 @@ public class FontInfo {
 		this.skewChar = skewChar;
 		this.size = size == 0 ? NUMBER_OF_CHAR_CODES : size;
 		this.metrics = new double[this.size][];
+
+		try {
+			myWriter = new FileWriter("fonts/" + name + ".java");
+			myWriter.write("package com.himamis.retex.renderer.share.fonts;\n\n");
+			myWriter.write("import com.himamis.retex.renderer.share.Configuration;\n");
+			myWriter.write("import com.himamis.retex.renderer.share.FontInfo;\n");
+			myWriter.write("import com.himamis.retex.renderer.share.UniFontInfo;\n\n");
+
+			if (this instanceof UniFontInfo) {
+				myWriter.write("final class " + name + " extends UniFontInfo {\n\n");
+			} else {
+				myWriter.write("final class " + name + " extends FontInfo {\n\n");
+			}
+
+			myWriter.write("\t" + name + "(final String ttfPath) {\n");
+			myWriter.write("\t\tsuper(" + size + ", ttfPath, " + i(xHeight) + ", " + i(space) + ", " + i(quad) + ", " + c(skewChar) + ");\n");
+			myWriter.write("\t}\n\n");
+
+			myWriter.write("\t@Override\n");
+			myWriter.write("\tprotected final void initMetrics() {\n");
+
+			fonts.add(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void close() {
+		try {
+			myWriter.write("\t}\n");
+			myWriter.write("}\n");
+			myWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setDependencies(FontInfo bold, FontInfo roman, FontInfo ss,
@@ -237,6 +289,55 @@ public class FontInfo {
 	public void setInfo(char c, double[] metrics, char[] ligatures,
 			char[] kernCode, double[] kernValue, FontInfo nextLarger,
 			char nextLargerChar, char[] extension) {
+		try {
+			if (metrics[2] == 0 && metrics[3] == 0) {
+				myWriter.write("\t\tsetMetrics(" + c(c) + ", " + i(metrics[0]) + ", " + i(metrics[1]) + ");\n");
+			} else if (metrics[3] == 0) {
+				myWriter.write("\t\tsetMetrics(" + c(c) + ", " + i(metrics[0]) + ", " + i(metrics[1]) + ", " + i(metrics[2]) + ");\n");
+			} else {
+				myWriter.write("\t\tsetMetrics(" + c(c) + ", " + i(metrics[0]) + ", " + i(metrics[1]) + ", " + i(metrics[2]) + ", " + i(metrics[3]) + ");\n");
+			}
+
+			if (ligatures != null) {
+				myWriter.write("\t\tsetLigatures(");
+				for (int i = 0; i < ligatures.length; i += 1) {
+					if (i != 0) {
+						myWriter.write(", ");
+					}
+					myWriter.write(c(ligatures[i]));
+				}
+				myWriter.write(");\n");
+			}
+
+			if (kernCode != null) {
+				myWriter.write("\t\tsetKern(");
+				for (int i = 0; i < kernCode.length; i += 1) {
+					if (i != 0) {
+						myWriter.write(", ");
+					}
+					myWriter.write(c(kernCode[i]));
+					myWriter.write(", ");
+					myWriter.write(i(kernValue[i]));
+				}
+				myWriter.write(");\n");
+			}
+
+			if (nextLarger != null) {
+				String cname = nextLarger.getClass().getName();
+				cname = cname.substring(cname.lastIndexOf('.') + 1);
+				cname = cname.toLowerCase();
+				myWriter.write("\t\tsetNextLarger(Configuration.getFonts()." + cname + ", " + c(nextLargerChar) + ");\n");
+			}
+
+			if (extension != null) {
+				myWriter.write("\t\tsetExtension(" + c(extension[0]) + ", " + c(extension[1]) + ", " + c(extension[2]) + ", " + c(extension[3]) + ");\n");
+			}
+
+			myWriter.write("\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		setMetrics(c, metrics);
 		if (ligatures != null) {
 			for (int i = 0; i < ligatures.length; i += 2) {

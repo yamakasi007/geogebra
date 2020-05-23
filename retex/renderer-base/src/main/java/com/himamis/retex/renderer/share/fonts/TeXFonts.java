@@ -45,6 +45,8 @@
 
 package com.himamis.retex.renderer.share.fonts;
 
+import java.util.ArrayList;
+
 import com.himamis.retex.renderer.share.FontInfo;
 
 public final class TeXFonts {
@@ -168,5 +170,20 @@ public final class TeXFonts {
 		wnssi10.setDependencies(wnssbx10, wnti10, null, wntt10, null);
 		wnti10.setDependencies(wnbxti10, wnr10, wnssi10, wntt10, null);
 		wntt10.setDependencies(null, wnr10, wnss10, null, null);
+	}
+
+	public static void main(String[] args) {
+		new TeXFonts();
+
+
+		ArrayList<FontInfo> ffi = new ArrayList<>(FontInfo.fonts);
+
+		for (FontInfo fi : ffi) {
+			fi.getExtension('\0');
+		}
+
+		for (FontInfo fi : ffi) {
+			fi.close();
+		}
 	}
 }
