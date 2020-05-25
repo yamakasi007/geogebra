@@ -55,7 +55,7 @@ public class GeoFormulaTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void definiteIntegral() {
+	public void limes() {
 		equationEditor.setContent("limeq(x^(2),x→∞)");
 		assertEquals("\\lim_{x\\rightarrow{}\\infty{}} \\nbsp {x^{2}}",
 				equationEditor.toValueString(StringTemplate.latexTemplate));
