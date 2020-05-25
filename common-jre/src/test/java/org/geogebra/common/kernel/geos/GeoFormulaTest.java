@@ -57,6 +57,7 @@ public class GeoFormulaTest extends BaseUnitTest {
 	@Test
 	public void product() {
 		equationEditor.setContent("prodeq(x_{i},i=1,10)");
-		assertEquals("\\prod\\nolimits_{i\\,=\\,1}^{10}{x_{i}}", equationEditor.toValueString(StringTemplate.latexTemplate));
+		assertEquals("\\prod\\nolimits_{i\\,=\\,1}^{10}{x_{i}}",
+				equationEditor.toValueString(StringTemplate.latexTemplate));
 	}
 }
