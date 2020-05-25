@@ -729,6 +729,8 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 	protected void onFocusTimer() {
 		BlurHandler oldBlur = this.onTextfieldBlur;
 		onTextfieldBlur = null;
+		// set focused flag before update to make sure cursor is rendered
+		focused = true;
 		mathFieldInternal.update();
 		// first focus canvas to get the scrolling right
 		html.getElement().focus();
@@ -743,7 +745,6 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 
 	private void focusTextArea() {
 		inputTextArea.getElement().focus();
-
 		if (html.getElement().getParentElement() != null) {
 			html.getElement().getParentElement().setScrollTop(0);
 		}
@@ -940,8 +941,7 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 	 *            font size
 	 */
 	public void setFontSize(double size) {
-		this.mathFieldInternal.setSize(size);
-		this.mathFieldInternal.update();
+		mathFieldInternal.setSizeAndUpdate(size);
 	}
 
 	/**

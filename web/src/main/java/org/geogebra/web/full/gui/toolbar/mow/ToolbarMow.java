@@ -17,7 +17,6 @@ import org.geogebra.web.html5.util.PersistablePanel;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -126,12 +125,8 @@ public class ToolbarMow extends FlowPanel
 		pageControlButton.setStyleName("mowFloatingButton");
 		showPageControlButton(true);
 
-		pageControlButton.addTouchStartHandler(new TouchStartHandler() {
-			@Override
-			public void onTouchStart(TouchStartEvent event) {
-				setTouchStyleForCards();
-			}
-		});
+		pageControlButton.addBitlessDomHandler(event -> setTouchStyleForCards(),
+				TouchStartEvent.getType());
 		pageControlButton.addFastClickHandler(this);
 		updateFloatingButtonsPosition();
 	}
