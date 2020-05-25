@@ -46,8 +46,8 @@ public class VariableReplacerAlgorithmTest extends BaseUnitTest {
 	@Test
 	public void testFunctionProductsMul() {
 		allowTokenizer();
-		shouldReplaceAs("xlnx", "x * log(x)");
-		shouldReplaceAs("xln2x", "x * log(2 * x)");
+		shouldReplaceAs("xlnx", "x * ln(x)");
+		shouldReplaceAs("xln2x", "x * ln(2 * x)");
 		shouldReplaceAs("xsinx", "x * sin(x)");
 	}
 
