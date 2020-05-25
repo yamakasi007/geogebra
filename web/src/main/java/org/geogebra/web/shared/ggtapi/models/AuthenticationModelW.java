@@ -7,7 +7,6 @@ import org.geogebra.common.util.MD5EncrypterGWTImpl;
 import org.geogebra.web.html5.main.AppW;
 
 import com.google.gwt.storage.client.Storage;
-import org.geogebra.web.html5.util.GlobalFunctions;
 
 import elemental2.dom.DomGlobal;
 
