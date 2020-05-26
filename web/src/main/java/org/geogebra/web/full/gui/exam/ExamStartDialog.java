@@ -15,9 +15,10 @@ public class ExamStartDialog extends ComponentDialog {
 
 	/**
 	 * @param app application
+	 * @param data dialog transkeys
 	 */
-	public ExamStartDialog(AppWFull app, DialogData data, boolean autoHide, boolean hasScrim) {
-		super(app, data, autoHide, hasScrim);
+	public ExamStartDialog(AppWFull app, DialogData data) {
+		super(app, data, false, true);
 		addStyleName("examStartDialog");
 		buildContent();
 	}

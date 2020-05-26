@@ -79,7 +79,7 @@ public class AppsSubmenu extends Submenu {
 			app.getLAF().toggleFullscreen(true);
 			DialogData data = new DialogData("exam_menu_enter", "Cancel",
 					"exam_start_button");
-			ExamStartDialog examStartDialog = new ExamStartDialog((AppWFull) getApp(), data, false, true);
+			ExamStartDialog examStartDialog = new ExamStartDialog((AppWFull) getApp(), data);
 			examStartDialog.setOnNegativeAction(() -> {
 				app.getLAF().toggleFullscreen(false);
 			});
