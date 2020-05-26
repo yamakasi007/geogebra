@@ -27,7 +27,7 @@ public class ComponentDialog extends GPopupPanel implements Persistable, ResizeH
 	private Runnable negativeAction;
 
 	/**
-	 * based dialog constructor
+	 * base dialog constructor
 	 * @param app - see {@link AppW}
 	 * @param dialogData - contains trans keys for title and buttons
 	 * @param autoHide - if the dialog should be closed on click outside
@@ -87,15 +87,11 @@ public class ComponentDialog extends GPopupPanel implements Persistable, ResizeH
 			return;
 		}
 
-		StandardButton negButton = new StandardButton(negTransKey, getApplication());
+		StandardButton negButton = new StandardButton(getApplication().getLocalization().
+				getMenu(negTransKey), getApplication());
 		negButton.setStyleName("dialogTextButton");
 
-		FastClickHandler negBtnClickHandler = new FastClickHandler() {
-			@Override
-			public void onClick(Widget source) {
-				onNegativeAction();
-			}
-		};
+		FastClickHandler negBtnClickHandler = source -> onNegativeAction();
 
 		negButton.addFastClickHandler(negBtnClickHandler);
 		dialogButtonPanel.add(negButton);
@@ -106,15 +102,11 @@ public class ComponentDialog extends GPopupPanel implements Persistable, ResizeH
 			return;
 		}
 
-		StandardButton posButton = new StandardButton(posTransKey, getApplication());
+		StandardButton posButton = new StandardButton(getApplication().getLocalization().
+				getMenu(posTransKey), getApplication());
 		posButton.setStyleName("dialogContainedButton");
 
-		FastClickHandler posBtnClickHandler = new FastClickHandler() {
-			@Override
-			public void onClick(Widget source) {
-				onPositiveAction();
-			}
-		};
+		FastClickHandler posBtnClickHandler = source -> onPositiveAction();
 
 		posButton.addFastClickHandler(posBtnClickHandler);
 		dialogButtonPanel.add(posButton);

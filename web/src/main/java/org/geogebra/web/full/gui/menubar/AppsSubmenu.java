@@ -11,6 +11,7 @@ import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.gui.util.ImgResourceHelper;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.resources.SVGResource;
+import org.geogebra.web.shared.components.DialogData;
 
 import com.google.gwt.resources.client.ResourcePrototype;
 
@@ -73,16 +74,13 @@ public class AppsSubmenu extends Submenu {
 	 * @return callback that shows the start exam dialog
 	 */
 	AsyncOperation<Boolean> getExamCallback() {
-		return new AsyncOperation<Boolean>() {
-
-			@Override
-			public void callback(Boolean active) {
-				app.fileNew();
-				app.getLAF().toggleFullscreen(true);
-				ExamStartDialog examStartDialog = new ExamStartDialog((AppWFull) getApp());
-				examStartDialog.show();
-				examStartDialog.center();
-			}
+		return startExam -> {
+			app.fileNew();
+			app.getLAF().toggleFullscreen(true);
+			DialogData data = new DialogData("exam_menu_enter", "Cancel",
+					"exam_start_button");
+			ExamStartDialog examStartDialog = new ExamStartDialog((AppWFull) getApp(), data, false, true);
+			examStartDialog.show();
 		};
 	}
 
