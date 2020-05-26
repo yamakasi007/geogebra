@@ -653,13 +653,6 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	}
 
 	@Override
-	public boolean isGeoVector() {
-		return twinGeo != null
-				? twinGeo.isGeoVector()
-				: getDefinition() != null && getDefinition().unwrap() instanceof MyVecNDNode;
-	}
-
-	@Override
 	public boolean isMatrix() {
 		return twinGeo != null ? twinGeo.isMatrix() : hasMatrixDefinition();
 	}
@@ -679,5 +672,12 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		return twinGeo != null
 				? twinGeo.toLaTeXString(symbolic, tpl)
 				: symbolic ? getDefinition(tpl) : toValueString(tpl);
+	}
+
+	@Override
+	public boolean isGeoVector() {
+		return twinGeo != null
+				? twinGeo.isGeoVector()
+				: getDefinition() != null && getDefinition().unwrap() instanceof MyVecNDNode;
 	}
 }

@@ -6317,13 +6317,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		selectAndShowSelectionUI((GeoElement) inlineObject);
 		final DrawableND drawable = view.getDrawableFor(inlineObject);
 		drawable.update();
-
-		app.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				((DrawInline) drawable).toForeground(0, 0);
-			}
-		});
+		((DrawInline) drawable).toForeground(0, 0);
 	}
 
 	protected void hitCheckBox(GeoBoolean bool) {
