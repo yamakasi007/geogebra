@@ -12,6 +12,7 @@ import org.geogebra.common.kernel.commands.selector.CommandFilter;
 import org.geogebra.common.kernel.geos.properties.FillType;
 import org.geogebra.common.kernel.parser.function.ParserFunctions;
 import org.geogebra.common.main.settings.updater.SettingsUpdater;
+import org.geogebra.common.properties.factory.PropertiesFactory;
 
 public interface AppConfig {
 
@@ -252,5 +253,20 @@ public interface AppConfig {
 	 * @return whether the apps uses restricted dragging for certain objects or not
 	 */
 	boolean isObjectDraggingRestricted();
+
+	/**
+	 * @return default angle unit
+	 */
+	int getDefaultAngleUnit();
+
+	/**
+	 * @return true if the angle unit setting is enabled
+	 */
+	boolean isAngleUnitSettingEnabled();
+
+	/**
+	 * @return new PropertiesFactory instance
+	 */
+	PropertiesFactory createPropertiesFactory();
 }
 
