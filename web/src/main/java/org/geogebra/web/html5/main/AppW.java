@@ -846,6 +846,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		if (embedManager != null) {
 			embedManager.loadEmbeds(archive);
 		}
+
 		if (construction == null) {
 			if (macros != null) {
 				getXMLio().processXMLString(macros, true, true);
