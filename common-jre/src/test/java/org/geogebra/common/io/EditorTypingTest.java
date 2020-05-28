@@ -309,12 +309,4 @@ public class EditorTypingTest {
 		EditorChecker inputBoxChecker = new EditorChecker(AppCommonFactory.create(), model);
 		inputBoxChecker.type("sin(pix)").checkAsciiMath("sin(" + Unicode.PI_STRING + "x)");
 	}
-
-	@Test
-	public void typingSqrtNegativeOneShouldProduceSqrtImaginary() {
-		MetaModel model = new MetaModel();
-		model.enableSubstitutions();
-		EditorChecker inputBoxChecker = new EditorChecker(AppCommonFactory.create(), model);
-		inputBoxChecker.type("sqrt(-1)").checkAsciiMath("sqrt(" + Unicode.IMAGINARY + ")");
-	}
 }
