@@ -279,9 +279,32 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void testImaginaryShouldBeI() {
+	public void testImaginaryShouldRenderedAsRegularI() {
 		add("z_1 = 3+2i");
 		GeoInputBox inputBox = add("InputBox(z_1)");
 		assertEquals("3 + 2i" ,inputBox.getText());
+	}
+
+	@Test
+	public void testImaginaryShouldEditedAsRegularI() {
+		add("z_1 = 3+2i");
+		GeoInputBox inputBox = add("InputBox(z_1)");
+		assertEquals("3+2 i" ,inputBox.getTextForEditor());
+	}
+
+	@Test
+	public void testOnUpdateImaginaryShouldBeUsed() {
+		add("z_1 = 3+2i");
+		GeoInputBox inputBox = add("InputBox(z_1)");
+		inputBox.updateLinkedGeo("4 + 5" + Unicode.IMAGINARY);
+		assertEquals("4 + 5	i" ,inputBox.getText());
+	}
+
+	@Test
+	public void capitalIShouldBeSmallIWhenComplex() {
+		add("z_1 = 3+2i");
+		GeoInputBox inputBox = add("InputBox(z_1)");
+		inputBox.updateLinkedGeo("4+5I");
+		assertEquals("4 + 5i", inputBox.getText());
 	}
 }

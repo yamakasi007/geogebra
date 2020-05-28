@@ -18,6 +18,8 @@ import org.geogebra.common.kernel.kernelND.GeoVectorND;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.TextObject;
 
+import com.himamis.retex.editor.share.util.Unicode;
+
 /**
  * Input box for user input
  *
@@ -114,6 +116,11 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 
 		String linkedGeoText = linkedGeo.getRedefineString(true, true,
 				tpl);
+
+
+		if (InputBoxRenderer.isComplexNumber(linkedGeo)) {
+			linkedGeoText = linkedGeoText.replace(Unicode.IMAGINARY, 'i');
+		}
 
 		if (hasLaTeXEditableVector()) {
 			linkedGeoText = getColumnMatrix((GeoVectorND) linkedGeo);

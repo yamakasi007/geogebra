@@ -138,6 +138,7 @@ public class InputBoxProcessor {
 
 			// make sure user can enter regular "i"
 			defineText = defineText.replace('i', Unicode.IMAGINARY);
+			defineText = defineText.replace('I', Unicode.IMAGINARY);
 
 		}
 		if (linkedGeo instanceof FunctionalNVar) {
