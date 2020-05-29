@@ -21,7 +21,6 @@ import org.geogebra.common.move.ggtapi.models.Material;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.full.gui.applet.AppletFactory;
 import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.images.SvgPerspectiveResources;
 import org.geogebra.web.full.gui.layout.DockPanelW;
@@ -30,6 +29,7 @@ import org.geogebra.web.full.html5.Sandbox;
 import org.geogebra.web.full.main.embed.CalcEmbedElement;
 import org.geogebra.web.full.main.embed.EmbedElement;
 import org.geogebra.web.full.main.embed.GraspableEmbedElement;
+import org.geogebra.web.geogebra3D.AppletFactory3D;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.MyImageW;
 import org.geogebra.web.html5.main.ScriptManagerW;
@@ -39,7 +39,6 @@ import org.geogebra.web.html5.util.ImageManagerW;
 import org.geogebra.web.html5.util.JSON;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -110,7 +109,7 @@ public class EmbedManagerW implements EmbedManager {
 	private CalcEmbedElement createCalcEmbed(DrawEmbed drawEmbed) {
 		TestArticleElement parameters = new TestArticleElement("", "graphing");
 		GeoGebraFrameFull fr = new GeoGebraFrameFull(
-				(AppletFactory) GWT.create(AppletFactory.class), app.getLAF(),
+				new AppletFactory3D(), app.getLAF(),
 				app.getDevice(), parameters);
 
 		parameters

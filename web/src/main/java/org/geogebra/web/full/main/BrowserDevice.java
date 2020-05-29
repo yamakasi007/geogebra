@@ -5,8 +5,6 @@ import org.geogebra.web.full.gui.browser.BrowseGUI;
 import org.geogebra.web.full.gui.browser.BrowseResources;
 import org.geogebra.web.full.gui.dialog.image.ImageInputDialog;
 import org.geogebra.web.full.gui.dialog.image.UploadImageDialog;
-import org.geogebra.web.full.gui.dialog.image.UploadImageWithoutDialog;
-import org.geogebra.web.full.gui.dialog.image.WebcamInputDialog;
 import org.geogebra.web.full.gui.openfileview.OpenFileView;
 import org.geogebra.web.full.gui.view.consprotocol.ConstructionProtocolViewW;
 import org.geogebra.web.html5.Browser;
@@ -132,24 +130,6 @@ public class BrowserDevice implements GDevice {
 	public UploadImageDialog getImageInputDialog(AppW app) {
 
 		return new ImageInputDialog(app);
-	}
-
-	/**
-	 * @param app
-	 *            application
-	 * @return WebcamInputDialog webcam input dialog
-	 */
-	public WebcamInputDialog getWebcamInputDialog(AppW app) {
-		return new WebcamInputDialog(app);
-	}
-
-	/**
-	 * @param app
-	 *            application
-	 * @return image panel controller
-	 */
-	public UploadImageWithoutDialog getUploadImageWithoutDialog(AppW app) {
-		return new UploadImageWithoutDialog(app);
 	}
 
 	@Override

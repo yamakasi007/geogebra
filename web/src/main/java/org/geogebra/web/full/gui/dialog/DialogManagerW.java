@@ -40,6 +40,7 @@ import org.geogebra.web.full.export.AnimationExportDialogW;
 import org.geogebra.web.full.export.PrintPreviewW;
 import org.geogebra.web.full.gui.GuiManagerW;
 import org.geogebra.web.full.gui.dialog.image.UploadImageDialog;
+import org.geogebra.web.full.gui.dialog.image.UploadImageWithoutDialog;
 import org.geogebra.web.full.gui.dialog.image.WebcamInputDialog;
 import org.geogebra.web.full.gui.dialog.template.TemplateChooser;
 import org.geogebra.web.full.gui.properties.PropertiesViewW;
@@ -49,7 +50,6 @@ import org.geogebra.web.full.gui.util.SaveDialogW;
 import org.geogebra.web.full.gui.view.data.DataAnalysisViewW;
 import org.geogebra.web.full.gui.view.functioninspector.FunctionInspectorW;
 import org.geogebra.web.full.main.AppWFull;
-import org.geogebra.web.full.main.BrowserDevice;
 import org.geogebra.web.full.main.GDevice;
 import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.BaseWidgetFactory;
@@ -253,9 +253,8 @@ public class DialogManagerW extends DialogManager
 	 *            used device
 	 */
 	public void showImageInputDialog(GeoPoint corner, GDevice device) {
-		if (app.isWhiteboardActive()
-				&& device instanceof BrowserDevice) {
-			((BrowserDevice) device).getUploadImageWithoutDialog((AppW) app);
+		if (app.isWhiteboardActive()) {
+			new UploadImageWithoutDialog((AppW) app).initGUI();
 			return;
 		}
 		if (this.imageDialog == null) {
@@ -340,17 +339,14 @@ public class DialogManagerW extends DialogManager
 	}
 
 	/**
-	 * @param device
-	 *            device type
+	 * Show webcam dialog
 	 */
-	public void showWebcamInputDialog(GDevice device) {
-		if (!(app.isWhiteboardActive()
-				&& device instanceof BrowserDevice)) {
+	public void showWebcamInputDialog() {
+		if (!app.isWhiteboardActive()) {
 			return;
 		}
 		if (this.webcamInputDialog == null) {
-			this.webcamInputDialog = ((BrowserDevice) device)
-					.getWebcamInputDialog((AppW) app);
+			this.webcamInputDialog = new WebcamInputDialog((AppW) app);
 		} else {
 			webcamInputDialog.startVideo();
 		}

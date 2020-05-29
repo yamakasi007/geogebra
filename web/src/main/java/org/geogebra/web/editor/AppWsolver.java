@@ -1,12 +1,14 @@
 package org.geogebra.web.editor;
 
 import org.geogebra.common.GeoGebraConstants;
+import org.geogebra.common.factories.CASFactory;
 import org.geogebra.common.gui.view.algebra.AlgebraView;
 import org.geogebra.common.main.DialogManager;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.keyboard.web.HasKeyboard;
 import org.geogebra.web.html5.Browser;
+import org.geogebra.web.html5.factories.NoCASFactory;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.gui.laf.SignInControllerI;
 import org.geogebra.web.html5.main.AppW;
@@ -193,5 +195,13 @@ public class AppWsolver extends AppW implements HasKeyboard {
 	@Override
 	public SignInControllerI getSignInController() {
 		return new SignInController(this, 0, null);
+	}
+
+	@Override
+	public void initFactories() {
+		super.initFactories();
+		if (!CASFactory.isInitialized()) {
+			CASFactory.setPrototype(new NoCASFactory());
+		}
 	}
 }

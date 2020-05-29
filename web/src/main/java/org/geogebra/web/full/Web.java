@@ -3,8 +3,6 @@ package org.geogebra.web.full;
 import java.util.ArrayList;
 
 import org.geogebra.common.GeoGebraConstants;
-import org.geogebra.common.GeoGebraConstants.Platform;
-import org.geogebra.common.factories.CASFactory;
 import org.geogebra.web.full.gui.applet.AppletFactory;
 import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.laf.BundleLookAndFeel;
@@ -84,7 +82,7 @@ public class Web implements EntryPoint {
 	 */
 	public static void renderArticleElement(Element el, JavaScriptObject clb) {
 		GeoGebraFrameFull.renderArticleElement(el,
-				(AppletFactory) GWT.create(AppletFactory.class),
+				GWT.create(AppletFactory.class),
 				getLAF(), clb);
 	}
 
@@ -94,7 +92,7 @@ public class Web implements EntryPoint {
 	 */
 	static void startGeoGebra(ArrayList<ArticleElement> geoGebraMobileTags) {
 		GeoGebraFrameFull.main(geoGebraMobileTags,
-				(AppletFactory) GWT.create(AppletFactory.class),
+				GWT.create(AppletFactory.class),
 				getLAF(), null);
 	}
 
@@ -125,14 +123,6 @@ public class Web implements EntryPoint {
 			if ("chrome".equals(laf)) {
 				return new ChromeLookAndFeel();
 			}
-		}
-		if (!((CASFactory) GWT.create(CASFactory.class)).isEnabled()) {
-			return new GLookAndFeel() {
-				@Override
-				public Platform getPlatform(int dim, String appName) {
-					return Platform.NO_CAS;
-				}
-			};
 		}
 
 		return new GLookAndFeel();

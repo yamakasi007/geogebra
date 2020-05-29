@@ -22,10 +22,6 @@
         <when-property-is name="user.agent" value="gecko1_8"/>
     </replace-with>
 
-    <replace-with class="org.geogebra.web.cas.giac.CASFactoryW">
-        <when-type-is class="org.geogebra.common.factories.CASFactory"/>
-    </replace-with>
-
     <replace-with class="org.geogebra.web.full.helper.ResourcesInjectorFull">
         <when-type-is class="org.geogebra.web.html5.js.ResourcesInjector"/>
     </replace-with>

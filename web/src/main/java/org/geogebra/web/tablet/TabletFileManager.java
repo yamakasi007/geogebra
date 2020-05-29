@@ -3,6 +3,7 @@ package org.geogebra.web.tablet;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.geogebra.common.main.App;
 import org.geogebra.common.main.MaterialsManager;
 import org.geogebra.common.move.ggtapi.models.JSONParserGGT;
 import org.geogebra.common.move.ggtapi.models.Material;
@@ -11,20 +12,24 @@ import org.geogebra.common.move.ggtapi.models.MaterialFilter;
 import org.geogebra.common.move.ggtapi.models.SyncEvent;
 import org.geogebra.common.move.ggtapi.models.json.JSONException;
 import org.geogebra.common.move.ggtapi.models.json.JSONObject;
+import org.geogebra.common.plugin.Event;
+import org.geogebra.common.plugin.EventType;
+import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.debug.Log;
+import org.geogebra.web.full.gui.dialog.DialogManagerW;
+import org.geogebra.web.full.main.FileManager;
 import org.geogebra.web.full.util.SaveCallback;
 import org.geogebra.web.html5.main.AppW;
-import org.geogebra.web.touch.FileManagerT;
 
 import com.google.gwt.core.client.Callback;
 
-public class TabletFileManager extends FileManagerT {
+public class TabletFileManager extends FileManager {
 
 	private final static int NO_CALLBACK = 0;
 	private TreeMap<Integer, MyCallback> callbacks;
 	private int callbacksCount = NO_CALLBACK;
 
-	private abstract class MyCallback implements Callback<Object, Object> {
+	private abstract static class MyCallback implements Callback<Object, Object> {
 		private int id;
 
 		protected MyCallback() {
@@ -41,10 +46,10 @@ public class TabletFileManager extends FileManagerT {
 	}
 
 	public TabletFileManager(AppW tabletApp) {
-		super(tabletApp);	
+		super(tabletApp);
+		init();
 	}
 
-	@Override
 	protected void init() {
 		callbacks = new TreeMap<>();
 		exportJavascriptMethods();
@@ -353,7 +358,7 @@ public class TabletFileManager extends FileManagerT {
 		final String oldKey = getFileKey(mat);
 		mat.setBase64("");
 		mat.setTitle(newTitle);
-		int callback1 = addNewCallback(new MyCallback() {			
+		int callback1 = addNewCallback(new MyCallback() {
 			@Override
 			public void onSuccess(Object result) {
 				if (callback != null) {
@@ -363,7 +368,7 @@ public class TabletFileManager extends FileManagerT {
 
 			@Override
 			public void onFailure(Object reason) {
-				// not needed					
+				// not needed
 			}
 		});
 		renameNative(oldKey, newKey, mat.toJson().toString(), callback1);
@@ -486,5 +491,82 @@ public class TabletFileManager extends FileManagerT {
 	protected void debug(String s) {
 		Log.debug(s);
 		debugNative(s);
+	}
+
+	@Override
+	public void rename(final String newTitle, final Material mat) {
+		rename(newTitle, mat, null);
+	}
+
+	@Override
+	public void autoSave(int counter) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getAutosaveJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void restoreAutoSavedFile(String json) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deleteAutoSavedFile() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void saveLoggedOut(App app1) {
+		((DialogManagerW) app1.getDialogManager()).showSaveDialog();
+	}
+
+	/**
+	 * @param m {@link Material}
+	 */
+	protected void doUpload(Material m) {
+		super.upload(m);
+	}
+
+	/**
+	 * @param m {@link Material}
+	 */
+	protected void doOpenMaterial(Material m) {
+		super.openMaterial(m);
+	}
+
+	@Override
+	public void export(final App app1) {
+		((AppW) app1).getGgbApi().getBase64(true, new AsyncOperation<String>() {
+
+			@Override
+			public void callback(String s) {
+				nativeShare(s, app1.getExportTitle());
+			}
+		});
+	}
+
+	@Override
+	public boolean hasBase64(Material material) {
+		return true;
+	}
+
+	@Override
+	public void refreshAutosaveTimestamp() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void showExportAsPictureDialog(String url, String filename,
+			String extension, String titleKey, App appW) {
+
+		exportImage(url, filename, extension);
+		// TODO check if it really happened
+		appW.dispatchEvent(
+				new Event(EventType.EXPORT, null, "[\"" + extension + "\"]"));
 	}
 }

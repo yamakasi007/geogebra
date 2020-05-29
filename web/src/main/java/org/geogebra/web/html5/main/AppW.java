@@ -86,6 +86,7 @@ import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.common.util.lang.Language;
 import org.geogebra.common.util.profiler.FpsProfiler;
+import org.geogebra.web.cas.giac.CASFactoryW;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.awt.GDimensionW;
 import org.geogebra.web.html5.awt.GFontW;
@@ -546,7 +547,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		}
 
 		if (!CASFactory.isInitialized()) {
-			CASFactory.setPrototype((CASFactory) GWT.create(CASFactory.class));
+			CASFactory.setPrototype(new CASFactoryW());
 		}
 
 		if (UtilFactory.getPrototype() == null) {

@@ -4,19 +4,14 @@ import org.geogebra.common.main.App;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.full.gui.dialog.image.UploadImageDialog;
 import org.geogebra.web.html5.gui.FastClickHandler;
-import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
-import org.geogebra.web.tablet.Tablet;
-import org.geogebra.web.touch.PhoneGapManager;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.gwtphonegap.client.camera.PictureCallback;
-import com.googlecode.gwtphonegap.client.camera.PictureOptions;
 
 /**
  *
@@ -32,9 +27,7 @@ public class ImageInputDialogT extends UploadImageDialog {
 	private String pictureFromFileString = "";
 	private FlowPanel filePanel;
 	private StandardButton chooseFromFile;
-	private PictureOptions options;
 	private boolean cameraIsActive;
-	private PictureCallback pictureCallback;
 
 	/**
 	 * @param app
@@ -42,23 +35,8 @@ public class ImageInputDialogT extends UploadImageDialog {
 	 */
 	public ImageInputDialogT(final App app) {
 		super((AppW) app, PREVIEW_WIDTH, PREVIEW_HEIGHT);
-		this.pictureCallback = new PictureCallback() {
 
-			@Override
-			public void onSuccess(final String pictureBase64) {
-				setPicturePreview(pictureBase64);
-			}
-
-			@Override
-			public void onFailure(final String arg0) {
-				ToolTipManagerW.sharedInstance().showBottomMessage(
-						"Couldn't open chosen image", true, (AppW) app);
-			}
-		};
-
-		if (!Tablet.useCordova()) {
-			exportJavascriptMethods();
-		}
+		exportJavascriptMethods();
 	}
 
 	@Override
@@ -77,11 +55,6 @@ public class ImageInputDialogT extends UploadImageDialog {
 	}
 
 	private void initFilePanel() {
-		this.options = new PictureOptions(ImageInputDialogT.PICTURE_QUALITY);
-		// PICTURE_SOURCE_TYPE_PHOTO_LIBRARY
-		this.options.setSourceType(
-				PictureOptions.PICTURE_SOURCE_TYPE_SAVED_PHOTO_ALBUM);
-
 		filePanel = new FlowPanel();
 		filePanel.add(chooseFromFile = new StandardButton(
 				appw.getLocalization().getMenu("ChooseFromFile"), appw));
@@ -103,12 +76,7 @@ public class ImageInputDialogT extends UploadImageDialog {
 	 * Callback for file open button
 	 */
 	void openFromFileClicked() {
-		if (Tablet.useCordova()) {
-			PhoneGapManager.getPhoneGap().getCamera().getPicture(options,
-					this.pictureCallback);
-		} else {
-			openFromFileClickedNative();
-		}
+		openFromFileClickedNative();
 	}
 
 	private native void openFromFileClickedNative() /*-{
@@ -185,17 +153,8 @@ public class ImageInputDialogT extends UploadImageDialog {
 		this.camera.addStyleDependentName("highlighted");
 		this.upload.removeStyleDependentName("highlighted");
 		this.inputPanel.setWidget(this.cameraPanel);
-		PictureOptions pictureOptions = new PictureOptions(
-				ImageInputDialogT.PICTURE_QUALITY);
-		pictureOptions.setAllowEdit(false);
-		pictureOptions.setCorrectOrientation(true);
 
-		if (Tablet.useCordova()) {
-			PhoneGapManager.getPhoneGap().getCamera().getPicture(pictureOptions,
-					this.pictureCallback);
-		} else {
-			getCameraPictureNative();
-		}
+		getCameraPictureNative();
 	}
 
 	private native void getCameraPictureNative() /*-{
