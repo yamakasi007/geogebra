@@ -113,13 +113,8 @@ public abstract class OptionDialog extends DialogBoxW
 	 *            input field
 	 */
 	protected static void focusDeferred(final ComponentInputField inputField) {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-			@Override
-			public void execute() {
-				inputField.getTextField().getTextComponent().setFocus(true);
-			}
-		});
+		Scheduler.get().scheduleDeferred(
+				() -> inputField.getTextField().getTextComponent().setFocus(true));
 	}
 
 }

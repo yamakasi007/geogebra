@@ -457,7 +457,22 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    		}
 	}
 
-	.MaterialDialogBox.mediaDialog {
+	.dialogComponent.mediaDialog {
+	    &.hyperLink {
+	        max-width: 448px;
+	        max-height: 246px;
+	    }
+
+	    &.Video, &.Audio {
+	        max-width: 448px;
+	        max-height: 200px;
+	    }
+
+        &.Web {
+            max-width: 448px;
+            max-height: 240px;
+        }
+
    		.mowInputPanelContent {
    			.AutoCompleteTextFieldW {
    				margin: 8px 16px 8px 0px;
@@ -472,6 +487,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
  				.AutoCompleteTextFieldW {
  					border-bottom: 1px solid $black-42;
  					.TextField {
+ 					    border: none;
+ 					    box-shadow: none;
  						padding: 0px;
  						margin-bottom: 8px;
  						margin-top: 0px;
