@@ -56,7 +56,8 @@ public class EmbedInputDialog extends MediaDialog
 		}
 	}
 
-	protected void processInput() {
+	@Override
+	public void onPositiveAction() {
 		if (app.getGuiManager() != null) {
 			String input = mediaInputPanel.getInput();
 			addEmbed(input);

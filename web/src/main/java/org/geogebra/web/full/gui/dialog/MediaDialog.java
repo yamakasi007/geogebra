@@ -76,6 +76,4 @@ public abstract class MediaDialog extends ComponentDialog {
 		getApplication().getActiveEuclidianView()
 				.getEuclidianController().selectAndShowBoundingBox(geoElement);
 	}
-
-	abstract void processInput();
 }

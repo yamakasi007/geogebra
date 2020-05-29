@@ -19,7 +19,8 @@ public class AudioInputDialog extends MediaDialog {
 		super(app, "Audio");
 	}
 
-	public void processInput() {
+	@Override
+	public void onPositiveAction() {
 		if (app.getGuiManager() != null) {
 			String url = getUrlWithProtocol();
 			mediaInputPanel.inputField.getTextComponent().setText(url);

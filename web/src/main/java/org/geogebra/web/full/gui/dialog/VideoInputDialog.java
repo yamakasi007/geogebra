@@ -19,7 +19,8 @@ public class VideoInputDialog extends MediaDialog {
 		super(app, "Video");
 	}
 
-	protected void processInput() {
+	@Override
+	public void onPositiveAction() {
 		if (app.getGuiManager() != null) {
 			String url = getUrlWithProtocol();
 			mediaInputPanel.inputField.getTextComponent().setText(url);
