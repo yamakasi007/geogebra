@@ -671,7 +671,8 @@ public class DialogManagerW extends DialogManager
 
 	@Override
 	public Export3dDialogInterface getExport3dDialog(View view) {
-		return new Export3dDialog((AppW) app, view);
+		DialogData data = new DialogData("DownloadAsStl", "Cancel", "Download");
+		return new Export3dDialog((AppW) app, data, view);
 	}
 
 	public void setWidgetFactory(BaseWidgetFactory widgetFactory) {

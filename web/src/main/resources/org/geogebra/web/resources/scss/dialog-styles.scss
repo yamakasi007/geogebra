@@ -1573,13 +1573,15 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.export3dDialog {
+	.dialogComponent.export3dDialog {
+		max-width: 384px;
+		max-height: 359px;
 		padding-right: 0px;
-		.Caption {
-			// with the extra 8px from the top
-			// of input field is 20px as supposed to
-			margin-bottom: 12px;
+
+		.dialogContent {
+			padding-right: 0px;
 		}
+
 	   	.panelRow>* {
 			margin: 0px;
 		}
@@ -1611,7 +1613,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
    		.gwt-CheckBox label {
     			padding-left: 8px;
-    			//color: $text-secondary;
     			opacity: 0.7;
 		}
    		.equal {
@@ -1622,9 +1623,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    			margin-left: -8px;
    			margin-right: 16px;
    		}
-   		.DialogButtonPanel {
-			margin-right: 8px;
-		}
    	}
 
    	.MaterialDialogBox.whatsNewDialog {

@@ -7,7 +7,6 @@ import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.shared.DialogBoxW;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -108,7 +107,7 @@ public abstract class OptionDialog extends DialogBoxW
 
 	/**
 	 * give focus to input field
-	 * 
+	 *
 	 * @param inputField
 	 *            input field
 	 */
@@ -116,5 +115,4 @@ public abstract class OptionDialog extends DialogBoxW
 		Scheduler.get().scheduleDeferred(
 				() -> inputField.getTextField().getTextComponent().setFocus(true));
 	}
-
 }
