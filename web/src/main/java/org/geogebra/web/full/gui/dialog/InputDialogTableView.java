@@ -70,7 +70,6 @@ public class InputDialogTableView extends ComponentDialog
 		scrollContent.add(errorLabel);
 		contentPanel.add(scrollContent);
 		addDialogContent(contentPanel);
-		setLabels();
 	}
 
 	private void buildTextFieldPanel(FlowPanel root) {
@@ -89,12 +88,6 @@ public class InputDialogTableView extends ComponentDialog
 				null, labelText, null, "", 20);
 		root.add(field);
 		return field;
-	}
-
-	public void setLabels() {
-		startValue.setLabels();
-		endValue.setLabels();
-		step.setLabels();
 	}
 
 	@Override

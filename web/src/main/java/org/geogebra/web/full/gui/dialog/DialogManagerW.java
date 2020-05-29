@@ -679,7 +679,8 @@ public class DialogManagerW extends DialogManager
 
 	@Override
 	public void showTemplateChooser() {
-		templateChooser = new TemplateChooser((AppW) app,
+		DialogData data = new DialogData("New.Mebis", "Cancel", "Create");
+		templateChooser = new TemplateChooser((AppW) app, data,
 				((GuiManagerW) ((AppW) app).getGuiManager()).getTemplateController());
 		templateChooser.show();
 	}
