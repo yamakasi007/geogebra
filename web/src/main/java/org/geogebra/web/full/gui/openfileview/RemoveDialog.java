@@ -23,7 +23,7 @@ public class RemoveDialog extends ComponentDialog {
 	public RemoveDialog(AppW app, DialogData data, MaterialCard card) {
 		super(app, data, false, true);
 		this.card = card;
-		addStyleName("renameMaterial");
+		addStyleName("removeMaterial");
 		addStyleName("mebis");
 		buildContent();
 	}

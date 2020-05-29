@@ -454,64 +454,7 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    		}
 	}
 
-	.dialogComponent {
-		.AutoCompleteTextFieldW {
-			margin: 8px 16px 16px 0px;
-			display: inline-block;
-		}
-
-		.mowInputPanelContent {
-
-			&.emptyState {
-				.inputLabel {
-					color: $text-secondary;
-					font-size: 75%;
-				}
-
-				.AutoCompleteTextFieldW {
-					border-bottom: 1px solid $black-42;
-
-					.TextField {
-						border: none;
-						box-shadow: none;
-						padding: 0px;
-						margin-bottom: 8px;
-						margin-top: 0px;
-						font-size: 100%;
-						color: $text-primary;
-						&::placeholder {
-							color: $text-secondary;
-						}
-					}
-				}
-			}
-
-			&.hoverState {
-				.inputLabel {
-					color: $black-87;
-				}
-
-				.AutoCompleteTextFieldW {
-					border-bottom: 2px solid $black-87;
-					margin: 8px 16px 15px 0px;
-				}
-			}
-
-			&.focusState, &.focusState:hover {
-				@extend .emptyState;
-				.inputLabel {
-					color: $mow_dark_87;
-				}
-
-				.AutoCompleteTextFieldW {
-					border-bottom: 2px solid $mow_dark;
-					margin: 8px 16px 15px 0px;
-				}
-			}
-		}
-   	}
-
-   	.dialogComponent.renameMaterial {
+   	.dialogComponent.removeMaterial {
    		max-width: 472px;
    		max-height: 123px;
 
@@ -523,6 +466,61 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	.dialogComponent.materialRename {
 		max-width: 448px;
 		max-height: 167px;
+
+		.AutoCompleteTextFieldW {
+        			margin: 8px 16px 16px 0px;
+        			display: inline-block;
+        		}
+
+        		.mowInputPanelContent {
+
+        			&.emptyState {
+        				.inputLabel {
+        					color: $text-secondary;
+        					font-size: 75%;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 1px solid $black-42;
+
+        					.TextField {
+        						border: none;
+        						box-shadow: none;
+        						padding: 0px;
+        						margin-bottom: 8px;
+        						margin-top: 0px;
+        						font-size: 100%;
+        						color: $text-primary;
+        						&::placeholder {
+        							color: $text-secondary;
+        						}
+        					}
+        				}
+        			}
+
+        			&.hoverState {
+        				.inputLabel {
+        					color: $black-87;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 2px solid $black-87;
+        					margin: 8px 16px 15px 0px;
+        				}
+        			}
+
+        			&.focusState, &.focusState:hover {
+        				@extend .emptyState;
+        				.inputLabel {
+        					color: $mow_dark_87;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 2px solid $mow_dark;
+        					margin: 8px 16px 15px 0px;
+        				}
+        			}
+        		}
 	}
 
 	.dialogComponent.mediaDialog {
@@ -632,36 +630,15 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    		}
    	}
 
-   	.MaterialDialogBox.optionDialog {
-		.DialogButtonPanel {
-			padding-top: 8px;
-
-			.button-up-disabled {
-				opacity: 1;
-				&:hover {
-					background: none !important;
-				}
-			}
-		}
-
-		&.mebis .DialogButtonPanel {
-			.button {
-				color: $mow_dark;
-			}
-
-			.button-up-disabled {
-				color: $mow_dark_26;
-			}
-		}
-
+	.dialogComponent {
 		.globalErrorLabel {
-			color: $error;
-			max-width: (20em/0.75);
-			font-size: 75%;
-			line-height: 16px;
-			min-height: 32px;
-			margin-bottom: 4px;
-		}
+        	color: $error;
+        	max-width: (20em/0.75);
+        	font-size: 75%;
+        	line-height: 16px;
+        	min-height: 32px;
+       	 	margin-bottom: 4px;
+        }
 	}
 
    .exportImgDialog {
@@ -1565,11 +1542,18 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.MaterialDialogBox.tableOfValuesDialog {
-		.Caption {
+	.dialogComponent.tableOfValuesDialog {
+		max-width: 368px;
+		max-height: 391px;
+
+		.dialogTitle {
 			// with the extra 8px from the top
 			// of input field is 20px as supposed to
 			margin-bottom: 12px;
+		}
+
+		.dialogContent {
+			padding-right: 0px;
 		}
 	}
 

@@ -79,7 +79,6 @@ public class DialogManagerW extends DialogManager
 	private PDFInputDialog pdfInputDialog;
 	private PopupPanel loadingAnimation = null;
 	private ColorChooserDialog dialog = null;
-	private InputDialogTableView tableViewDialog = null;
 	private BaseWidgetFactory widgetFactory = new BaseWidgetFactory();
 
 	/**
@@ -663,9 +662,8 @@ public class DialogManagerW extends DialogManager
 
 	@Override
 	public void openTableViewDialog(GeoElement geo) {
-		if (tableViewDialog == null) {
-			tableViewDialog = new InputDialogTableView((AppW) app);
-		}
+		DialogData data = new DialogData("TableOfValues", "Cancel", "OK");
+		InputDialogTableView tableViewDialog = new InputDialogTableView((AppW) app, data);
 		tableViewDialog.show(geo);
 	}
 
