@@ -137,11 +137,6 @@ public class AppConfigDefault implements AppConfig {
 	}
 
 	@Override
-	public boolean hasScientificKeyboard() {
-		return false;
-	}
-
-	@Override
 	public boolean isEnableStructures() {
 		return true;
 	}
@@ -274,6 +269,11 @@ public class AppConfigDefault implements AppConfig {
 	@Override
 	public PropertiesFactory createPropertiesFactory() {
 		return new BasePropertiesFactory();
+	}
+
+	@Override
+	public AppKeyboardType getKeyboardType() {
+		return AppKeyboardType.GRAPHING;
 	}
 
 	@Override
