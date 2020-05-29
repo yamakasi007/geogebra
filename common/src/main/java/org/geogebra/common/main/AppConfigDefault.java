@@ -277,17 +277,12 @@ public class AppConfigDefault implements AppConfig {
 	}
 
 	@Override
-	public boolean isShowingErrorDialogForInputBox() {
-		return false;
-	}
-
-    @Override
-    public int getEnforcedLineEquationForm() {
+	public int getEnforcedLineEquationForm() {
 	    return -1;
     }
 
-    @Override
-    public int getEnforcedConicEquationForm() {
+	@Override
+	public int getEnforcedConicEquationForm() {
         return -1;
     }
 
