@@ -1753,15 +1753,13 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    	}
 
    	.sessionExpireNotifyDialog {
-   		max-width: 400px;
-
-   		.dialogContent {
-            height: calc(100% - 52px);
-		}
+   		max-width: 448px;
+   		max-height: 210px;
+   		height: unset;
 
         .sessionExpireTxt {
             color: $text-secondary;
-            max-width: 384px;
+            max-width: 400px;
             margin-bottom: 20px;
         }
     }
