@@ -1664,13 +1664,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
         overflow: auto;
         height: unset;
 
-   	    .Caption {
-   	        height: 26px;
-   	        line-height: 26px;
-   	        margin-left: 24px;
-   	        margin-bottom: 0px;
-   	    }
-
    	    .templatesPanel {
    	        max-width: 649px;
             max-height: 372px;
@@ -1757,15 +1750,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
                 }
    	         }
    	    }
-
-        .DialogButtonPanel {
-            margin-right: 8px;
-            padding-top: 4px;
-
-            .button {
-                color: $mow_primary;
-             }
-        }
    	}
 
    	.sessionExpireNotifyDialog {
