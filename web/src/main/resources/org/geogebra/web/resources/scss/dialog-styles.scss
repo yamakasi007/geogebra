@@ -1639,6 +1639,11 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    	}
 
    	.dialogComponent.templateChooser {
+        max-width: 680px;
+        max-height: 486px;
+        overflow: auto;
+        height: unset;
+
    		.dialogMainPanel {
    			padding-left: 0px;
    		}
@@ -1651,18 +1656,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    		.dialogContent {
    			padding-right: 0px;
    		}
-
-   		.dialogBtnPanel {
-   			position: relative;
-   			float: right;
-   		}
-
-   	    padding-left: 0px;
-        padding-right: 0px;
-        max-width: 680px;
-        max-height: 486px;
-        overflow: auto;
-        height: unset;
 
    	    .templatesPanel {
    	        max-width: 649px;
