@@ -31,7 +31,7 @@ public abstract class MediaDialog extends ComponentDialog {
 		buildContent();
 	}
 
-	public void buildContent() {
+	private void buildContent() {
 		FlowPanel contentPanel = new FlowPanel();
 
 		mediaInputPanel = new MediaInputPanel((AppW) app, this, "Link", true);

@@ -162,10 +162,10 @@ public class MediaInputPanel extends FlowPanel implements ProcessInput {
 	 */
 	private void addHoverHandlers() {
 		inputField.getTextComponent().getTextBox().addMouseOverHandler(
-				event -> MediaInputPanel.this.addStyleName("hoverState"));
+				event -> this.addStyleName("hoverState"));
 
 		inputField.getTextComponent().getTextBox().addMouseOutHandler(
-				event -> MediaInputPanel.this.removeStyleName("hoverState"));
+				event -> this.removeStyleName("hoverState"));
 	}
 
 	private void addFocusBlurHandlers() {

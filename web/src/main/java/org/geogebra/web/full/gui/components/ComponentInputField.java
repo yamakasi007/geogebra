@@ -229,6 +229,9 @@ public class ComponentInputField extends FlowPanel implements SetLabels, Input {
 		return !StringUtil.empty(errorTextKey);
 	}
 
+	/**
+	 * focus input text field
+	 */
 	public void focusDeferred() {
 		Scheduler.get().scheduleDeferred(
 				() -> this.getTextField().getTextComponent().setFocus(true));

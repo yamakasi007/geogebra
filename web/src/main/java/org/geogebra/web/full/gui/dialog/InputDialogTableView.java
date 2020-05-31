@@ -48,7 +48,7 @@ public class InputDialogTableView extends ComponentDialog
 		buildContent();
 		validator = new TableValuesDialogValidator(app);
 		this.addCloseHandler(event -> {
-			app.unregisterPopup(InputDialogTableView.this);
+			app.unregisterPopup(this);
 			app.hideKeyboard();
 		});
 	}

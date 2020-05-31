@@ -265,7 +265,7 @@ public class Export3dDialog extends ComponentDialog
 		buildContent();
 		this.addCloseHandler(event -> {
 			app.getKernel().detach(view);
-			app.unregisterPopup(Export3dDialog.this);
+			app.unregisterPopup(this);
 			app.hideKeyboard();
 		});
 	}

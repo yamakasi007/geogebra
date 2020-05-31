@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Label;
  * Base dialog material design component
  */
 public class ComponentDialog extends GPopupPanel implements Persistable, ResizeHandler {
-
 	private Label title;
 	private FlowPanel dialogContent;
 	private Runnable positiveAction;
@@ -39,12 +38,6 @@ public class ComponentDialog extends GPopupPanel implements Persistable, ResizeH
 		setGlassEnabled(hasScrim);
 		this.setStyleName("dialogComponent");
 		buildDialog(dialogData);
-		Window.addResizeHandler(this);
-	}
-
-	public ComponentDialog(AppW app) {
-		super(app.getPanel(), app);
-		this.setStyleName("dialogComponent");
 		Window.addResizeHandler(this);
 	}
 

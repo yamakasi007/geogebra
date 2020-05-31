@@ -1,6 +1,5 @@
 package org.geogebra.web.full.gui.dialog.template;
 
-import org.geogebra.common.main.Localization;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.shared.components.ComponentDialog;
 import org.geogebra.web.shared.components.DialogData;
@@ -8,7 +7,6 @@ import org.geogebra.web.shared.components.DialogData;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 public class TemplateChooser extends ComponentDialog {
-    private Localization loc;
     private TemplateChooserController controller;
 
     /**
@@ -18,7 +16,6 @@ public class TemplateChooser extends ComponentDialog {
      */
     public TemplateChooser(AppW app, DialogData data, TemplateChooserController controller) {
         super(app, data, false, true);
-        loc = app.getLocalization();
         this.controller = controller;
         this.addStyleName("templateChooser");
         buildContent();
