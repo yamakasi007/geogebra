@@ -37,10 +37,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class PDFInputDialog extends ComponentDialog
 		implements FastClickHandler, PDFListener {
 	private FlowPanel pdfContainerPanel;
-	private FlowPanel pdfPreviewPanel;
 	private FlowPanel imgTextPanel;
 	private FlowPanel pdfPageTextPanel;
-	StandardButton insertBtn;
 	private StandardButton leftBtn;
 	private StandardButton rightBtn;
 	private NoDragImage previewImg;
@@ -105,9 +103,7 @@ public class PDFInputDialog extends ComponentDialog
 		contentPanel.add(pdfChooser);
 
 		pdfChooser.addStyleName("hidden");
-		getContainerElement().addClassName("pdfDialogMainPanel");
-		getContainerElement().getFirstChildElement()
-				.addClassName("pdfDialogTable");
+		setPosBtnDisabled(true);
 
 		addDialogContent(contentPanel);
 	}
@@ -148,7 +144,7 @@ public class PDFInputDialog extends ComponentDialog
 	private void buildPdfContainer() {
 		pdfContainerPanel.clear();
 		pdfContainerPanel.addStyleName("withPdf");
-		pdfPreviewPanel = new FlowPanel();
+		FlowPanel pdfPreviewPanel = new FlowPanel();
 		pdfPreviewPanel.addStyleName("pdfPreview");
 		previewImg = new NoDragImage("");
 		previewImg.addStyleName("previewImage");
@@ -338,10 +334,7 @@ public class PDFInputDialog extends ComponentDialog
 	}
 
 	/**
-	 * Progress bar.
-	 *
-	 * @author judit
-	 *
+	 * Progress bar for loading pdf
 	 */
 	public class ProgressBar extends SimplePanel {
 
@@ -371,8 +364,7 @@ public class PDFInputDialog extends ComponentDialog
 				onPDFLoaded();
 			} else {
 				pdf = null;
-
-				insertBtn.setEnabled(false);
+				setPosBtnDisabled(true);
 				buildErrorPanel();
 			}
 		}
@@ -406,7 +398,7 @@ public class PDFInputDialog extends ComponentDialog
 		} else {
 			displayCurrentPageNumber();
 		}
-		insertBtn.setEnabled(true);
+		setPosBtnDisabled(false);
 	}
 
 	private void buildLoadingPanel() {
@@ -443,4 +435,3 @@ public class PDFInputDialog extends ComponentDialog
 		progressBar.finishLoading(result);
 	}
 }
-

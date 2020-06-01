@@ -705,28 +705,17 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    		}
    }
 
-	.pdfDialog {
-		max-width: 474px;
-		max-height: 522px;
+	.dialogComponent.pdfDialog {
+		max-width: 506px;
+		max-height: 546px;
 		width: 80%;
 		height: 94%;
 
-		.pdfDialogMainPanel {
-			height: 100%;
-		}
+        .dialogContent {
+            height: calc(100% - 116px);
+            margin-bottom: 24px;
+        }
 
-		.pdfDialogTable {
-			height: 100%;
-			width: 100%;
-		}
-
-		.dialogMiddle {
-			height: 100%;
-		}
-
-		.dialogMiddleCenterInner.dialogContent {
-			height: 100%;
-		}
 
 		 .pdfDialogContent {
 			height: 100%;
@@ -854,7 +843,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 						text-align: center;
 						font-size: 100%;
 						padding: 0px;
+						box-shadow: none;
+                        border: none;
 						border-radius: 0px;
+						border-bottom: 1px solid $black-42;
 					}
 
 					&.default {
