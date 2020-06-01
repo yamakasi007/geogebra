@@ -100,15 +100,13 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
     		display: block;
     		cursor: default;
 		}
-
-		 .AutoCompleteTextFieldW {
-		    // ignore this for now (new design needed)
-            border-bottom-color: $mow-primary !important;
-         }
 	}
 
 	/* button tool dialog*/
-	.MaterialDialogBox.buttonDialog {
+	.dialogComponent.buttonDialog {
+	    max-width: 448px;
+	    max-height: 444px;
+
 		.scriptArea {
 			margin-right: 16px;
 			border-radius: 2px;
@@ -119,6 +117,15 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			margin-right: 16px;
 			width: calc(100% - 16px) !important;
 		}
+	}
+
+	.dialogComponent.inputboxDialog {
+	    max-width: 430px;
+	    max-height: 250px;
+
+        .AutoCompleteTextFieldW {
+	        max-width: 382px;
+	    }
 	}
 
 	/* recover dialog*/
@@ -372,14 +379,12 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			.gwt-Label {
     			margin-top: 0px;
 			}
-
 		}
 
    		.gwt-TabBar {
    			.gwt-Label {
    				font-size: 100% !important;
 			}
-
    		}
 
    		.gwt-TabBar .gwt-TabBarItem-selected {
@@ -463,6 +468,16 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 
 	.dialogComponent {
 	    padding: 0px;
+
+        .coloredLabel {
+            color: $mow-primary;
+        }
+
+	    :not(.textField)>.AutoCompleteTextFieldW,
+	        .sliderIntervalPanel .gwt-TextBox {
+	        // ignore this for now, we need new design
+            border-bottom: 1px solid $mow-primary !important;
+        }
 	}
 
 	.MaterialDialogBox.mediaDialog {
@@ -1797,14 +1812,5 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
         .gwt-RadioButton [type="radio"]+label {
             padding-left: 35px;
         }
-
-        .coloredLabel {
-            color: $mow-primary;
-        }
-
-        .AutoCompleteTextFieldW, .gwt-TextBox {
-            // ignore this for now (new design needed)
-            border-bottom-color: $mow-primary !important;
-         }
     }
 }
