@@ -215,7 +215,8 @@ public class PDFInputDialog extends ComponentDialog
 	 * Add mouse over/ out handlers
 	 */
 	private void addHoverHandlers() {
-		curPageNrField.getTextBox().addMouseOverHandler(event -> setPageTextFieldStyleName("hover"));
+		curPageNrField.getTextBox().addMouseOverHandler(event
+				-> setPageTextFieldStyleName("hover"));
 		curPageNrField.getTextBox().addMouseOutHandler(event -> {
 			if (!isFocus()) {
 				setPageTextFieldStyleName("default");

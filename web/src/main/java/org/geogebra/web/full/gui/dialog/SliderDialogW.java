@@ -74,7 +74,7 @@ public class SliderDialogW extends ComponentDialog implements
 			app.registerPopup(this);
 		}
 		this.addCloseHandler(event -> {
-			app.unregisterPopup(SliderDialogW.this);
+			app.unregisterPopup(this);
 			app.hideKeyboard();
 		});
 	}
