@@ -288,7 +288,7 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
         }
     }
 
-	.MaterialDialogBox {
+	.MaterialDialogBox, .dialogComponent {
 		z-index: 501;
 		background-color: $white;
 		border-radius: 2px;
@@ -1780,5 +1780,24 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
             	}
            	}
        }
+    }
+
+    .dialogComponent.sliderDialog {
+        padding: 0px;
+        max-width: 504px;
+        max-height: 450px;
+
+        .gwt-RadioButton [type="radio"]+label {
+            padding-left: 35px;
+        }
+
+        .coloredLabel {
+            color: $mow-primary;
+        }
+
+        .AutoCompleteTextFieldW, .gwt-TextBox {
+            // ignore this for now (new design needed)
+            border-bottom-color: $mow-primary !important;
+         }
     }
 }

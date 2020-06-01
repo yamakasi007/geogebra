@@ -77,9 +77,8 @@ public class DialogManagerW extends DialogManager
 	private RecoverAutoSavedDialog autoSavedDialog;
 	private AudioInputDialog audioInputDialog;
 	private TemplateChooser templateChooser;
-	private PDFInputDialog pdfInputDialog;
 	private PopupPanel loadingAnimation = null;
-	private ColorChooserDialog dialog = null;
+	private ColorChooserDialog colChooser = null;
 	private InputDialogTableView tableViewDialog = null;
 	private BaseWidgetFactory widgetFactory = new BaseWidgetFactory();
 
@@ -189,7 +188,6 @@ public class DialogManagerW extends DialogManager
 		InputDialogW id = new InputDialogCirclePointRadiusW(((AppW) app), title,
 				handler, (GeoPoint) geoPoint1, app.getKernel());
 		id.setVisible(true);
-
 	}
 
 	@Override
@@ -288,8 +286,7 @@ public class DialogManagerW extends DialogManager
 			public void onSuccess() {
 				LoggerW.loaded("PDF JS");
 				DialogData data = new DialogData("pdfDialogTitle", "Cancel", "Insert");
-				pdfInputDialog = new PDFInputDialog((AppW) app, data);
-				pdfInputDialog.center();
+				PDFInputDialog pdfInputDialog = new PDFInputDialog((AppW) app, data);
 				pdfInputDialog.show();
 				if (file != null) {
 					pdfInputDialog.loadPdf(file);
@@ -371,7 +368,6 @@ public class DialogManagerW extends DialogManager
 				((AppW) app), message, title, initText, handler, changingSign,
 				checkBoxText);
 		id.setVisible(true);
-
 	}
 
 	/**
@@ -381,13 +377,9 @@ public class DialogManagerW extends DialogManager
 	 */
 	@Override
 	public boolean showSliderCreationDialog(int x, int y) {
-		app.setWaitCursor();
-
-		SliderDialogW sliderDialog = new SliderDialogW(((AppW) app), x, y);
-		sliderDialog.center();
-
-		app.setDefaultCursor();
-
+		DialogData data = new DialogData("Slider", "Cancel", "OK");
+		SliderDialogW sliderDialog = new SliderDialogW(((AppW) app), data, x, y);
+		sliderDialog.show();
 		return true;
 	}
 
@@ -400,7 +392,6 @@ public class DialogManagerW extends DialogManager
 		InputDialogRotateW id = new InputDialogRotatePointW(((AppW) app), title,
 				handler, polys, points, selGeos, ec);
 		id.setVisible(true);
-
 	}
 
 	@Override
@@ -425,7 +416,6 @@ public class DialogManagerW extends DialogManager
 		InputDialogW id = new InputDialogDilateW(((AppW) app), title, handler,
 				points, selGeos, app.getKernel(), ec);
 		id.setVisible(true);
-
 	}
 
 	@Override
@@ -501,9 +491,7 @@ public class DialogManagerW extends DialogManager
 		} else {
 			((GuiManagerW) app.getGuiManager()).setShowView(true,
 					App.VIEW_PROPERTIES);
-
 		}
-
 	}
 
 	@Override
@@ -613,13 +601,13 @@ public class DialogManagerW extends DialogManager
 	 */
 	public void showColorChooserDialog(GColor originalColor,
 			ColorChangeHandler handler) {
-		if (dialog == null) {
-			dialog = new ColorChooserDialog((AppW) app, originalColor, handler);
+		if (colChooser == null) {
+			colChooser = new ColorChooserDialog((AppW) app, originalColor, handler);
 		} else {
-			dialog.setOriginalColor(originalColor);
-			dialog.setHandler(handler);
+			colChooser.setOriginalColor(originalColor);
+			colChooser.setHandler(handler);
 		}
-		dialog.center();
+		colChooser.center();
 	}
 
 	/**
