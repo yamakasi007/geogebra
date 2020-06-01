@@ -59,6 +59,7 @@ import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW.ToolTipLinkType;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.debug.LoggerW;
+import org.geogebra.web.shared.components.DialogData;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -286,7 +287,8 @@ public class DialogManagerW extends DialogManager
 			@Override
 			public void onSuccess() {
 				LoggerW.loaded("PDF JS");
-				pdfInputDialog = new PDFInputDialog((AppW) app);
+				DialogData data = new DialogData("pdfDialogTitle", "Cancel", "Insert");
+				pdfInputDialog = new PDFInputDialog((AppW) app, data);
 				pdfInputDialog.center();
 				pdfInputDialog.show();
 				if (file != null) {

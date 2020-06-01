@@ -16,8 +16,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * Input Dialog for Webcam / Document Camera
- * 
- * @author Alicia
  */
 public class WebcamInputDialog extends DialogBoxW implements WebcamDialogInterface,
 	ClickHandler {
