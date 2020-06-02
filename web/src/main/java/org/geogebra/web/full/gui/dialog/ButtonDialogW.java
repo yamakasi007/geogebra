@@ -58,7 +58,7 @@ public class ButtonDialogW extends ComponentDialog
 		}
 
 		this.addCloseHandler(event -> {
-			app.unregisterPopup(ButtonDialogW.this);
+			app.unregisterPopup(this);
 			app.hideKeyboard();
 		});
 	}

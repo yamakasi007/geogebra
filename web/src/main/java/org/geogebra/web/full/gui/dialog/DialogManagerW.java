@@ -209,7 +209,8 @@ public class DialogManagerW extends DialogManager
 
 	@Override
 	public boolean showButtonCreationDialog(int x, int y, boolean textfield) {
-		DialogData data = new DialogData(textfield ? "TextFieldAction" : "ButtonAction", "Cancel", "OK");
+		DialogData data = new DialogData(textfield ? "TextFieldAction" 
+				: "ButtonAction", "Cancel", "OK");
 		ButtonDialogW buttonDialog = new ButtonDialogW(((AppW) app), x, y,
 				data, textfield);
 		buttonDialog.show();
