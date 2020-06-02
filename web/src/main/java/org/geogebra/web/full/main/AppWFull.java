@@ -2061,7 +2061,7 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	@Override
-	public void initFactories() {
+	protected void initFactories() {
 		super.initFactories();
 		if (!CASFactory.isInitialized()) {
 			CASFactory.setPrototype(new CASFactoryW());

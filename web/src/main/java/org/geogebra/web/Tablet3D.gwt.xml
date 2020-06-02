@@ -20,16 +20,6 @@
   <set-property name="user.agent" value="safari" />
   <set-property-fallback name="user.agent" value="safari"/>
 
-  <replace-with class="org.geogebra.web.touch.gui.layout.SplitterImplTouch">
-    <when-type-is class="org.geogebra.web.full.gui.layout.SplitterImpl"/>
-  </replace-with>
-
-  <!-- Switch the replace-with rule to 2D when compiling for slow tablets -->
-  <!--replace-with class="geogebra.web.gui.applet.AppletFactory2D"-->
-  <replace-with class="org.geogebra.web.geogebra3D.AppletFactory3D">
-    <when-type-is class="org.geogebra.web.full.gui.applet.AppletFactory" />
-  </replace-with>
-
   <set-configuration-property name="devModeRedirectEnabled" value="true"/>
   <!-- Compile only one permutation -->
   <collapse-all-properties />

@@ -981,4 +981,8 @@ public class GeoGebraFrameFull
 	public AppWFull getApp() {
 		return (AppWFull) super.getApp();
 	}
+
+	public AppletFactory getAppletFactory() {
+		return factory;
+	}
 }

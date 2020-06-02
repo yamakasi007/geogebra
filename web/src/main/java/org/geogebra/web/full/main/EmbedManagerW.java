@@ -109,7 +109,7 @@ public class EmbedManagerW implements EmbedManager {
 	private CalcEmbedElement createCalcEmbed(DrawEmbed drawEmbed) {
 		TestArticleElement parameters = new TestArticleElement("", "graphing");
 		GeoGebraFrameFull fr = new GeoGebraFrameFull(
-				new AppletFactory3D(), app.getLAF(),
+				app.getAppletFrame().getAppletFactory(), app.getLAF(),
 				app.getDevice(), parameters);
 
 		parameters

@@ -49,7 +49,6 @@ public class StickyValuesTable extends StickyTable<TVRowData> implements TableVa
 	private static final int MIN_COLUMN_WIDTH = 72;
 
 	/** Template to create a cell */
-	static final CellTemplates TEMPLATES = GWT.create(CellTemplates.class);
 	private TableValuesModel tableModel;
 	private TableValuesDimensions dimensions;
 	private TableValuesView view;
@@ -178,7 +177,8 @@ public class StickyValuesTable extends StickyTable<TVRowData> implements TableVa
 		SafeStylesBuilder sb = new SafeStylesBuilder();
 		sb.width(width, Unit.PX).height(height, Unit.PX).trustedNameAndValue("line-height", height,
 				Unit.PX);
-		return TEMPLATES.cell(content, sb.toSafeStyles());
+		return (SafeHtml) () -> "<div style=\"" + sb.toSafeStyles().asString() + "\""
+				+ "class=\"cell\"><div class=\"content\">" + content + "</div></div>";
 	}
 
 	/**
@@ -214,23 +214,6 @@ public class StickyValuesTable extends StickyTable<TVRowData> implements TableVa
 			}
 		};
 		return column;
-	}
-
-	/**
-	 * @author Balazs
-	 *
-	 */
-	public interface CellTemplates extends SafeHtmlTemplates {
-		/**
-		 * @param message
-		 *            of the cell.
-		 * @param style
-		 *            of the cell.
-		 * @return HTML representation of the cell content.
-		 */
-		@SafeHtmlTemplates.Template("<div style=\"{1}\""
-				+ "class=\"cell\"><div class=\"content\">{0}</div></div>")
-		SafeHtml cell(SafeHtml message, SafeStyles style);
 	}
 
 	/**

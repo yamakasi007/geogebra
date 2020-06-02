@@ -3,6 +3,7 @@ package org.geogebra.web.html5.webcam;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.VideoElement;
 
 /**
  * Class for camera support.
@@ -66,7 +67,7 @@ public class WebCamAPI implements WebCamInterface {
 	 * @param video the video holder element.
 	 * @return the screenshot data URL.
 	 */
-	public String takeScreenshot(Element video) {
+	public String takeScreenshot(VideoElement video) {
 		Canvas c = Canvas.createIfSupported();
 		int w = 0;
 		int h = 0;
@@ -82,7 +83,7 @@ public class WebCamAPI implements WebCamInterface {
 			c.setPixelSize(width, height);
 			c.setCoordinateSpaceHeight(height);
 			c.setCoordinateSpaceWidth(width);
-			drawVideoElement(c.getContext2d(), video);
+			c.getContext2d().drawImage(video, 0,0);
 
 		}
 		return c.toDataUrl("image/png");
@@ -110,10 +111,6 @@ public class WebCamAPI implements WebCamInterface {
 	public void onLoadedMetadata(int width, int height) {
 		dialog.onLoadedMetadata(width, height);
 	}
-
-	private native void drawVideoElement(JavaScriptObject ctx, Element img) /*-{
-		ctx.drawImage(img, 0, 0);
-	}-*/;
 
 	private native void createPolyfillIfNeeded() /*-{
 		var mediaDevices = $wnd.navigator.mediaDevices;
@@ -179,11 +176,10 @@ public class WebCamAPI implements WebCamInterface {
 		stream = null;
 	}-*/;
 
-	private native void setVideoSource(JavaScriptObject mediaStream, Element el,
+	private native void setVideoSource(JavaScriptObject mediaStream, Element video,
 			Element errorElem) /*-{
 		$wnd.URL = $wnd.URL || $wnd.webkitURL || $wnd.msURL || $wnd.mozURL
 				|| $wnd.oURL || null;
-		var video = el.firstChild;
 		if ($wnd.URL && $wnd.URL.createObjectURL) {
 			try {
 				video.srcObject = mediaStream

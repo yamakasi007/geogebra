@@ -12,6 +12,7 @@ import org.geogebra.web.html5.webcam.WebcamDialogInterface;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.DOM;
@@ -24,7 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class WebCamInputPanel extends VerticalPanel implements WebCamInterface {
 
 	private SimplePanel inputWidget;
-	private Element video;
+	private VideoElement video;
 	private Element errorPanel;
 	private int canvasWidth = 640;
 	private int canvasHeight = 480; // overwritten by real
@@ -32,7 +33,6 @@ public class WebCamInputPanel extends VerticalPanel implements WebCamInterface {
 	private AppW app;
 	private WebcamDialogInterface webcamDialog;
 	private WebcamPermissionDialog permissionDialog;
-	private static final VideoTemplate TEMPLATE = GWT.create(VideoTemplate.class);
 	private WebCamAPI webCam;
 
 	/**
@@ -72,7 +72,7 @@ public class WebCamInputPanel extends VerticalPanel implements WebCamInterface {
 		if (video == null) {
 			return null;
 		}
-		String capture = webCam.takeScreenshot(video.getFirstChildElement());
+		String capture = webCam.takeScreenshot(video);
 		if (!app.isWhiteboardActive()) {
 			webCam.stop();
 		}
@@ -102,12 +102,14 @@ public class WebCamInputPanel extends VerticalPanel implements WebCamInterface {
 		}
 
 		errorPanel = DOM.createSpan();
-		video = DOM.createSpan();
-		errorPanel.setInnerSafeHtml(TEMPLATE.error(getStyle(), message));
+		video = DOM.createElement("video").cast();
+		errorPanel.setClassName(getStyle());
+		errorPanel.setInnerText(message);
 		inputWidget.getElement().appendChild(video);
 		inputWidget.getElement().appendChild(errorPanel);
-		video.setInnerSafeHtml(TEMPLATE.video(getStyle(),
-				loc.getMenu("Webcam.Problem")));
+		video.setAttribute("autoplay", "autoplay");
+		video.setClassName(getStyle());
+		video.setInnerText(loc.getMenu("Webcam.Problem"));
 		webCam.start(video, errorPanel);
 	}
 
@@ -209,14 +211,5 @@ public class WebCamInputPanel extends VerticalPanel implements WebCamInterface {
 	@Override
 	public void onNotSupported() {
 		showNotSupportedDialog();
-	}
-	
-	public interface VideoTemplate extends SafeHtmlTemplates {
-		@SafeHtmlTemplates.Template("<video autoplay class=\"{0}\"><br>\r\n"
-				+ "  {1}</video>")
-		SafeHtml video(String style, String err);
-
-		@SafeHtmlTemplates.Template("<span class=\"{0}\">{1}</span>")
-		SafeHtml error(String style, String message);
 	}
 }
