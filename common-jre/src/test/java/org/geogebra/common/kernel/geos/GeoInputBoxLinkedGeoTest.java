@@ -307,4 +307,25 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 		inputBox.updateLinkedGeo("4+5I");
 		assertEquals("4 + 5i", inputBox.getText());
 	}
+
+	@Test
+	public void formulaTextShouldUseSmallIWhenComplex() {
+		add("z_1 = 3+2i");
+		GeoInputBox inputBox = add("input=InputBox(z_1)");
+		GeoText text = add("FormulaText[input]");
+		assertEquals("3 + 2i", text.getTextString());
+	}
+
+	@Test
+	public void formulaTextOnePlusIShouldUseSmallI() {
+		GeoText text = add("FormulaText(1+" + Unicode.IMAGINARY + ")");
+		assertEquals("1 + i", text.getTextString());
+	}
+
+	@Test
+	public void textOnePlusIShouldUseImaginary() {
+		GeoText text = add("Text(1+" + Unicode.IMAGINARY + ")");
+		assertEquals("1 + " + Unicode.IMAGINARY, text.getTextString());
+	}
+
 }
