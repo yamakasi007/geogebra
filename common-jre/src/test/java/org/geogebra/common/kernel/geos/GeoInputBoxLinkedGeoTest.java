@@ -61,7 +61,7 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 
 	@Test
 	public void enteringNewValueShouldKeepComplexNumber() {
-		setupAndCheckInput("P", "1 + " + Unicode.IMAGINARY);
+		setupAndCheckInput("P", "1 + i");
 		updateInput("7");
 		t("P", "7 + 0" + Unicode.IMAGINARY);
 		assertEquals("7",
@@ -297,7 +297,7 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 		add("z_1 = 3+2i");
 		GeoInputBox inputBox = add("InputBox(z_1)");
 		inputBox.updateLinkedGeo("4 + 5" + Unicode.IMAGINARY);
-		assertEquals("4 + 5	i" ,inputBox.getText());
+		assertEquals("4 + 5i" ,inputBox.getText());
 	}
 
 	@Test
