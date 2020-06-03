@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Label;
  * Base dialog material design component
  */
 public class ComponentDialog extends GPopupPanel implements Persistable, ResizeHandler {
-
 	private Label title;
 	private FlowPanel dialogContent;
 	private Runnable positiveAction;

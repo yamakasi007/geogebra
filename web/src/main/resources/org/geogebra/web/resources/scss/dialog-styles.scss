@@ -1289,9 +1289,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.MaterialDialogBox.camera {
-		max-width: 80%;
-		max-height: 80%;
+	.dialogComponent.camera {
+		max-width: 530px;
+        max-height: 488px;
+
 		.mowCameraSimplePanel{
 			position: relative;
 			margin-left: 16px;
@@ -1308,9 +1309,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			max-height: calc(100vh - 320px);
 			position: relative;
 			text-align: center;
-		}
-		button {
-			color: $mow_dark !important;
 		}
 	}
 
