@@ -1,7 +1,7 @@
 package org.geogebra.common.kernel.geos;
 
-import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GPoint2D;
+import org.geogebra.common.euclidian.draw.HasFormat;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -108,7 +108,12 @@ public class GeoInlineTable extends GeoInline implements TextStyle {
 
 	@Override
 	public int getFontStyle() {
-		return GFont.PLAIN;
+		return GeoInlineText.getFontStyle(getDrawable());
+	}
+
+	protected HasFormat getDrawable() {
+		return (HasFormat) kernel.getApplication()
+				.getActiveEuclidianView().getDrawableFor(this);
 	}
 
 	@Override
