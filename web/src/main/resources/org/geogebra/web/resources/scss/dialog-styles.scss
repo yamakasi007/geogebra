@@ -132,12 +132,24 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	    }
 	}
 
-	/* recover dialog*/
-	.MaterialDialogBox.RecoverAutoSavedDialog, .MaterialDialogBox.GeoGebraFileChooser {
-		.infotext {
-			font-size: 95%;
-			margin-right: 16px;
-		}
+	.dialogComponent.RecoverAutoSavedDialog {
+    	    max-width: 450px;
+    	    max-height: 174px;
+
+            .infoText {
+    			font-size: 100%;
+    			margin-bottom: 24px;
+    			color: $text-secondary;
+    		}
+    }
+
+	.dialogComponent.GeoGebraFileChooser {
+	    max-width: 530px;
+	    max-height: 210px;
+
+	    .titlePanel .coloredLabel {
+	        font-size: 80%;
+	    }
 
 		.templatePanel {
             display: flex;
@@ -163,20 +175,11 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
             }
         }
 
-		.buttonPanel {
-   			height: 36px;
-   			text-align: right;
-    		padding-top: 32px;
-    		padding-right: 0px;
-    		padding-bottom: 8px;
-    		padding-left: 0px;
-
-    		.gwt-Button,.button {
-    			@extend .flatDialogBtn;
-   			}
-
+		.visibilityPanel {
    			.visibility {
+   			    position: absolute;
    			    bottom: 6px;
+   			    width: 131px;
                 left: 76px;
                 top: auto;
    			 }
@@ -186,10 +189,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    				bottom: 15px;
    				left: 24px !important;
    			}
-
-   			input.gwt-TextBox {
-    			opacity: 0.7;
-			}
    		}
 	}
 
@@ -312,7 +311,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		padding-left: 24px;
 		padding-right: 8px;
 		padding-top: 24px;
-
    		box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
    		-webkit-box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
 
@@ -488,7 +486,99 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
         }
 	}
 
-	.MaterialDialogBox.mediaDialog {
+   	.dialogComponent.removeMaterial {
+   		max-width: 472px;
+   		max-height: 115px;
+
+   		.dialogContent {
+            height: calc(100% - 52px);
+        }
+
+        .message {
+            margin-bottom: 24px;
+        }
+   	}
+
+	.dialogComponent.materialRename {
+		max-width: 448px;
+		max-height: 167px;
+
+		.AutoCompleteTextFieldW {
+        			margin: 8px 16px 16px 0px;
+        			display: inline-block;
+        		}
+
+        		.mowInputPanelContent {
+
+        			&.emptyState {
+        				.inputLabel {
+        					color: $text-secondary;
+        					font-size: 75%;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 1px solid $black-42;
+
+        					.TextField {
+        						border: none;
+        						box-shadow: none;
+        						padding: 0px;
+        						margin-bottom: 8px;
+        						margin-top: 0px;
+        						font-size: 100%;
+        						color: $text-primary;
+        						&::placeholder {
+        							color: $text-secondary;
+        						}
+        					}
+        				}
+        			}
+
+        			&.hoverState {
+        				.inputLabel {
+        					color: $black-87;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 2px solid $black-87;
+        					margin: 8px 16px 15px 0px;
+        				}
+        			}
+
+        			&.focusState, &.focusState:hover {
+        				@extend .emptyState;
+        				.inputLabel {
+        					color: $mow_dark_87;
+        				}
+
+        				.AutoCompleteTextFieldW {
+        					border-bottom: 2px solid $mow_dark;
+        					margin: 8px 16px 15px 0px;
+        				}
+        			}
+        		}
+	}
+
+	.dialogComponent.mediaDialog {
+	    &.hyperLink {
+	        max-width: 448px;
+	        max-height: 246px;
+
+	        .dialogContent {
+                height: calc(100% - 52px); //no title
+            }
+	    }
+
+	    &.Video, &.Audio {
+	        max-width: 448px;
+	        max-height: 200px;
+	    }
+
+        &.Web {
+            max-width: 448px;
+            max-height: 240px;
+        }
+
    		.mowInputPanelContent {
    			.AutoCompleteTextFieldW {
    				margin: 8px 16px 8px 0px;
@@ -503,6 +593,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
  				.AutoCompleteTextFieldW {
  					border-bottom: 1px solid $black-42;
  					.TextField {
+ 					    border: none;
+ 					    box-shadow: none;
  						padding: 0px;
  						margin-bottom: 8px;
  						margin-top: 0px;
@@ -576,115 +668,33 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    				}
    			}
    		}
-
-   		.DialogButtonPanel {
-   			padding-top: 8px;
-
-   			.button {
-   				color: $mow_dark;
-   			}
-
-   			.insertBtn.button-up-disabled {
-   				opacity: 1;
-   				color: $mow_dark_26;
-
-   				&:hover {
-   					background: none !important;
-   				}
-   			}
-   		}
    	}
 
-   	.MaterialDialogBox.optionDialog {
-   		.mowRenameDialogContent {
-   			.AutoCompleteTextFieldW {
-   				margin: 8px 16px 16px 0px;
-   			}
-
-   			&.emptyState {
-   				.inputLabel {
-   					color: $text-secondary;
-   					font-size: 75%;
-   				}
-
- 				.AutoCompleteTextFieldW {
- 					border-bottom: 1px solid $black-42;
- 					.TextField {
- 						padding: 0px;
- 						margin-bottom: 8px;
- 						margin-top: 0px;
- 						font-size: 100%;
- 						color: $text-primary;
- 						&::placeholder {
- 							color: $text-secondary;
- 						}
- 					}
- 				}
-
-   				&.hoverState {
-   					.inputLabel {
-   						color: $black-87;
-   					}
-
- 					.AutoCompleteTextFieldW {
- 						border-bottom: 2px solid $black-87;
- 						margin: 8px 16px 15px 0px;
- 					}
- 				}
-   			}
-
-   			&.focusState, &.focusState:hover {
-   				@extend .emptyState;
-   				.inputLabel {
-   					color: $mow_dark_87;
-   				}
-
- 				.AutoCompleteTextFieldW {
- 					border-bottom: 2px solid $mow_dark;
- 					margin: 8px 16px 15px 0px;
- 				}
-   			}
-   		}
-
-		.DialogButtonPanel {
-			padding-top: 8px;
-
-			.button-up-disabled {
-				opacity: 1;
-				&:hover {
-					background: none !important;
-				}
-			}
-		}
-
-		&.mebis .DialogButtonPanel {
-			.button {
-				color: $mow_dark;
-			}
-
-			.button-up-disabled {
-				color: $mow_dark_26;
-			}
-		}
-
+	.dialogComponent {
 		.globalErrorLabel {
-			color: $error;
-			max-width: (20em/0.75);
-			font-size: 75%;
-			line-height: 16px;
-			min-height: 32px;
-			margin-bottom: 4px;
-		}
+        	color: $error;
+        	max-width: (20em/0.75);
+        	font-size: 75%;
+        	line-height: 16px;
+        	min-height: 32px;
+       	 	margin-bottom: 4px;
+        }
 	}
 
-   .exportImgDialog {
-   		.expImgContent {
-   			margin-right: 16px;
-   		}
+   .dialogComponent.exportImgDialog {
+        max-width: unset;
+        max-height: unset;
+        height: unset;
+        width: unset;
 
-   		.rightClickHelpText {
-   			margin: 0px;
+        .expImgContent {
+            margin-bottom: 20px;
+        }
+
+   	    .rightClickHelpText {
+   	        font-size: 80%;
    			margin-bottom: 20px;
+   			color: $text-secondary;
    		}
 
    		.prevImg {
@@ -693,46 +703,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			border: 1px solid $black-20;
 			border-radius: 2px 2px 0 0 ;
 			cursor: pointer;
-   		}
-
-   		.DialogButtonPanel.withCopyToClip {
-   			height: 96px;
-   			padding-top: 24px;
-   			/*display: grid;*/
-    		float: right;
-
-   			.button {
-   				height: 48px;
-   				line-height: 48px;
-   				position: absolute;
-   				right: 8px;
-   				bottom: 8px;
-
-   				&.copyToClipBtn {
-   					bottom: 56px;
-   					min-width: 148px;
-   					line-height: 48px;
-   				}
-   			}
-
-   			&.classic {
-   				height: 56px;
-
-   				.button {
-   					min-width: 116px;
-   					max-height: 24px;
-   					line-height: 16px;
-
-   					&.copyToClipBtn {
-   						bottom: 50px;
-   					}
-
-   					.html-face {
-   						text-align: center;
-   						padding: 4px 0px;
-   					}
-   				}
-   			}
    		}
    }
 
@@ -934,9 +904,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.MaterialDialogBox.shareLink {
+	.dialogComponent.shareLink {
 		padding-bottom: 24px;
-		padding-right: 24px;
+		max-width: 510px;
+		max-height: 164px;
 
 		>div>table {
 			padding-right: 0px;
@@ -952,7 +923,9 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			.linkBox {
 				padding: 8px 0 8px 0;
 				margin: 0;
-			    border-bottom: 2px solid $teal-default !important;
+				border: none;
+				box-shadow: none;
+			    border-bottom: 2px solid $teal-default;
 			    border-radius: 0;
 			}
 			.linkBox::selection {
@@ -1000,8 +973,7 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 				.gwt-Label {
 					color: $text-primary;
 					font-size: 100%;
-					margin-left: 12px;
-					margin-right: auto;
+					margin: 10px auto 0px 12px;
 					cursor: pointer;
 				}
 				&:hover {
@@ -1210,7 +1182,7 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.MaterialDialogBox.shareLinkMebis {
+	.dialogComponent.shareLinkMebis {
 		@extend .shareLink;
 
 		padding: 24px 8px 0px 24px;
@@ -1219,7 +1191,7 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			margin-right: 16px;
 
 			.linkBox {
-			    border-bottom: 2px solid $mow_dark !important;
+			    border-bottom: 2px solid $mow_dark;
 			}
 			.linkBox::selection {
   				background: rgba($mow_primary, 0.2)
@@ -1342,14 +1314,22 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.shareDialogMow {
-		padding-right: 0px !important;
-		padding-left: 0px !important;
+	.dialogComponent.shareDialogMow {
+		max-width: 522px;
+		max-height: unset;
+		height: unset;
 
-		.Caption {
-			padding-left: 24px !important;
-			margin-bottom: 0px !important;
+		.dialogTitle {
+			margin-left: 24px;
 		}
+
+        .dialogMainPanel {
+            padding-left: 0px;
+        }
+
+        .dialogContent {
+            margin-bottom: 24px;
+        }
 
 		.selGrLbl {
 			font-size: 100%;
@@ -1363,7 +1343,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			border-bottom: 1px solid $black-12;
 			max-height: 200px;
 		    overflow: auto;
-		    width: 494px;
+		    max-width: 502px;
+		    width: 101%;
     		padding: 16px 0px 0px 20px;
 		}
 
@@ -1409,7 +1390,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 
 		.shareByLink {
-		    width: 474px;
+		    max-width: 474px;
+		    width: 100%;
 		    margin: 16px 8px 0px 24px;
 
 		    .linkImg {
@@ -1419,7 +1401,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 
 		    .textPanel {
 			    position: relative;
-			    width: 356px;
+			    max-width: 356px;
+			    width: 90%;
 			    display: inline-block;
 
 			    .linkShareOnOff {
@@ -1448,7 +1431,9 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 					padding: 8px 0 8px 0;
 					margin: 0;
 					border-radius: 0;
-				    border-bottom: 2px solid $mow_dark !important;
+					box-shadow: none;
+					border: none;
+				    border-bottom: 2px solid $mow_dark;
 				}
 				.linkBox::selection {
 	  				background: rgba($mow_primary, 0.2);
@@ -1477,7 +1462,8 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 
         .shareLinkAvailableInfo {
-            width: 474px;
+            max-width: 474px;
+            width: 90%;
             margin: 14px 24px 0px 24px;
             font-size: 87%;
         }
@@ -1555,21 +1541,30 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
 	}
 
-	.MaterialDialogBox.tableOfValuesDialog {
-		.Caption {
+	.dialogComponent.tableOfValuesDialog {
+		max-width: 368px;
+		max-height: 391px;
+
+		.dialogTitle {
 			// with the extra 8px from the top
 			// of input field is 20px as supposed to
 			margin-bottom: 12px;
+		}
+
+		.dialogContent {
+			padding-right: 0px;
 		}
 	}
 
-	.export3dDialog {
+	.dialogComponent.export3dDialog {
+		max-width: 384px;
+		max-height: 359px;
 		padding-right: 0px;
-		.Caption {
-			// with the extra 8px from the top
-			// of input field is 20px as supposed to
-			margin-bottom: 12px;
+
+		.dialogContent {
+			padding-right: 0px;
 		}
+
 	   	.panelRow>* {
 			margin: 0px;
 		}
@@ -1601,7 +1596,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 		}
    		.gwt-CheckBox label {
     			padding-left: 8px;
-    			//color: $text-secondary;
     			opacity: 0.7;
 		}
    		.equal {
@@ -1612,18 +1606,13 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
    			margin-left: -8px;
    			margin-right: 16px;
    		}
-   		.DialogButtonPanel {
-			margin-right: 8px;
-		}
    	}
 
-   	.MaterialDialogBox.whatsNewDialog {
-   	    width: 560px;
-   	    .title {
-   	        @extend .headline6;
-   	        margin-top: 0px;
-            margin-bottom: 20px;
-   	    }
+   	.dialogComponent.whatsNewDialog {
+   	    max-width: 592px;
+   	    max-height: 424px;
+   	    height: auto;
+
    	    .messagePanel {
    	        padding-right: 16px;
    	        .message {
@@ -1635,9 +1624,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
                 @extend .subtitle1-link;
             }
    	    }
-        .DialogButtonPanel {
-            padding-top: 28px;
-        }
    	}
 
    	.mowInputPanelContent  {
@@ -1646,19 +1632,24 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
         }
    	}
 
-   	.MaterialDialogBox.optionDialog.templateChooser {
-   	    padding-left: 0px;
-        padding-right: 0px;
+   	.dialogComponent.templateChooser {
         max-width: 680px;
         max-height: 486px;
         overflow: auto;
+        height: unset;
 
-   	    .Caption {
-   	        height: 26px;
-   	        line-height: 26px;
-   	        margin-left: 24px;
-   	        margin-bottom: 0px;
-   	    }
+   		.dialogMainPanel {
+   			padding-left: 0px;
+   		}
+
+   		.dialogTitle {
+   			padding-left: 24px;
+   			margin-bottom: 0px;
+   		}
+
+   		.dialogContent {
+   			padding-right: 0px;
+   		}
 
    	    .templatesPanel {
    	        max-width: 649px;
@@ -1746,55 +1737,18 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
                 }
    	         }
    	    }
-
-        .DialogButtonPanel {
-            margin-right: 8px;
-            padding-top: 4px;
-
-            .button {
-                color: $mow_primary;
-             }
-        }
    	}
 
    	.sessionExpireNotifyDialog {
-        z-index: 501;
-    	background-color: $white;
-    	border-radius: 2px;
-    	padding: 24px 8px 0px 24px;
-        box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0
-        24px 38px 3px rgba(0, 0, 0, 0.2);
-       	-webkit-box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
+   		max-width: 448px;
+   		max-height: 210px;
+   		height: unset;
 
         .sessionExpireTxt {
-            padding-right: 16px;
             color: $text-secondary;
-            max-width: 384px;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
-
-        .DialogButtonPanel {
-             height: 36px;
-             text-align: right;
-             padding-top: 28px;
-             padding-right: 0px;
-             padding-bottom: 8px;
-             padding-left: 0px;
-
-           	.cancelBtn , .saveBtn  {
-            	@extend .flatDialogBtn;
-            	cursor: pointer;
-
-                color: $mow_primary;
-
-                &:hover {
-                   color: $mow_primary;
-                }
-
-            	.html-face {
-            		text-align: center;
-            	}
-           	}
-       }
     }
 
     .dialogComponent.sliderDialog {
