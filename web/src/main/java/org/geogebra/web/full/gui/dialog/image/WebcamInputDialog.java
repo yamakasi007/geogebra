@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class WebcamInputDialog extends DialogBoxW implements WebcamDialogInterface,
 	ClickHandler {
-
 	private AppW appW;
 	private FlowPanel mainPanel;
 	private SimplePanel inputPanel;

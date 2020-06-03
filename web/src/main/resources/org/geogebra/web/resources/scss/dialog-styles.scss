@@ -74,14 +74,18 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	}
 
 	/* image tool dialog */
-	.MaterialDialogBox.image {
+	.dialogComponent.image {
 		.gwt-Label:hover {
-			color: $teal-default;
+			color: $purple-default;
+			cursor: pointer;
 		}
 
 		.gwt-Label-highlighted {
-			color: $teal-default;
-			cursor: pointer;
+			color: $purple-default;
+
+			&:hover {
+			    cursor: default;
+			}
 		}
 	}
 
@@ -477,6 +481,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	        .sliderIntervalPanel .gwt-TextBox {
 	        // ignore this for now, we need new design
             border-bottom: 1px solid $mow-primary !important;
+        }
+
+        .gwt-Label-highlighted {
+            color: $toolbar-header;
         }
 	}
 

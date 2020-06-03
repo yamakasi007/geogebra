@@ -69,7 +69,6 @@ public class DialogManagerW extends DialogManager
 		implements LoadingApplication {
 	private FunctionInspectorW functionInspector;
 	protected SaveDialogI saveDialog = null;
-	protected UploadImageDialog imageDialog;
 	protected WebcamInputDialog webcamInputDialog;
 	private RecoverAutoSavedDialog autoSavedDialog;
 	private AudioInputDialog audioInputDialog;
@@ -257,9 +256,7 @@ public class DialogManagerW extends DialogManager
 			((BrowserDevice) device).getUploadImageWithoutDialog((AppW) app);
 			return;
 		}
-		if (this.imageDialog == null) {
-			this.imageDialog = device.getImageInputDialog((AppW) app);
-		}
+		UploadImageDialog imageDialog = device.getImageInputDialog((AppW) app);
 		imageDialog.setLocation(corner);
 		imageDialog.center();
 		imageDialog.show();
@@ -574,10 +571,6 @@ public class DialogManagerW extends DialogManager
 
 		if (saveDialog != null) {
 			saveDialog.setLabels();
-		}
-
-		if (imageDialog != null) {
-			imageDialog.setLabels();
 		}
 
 		if (this.autoSavedDialog != null) {

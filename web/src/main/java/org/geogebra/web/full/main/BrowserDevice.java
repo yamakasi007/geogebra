@@ -130,7 +130,6 @@ public class BrowserDevice implements GDevice {
 
 	@Override
 	public UploadImageDialog getImageInputDialog(AppW app) {
-
 		return new ImageInputDialog(app);
 	}
 

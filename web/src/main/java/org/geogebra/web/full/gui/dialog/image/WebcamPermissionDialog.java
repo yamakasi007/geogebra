@@ -16,12 +16,8 @@ import com.google.gwt.user.client.ui.Label;
 
 /**
  * dialog to ask user for webcam permission and show error messages
- * 
- * @author Alicia
- *
  */
 public class WebcamPermissionDialog extends DialogBoxW implements ClickHandler {
-
 	private AppW app1;
 	private Button dismissBtn;
 	private Label text;
@@ -147,5 +143,4 @@ public class WebcamPermissionDialog extends DialogBoxW implements ClickHandler {
 		return Browser.isElectron() && Browser.isMacOS() && !app1.isMebis() ? "permission"
 				+ ".request" : "Webcam.Denied.Message";
 	}
-
 }
