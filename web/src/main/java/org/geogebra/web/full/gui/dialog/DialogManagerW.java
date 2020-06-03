@@ -36,7 +36,6 @@ import org.geogebra.common.main.OptionType;
 import org.geogebra.common.move.ggtapi.models.Material.MaterialType;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.full.export.AnimationExportDialogW;
 import org.geogebra.web.full.export.PrintPreviewW;
 import org.geogebra.web.full.gui.GuiManagerW;
 import org.geogebra.web.full.gui.dialog.image.UploadImageDialog;
@@ -53,7 +52,6 @@ import org.geogebra.web.full.main.BrowserDevice;
 import org.geogebra.web.full.main.GDevice;
 import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.BaseWidgetFactory;
-import org.geogebra.web.html5.gui.GDialogBox;
 import org.geogebra.web.html5.gui.LoadingApplication;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW.ToolTipLinkType;
@@ -69,7 +67,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 public class DialogManagerW extends DialogManager
 		implements LoadingApplication {
-
 	private FunctionInspectorW functionInspector;
 	protected SaveDialogI saveDialog = null;
 	protected UploadImageDialog imageDialog;
@@ -632,15 +629,6 @@ public class DialogManagerW extends DialogManager
 			String initString, InputHandler handler, GeoElement geo) {
 		return new InputDialogW((AppW) app1, message, title, initString,
 				handler, geo);
-	}
-
-	/**
-	 * Show animation export dialog.
-	 */
-	public void showAnimGifExportDialog() {
-		GDialogBox gifDialog = new AnimationExportDialogW((AppW) app);
-		gifDialog.center();
-		gifDialog.show();
 	}
 
 	/**
