@@ -16,9 +16,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * Material rename dialog
  */
 public class MaterialRenameDialog extends ComponentDialog {
-	private FlowPanel contentPanel;
 	private InputPanelW inputField;
-	private FormLabel inputLabel;
 	private boolean inputChanged;
 	private MaterialCardI card;
 
@@ -40,9 +38,9 @@ public class MaterialRenameDialog extends ComponentDialog {
 	}
 
 	private void buildContent() {
-		contentPanel = new FlowPanel();
+		FlowPanel contentPanel = new FlowPanel();
 		inputField = new InputPanelW("", app, 1, 25, false);
-		inputLabel = new FormLabel().setFor(inputField.getTextComponent());
+		FormLabel inputLabel = new FormLabel().setFor(inputField.getTextComponent());
 		inputLabel.addStyleName("inputLabel");
 		contentPanel.add(inputLabel);
 		contentPanel.add(inputField);

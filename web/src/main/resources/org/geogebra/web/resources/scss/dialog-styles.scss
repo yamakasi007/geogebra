@@ -456,10 +456,14 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 
    	.dialogComponent.removeMaterial {
    		max-width: 472px;
-   		max-height: 123px;
+   		max-height: 115px;
 
    		.dialogContent {
-            height: calc(100% - 84px);
+            height: calc(100% - 52px);
+        }
+
+        .message {
+            margin-bottom: 24px;
         }
    	}
 
@@ -527,6 +531,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	    &.hyperLink {
 	        max-width: 448px;
 	        max-height: 246px;
+
+	        .dialogContent {
+                height: calc(100% - 52px); //no title
+            }
 	    }
 
 	    &.Video, &.Audio {

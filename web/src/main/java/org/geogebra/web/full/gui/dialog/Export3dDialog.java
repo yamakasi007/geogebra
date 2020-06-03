@@ -206,7 +206,7 @@ public class Export3dDialog extends ComponentDialog
 			inputField.getTextField().getTextComponent()
 					.addInsertHandler(text -> parseAndUpdateOthers());
 			inputField.getTextField().getTextComponent()
-					.addOnBackSpaceHandler(() -> parseAndUpdateOthers());
+					.addOnBackSpaceHandler(this::parseAndUpdateOthers);
 		}
 
 		void parseAndUpdateOthers() {
