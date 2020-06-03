@@ -44,8 +44,6 @@ import org.geogebra.common.util.MyMath;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.common.util.mathIT.Riemann;
 
-import com.himamis.retex.editor.share.util.Unicode;
-
 /**
  * 
  * @author Markus
@@ -1178,7 +1176,7 @@ final public class GeoVec2D extends ValidExpression
 				// case GEOGEBRA:
 				// case GEOGEBRA_XML:
 				// case LATEX:
-				return Unicode.IMAGINARY + "";
+				return "i";
 			}
 		} else if (mode == Kernel.COORD_COMPLEX) {
 			initStringBuilder();
