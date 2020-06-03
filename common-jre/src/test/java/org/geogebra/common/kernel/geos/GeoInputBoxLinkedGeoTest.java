@@ -11,6 +11,7 @@ import org.geogebra.common.main.AppCommon3D;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.test.commands.AlgebraTestHelper;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.himamis.retex.editor.share.util.Unicode;
@@ -280,46 +281,61 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 
 	@Test
 	public void testImaginaryShouldRenderedAsRegularI() {
-		add("z_1 = 3+2i");
-		GeoInputBox inputBox = add("InputBox(z_1)");
+		GeoInputBox inputBox = withComplexLinkedGeo();
 		assertEquals("3 + 2i" ,inputBox.getText());
+	}
+
+	protected GeoInputBox withComplexLinkedGeo() {
+		add("z_1 = 3+2i");
+		return add("InputBox(z_1)");
 	}
 
 	@Test
 	public void testImaginaryShouldEditedAsRegularI() {
-		add("z_1 = 3+2i");
-		GeoInputBox inputBox = add("InputBox(z_1)");
+		GeoInputBox inputBox = withComplexLinkedGeo();
 		assertEquals("3+2 i" ,inputBox.getTextForEditor());
 	}
 
 	@Test
 	public void testOnUpdateImaginaryShouldBeUsed() {
-		add("z_1 = 3+2i");
-		GeoInputBox inputBox = add("InputBox(z_1)");
+		GeoInputBox inputBox = withComplexLinkedGeo();
 		inputBox.updateLinkedGeo("4 + 5" + Unicode.IMAGINARY);
 		assertEquals("4 + 5i" ,inputBox.getText());
 	}
 
 	@Test
 	public void capitalIShouldBeSmallIWhenComplex() {
-		add("z_1 = 3+2i");
-		GeoInputBox inputBox = add("InputBox(z_1)");
+		GeoInputBox inputBox = withComplexLinkedGeo();
 		inputBox.updateLinkedGeo("4+5I");
 		assertEquals("4 + 5i", inputBox.getText());
 	}
 
 	@Test
 	public void formulaTextShouldUseSmallIWhenComplex() {
-		add("z_1 = 3+2i");
-		GeoInputBox inputBox = add("input=InputBox(z_1)");
-		GeoText text = add("FormulaText[input]");
+		GeoInputBox inputBox = withComplexLinkedGeo();
+		GeoText text = add("FormulaText[InputBox1]");
 		assertEquals("3 + 2i", text.getTextString());
 	}
+
+	@Test
+	public void InputBoxPlusStringShouldUseImaginaryWhenComplex() {
+		GeoInputBox inputBox = withComplexLinkedGeo();
+		GeoText text = add("InputBox1 + \"\"");
+		assertEquals("3 + 2" + Unicode.IMAGINARY, text.getTextString());
+	}
+	
+	
 
 	@Test
 	public void formulaTextOnePlusIShouldUseSmallI() {
 		GeoText text = add("FormulaText(1+" + Unicode.IMAGINARY + ")");
 		assertEquals("1 + i", text.getTextString());
+	}
+	
+	@Test
+	public void addOnePlusIShouldUseImaginary() {
+		GeoText text = add("(1 + " + Unicode.IMAGINARY + ") + \"\"");
+		assertEquals("(1 + " + Unicode.IMAGINARY + ")", text.getTextString());
 	}
 
 	@Test
@@ -328,4 +344,11 @@ public class GeoInputBoxLinkedGeoTest extends BaseUnitTest {
 		assertEquals("1 + " + Unicode.IMAGINARY, text.getTextString());
 	}
 
+	@Ignore
+	@Test
+	public void piShouldBeTypedWhenComplex() {
+		GeoInputBox inputBox = withComplexLinkedGeo();
+		inputBox.updateLinkedGeo("2pi + 3i");
+		assertEquals("2" + Unicode.PI_STRING + " + 2i", inputBox.getText());
+	}
 }

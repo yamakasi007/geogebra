@@ -309,4 +309,20 @@ public class EditorTypingTest {
 		EditorChecker inputBoxChecker = new EditorChecker(AppCommonFactory.create(), model);
 		inputBoxChecker.type("sin(pix)").checkAsciiMath("sin(" + Unicode.PI_STRING + "x)");
 	}
+
+	@Test
+	public void testTypingPiWithComplex() {
+		MetaModel model = new MetaModel();
+		model.enableSubstitutions();
+		EditorChecker inputBoxChecker = new EditorChecker(AppCommonFactory.create(), model);
+		inputBoxChecker.type("3pi + 4i").checkAsciiMath("3" + Unicode.PI_STRING + " + 4i");
+	}
+
+	@Test
+	public void testTypingPiiWithComplex() {
+		MetaModel model = new MetaModel();
+		model.enableSubstitutions();
+		EditorChecker inputBoxChecker = new EditorChecker(AppCommonFactory.create(), model);
+		inputBoxChecker.type("3pii").checkAsciiMath("3" + Unicode.PI_STRING + "i");
+	}
 }

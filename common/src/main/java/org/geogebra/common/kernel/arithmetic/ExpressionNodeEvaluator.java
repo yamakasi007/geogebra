@@ -9,6 +9,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoFunctionable;
+import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoVec2D;
@@ -23,6 +24,8 @@ import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
+
+import com.himamis.retex.editor.share.util.Unicode;
 
 /**
  * @author ggb3D
@@ -718,8 +721,16 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 				msb.insert(0, lt.toLaTeXString(false, tpl));
 			} else {
 				if (lt.isGeoElement()) {
-					GeoElement geo = (GeoElement) lt;
-					msb.insert(0, getGeoString(geo, tpl));
+					if (lt instanceof GeoInputBox) {
+						GeoInputBox inputBox = (GeoInputBox) lt;
+						if (inputBox.getLinkedGeo() instanceof VectorNDValue) {
+							msb.insert(0, getGeoString(inputBox, tpl)
+								.replace('i', Unicode.IMAGINARY));
+						}
+					} else {
+						GeoElement geo = (GeoElement) lt;
+						msb.insert(0, getGeoString(geo, tpl));
+					}
 				} else {
 					msb.insert(0, lt.toValueString(tpl));
 				}
