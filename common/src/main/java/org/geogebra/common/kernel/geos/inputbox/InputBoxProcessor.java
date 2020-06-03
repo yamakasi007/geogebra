@@ -19,8 +19,6 @@ import org.geogebra.common.main.error.ErrorHelper;
 import org.geogebra.common.plugin.GeoClass;
 import org.geogebra.common.util.debug.Log;
 
-import com.himamis.retex.editor.share.util.Unicode;
-
 /**
  * Updates linked element for an input box from user input
  */
@@ -134,13 +132,8 @@ public class InputBoxProcessor {
 			if (!defineText.startsWith(prefix)) {
 				defineText = prefix + defineText;
 			}
-		} else if (isComplexNumber()) {
-
-			// make sure user can enter regular "i"
-			defineText = defineText.replace('i', Unicode.IMAGINARY);
-			defineText = defineText.replace('I', Unicode.IMAGINARY);
-
 		}
+
 		if (linkedGeo instanceof FunctionalNVar) {
 			// string like f(x,y)=x^2
 			// or f(\theta) = \theta
