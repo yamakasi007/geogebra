@@ -258,7 +258,6 @@ public class DialogManagerW extends DialogManager
 		}
 		UploadImageDialog imageDialog = device.getImageInputDialog((AppW) app);
 		imageDialog.setLocation(corner);
-		imageDialog.center();
 		imageDialog.show();
 	}
 

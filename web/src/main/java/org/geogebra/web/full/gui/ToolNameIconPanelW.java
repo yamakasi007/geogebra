@@ -121,7 +121,8 @@ public class ToolNameIconPanelW extends VerticalPanel implements BlurHandler,
 				32);
 		Button labelIcon = new Button(loc.getMenu("Icon") + " ...");
 		labelIcon.addClickHandler(event -> {
-			UploadImageDialog imageDialog = new UploadImageDialog((AppW) app, ICON_WIDTH, ICON_HEIGHT);
+			UploadImageDialog imageDialog = new UploadImageDialog((AppW) app,
+					ICON_WIDTH, ICON_HEIGHT);
 			imageDialog.center();
 			imageDialog.setOnPositiveAction(() -> {
 				setIconFile(imageDialog.getUploadImgPanel().getFileName(),

@@ -20,11 +20,11 @@ public class ImageInputDialog extends UploadImageDialog
 	private WebCamInputPanel webcamPanel;
 	private Label webcamLabel;
 
-	public ImageInputDialog(App app) {
-		super((AppW) app, PREVIEW_WIDTH, PREVIEW_HEIGHT);
+	public ImageInputDialog(AppW app) {
+		super(app, PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		setOnNegativeAction(() -> {
-			((AppW) app).getImageManager().setPreventAuxImage(false);
-			((AppW) app).getGuiManager().setMode(EuclidianConstants.MODE_MOVE,
+			app.getImageManager().setPreventAuxImage(false);
+			app.getGuiManager().setMode(EuclidianConstants.MODE_MOVE,
 					ModeSetter.TOOLBAR);
 		});
 		setOnPositiveAction(this::positiveAction);

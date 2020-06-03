@@ -1278,28 +1278,14 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 *   WEBCAM DIALOGS: permission dialog + camera dialog
 *****************************************************/
 	.mowPermissionDialog{
-		width: calc(100% - 80px);
-   		min-width: 250px;
-   		max-width: 476px; // 500px - (8px + 16px) padding
-   		max-height: calc(100% - 48px);
-		.Caption{
-			margin-right: 16px;
-		}
+   		max-width: 500px;
+   		max-height: 177px;
 		.gwt-Label{
 			margin-top: 0px !important;
-			margin-right: 16px;
 		}
-		button {
-   			color: $mow_dark !important;
-   		}
    		&.narrowDialog {
 			max-width: 376px; // 400px - (8px + 16px) padding
 			width: fit-content;
-		}
-		&.noButtons {
-			.gwt-Label{
-				padding-bottom: 32px;
-			}
 		}
 	}
 
