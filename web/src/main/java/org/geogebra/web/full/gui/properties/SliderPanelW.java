@@ -112,7 +112,8 @@ public class SliderPanelW extends OptionPanel implements ISliderOptionsListener 
 				app.getLocalization(), new ExtendedAVModel(null, app));
 
 		cbSliderFixed = new CheckBox();
-		cbSliderFixed.addClickHandler(event -> getModel().applyFixed(getCbSliderFixed().getValue()));
+		cbSliderFixed.addClickHandler(event -> getModel()
+				.applyFixed(getCbSliderFixed().getValue()));
 		positionPanel.add(cbSliderFixed);
 
 		cbRandom = new CheckBox();
