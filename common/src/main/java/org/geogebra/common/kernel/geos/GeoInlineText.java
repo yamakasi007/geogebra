@@ -88,9 +88,7 @@ public class GeoInlineText extends GeoInline implements TextStyle {
 		this.content = content;
 	}
 
-	/**
-	 * @return JSON representation of the document (used by Carota)
-	 */
+	@Override
 	public String getContent() {
 		return content;
 	}
@@ -114,21 +112,6 @@ public class GeoInlineText extends GeoInline implements TextStyle {
 			setWidth(text.getWidth());
 			setHeight(text.getHeight());
 		}
-	}
-
-	/**
-	 * returns all class-specific xml tags for getXML
-	 */
-	@Override
-	protected void getXMLtags(StringBuilder sb) {
-		getXMLfixedTag(sb);
-		getXMLvisualTags(sb);
-
-		sb.append("\t<content val=\"");
-		StringUtil.encodeXML(sb, content);
-		sb.append("\"/>\n");
-
-		XMLBuilder.appendPosition(sb, this);
 	}
 
 	@Override
