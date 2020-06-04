@@ -7,7 +7,6 @@ import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.ValueType;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.plugin.GeoClass;
-import org.geogebra.common.util.StringUtil;
 
 public class GeoInlineTable extends GeoInline implements TextStyle {
 
@@ -96,17 +95,6 @@ public class GeoInlineTable extends GeoInline implements TextStyle {
 	}
 
 	@Override
-	public void getXMLtags(StringBuilder sb) {
-		super.getXMLtags(sb);
-
-		sb.append("\t<table content=\"");
-		sb.append(StringUtil.encodeXML(content));
-		sb.append("\"/>\n");
-
-		XMLBuilder.appendPosition(sb, this);
-	}
-
-	@Override
 	public int getFontStyle() {
 		return GeoInlineText.getFontStyle(getDrawable());
 	}
@@ -121,13 +109,14 @@ public class GeoInlineTable extends GeoInline implements TextStyle {
 		return GeoText.getRelativeFontSize(GeoText.FONTSIZE_SMALL);
 	}
 
-	public String getContent() {
-		return content;
-	}
-
 	@Override
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	@Override
+	public String getContent() {
+		return content;
 	}
 
 	@Override
