@@ -1374,8 +1374,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				// app.updateStatusLabelAxesRatio();
 			}
 		}
-		// tells app that set coord system occured
-		app.setCoordSystemOccured();
+		// tells app that set coord system occured during user interaction
+		if (!app.getKernel().getLoadingMode()) {
+			app.setCoordSystemOccured();
+		}
 	}
 
 	/**
