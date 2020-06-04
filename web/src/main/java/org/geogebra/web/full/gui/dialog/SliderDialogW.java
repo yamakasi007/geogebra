@@ -134,9 +134,7 @@ public class SliderDialogW extends ComponentDialog implements
 		sliderPanel.getWidget().setStyleName("sliderPanelWidget");
 
 		Label nameLabel = new Label(loc.getMenu("Name"));
-		if (app.isUnbundledOrWhiteboard()) {
-			nameLabel.setStyleName("coloredLabel");
-		}
+		nameLabel.setStyleName("coloredLabel");
 		nameWidget.add(nameLabel);
 		
 		tfLabel = new AutoCompleteTextFieldW(-1, app);
