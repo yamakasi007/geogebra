@@ -28,7 +28,6 @@ public class ButtonDialogW extends ComponentDialog
 		implements HasKeyboardPopup {
 	private AutoCompleteTextFieldW tfCaption;
 	private ButtonDialogModel model;
-	private FlowPanel optionPane;
 	private ScriptArea tfScript;
 	private Localization loc;
 	
@@ -129,18 +128,18 @@ public class ButtonDialogW extends ComponentDialog
 		linkedPanel.add(linkedLabel);
 		linkedPanel.add(cbAdd);
 			
-		optionPane = new FlowPanel();
+		FlowPanel contentPanel = new FlowPanel();
 		
 		// create object list
-		optionPane.add(captionPanel);
+		contentPanel.add(captionPanel);
 
 		if (model.isTextField()) {
-			optionPane.add(linkedPanel);
+			contentPanel.add(linkedPanel);
 		}
 		else {
-			optionPane.add(scriptPanel);
+			contentPanel.add(scriptPanel);
 		}
-		addDialogContent(optionPane);
+		addDialogContent(contentPanel);
 	}
 
 	/**

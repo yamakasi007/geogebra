@@ -47,9 +47,7 @@ import com.google.gwt.user.client.ui.ListBox;
  */
 public class CheckboxCreationDialogW extends ComponentDialog implements
 		GeoElementSelectionListener, HasKeyboardPopup {
-
 	private AutoCompleteTextFieldW tfCaption;
-	private FlowPanel optionPane;
 	private GeoListBox gbObjects;
 	private GeoAttachedListBox gbList;
 
@@ -234,14 +232,14 @@ public class CheckboxCreationDialogW extends ComponentDialog implements
 		});
 
 		// Create the JOptionPane.
-		optionPane = new FlowPanel();
+		FlowPanel contentPanel = new FlowPanel();
 
 		// create object list
-		optionPane.add(captionPanel);
-		optionPane.add(listPanel);
+		contentPanel.add(captionPanel);
+		contentPanel.add(listPanel);
 
 		// Make this dialog display it.
-		addDialogContent(optionPane);
+		addDialogContent(contentPanel);
 	}
 
 	private void apply() {

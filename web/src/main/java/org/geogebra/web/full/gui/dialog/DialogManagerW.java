@@ -74,8 +74,6 @@ public class DialogManagerW extends DialogManager
 	private TemplateChooser templateChooser;
 	private PopupPanel loadingAnimation = null;
 	private ColorChooserDialog colChooser = null;
-	private InputDialogTableView tableViewDialog = null;
-	private ColorChooserDialog dialog = null;
 	private BaseWidgetFactory widgetFactory = new BaseWidgetFactory();
 
 	/**
@@ -562,24 +560,6 @@ public class DialogManagerW extends DialogManager
 		if (textInputDialog != null) {
 			((TextInputDialogW) textInputDialog).setLabels();
 		}
-
-		if (saveDialog != null) {
-			saveDialog.setLabels();
-		}
-
-		if (imageDialog != null) {
-			imageDialog.setLabels();
-		}
-
-		if (this.autoSavedDialog != null) {
-			this.autoSavedDialog.setLabels();
-		}
-		// if (fileChooser != null)
-		// updateJavaUILanguage();
-
-		// if (dataSourceDialog != null)
-		// dataSourceDialog.setLabels();
-
 	}
 
 	/**
