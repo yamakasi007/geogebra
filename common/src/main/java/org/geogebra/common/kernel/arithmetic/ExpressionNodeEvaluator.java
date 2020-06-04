@@ -721,19 +721,7 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 				msb.insert(0, lt.toLaTeXString(false, tpl));
 			} else {
 				if (lt.isGeoElement()) {
-					if (lt instanceof GeoInputBox) {
-						GeoInputBox inputBox = (GeoInputBox) lt;
-						String value = getGeoString(inputBox, tpl);
-						if (inputBox.getLinkedGeo() instanceof VectorNDValue
-						&& inputBox.isSymbolicMode()) {
-							value = value.replace('i', Unicode.IMAGINARY);
-						}
-
-						msb.insert(0, value);
-					} else	{
-						GeoElement geo = (GeoElement) lt;
-						msb.insert(0, getGeoString(geo, tpl));
-					}
+					msb.insert(0, valueFromGeoElement((GeoElement)lt, tpl));
 				} else {
 					msb.insert(0, lt.toValueString(tpl));
 				}
@@ -745,6 +733,22 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 			throw new MyError(loc, Errors.IllegalAddition, lt, "+", rt);
 		}
 
+	}
+
+	private String valueFromGeoElement(GeoElement geo,StringTemplate tpl) {
+		return shouldImaginaryCodeUsed(geo)
+				? getGeoString(geo, tpl).replace('i', Unicode.IMAGINARY)
+				: getGeoString(geo, tpl);
+	}
+
+	private boolean shouldImaginaryCodeUsed(GeoElement geo) {
+		if (!geo.isGeoInputBox()) {
+			return false;
+		}
+
+		GeoInputBox inputBox = (GeoInputBox) geo;
+		return  (inputBox.getLinkedGeo() instanceof VectorNDValue
+				&& inputBox.isSymbolicMode());
 	}
 
 	/**
