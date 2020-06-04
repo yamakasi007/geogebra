@@ -54,7 +54,8 @@ class InputBoxRenderer {
 	 * @return if geo is complex number or not.
 	 */
 	public static boolean isComplexNumber(GeoElementND geo) {
-		return geo instanceof VectorNDValue && ((VectorNDValue) geo).getToStringMode() == Kernel.COORD_COMPLEX;
+		return geo instanceof VectorNDValue
+				&& ((VectorNDValue) geo).getToStringMode() == Kernel.COORD_COMPLEX;
 	}
 
 	private boolean isTextUndefined(String text) {

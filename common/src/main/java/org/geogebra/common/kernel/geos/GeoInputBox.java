@@ -117,7 +117,6 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 		String linkedGeoText = linkedGeo.getRedefineString(true, true,
 				tpl);
 
-
 		if (InputBoxRenderer.isComplexNumber(linkedGeo)) {
 			linkedGeoText = linkedGeoText.replace(Unicode.IMAGINARY, 'i');
 		}

@@ -721,7 +721,7 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 				msb.insert(0, lt.toLaTeXString(false, tpl));
 			} else {
 				if (lt.isGeoElement()) {
-					msb.insert(0, valueFromGeoElement((GeoElement)lt, tpl));
+					msb.insert(0, valueFromGeoElement((GeoElement) lt, tpl));
 				} else {
 					msb.insert(0, lt.toValueString(tpl));
 				}
@@ -735,7 +735,7 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 
 	}
 
-	private String valueFromGeoElement(GeoElement geo,StringTemplate tpl) {
+	private String valueFromGeoElement(GeoElement geo, StringTemplate tpl) {
 		return shouldImaginaryCodeUsed(geo)
 				? getGeoString(geo, tpl).replace('i', Unicode.IMAGINARY)
 				: getGeoString(geo, tpl);

@@ -38,7 +38,7 @@ public class GeoInputBoxForComplexTest extends BaseUnitTest {
 	@Test
 	public void testImaginaryShouldRenderedAsRegularI() {
 		GeoInputBox inputBox = withComplexLinkedGeo();
-		assertEquals("3 + 2 \\; i" ,inputBox.getText());
+		assertEquals("3 + 2 \\; i", inputBox.getText());
 	}
 
 	protected GeoInputBox withComplexLinkedGeo() {
@@ -51,15 +51,15 @@ public class GeoInputBoxForComplexTest extends BaseUnitTest {
 	@Test
 	public void testImaginaryShouldEditedAsRegularI() {
 		GeoInputBox inputBox = withComplexLinkedGeo();
-		assertEquals("3+2 i" ,inputBox.getTextForEditor());
+		assertEquals("3+2 i", inputBox.getTextForEditor());
 	}
 
 	@Test
 	public void testOnUpdateImaginaryShouldBeUsed() {
 		GeoInputBox inputBox = withComplexLinkedGeo();
 		inputBox.updateLinkedGeo("4 + 5" + Unicode.IMAGINARY);
-		assertEquals("4 + 5 \\; i" ,inputBox.getText());
-		assertEquals("4+5 i" ,inputBox.getTextForEditor());
+		assertEquals("4 + 5 \\; i", inputBox.getText());
+		assertEquals("4+5 i", inputBox.getTextForEditor());
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class GeoInputBoxForComplexTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void InputBoxPlusStringShouldUseImaginaryWhenComplex() {
+	public void inputBoxPlusStringShouldUseImaginaryWhenComplex() {
 		GeoInputBox inputBox = withComplexLinkedGeo();
 		GeoText text = add("InputBox1 + \"\"");
 		assertEquals("3 + 2" + Unicode.IMAGINARY, text.getTextString());
