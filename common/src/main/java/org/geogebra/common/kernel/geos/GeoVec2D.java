@@ -44,6 +44,8 @@ import org.geogebra.common.util.MyMath;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.common.util.mathIT.Riemann;
 
+import com.himamis.retex.editor.share.util.Unicode;
+
 /**
  * 
  * @author Markus
@@ -1170,13 +1172,13 @@ final public class GeoVec2D extends ValidExpression
 		if (isImaginaryUnit()) {
 			switch (tpl.getStringType()) {
 			case GIAC:
+			case LATEX:
 				return "i";
-
 			default:
 				// case GEOGEBRA:
 				// case GEOGEBRA_XML:
 				// case LATEX:
-				return "i";
+				return String.valueOf(Unicode.IMAGINARY);
 			}
 		} else if (mode == Kernel.COORD_COMPLEX) {
 			initStringBuilder();

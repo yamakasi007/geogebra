@@ -723,11 +723,14 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 				if (lt.isGeoElement()) {
 					if (lt instanceof GeoInputBox) {
 						GeoInputBox inputBox = (GeoInputBox) lt;
-						if (inputBox.getLinkedGeo() instanceof VectorNDValue) {
-							msb.insert(0, getGeoString(inputBox, tpl)
-								.replace('i', Unicode.IMAGINARY));
+						String value = getGeoString(inputBox, tpl);
+						if (inputBox.getLinkedGeo() instanceof VectorNDValue
+						&& inputBox.isSymbolicMode()) {
+							value = value.replace('i', Unicode.IMAGINARY);
 						}
-					} else {
+
+						msb.insert(0, value);
+					} else	{
 						GeoElement geo = (GeoElement) lt;
 						msb.insert(0, getGeoString(geo, tpl));
 					}
