@@ -141,7 +141,7 @@ public class BrowserDevice implements GDevice {
 	 */
 	public WebcamInputDialog getWebcamInputDialog(AppW app) {
 		DialogData data = new DialogData("Camera", "Close", "takepicture");
-		return new WebcamInputDialog(app ,data);
+		return new WebcamInputDialog(app, data);
 	}
 
 	/**

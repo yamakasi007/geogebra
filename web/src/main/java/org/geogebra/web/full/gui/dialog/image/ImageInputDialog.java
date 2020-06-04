@@ -2,7 +2,6 @@ package org.geogebra.web.full.gui.dialog.image;
 
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.kernel.ModeSetter;
-import org.geogebra.common.main.App;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.webcam.WebcamDialogInterface;
@@ -20,6 +19,10 @@ public class ImageInputDialog extends UploadImageDialog
 	private WebCamInputPanel webcamPanel;
 	private Label webcamLabel;
 
+	/**
+	 * constructor
+	 * @param app see {@link AppW}
+	 */
 	public ImageInputDialog(AppW app) {
 		super(app, PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		setOnNegativeAction(() -> {
