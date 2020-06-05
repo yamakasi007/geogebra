@@ -647,29 +647,23 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		// change back to old name-> Fix instead of Lock
 		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
 				|| !geo.isFunctionOrEquationFromUser())) {
-			final GCheckmarkMenuItem cmItem = addFixObjectMenuItem(geo.isLocked());
-
-			Command cmdLock = new Command() {
-
-				@Override
-				public void execute() {
-					fixObjectCmd();
-					cmItem.setChecked(geo.isLocked());
-				}
-			};
-			cmItem.setCommand(cmdLock);
+			addFixObjectMenuItem(geo.isLocked());
 		}
 	}
 
-	private GCheckmarkMenuItem addFixObjectMenuItem(boolean locked) {
+	private void addFixObjectMenuItem(boolean locked) {
 		String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
 				.asString();
 		final GCheckmarkMenuItem cmItem = new GCheckmarkMenuItem(
 				MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("FixObject")),
 				MaterialDesignResources.INSTANCE.check_black(),
 				locked);
+		cmItem.setCommand(() -> {
+			fixObjectCmd();
+			cmItem.setChecked(locked);
+		});
+		cmItem.setChecked(locked);
 		wrappedPopup.addItem(cmItem);
-		return cmItem;
 	}
 
 	private void addFixForSelection(ArrayList<GeoElement> selectedGeos) {
@@ -684,17 +678,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			return;
 		}
 
-		GCheckmarkMenuItem cmItem = addFixObjectMenuItem(locked);
-
-		Command cmdLock = new Command() {
-
-			@Override
-			public void execute() {
-				fixObjectCmd();
-//				cmItem.setChecked(locked);
-			}
-		};
-		cmItem.setCommand(cmdLock);
+		addFixObjectMenuItem(locked);
 	}
 
 	private void addCutCopyPaste() {
