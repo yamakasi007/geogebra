@@ -69,7 +69,6 @@ public class DialogManagerW extends DialogManager
 		implements LoadingApplication {
 	private FunctionInspectorW functionInspector;
 	protected SaveDialogI saveDialog = null;
-	protected WebcamInputDialog webcamInputDialog;
 	private RecoverAutoSavedDialog autoSavedDialog;
 	private TemplateChooser templateChooser;
 	private PopupPanel loadingAnimation = null;
@@ -343,12 +342,9 @@ public class DialogManagerW extends DialogManager
 				&& device instanceof BrowserDevice)) {
 			return;
 		}
-		if (this.webcamInputDialog == null) {
-			this.webcamInputDialog = ((BrowserDevice) device)
-					.getWebcamInputDialog((AppW) app);
-		} else {
-			webcamInputDialog.startVideo();
-		}
+		WebcamInputDialog webcamInputDialog = ((BrowserDevice) device)
+				.getWebcamInputDialog((AppW) app);
+		webcamInputDialog.startVideo();
 	}
 
 	@Override
@@ -424,14 +420,12 @@ public class DialogManagerW extends DialogManager
 	 * @return {@link SaveDialogI}
 	 */
 	public SaveDialogI getSaveDialog() {
-		if (saveDialog == null) {
-			DialogData data;
-			if (app.isMebis()) {
-				saveDialog = new SaveDialogMow((AppW) app);
-			} else {
-				data = new DialogData("Save", "Cancel", "Save");
-				saveDialog = new SaveDialogW((AppW) app, data, widgetFactory);
-			}
+		DialogData data;
+		if (app.isMebis()) {
+			saveDialog = new SaveDialogMow((AppW) app);
+		} else {
+			data = new DialogData("Save", "Cancel", "Save");
+			saveDialog = new SaveDialogW((AppW) app, data, widgetFactory);
 		}
 		// set default saveType
 		saveDialog.setSaveType(
