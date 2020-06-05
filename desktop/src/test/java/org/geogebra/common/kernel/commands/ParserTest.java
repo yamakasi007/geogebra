@@ -331,6 +331,21 @@ public class ParserTest {
 		}
 	}
 
+	@Test
+	public void shouldKeepMultiplicationFromLeft() {
+		String f1 = reparse(app, "F(x,A,B)=BAxe^(-Bx)-Ae^(-Bx)",
+				StringTemplate.xmlTemplate, true);
+		assertEquals("(((B * A) * x) * " + Unicode.EULER_STRING
+				+ "^((-((B * x))))) - (A * " + Unicode.EULER_STRING + "^((-((B * x)))))",
+				f1);
+		String f2 = reparse(app, "F(x,A,B)=B A x e^(-B x)-A e^(-B x)",
+				StringTemplate.xmlTemplate, true);
+		// brackets in exponent slightly different
+		assertEquals("(((B * A) * x) * " + Unicode.EULER_STRING
+						+ "^(((-B) * x))) - (A * " + Unicode.EULER_STRING + "^(((-B) * x)))",
+				f2);
+	}
+
 	static void shouldReparseAs(App app, String string, String expected) {
 		Assert.assertEquals(expected,
 				reparse(app, string, StringTemplate.editTemplate, true));
