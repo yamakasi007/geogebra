@@ -634,18 +634,21 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	}
 
 	private void addFixForUnbundledOrNotes() {
+		ArrayList<GeoElement> selection = app.getSelectionManager().getSelectedGeos();
+		if (selection.size() > 1) {
+			addFixForSelection(selection);
+		} else {
+			addFixObjectForOneGeo();
+		}
+	}
+
+	private void addFixObjectForOneGeo() {
 		final GeoElement geo = getGeo();
 		// change back to old name-> Fix instead of Lock
 		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
-				|| !geo.isFunctionOrEquationFromUser())
-				&& app.getSelectionManager().getSelectedGeos().size() <= 1) {
+				|| !geo.isFunctionOrEquationFromUser())) {
+			final GCheckmarkMenuItem cmItem = addFixObjectMenuItem(geo.isLocked());
 
-			String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
-					.asString();
-			final GCheckmarkMenuItem cmItem = new GCheckmarkMenuItem(
-					MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("FixObject")),
-					MaterialDesignResources.INSTANCE.check_black(),
-					geo.isLocked());
 			Command cmdLock = new Command() {
 
 				@Override
@@ -655,8 +658,43 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				}
 			};
 			cmItem.setCommand(cmdLock);
-			wrappedPopup.addItem(cmItem);
 		}
+	}
+
+	private GCheckmarkMenuItem addFixObjectMenuItem(boolean locked) {
+		String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
+				.asString();
+		final GCheckmarkMenuItem cmItem = new GCheckmarkMenuItem(
+				MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("FixObject")),
+				MaterialDesignResources.INSTANCE.check_black(),
+				locked);
+		wrappedPopup.addItem(cmItem);
+		return cmItem;
+	}
+
+	private void addFixForSelection(ArrayList<GeoElement> selectedGeos) {
+		boolean fixable = true;
+		boolean locked = !app.getConfig().isObjectDraggingRestricted();
+		for (GeoElement geo: selectedGeos) {
+			fixable = fixable && geo.isFixable();
+			locked = locked && geo.isLocked();
+		}
+
+		if (!fixable) {
+			return;
+		}
+
+		GCheckmarkMenuItem cmItem = addFixObjectMenuItem(locked);
+
+		Command cmdLock = new Command() {
+
+			@Override
+			public void execute() {
+				fixObjectCmd();
+//				cmItem.setChecked(locked);
+			}
+		};
+		cmItem.setCommand(cmdLock);
 	}
 
 	private void addCutCopyPaste() {
