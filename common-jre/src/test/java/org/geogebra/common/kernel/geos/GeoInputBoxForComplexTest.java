@@ -100,5 +100,4 @@ public class GeoInputBoxForComplexTest extends BaseUnitTest {
 		GeoText text = add("Text(1+" + Unicode.IMAGINARY + ")");
 		assertEquals("1 + " + Unicode.IMAGINARY, text.getTextString());
 	}
-
 }

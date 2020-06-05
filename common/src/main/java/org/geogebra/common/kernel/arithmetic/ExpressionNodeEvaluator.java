@@ -9,7 +9,6 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
 import org.geogebra.common.kernel.geos.GeoFunctionable;
-import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoVec2D;
@@ -24,8 +23,6 @@ import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
-
-import com.himamis.retex.editor.share.util.Unicode;
 
 /**
  * @author ggb3D
@@ -721,7 +718,8 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 				msb.insert(0, lt.toLaTeXString(false, tpl));
 			} else {
 				if (lt.isGeoElement()) {
-					msb.insert(0, valueFromGeoElement((GeoElement) lt, tpl));
+					GeoElement geo = (GeoElement) lt;
+					msb.insert(0, getGeoString(geo, tpl));
 				} else {
 					msb.insert(0, lt.toValueString(tpl));
 				}
@@ -733,22 +731,6 @@ public class ExpressionNodeEvaluator implements ExpressionNodeConstants {
 			throw new MyError(loc, Errors.IllegalAddition, lt, "+", rt);
 		}
 
-	}
-
-	private String valueFromGeoElement(GeoElement geo, StringTemplate tpl) {
-		return shouldImaginaryCodeUsed(geo)
-				? getGeoString(geo, tpl).replace('i', Unicode.IMAGINARY)
-				: getGeoString(geo, tpl);
-	}
-
-	private boolean shouldImaginaryCodeUsed(GeoElement geo) {
-		if (!geo.isGeoInputBox()) {
-			return false;
-		}
-
-		GeoInputBox inputBox = (GeoInputBox) geo;
-		return  (inputBox.getLinkedGeo() instanceof VectorNDValue
-				&& inputBox.isSymbolicMode());
 	}
 
 	/**

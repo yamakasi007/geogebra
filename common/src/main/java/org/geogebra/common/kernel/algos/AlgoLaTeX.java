@@ -22,15 +22,12 @@ import java.util.ArrayList;
 
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.StringTemplate;
-import org.geogebra.common.kernel.arithmetic.VectorNDValue;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoBoolean;
 import org.geogebra.common.kernel.geos.GeoCasCell;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.HasSymbolicMode;
-
-import com.himamis.retex.editor.share.util.Unicode;
 
 /**
  * Returns a description of a GeoElement as a GeoText in LaTeX format.
@@ -81,15 +78,6 @@ public class AlgoLaTeX extends AlgoElement {
 
 		// set sans-serif LaTeX default
 		text.setSerifFont(false);
-	}
-
-	private void replaceImaginaryToPlainI() {
-		if (geo instanceof VectorNDValue) {
-			String str = text.getTextString();
-			if (str != null) {
-				text.setTextString(str.replace(Unicode.IMAGINARY, 'i'));
-			}
-		}
 	}
 
 	/**
@@ -214,8 +202,6 @@ public class AlgoLaTeX extends AlgoElement {
 		}
 
 		text.setLaTeX(useLaTeX, false);
-		replaceImaginaryToPlainI();
-
 	}
 
 	@Override
