@@ -143,6 +143,7 @@ public class InlineTableControllerW implements InlineTableController {
 
 		style = tableElement.getStyle();
 		style.setProperty("transformOrigin", "0 0");
+		style.setVisibility(Style.Visibility.HIDDEN);
 		tableImpl = Carota.get().getTable().create(tableElement);
 		tableImpl.init(2, 2);
 
