@@ -68,7 +68,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 public class DialogManagerW extends DialogManager
 		implements LoadingApplication {
 	private FunctionInspectorW functionInspector;
-	protected SaveDialogI saveDialog = null;
 	private RecoverAutoSavedDialog autoSavedDialog;
 	private TemplateChooser templateChooser;
 	private PopupPanel loadingAnimation = null;
@@ -421,6 +420,7 @@ public class DialogManagerW extends DialogManager
 	 */
 	public SaveDialogI getSaveDialog() {
 		DialogData data;
+		SaveDialogI saveDialog;
 		if (app.isMebis()) {
 			saveDialog = new SaveDialogMow((AppW) app);
 		} else {
