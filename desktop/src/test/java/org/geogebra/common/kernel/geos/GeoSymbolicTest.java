@@ -1135,4 +1135,13 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		GeoSymbolic element = add("Solve({eq1, eq2}, {x, y})");
 		assertThat(element.showInEuclidianView(), is(false));
 	}
+
+	@Test
+	public void testRedefinitionKeepsConstant() {
+		add("f(x) = Integral(x)");
+		// redefine geo
+		add("f(x) = Integral(x)");
+		GeoElement element = lookup("c_2");
+		assertThat(element, is(nullValue()));
+	}
 }
