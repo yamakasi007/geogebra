@@ -58,4 +58,18 @@ public class VoiceInputSegment implements VoiceInputCommandInterface {
 		return algo.getSegment();
 	}
 
+	@Override
+	public String getStringRepresentation(ArrayList<Double> inputList) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Segment with starting point coordinates ");
+		sb.append(inputList.get(0));
+		sb.append(" and ");
+		sb.append(inputList.get(1));
+		sb.append("and with ending point coordinates ");
+		sb.append(inputList.get(2));
+		sb.append(" and ");
+		sb.append(inputList.get(3));
+		sb.append(" has been created.");
+		return sb.toString();
+	}
 }

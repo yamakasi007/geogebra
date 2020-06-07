@@ -46,4 +46,15 @@ public class VoiceInputPoint implements VoiceInputCommandInterface {
 				yCoord,
 				1.0);
 	}
+
+	@Override
+	public String getStringRepresentation(ArrayList<Double> inputList) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Point with coordinates ");
+		sb.append(inputList.get(0));
+		sb.append(" and ");
+		sb.append(inputList.get(1));
+		sb.append(" has been created.");
+		return sb.toString();
+	}
 }

@@ -51,4 +51,21 @@ public class VoiceInputAngle implements VoiceInputCommandInterface {
                 legPoint, vertexPoint, (GeoPointND) thirdPoint.getOutput(0));
         return angleAlgo.getAngle();
     }
+
+    @Override
+    public String getStringRepresentation(ArrayList<Double> inputList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Angle with leg point coordinates ");
+        sb.append(inputList.get(0));
+        sb.append(" and ");
+        sb.append(inputList.get(1));
+        sb.append(", with vertex point coordinates ");
+        sb.append(inputList.get(2));
+        sb.append(" and ");
+        sb.append(inputList.get(3));
+        sb.append(" and with angle range ");
+        sb.append(inputList.get(4));
+        sb.append(" has been created.");
+        return sb.toString();
+    }
 }

@@ -2,6 +2,7 @@ package org.geogebra.web.html5.gui.voiceInput;
 
 import java.util.ArrayList;
 
+import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputAngle;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputCircle;
 import org.geogebra.web.html5.gui.voiceInput.command.VoiceInputCommandInterface;
@@ -60,7 +61,10 @@ public class VoiceInputDispatcher {
 				break;
 			case QuestResErrConstants.CREATE_ANGLE:
 				setCurrentCommand(new VoiceInputAngle());
+				break;
 			default:
+				// no command found
+				Log.error("NO COMMAND FOUND IN INPUT");
 				break;
 		}
 		questList = currentCommand.getQuestResList();

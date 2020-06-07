@@ -58,4 +58,17 @@ public class VoiceInputCircle implements VoiceInputCommandInterface {
 		circleAlgo.getCircle().setLabel("C");
 		return circleAlgo.getCircle();
 	}
+
+	@Override
+	public String getStringRepresentation(ArrayList<Double> inputList) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Circle with center coordinates ");
+		sb.append(inputList.get(0));
+		sb.append(" and ");
+		sb.append(inputList.get(1));
+		sb.append(" and radius ");
+		sb.append(inputList.get(2));
+		sb.append(" has been created.");
+		return sb.toString();
+	}
 }

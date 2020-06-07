@@ -30,4 +30,11 @@ public interface VoiceInputCommandInterface {
 	 * @return geoElement created from input list
 	 */
 	GeoElement createGeo(AppW appW, ArrayList<Double> inputList);
+
+	/**
+	 * @param inputList
+	 * 			  list of needed parameters
+	 * @return textual representation of result object
+ 	 */
+	String getStringRepresentation(ArrayList<Double> inputList);
 }

@@ -53,17 +53,21 @@ public class NaturalLanguageProcessor {
 		String pointTest2 = "I might want to draw a point with coordinates 1.";
 		String pointTest3 = "I would prefer to construct a point with coordinates.";
 		String pointTest4 = "Please build a point.";
-		String circleTest1 = "I would like to create a circle with coordinates 1 and 2 and radius 5.";
+		String circleTest1 = "I would like to create a
+		 	circle with coordinates 1 and 2 and radius 5.";
 		String circleTest2 = "I might want to draw a circle with coordinates 1 and 2.";
 		String circleTest3 = "I would prefer to construct a circle with coordinates 3.";
 		String circleTest4 = "I would like to create a circle with coordinates 1 and radius 5.";
 		String circleTest5 = "I might want to draw a circle with radius 10.";
 		String circleTest6 = "Please build a circle.";
-		String segmentTest1 = "I would like to create a segment with coordinates 1 and 2 and coordinates 3 and 4.";
-		String segmentTest2 = "I might want to draw a segment with coordinates 1 and 2 and coordinates 3.";
+		String segmentTest1 = "I would like to create a segment with
+		 	coordinates 1 and 2 and coordinates 3 and 4.";
+		String segmentTest2 = "I might want to draw a segment
+		 	with coordinates 1 and 2 and coordinates 3.";
 		String segmentTest3 = "I would prefer to construct a segment with coordinates 1 and 2.";
 		String segmentTest4 = "I would like to create a segment with coordinates 1.";
-		String segmentTest5 = "I might want to draw a segment with coordinates 10 and coordinates 12.";
+		String segmentTest5 = "I might want to draw a segment
+		 	with coordinates 10 and coordinates 12.";
 		String segmentTest6 = "Please build a segment.";**/
 		String text = cleanText(input);
 		if (!"".equals(text)) {
@@ -73,14 +77,14 @@ public class NaturalLanguageProcessor {
 				controller.collectInput();
 			} else {
 				controller.initSpeechSynth(
-						"I couldn't interpret it. Please repeat" +
-								" command. Must contain create and tool name.",
+						"I couldn't interpret it. Please repeat"
+								+ " command. Must contain create and tool name.",
 						QuestResErrConstants.COMMAND);
 			}
 		} else {
 			controller.initSpeechSynth(
-					"I couldn't interpret it. Please repeat command. " +
-							"Must contain create and tool name.",
+					"I couldn't interpret it. Please repeat command. "
+							+ "Must contain create and tool name.",
 					QuestResErrConstants.COMMAND);
 		}
 	}
@@ -135,7 +139,7 @@ public class NaturalLanguageProcessor {
 			this.act = cleanedToken;
 		}
 		// recognize which mathematical object
-		else if (toolWords.contains(cleanedToken)) {
+		else if (toolWords.contains(cleanedToken) && tool.isEmpty()) {
 			this.tool = cleanedToken;
 			// get tool id
 			int commandID = controller.getDispatcher().getCommandID(tool);

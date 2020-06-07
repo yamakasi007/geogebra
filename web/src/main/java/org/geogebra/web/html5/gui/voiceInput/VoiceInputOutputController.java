@@ -224,8 +224,9 @@ public class VoiceInputOutputController {
     public void collectInput() {
         // nothing to process -> make output object
         if (dispatcher.getQuestList().isEmpty()) {
-            initSpeechSynth("Object created.", -1);
             dispatcher.getCurrentCommand().createGeo(appW, results);
+            String toSay = dispatcher.getCurrentCommand().getStringRepresentation(results);
+            initSpeechSynth(toSay, -1);
             results.clear();
         }
         // still something to process
