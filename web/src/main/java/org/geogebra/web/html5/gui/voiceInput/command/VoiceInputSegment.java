@@ -65,7 +65,7 @@ public class VoiceInputSegment implements VoiceInputCommandInterface {
 		sb.append(inputList.get(0));
 		sb.append(" and ");
 		sb.append(inputList.get(1));
-		sb.append("and with ending point coordinates ");
+		sb.append(" and with ending point coordinates ");
 		sb.append(inputList.get(2));
 		sb.append(" and ");
 		sb.append(inputList.get(3));
