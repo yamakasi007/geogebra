@@ -28,7 +28,6 @@ public class QuestResErrConstants {
 	 * size of an angle
 	 */
 	public static final int ANGLESIZE = 4;
-	
 	/**
 	 * error message if the input was not a number
 	 */
@@ -37,7 +36,6 @@ public class QuestResErrConstants {
 	 * error message if the input was not positive
 	 */
 	public static final String ERR_MUST_BE_POSITIVE = "The input must be a positive number. ";
-
 	/**
 	 * if tool is not supported yet
 	 */
@@ -62,5 +60,4 @@ public class QuestResErrConstants {
 	 * task fulfilled
 	 */
 	public static final int CREATED_OBJECT = 500;
-
 }
