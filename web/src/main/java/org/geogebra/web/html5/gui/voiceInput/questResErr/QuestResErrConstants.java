@@ -28,8 +28,7 @@ public class QuestResErrConstants {
 	 * size of an angle
 	 */
 	public static final int ANGLESIZE = 4;
-
-
+	
 	/**
 	 * error message if the input was not a number
 	 */
