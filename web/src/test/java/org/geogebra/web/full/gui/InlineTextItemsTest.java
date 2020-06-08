@@ -28,7 +28,7 @@ import com.google.gwtmockito.WithClassesToStub;
 public class InlineTextItemsTest {
 
 	public static final String LINK_URL = "www.foo.bar";
-	private ContextMenuMock contextMenuMock;
+	private ContextMenuMock contextMenu;
 	private Construction construction;
 	private AppW app;
 	private GPoint2D point;
@@ -40,7 +40,7 @@ public class InlineTextItemsTest {
 		construction = app.getKernel().getConstruction();
 		point = new GPoint2D(0, 0);
 		controllerMockWithLink = new InlineTextControllerMock(LINK_URL);
-		contextMenuMock  = new ContextMenuMock(app);
+		contextMenu = new ContextMenuMock(app);
 		enableSettingsItem();
 	}
 
@@ -61,11 +61,7 @@ public class InlineTextItemsTest {
 				"FixObject", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
-	}
-
-	private List<String> getMenuEntriesFor(ArrayList<GeoElement> geos) {
-		return contextMenuMock.getMenuEntriesFor(geos);
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -80,7 +76,7 @@ public class InlineTextItemsTest {
 				"FixObject", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -96,7 +92,7 @@ public class InlineTextItemsTest {
 				"FixObject", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -111,7 +107,7 @@ public class InlineTextItemsTest {
 				"FixObject", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -123,7 +119,7 @@ public class InlineTextItemsTest {
 				"FixObject", "ShowTrace", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -135,7 +131,7 @@ public class InlineTextItemsTest {
 				"FixObject", "Settings"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	private GeoElement createMask() {
@@ -172,7 +168,7 @@ public class InlineTextItemsTest {
 				"SEPARATOR", "General.Order"
 		);
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 
 	@Test
@@ -184,6 +180,6 @@ public class InlineTextItemsTest {
 		construction.createGroup(geos);
 		List<String> expected = Collections.singletonList("General.Order");
 
-		assertEquals(expected, contextMenuMock.getMenuEntriesFor(geos));
+		assertEquals(expected, contextMenu.getEntriesFor(geos));
 	}
 }

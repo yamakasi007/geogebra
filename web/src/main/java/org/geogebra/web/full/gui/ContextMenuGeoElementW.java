@@ -637,7 +637,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	private void addFixObjectMenuItem(boolean locked, Runnable command) {
 		String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
 				.asString();
-		final GCheckmarkMenuItem cmItem = new GCheckmarkMenuItem(
+		final GCheckmarkMenuItem cmItem = factory.newCheckmarkMenuItem(
 				MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("FixObject")),
 				MaterialDesignResources.INSTANCE.check_black(),
 				locked);
