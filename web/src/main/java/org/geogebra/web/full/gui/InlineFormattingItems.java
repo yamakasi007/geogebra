@@ -85,6 +85,23 @@ public class InlineFormattingItems {
 		addFontSubmenu();
 		addHyperlinkItems();
 		menu.addSeparator();
+
+		if (editModeTable(inlines.get(0))) {
+			addTableItems();
+		}
+	}
+
+	private void addTableItems() {
+		addItem("ContextMenu.insertRowAbove", () -> {});
+		addItem("ContextMenu.insertRowBelow", () -> {});
+		addItem("ContextMenu.insertColumnLeft", () -> {});
+		addItem("ContextMenu.insertColumnRight", () -> {});
+
+		menu.addSeparator();
+
+		addItem("ContextMenu.deleteRow", () -> {});
+		addItem("ContextMenu.deleteColumn", () -> {});
+		addItem("ContextMenu.deleteTable", () -> {});
 	}
 
 	private void addToolbar() {
@@ -123,8 +140,12 @@ public class InlineFormattingItems {
 
 	private boolean textOrEditModeTable(HasFormat hasFormat) {
 		return hasFormat instanceof DrawInlineText
-				|| hasFormat instanceof DrawInlineTable
-						&& ((DrawInlineTable) hasFormat).isInEditMode();
+				|| editModeTable(hasFormat);
+	}
+
+	private boolean editModeTable(HasFormat hasFormat) {
+		return hasFormat instanceof DrawInlineTable
+				&& ((DrawInlineTable) hasFormat).isInEditMode();
 	}
 
 	private void addHyperlinkItem(String labelTransKey) {
