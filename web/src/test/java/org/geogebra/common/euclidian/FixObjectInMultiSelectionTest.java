@@ -3,7 +3,7 @@ package org.geogebra.common.euclidian;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -76,6 +76,15 @@ public class FixObjectInMultiSelectionTest {
 	}
 
 	@Test
+	public void fixObjectShouldBeUnheckedIfNotAllIsFixed() {
+		withFixableGeos(4);
+		fixAllGeos();
+		geos.get(2).setFixed(false);
+		selectionManager.addSelectedGeos(geos, false);
+		assertFalse(contextMenu.isMenuChecked(geos, "FixObject"));
+	}
+
+	@Test
 	public void selectionShouldNotHaveFixObjectIfAnyNonFixable() {
 		withFixableGeos(4);
 		withNonFixableGeo();
@@ -104,15 +113,5 @@ public class FixObjectInMultiSelectionTest {
 	private void withGrouped() {
 		group = new Group(geos);
 		construction.addGroupToGroupList(group);
-	}
-
-	@Test
-	public void propertiesShouldChangeIndependently() {
-		withFixableGeos(3);
-		group.setFixed(true);
-		GeoElement selected = geos.get(1);
-		app.getSelectionManager().setFocusedGroupElement(selected);
-		selected.setLineThickness(20);
-		assertNotEquals(20, geos.get(0).getLineThickness());
 	}
 }
