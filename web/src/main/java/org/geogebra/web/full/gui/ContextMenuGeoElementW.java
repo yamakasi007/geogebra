@@ -647,11 +647,11 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		// change back to old name-> Fix instead of Lock
 		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
 				|| !geo.isFunctionOrEquationFromUser())) {
-			addFixObjectMenuItem(geo.isLocked());
+			addFixObjectMenuItem(geo.isLocked(), this::fixObjectCmd);
 		}
 	}
 
-	private void addFixObjectMenuItem(boolean locked) {
+	private void addFixObjectMenuItem(boolean locked, Runnable command) {
 		String img = MaterialDesignResources.INSTANCE.lock_black().getSafeUri()
 				.asString();
 		final GCheckmarkMenuItem cmItem = new GCheckmarkMenuItem(
@@ -659,7 +659,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				MaterialDesignResources.INSTANCE.check_black(),
 				locked);
 		cmItem.setCommand(() -> {
-			fixObjectCmd();
+			command.run();
 			cmItem.setChecked(locked);
 		});
 		cmItem.setChecked(locked);
@@ -678,7 +678,13 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			return;
 		}
 
-		addFixObjectMenuItem(locked);
+		final boolean fix = !locked;
+		addFixObjectMenuItem(locked, new Runnable() {
+			@Override
+			public void run() {
+				fixAllObjectCmd(fix);
+			}
+		});
 	}
 
 	private void addCutCopyPaste() {

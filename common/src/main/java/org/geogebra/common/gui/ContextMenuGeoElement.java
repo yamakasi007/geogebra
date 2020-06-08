@@ -399,6 +399,28 @@ public abstract class ContextMenuGeoElement {
 		app.storeUndoInfo();
 	}
 
+	public void fixAllObjectCmd(boolean fixed) {
+		ArrayList<GeoElement> geos2 = checkOneGeo();
+
+		for (int i = geos2.size() - 1; i >= 0; i--) {
+			GeoElement geo1 = geos2.get(i);
+			if (geo1.isGeoNumeric()) {
+				((GeoNumeric) geo1)
+						.setSliderFixed(fixed);
+				geo1.updateRepaint();
+			} else {
+				if (geo1.isFixable()) {
+					geo1.setFixed(fixed);
+					geo1.updateRepaint();
+				}
+			}
+
+		}
+		getGeo().updateVisualStyle(GProperty.COMBINED);
+		app.getKernel().notifyRepaint();
+		app.storeUndoInfo();
+	}
+
 	/**
 	 * Fix / unfix checkbox
 	 */
