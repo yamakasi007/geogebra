@@ -382,21 +382,32 @@ public abstract class ContextMenuGeoElement {
 
 		for (int i = geos2.size() - 1; i >= 0; i--) {
 			GeoElement geo1 = geos2.get(i);
-			if (geo1.isGeoNumeric()) {
-				((GeoNumeric) geo1)
-						.setSliderFixed(!((GeoNumeric) geo1).isSliderFixed());
+			if (isFixable(geo1)) {
+				fixGeo(geo1, !isGeoLocked(geo1));
 				geo1.updateRepaint();
-			} else {
-				if (geo1.isFixable()) {
-					geo1.setFixed(!geo1.isLocked());
-					geo1.updateRepaint();
-				}
 			}
-
 		}
+
 		getGeo().updateVisualStyle(GProperty.COMBINED);
 		app.getKernel().notifyRepaint();
 		app.storeUndoInfo();
+	}
+
+	private void fixGeo(GeoElement geo, boolean fixed) {
+		if (geo.isGeoNumeric()) {
+			((GeoNumeric)geo).setSliderFixed(fixed);
+		} else {
+			geo.setFixed(fixed);
+		}
+	}
+
+	private boolean isGeoLocked(GeoElement geo) {
+		return geo.isGeoNumeric() && ((GeoNumeric)geo).isSliderFixed()
+				|| geo.isFixable() && geo.isLocked();
+	}
+
+	private boolean isFixable(GeoElement geo) {
+		return geo.isFixable() || geo.isGeoNumeric();
 	}
 
 	public void fixAllObjectCmd(boolean fixed) {
