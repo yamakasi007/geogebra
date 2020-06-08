@@ -35,6 +35,8 @@ public interface InlineTableController {
 
 	void update();
 
+	boolean isInEditMode();
+
 	void draw(GGraphics2D g2, GAffineTransform transform);
 
 	void toForeground(int x, int y);

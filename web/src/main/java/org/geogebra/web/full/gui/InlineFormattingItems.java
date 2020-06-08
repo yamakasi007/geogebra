@@ -3,9 +3,9 @@ package org.geogebra.web.full.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.geogebra.common.euclidian.draw.DrawInlineTable;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.HasFormat;
-import org.geogebra.common.euclidian.inline.InlineTextController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
@@ -66,16 +66,6 @@ public class InlineFormattingItems {
 		return true;
 	}
 
-	private boolean hasInlineTable() {
-		for (GeoElement geo : geos) {
-			if (geo instanceof GeoInlineTable) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	private void fillInlines() {
 		for (GeoElement geo : geos) {
 			inlines.add((HasFormat) app.getActiveEuclidianView().getDrawableFor(geo));
@@ -91,20 +81,17 @@ public class InlineFormattingItems {
 			return;
 		}
 
-		if (hasInlineTable()) {
-			addFontSubmenu();
-			menu.addSeparator();
-		} else {
-			addToolbar();
-			addFontSubmenu();
-			addHyperlinkItems();
-			menu.addSeparator();
-		}
+		addToolbar();
+		addFontSubmenu();
+		addHyperlinkItems();
+		menu.addSeparator();
 	}
 
 	private void addToolbar() {
-		InlineTextToolbar toolbar = factory.newInlineTextToolbar(inlines, app);
-		menu.addItem(toolbar.getItem(), false);
+		if (inlines.stream().allMatch(this::textOrEditModeTable)) {
+			InlineTextToolbar toolbar = factory.newInlineTextToolbar(inlines, app);
+			menu.addItem(toolbar.getItem(), false);
+		}
 	}
 
 	private void addFontSubmenu() {
@@ -124,16 +111,20 @@ public class InlineFormattingItems {
 	}
 
 	protected void addHyperlinkItems() {
-		if (inlines.size() != 1) {
-			return;
+		if (inlines.size() == 1 && textOrEditModeTable(inlines.get(0))) {
+			if (StringUtil.emptyOrZero(inlines.get(0).getHyperLinkURL())) {
+				addHyperlinkItem("Link");
+			} else {
+				addHyperlinkItem("editLink");
+				addRemoveHyperlinkItem();
+			}
 		}
+	}
 
-		if (StringUtil.emptyOrZero(((DrawInlineText) inlines.get(0)).getHyperLinkURL())) {
-			addHyperlinkItem("Link");
-		} else {
-			addHyperlinkItem("editLink");
-			addRemoveHyperlinkItem();
-		}
+	private boolean textOrEditModeTable(HasFormat hasFormat) {
+		return hasFormat instanceof DrawInlineText
+				|| hasFormat instanceof DrawInlineTable
+						&& ((DrawInlineTable) hasFormat).isInEditMode();
 	}
 
 	private void addHyperlinkItem(String labelTransKey) {
@@ -141,24 +132,12 @@ public class InlineFormattingItems {
 	}
 
 	private void openHyperlinkDialog() {
-		HyperlinkDialog hyperlinkDialog = new HyperlinkDialog((AppW) app,
-				getTextController());
+		HyperlinkDialog hyperlinkDialog = new HyperlinkDialog((AppW) app, inlines.get(0));
 		hyperlinkDialog.center();
 	}
 
-	private InlineTextController getTextController() {
-		return ((DrawInlineText) inlines.get(0)).getTextController();
-	}
-
 	private void addRemoveHyperlinkItem() {
-		Command addRemoveHyperlinkCommand = new Command() {
-			@Override
-			public void execute() {
-				getTextController().setHyperlinkUrl(null);
-			}
-		};
-
-		addItem("removeLink", addRemoveHyperlinkCommand);
+		addItem("removeLink", () -> inlines.get(0).setHyperlinkUrl(null));
 	}
 
 	/**

@@ -73,6 +73,10 @@ public class DrawInlineTable extends Drawable implements DrawInline, HasFormat {
 		tableController.removeFromDom();
 	}
 
+	public boolean isInEditMode() {
+		return tableController != null && tableController.isInEditMode();
+	}
+
 	@Override
 	public void format(String key, Object val) {
 		tableController.format(key, val);
@@ -81,6 +85,36 @@ public class DrawInlineTable extends Drawable implements DrawInline, HasFormat {
 	@Override
 	public <T> T getFormat(String key, T fallback) {
 		return tableController.getFormat(key, fallback);
+	}
+
+	@Override
+	public String getHyperLinkURL() {
+		return "";
+	}
+
+	@Override
+	public void setHyperlinkUrl(String url) {
+		// intentionally empty - for now
+	}
+
+	@Override
+	public String getHyperlinkRangeText() {
+		return "";
+	}
+
+	@Override
+	public void insertHyperlink(String url, String text) {
+		// intentionally empty - for now
+	}
+
+	@Override
+	public String getListStyle() {
+		return null;
+	}
+
+	@Override
+	public void switchListTo(String listType) {
+		// intentionally empty - for now
 	}
 
 	@Override

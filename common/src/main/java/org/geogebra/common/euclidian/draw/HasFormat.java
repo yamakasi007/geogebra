@@ -16,4 +16,26 @@ public interface HasFormat {
 	 * @return formatting option value or fallback
 	 */
 	<T> T getFormat(String key, T fallback);
+
+	/**
+	 * @return hyperlink of selected part, or at the end of text element if no selection
+	 */
+	String getHyperLinkURL();
+
+	void setHyperlinkUrl(String url);
+
+	String getHyperlinkRangeText();
+
+	void insertHyperlink(String url, String text);
+
+	/**
+	 * @return list style of selected text
+	 */
+	String getListStyle();
+
+	/**
+	 * Switch the list type of selected text
+	 * @param listType - numbered or bullet list
+	 */
+	void switchListTo(String listType);
 }

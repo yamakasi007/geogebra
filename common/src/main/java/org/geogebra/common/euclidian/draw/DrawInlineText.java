@@ -196,9 +196,7 @@ public class DrawInlineText extends Drawable implements DrawInline, HasFormat {
 		return fallback;
 	}
 
-	/**
-	 * @return hyperlink of selected part, or at the end of text element if no selection
-	 */
+	@Override
 	public String getHyperLinkURL() {
 		if (textController != null) {
 			return textController.getHyperLinkURL();
@@ -206,19 +204,37 @@ public class DrawInlineText extends Drawable implements DrawInline, HasFormat {
 		return "";
 	}
 
-	/**
-	 * Switch the list type of selected text
-	 * @param listType - numbered or bullet list
-	 */
+	@Override
+	public void setHyperlinkUrl(String url) {
+		if (textController != null) {
+			textController.setHyperlinkUrl(url);
+		}
+	}
+
+	@Override
+	public String getHyperlinkRangeText() {
+		if (textController != null) {
+			return textController.getHyperlinkRangeText();
+		}
+
+		return "";
+	}
+
+	@Override
+	public void insertHyperlink(String url, String text) {
+		if (textController != null) {
+			textController.insertHyperlink(url, text);
+		}
+	}
+
+	@Override
 	public void switchListTo(String listType) {
 		if (textController != null) {
 			textController.switchListTo(listType);
 		}
 	}
 
-	/**
-	 * @return list style of selected text
-	 */
+	@Override
 	public String getListStyle() {
 		if (textController != null) {
 			return textController.getListStyle();
