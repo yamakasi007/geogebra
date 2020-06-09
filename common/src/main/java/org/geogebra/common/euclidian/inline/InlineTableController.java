@@ -2,10 +2,9 @@ package org.geogebra.common.euclidian.inline;
 
 import org.geogebra.common.awt.GAffineTransform;
 import org.geogebra.common.awt.GGraphics2D;
+import org.geogebra.common.euclidian.draw.HasTextFormat;
 
-public interface InlineTableController {
-
-	void format(String key, Object val);
+public interface InlineTableController extends HasTextFormat {
 
 	/**
 	 * Set the location of the text editor.
@@ -44,6 +43,4 @@ public interface InlineTableController {
 	void toBackground();
 
 	void updateContent();
-
-	<T> T getFormat(String key, T fallback);
 }

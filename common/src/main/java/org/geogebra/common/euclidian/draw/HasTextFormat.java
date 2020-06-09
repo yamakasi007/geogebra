@@ -1,6 +1,7 @@
 package org.geogebra.common.euclidian.draw;
 
-public interface HasFormat {
+public interface HasTextFormat {
+
 	/**
 	 * @param key
 	 *            formatting option
@@ -22,14 +23,25 @@ public interface HasFormat {
 	 */
 	String getHyperLinkURL();
 
+	/**
+	 * @param url
+	 *         (absolute) link URL
+	 */
 	void setHyperlinkUrl(String url);
 
+	/**
+	 * @return the plaintext representation of the hyperlink range
+	 */
 	String getHyperlinkRangeText();
 
+	/**
+	 * Inserts formatted hyperlink at the current selection
+	 */
 	void insertHyperlink(String url, String text);
 
 	/**
-	 * @return list style of selected text
+	 * Returns the style of selected text
+	 * @return "number" or "bullet"
 	 */
 	String getListStyle();
 

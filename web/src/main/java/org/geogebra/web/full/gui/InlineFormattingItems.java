@@ -3,12 +3,13 @@ package org.geogebra.web.full.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.geogebra.common.euclidian.draw.DrawInlineTable;
-import org.geogebra.common.euclidian.draw.DrawInlineText;
-import org.geogebra.common.euclidian.draw.HasFormat;
+import org.geogebra.common.euclidian.draw.HasTextFormat;
+import org.geogebra.common.euclidian.inline.InlineTableController;
+import org.geogebra.common.euclidian.inline.InlineTextController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
+import org.geogebra.common.kernel.geos.HasTextFormatter;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.util.StringUtil;
@@ -36,7 +37,7 @@ public class InlineFormattingItems {
 	private final ContextMenuFactory factory;
 
 	private final ArrayList<GeoElement> geos;
-	private final List<HasFormat> inlines;
+	private final List<HasTextFormat> inlines;
 
 	/**
 	 * @param app the application
@@ -68,7 +69,9 @@ public class InlineFormattingItems {
 
 	private void fillInlines() {
 		for (GeoElement geo : geos) {
-			inlines.add((HasFormat) app.getActiveEuclidianView().getDrawableFor(geo));
+			if (geo instanceof HasTextFormatter) {
+				inlines.add(((HasTextFormatter) geo).getFormatter());
+			}
 		}
 	}
 
@@ -138,14 +141,14 @@ public class InlineFormattingItems {
 		}
 	}
 
-	private boolean textOrEditModeTable(HasFormat hasFormat) {
-		return hasFormat instanceof DrawInlineText
-				|| editModeTable(hasFormat);
+	private boolean textOrEditModeTable(HasTextFormat hasTextFormat) {
+		return hasTextFormat instanceof InlineTextController
+				|| editModeTable(hasTextFormat);
 	}
 
-	private boolean editModeTable(HasFormat hasFormat) {
-		return hasFormat instanceof DrawInlineTable
-				&& ((DrawInlineTable) hasFormat).isInEditMode();
+	private boolean editModeTable(HasTextFormat hasTextFormat) {
+		return hasTextFormat instanceof InlineTableController
+				&& ((InlineTableController) hasTextFormat).isInEditMode();
 	}
 
 	private void addHyperlinkItem(String labelTransKey) {

@@ -10,7 +10,7 @@ import org.geogebra.common.euclidian.inline.InlineTableController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 
-public class DrawInlineTable extends Drawable implements DrawInline, HasFormat {
+public class DrawInlineTable extends Drawable implements DrawInline {
 
 	private final InlineTableController tableController;
 
@@ -78,46 +78,6 @@ public class DrawInlineTable extends Drawable implements DrawInline, HasFormat {
 	}
 
 	@Override
-	public void format(String key, Object val) {
-		tableController.format(key, val);
-	}
-
-	@Override
-	public <T> T getFormat(String key, T fallback) {
-		return tableController.getFormat(key, fallback);
-	}
-
-	@Override
-	public String getHyperLinkURL() {
-		return "";
-	}
-
-	@Override
-	public void setHyperlinkUrl(String url) {
-		// intentionally empty - for now
-	}
-
-	@Override
-	public String getHyperlinkRangeText() {
-		return "";
-	}
-
-	@Override
-	public void insertHyperlink(String url, String text) {
-		// intentionally empty - for now
-	}
-
-	@Override
-	public String getListStyle() {
-		return null;
-	}
-
-	@Override
-	public void switchListTo(String listType) {
-		// intentionally empty - for now
-	}
-
-	@Override
 	public void updateContent() {
 		if (tableController != null) {
 			tableController.updateContent();
@@ -137,5 +97,9 @@ public class DrawInlineTable extends Drawable implements DrawInline, HasFormat {
 			GPoint2D p = rectangle.getInversePoint(x, y);
 			tableController.toForeground((int) p.getX(), (int) p.getY());
 		}
+	}
+
+	public InlineTableController getTableController() {
+		return tableController;
 	}
 }

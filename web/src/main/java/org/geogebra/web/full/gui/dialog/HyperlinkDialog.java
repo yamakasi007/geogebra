@@ -2,7 +2,7 @@ package org.geogebra.web.full.gui.dialog;
 
 import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.euclidian.EuclidianConstants;
-import org.geogebra.common.euclidian.draw.HasFormat;
+import org.geogebra.common.euclidian.draw.HasTextFormat;
 import org.geogebra.common.kernel.ModeSetter;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.html5.main.AppW;
@@ -16,12 +16,12 @@ public class HyperlinkDialog extends OptionDialog {
 	private MediaInputPanel textInputPanel;
 	private MediaInputPanel linkInputPanel;
 
-	private HasFormat formatter;
+	private HasTextFormat formatter;
 
 	/**
 	 * Dialog for inserting hyperlink into an inline text
 	 */
-	public HyperlinkDialog(AppW app, HasFormat formatter) {
+	public HyperlinkDialog(AppW app, HasTextFormat formatter) {
 		super(app.getPanel(), app);
 		this.formatter = formatter;
 

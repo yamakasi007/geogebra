@@ -113,6 +113,36 @@ public class InlineTableControllerW implements InlineTableController {
 	}
 
 	@Override
+	public String getHyperLinkURL() {
+		return "";
+	}
+
+	@Override
+	public void setHyperlinkUrl(String url) {
+		// unimplemented - for now
+	}
+
+	@Override
+	public String getHyperlinkRangeText() {
+		return null;
+	}
+
+	@Override
+	public void insertHyperlink(String url, String text) {
+		// unimplemented - for now
+	}
+
+	@Override
+	public String getListStyle() {
+		return null;
+	}
+
+	@Override
+	public void switchListTo(String listType) {
+		// unimplemented - for now
+	}
+
+	@Override
 	public void setLocation(int x, int y) {
 		style.setLeft(x, Style.Unit.PX);
 		style.setTop(y, Style.Unit.PX);
