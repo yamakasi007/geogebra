@@ -12,7 +12,7 @@ import org.geogebra.common.kernel.geos.GeoInlineTable;
 
 public class DrawInlineTable extends Drawable implements DrawInline {
 
-	private final InlineTableController tableController;
+	private InlineTableController tableController;
 
 	private final TransformableRectangle rectangle;
 
@@ -101,5 +101,13 @@ public class DrawInlineTable extends Drawable implements DrawInline {
 
 	public InlineTableController getTableController() {
 		return tableController;
+	}
+
+	/**
+	 * For tests
+	 * @param tableController
+	 */
+	public void setTextController(InlineTableController tableController) {
+		this.tableController = tableController;
 	}
 }
