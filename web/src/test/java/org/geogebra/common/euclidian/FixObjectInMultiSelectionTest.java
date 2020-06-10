@@ -76,7 +76,7 @@ public class FixObjectInMultiSelectionTest {
 	}
 
 	@Test
-	public void fixObjectShouldBeUnheckedIfNotAllIsFixed() {
+	public void fixObjectShouldBeUncheckedIfNotAllIsFixed() {
 		withFixableGeos(4);
 		fixAllGeos();
 		geos.get(2).setFixed(false);
