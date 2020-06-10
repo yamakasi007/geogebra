@@ -243,6 +243,11 @@ public interface AppConfig {
 	boolean isObjectDraggingRestricted();
 
 	/**
+	 * @return type of keyboard based on the app
+	 */
+	AppKeyboardType getKeyboardType();
+
+	/**
 	 * @return default angle unit
 	 */
 	int getDefaultAngleUnit();
@@ -257,9 +262,5 @@ public interface AppConfig {
 	 */
 	PropertiesFactory createPropertiesFactory();
 
-	/**
-	 * @return type of keyboard based on the app
-	 */
-	AppKeyboardType getKeyboardType();
 }
 
