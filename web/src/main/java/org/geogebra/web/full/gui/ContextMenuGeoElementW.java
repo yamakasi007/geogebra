@@ -665,7 +665,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		addFixObjectMenuItem(locked, new Runnable() {
 			@Override
 			public void run() {
-				fixAllObjectCmd(fix);
+				setFixedAllObjectCmd(fix);
 			}
 		});
 	}
