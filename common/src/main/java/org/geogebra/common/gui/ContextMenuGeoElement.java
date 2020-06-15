@@ -395,14 +395,14 @@ public abstract class ContextMenuGeoElement {
 
 	private void fixGeo(GeoElement geo, boolean fixed) {
 		if (geo.isGeoNumeric()) {
-			((GeoNumeric)geo).setSliderFixed(fixed);
+			((GeoNumeric) geo).setSliderFixed(fixed);
 		} else {
 			geo.setFixed(fixed);
 		}
 	}
 
 	private boolean isGeoLocked(GeoElement geo) {
-		return geo.isGeoNumeric() && ((GeoNumeric)geo).isSliderFixed()
+		return geo.isGeoNumeric() && ((GeoNumeric) geo).isSliderFixed()
 				|| geo.isFixable() && geo.isLocked();
 	}
 
@@ -410,9 +410,13 @@ public abstract class ContextMenuGeoElement {
 		return geo.isFixable() || geo.isGeoNumeric();
 	}
 
+	/**
+	 * Command to set locked status for all
+	 * selected geos once.
+	 * @param fixed to set.
+	 */
 	public void fixAllObjectCmd(boolean fixed) {
 		ArrayList<GeoElement> geos2 = checkOneGeo();
-
 		for (int i = geos2.size() - 1; i >= 0; i--) {
 			GeoElement geo1 = geos2.get(i);
 			if (geo1.isGeoNumeric()) {

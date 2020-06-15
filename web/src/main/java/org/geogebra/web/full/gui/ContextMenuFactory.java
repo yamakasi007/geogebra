@@ -69,7 +69,8 @@ public class ContextMenuFactory {
 	 * @param checked if the item should be checked by default
 	 * @return the new checkmark capable item.
 	 */
-	public GCheckmarkMenuItem newCheckmarkMenuItem(String title, SVGResource checkmark, boolean checked) {
+	public GCheckmarkMenuItem newCheckmarkMenuItem(String title,
+			SVGResource checkmark, boolean checked) {
 		return new GCheckmarkMenuItem(title, checkmark, checked);
 	}
 }
