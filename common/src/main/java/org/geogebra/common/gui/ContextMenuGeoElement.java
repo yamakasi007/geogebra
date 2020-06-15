@@ -407,11 +407,6 @@ public abstract class ContextMenuGeoElement {
 		}
 	}
 
-	private boolean isGeoLocked(GeoElement geo) {
-		return geo.isGeoNumeric() && ((GeoNumeric) geo).isSliderFixed()
-				|| geo.isFixable() && geo.isLocked();
-	}
-
 	private boolean isFixable(GeoElement geo) {
 		return geo.isFixable() || geo.isGeoNumeric();
 	}
