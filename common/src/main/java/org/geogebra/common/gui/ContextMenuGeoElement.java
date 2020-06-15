@@ -386,7 +386,7 @@ public abstract class ContextMenuGeoElement {
 		});
 	}
 
-	public void fixObjects(RunOnGeo fix) {
+	private void fixObjects(RunOnGeo fix) {
 		ArrayList<GeoElement> geos2 = checkOneGeo();
 		for (int i = geos2.size() - 1; i >= 0; i--) {
 			GeoElement geo1 = geos2.get(i);
