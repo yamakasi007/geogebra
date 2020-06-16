@@ -377,58 +377,25 @@ public abstract class ContextMenuGeoElement {
 	/**
 	 * Lock / unlock object
 	 */
-	public void fixObjectCmd() {
-		fixObjects(new RunOnGeo() {
-			@Override
-			public void execute(GeoElement geo) {
-				fixGeo(geo, !geo.isLocked());
-			}
-		});
-	}
-
-	private void fixObjects(RunOnGeo fix) {
+	public void fixObjectCmd(boolean fixed) {
 		ArrayList<GeoElement> geos2 = checkOneGeo();
 		for (int i = geos2.size() - 1; i >= 0; i--) {
 			GeoElement geo1 = geos2.get(i);
-			if (isFixable(geo1)) {
-				fix.execute(geo1);
-				geo1.updateRepaint();
-			}
+			fixGeo(geo1, fixed);
+			geo1.updateRepaint();
 		}
 
-		updateStoreUndoAndNotify();
-	}
-
-	private void fixGeo(GeoElement geo, boolean fixed) {
-		if (geo.isGeoNumeric()) {
-			((GeoNumeric) geo).setSliderFixed(fixed);
-		} else {
-			geo.setFixed(fixed);
-		}
-	}
-
-	private boolean isFixable(GeoElement geo) {
-		return geo.isFixable() || geo.isGeoNumeric();
-	}
-
-	/**
-	 * Command to set locked status for all
-	 * selected geos once.
-	 * @param fixed to set.
-	 */
-	public void setFixedAllObjectCmd(final boolean fixed) {
-		fixObjects(new RunOnGeo() {
-			@Override
-			public void execute(GeoElement geo) {
-				geo.setFixed(fixed);
-			}
-		});
-	}
-
-	protected void updateStoreUndoAndNotify() {
 		getGeo().updateVisualStyle(GProperty.COMBINED);
 		app.getKernel().notifyRepaint();
 		app.storeUndoInfo();
+	}
+
+	private void fixGeo(GeoElement geo, boolean fixed) {
+		if (geo.isFixable()) {
+			geo.setFixed(fixed);
+		} else if (geo.isGeoNumeric()) {
+			((GeoNumeric) geo).setSliderFixed(fixed);
+		}
 	}
 
 	/**
@@ -640,7 +607,9 @@ public abstract class ContextMenuGeoElement {
 			}
 		}
 
-		updateStoreUndoAndNotify();
+		getGeo().updateVisualStyle(GProperty.COMBINED);
+		app.getKernel().notifyRepaint();
+		app.storeUndoInfo();
 	}
 
 	/**

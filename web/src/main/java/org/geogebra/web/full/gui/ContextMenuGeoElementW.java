@@ -500,7 +500,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 						@Override
 						public void execute() {
-							fixObjectCmd();
+							fixObjectCmd(!getGeo().isLocked());
 						}
 					}, true, app);
 
@@ -630,7 +630,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		// change back to old name-> Fix instead of Lock
 		if (geo.isFixable() && (!app.getConfig().isObjectDraggingRestricted()
 				|| !geo.isFunctionOrEquationFromUser())) {
-			addFixObjectMenuItem(geo.isLocked(), this::fixObjectCmd);
+			addFixObjectMenuItem(geo.isLocked(), () -> fixObjectCmd(!geo.isLocked()));
 		}
 	}
 
@@ -659,7 +659,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		final boolean fix = !locked;
-		addFixObjectMenuItem(locked, () -> setFixedAllObjectCmd(fix));
+		addFixObjectMenuItem(locked, () -> fixObjectCmd(fix));
 	}
 
 	private void addCutCopyPaste() {
