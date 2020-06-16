@@ -641,10 +641,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 				MainMenu.getMenuBarHtmlClassic(img, loc.getMenu("FixObject")),
 				MaterialDesignResources.INSTANCE.check_black(),
 				locked);
-		cmItem.setCommand(() -> {
-			command.run();
-			cmItem.setChecked(locked);
-		});
+		cmItem.setCommand(command::run);
 		cmItem.setChecked(locked);
 		wrappedPopup.addItem(cmItem);
 	}
@@ -662,12 +659,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		final boolean fix = !locked;
-		addFixObjectMenuItem(locked, new Runnable() {
-			@Override
-			public void run() {
-				setFixedAllObjectCmd(fix);
-			}
-		});
+		addFixObjectMenuItem(locked, () -> setFixedAllObjectCmd(fix));
 	}
 
 	private void addCutCopyPaste() {
