@@ -267,6 +267,11 @@ public class AppConfigDefault implements AppConfig {
 	}
 
 	@Override
+	public boolean isCoordinatesObjectSettingEnabled() {
+		return true;
+	}
+
+	@Override
 	public PropertiesFactory createPropertiesFactory() {
 		return new BasePropertiesFactory();
 	}
@@ -276,13 +281,13 @@ public class AppConfigDefault implements AppConfig {
 		return AppKeyboardType.GRAPHING;
 	}
 
-    @Override
-    public int getEnforcedLineEquationForm() {
+	@Override
+	public int getEnforcedLineEquationForm() {
 	    return -1;
     }
 
-    @Override
-    public int getEnforcedConicEquationForm() {
+	@Override
+	public int getEnforcedConicEquationForm() {
         return -1;
     }
 

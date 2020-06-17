@@ -258,8 +258,14 @@ public interface AppConfig {
 	boolean isAngleUnitSettingEnabled();
 
 	/**
+	 * @return true if the coordinates object setting is enabled
+	 */
+	boolean isCoordinatesObjectSettingEnabled();
+
+	/**
 	 * @return new PropertiesFactory instance
 	 */
 	PropertiesFactory createPropertiesFactory();
+
 }
 

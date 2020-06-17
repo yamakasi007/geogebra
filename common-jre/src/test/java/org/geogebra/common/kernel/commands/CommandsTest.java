@@ -610,7 +610,7 @@ public class CommandsTest {
 		t("f(" + theta_STRING + ")=sin" + theta_STRING, "sin(" + theta_STRING + ")");
 		t("f(t)=sin t", "sin(t)");
 		t("f(t)=sint", "sin(t)");
-		t("x" + PI_STRING, "(" + PI_STRING + " * x)");
+		t("x" + PI_STRING, "(x * " + PI_STRING + ")");
 		t("xdeg", "x" + DEGREE_STRING);
 		t("sinxdeg", "sin(x" + DEGREE_STRING + ")");
 	}
@@ -1607,16 +1607,6 @@ public class CommandsTest {
 		t("TaylorPolynomial[ sin(x)^2, pi, 5 ]",
 				"(2 * (x - pi)^(2) / 2!) - (8 * (x - pi)^(4) / 4!)"
 						.replaceAll("pi", "3.141592653589793"));
-	}
-
-	@Test
-	public void cmdHoles() {
-		if (app.has(Feature.COMMAND_HOLES)) {
-			t("Holes(x/x)", "{(0, 1)}");
-			t("Holes((x^2 - 4)/(x - 2))", "{(2, 4)}");
-			t("Holes(x + x/x)", "{(0, 1)}");
-			t("Holes(2^(x + x/x))", "{(0, 2)}");
-		}
 	}
 
 	@Test
