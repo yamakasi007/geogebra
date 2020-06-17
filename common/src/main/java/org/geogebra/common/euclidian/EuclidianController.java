@@ -125,6 +125,7 @@ import org.geogebra.common.kernel.geos.PolygonFactory;
 import org.geogebra.common.kernel.geos.TestGeo;
 import org.geogebra.common.kernel.geos.Transformable;
 import org.geogebra.common.kernel.geos.Translateable;
+import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.kernel.implicit.GeoImplicit;
 import org.geogebra.common.kernel.implicit.GeoImplicitCurve;
 import org.geogebra.common.kernel.kernelND.GeoAxisND;
@@ -152,6 +153,7 @@ import org.geogebra.common.main.SelectionManager;
 import org.geogebra.common.main.SpecialPointsListener;
 import org.geogebra.common.main.SpecialPointsManager;
 import org.geogebra.common.main.settings.EuclidianSettings;
+import org.geogebra.common.media.VideoManager;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
 import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
@@ -413,7 +415,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private SnapController snapController = new SnapController();
 	private ArrayList<GeoElement> splitPartsToRemove = new ArrayList<>();
 
-	private GeoInline lastInline;
+	// used for focused selection in groups and embed elements in groups
+	private Group lastGroupHit;
+	// used for edit mode of inline elements
+	private GeoElement lastMowHit;
 
 	private GeoPriorityComparator priorityComparator;
 
@@ -6538,7 +6543,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			if (dl instanceof DrawDropDownList) {
 				((DrawDropDownList) dl).onOptionOver(event.getX(),
 						event.getY());
-				return dl.isCanvasDrawable();
+				return true;
 			}
 		}
 		return false;
@@ -8144,9 +8149,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 						&& mode == EuclidianConstants.MODE_SELECT) {
 					lastSelectionPressResult = SelectionToolPressResult.REMOVE;
 					this.lastSelectionToolGeoToRemove = geo;
-				} else if (mode == EuclidianConstants.MODE_SELECT_MOW) {
-					// actually it's a geo to select but with the same reason
-					this.lastSelectionToolGeoToRemove = geo;
 				}
 			} else {
 				if (app.has(Feature.SELECT_TOOL_NEW_BEHAVIOUR)
@@ -8157,23 +8159,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 						lastSelectionPressResult = SelectionToolPressResult.ADD;
 						selection.addSelectedGeo(geo, true, true);
 					}
-				} else if (mode == EuclidianConstants.MODE_SELECT_MOW) {
-					if (!wasBoundingBoxHit) {
-						if (geo == null) {
-							lastSelectionPressResult = SelectionToolPressResult.EMPTY;
-						} else {
-							if (view.getSelectionRectangle() == null
-									&& !e.isRightClick()) {
-								selection.clearSelectedGeos(false, false);
-								selection.updateSelection(false);
-								selection.addSelectedGeoWithGroup(geo);
-							}
-						}
-					}
 				} else if (mode == EuclidianConstants.MODE_MOVE
 						&& isSpecialPreviewPointFound(topHits)) {
 					previewPointHits = getPreviewSpecialPointHits(topHits);
-				} else {
+				} else if (mode != EuclidianConstants.MODE_SELECT_MOW) {
 					// repaint done next step, no update for properties view (will
 					// display ev properties)
 					selection.clearSelectedGeos(geo == null, false);
@@ -8183,12 +8172,31 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 		}
 
-		if (geo != null && mode == EuclidianConstants.MODE_SELECT_MOW
-				&& view.getDrawableFor(geo) != null
-				&& !wasBoundingBoxHit) {
-			updateBoundingBoxFromSelection(
-					view.getBoundingBox() != null && view.getBoundingBox().isCropBox());
-			view.repaintView();
+		if (mode == EuclidianConstants.MODE_SELECT_MOW) {
+			if (view.getHits().isEmpty()) {
+				geo = null;
+			} else {
+				geo = getNotesTopHit();
+			}
+		}
+
+		if (mode == EuclidianConstants.MODE_SELECT_MOW && !wasBoundingBoxHit) {
+			if (geo == null) {
+				clearSelections();
+			}
+			if (geo != null && !selGeos.contains(geo)
+					&& view.getSelectionRectangle() == null && !e.isRightClick()) {
+				selection.clearSelectedGeos(false, false);
+				selection.updateSelection(false);
+				selection.addSelectedGeoWithGroup(geo);
+				updateBoundingBoxFromSelection(
+						view.getBoundingBox() != null && view.getBoundingBox().isCropBox());
+			}
+		}
+
+		if (geo != selection.getFocusedGroupElement()) {
+			selection.setFocusedGroupElement(null);
+			view.setFocusedGroupGeoBoundingBox(null);
 		}
 
 		Hits th = viewHits.getTopHits();
@@ -8310,24 +8318,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			this.hideDynamicStylebar();
 		}
 
-		this.lastSelectionToolGeoToRemove = null;
+		lastGroupHit = null;
 
 		if (shapeMode(mode) && !app.isRightClick(event)) {
-			if (getResizedShape() == null) {
-				Drawable d = view.getBoundingBoxHandlerHit(mouseLoc, null);
-				if (d != null && view
-						.getHitHandler() != EuclidianBoundingBoxHandler.UNDEFINED) {
-					if (view.getBoundingBox() != null
-							&& view.getBoundingBox().equals(d.getBoundingBox())) {
-						setBoundingBoxCursor();
-						setResizedShape(d);
-					}
-				} else {
-					setMouseLocation(event);
-					getShapeMode().handleMouseDraggedForShapeMode(event);
-					return;
-				}
-			}
+			setMouseLocation(event);
+			getShapeMode().handleMouseDraggedForShapeMode(event);
+			return;
 		}
 
 		// preview shape for mow text tool
@@ -9372,37 +9368,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return view.isSymbolicEditorClicked(mouseLoc);
 	}
 
-	private boolean handleVideoEmbedReleased() {
-		if (!moveMode(mode)
-			|| draggingOccured || view.getHits().isEmpty()) {
-			return false;
-		}
-
-		GeoElement topHit = view.getHits().get(view.getHits().size() - 1);
-
-		if (topHit instanceof GeoVideo) {
-			DrawVideo drawVideo = (DrawVideo) view.getDrawableFor(topHit);
-			if (videoHasError(drawVideo)) {
-				return false;
-			}
-
-			selectAndShowSelectionUI(topHit);
-			maybeFocusGroupElement(topHit);
-
-			app.getVideoManager().play(drawVideo);
-			return true;
-		}
-		EmbedManager embedManager = app.getEmbedManager();
-		if (topHit instanceof GeoEmbed && embedManager != null) {
-			selectAndShowSelectionUI(topHit);
-			maybeFocusGroupElement(topHit);
-			embedManager.play((GeoEmbed) topHit);
-			return true;
-		}
-
-		return false;
-	}
-
 	private boolean videoHasError(DrawVideo video) {
 		return app.getVideoManager().isPlayerOffline(video);
 	}
@@ -9857,47 +9822,105 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return draggingOccured && draggingBeyondThreshold;
 	}
 
-	private boolean handleInlineHit(AbstractEvent event) {
-		if (!moveMode(mode) || app.isRightClick(event) || view.getHits().isEmpty()
-				|| event.isControlDown()) {
-			lastInline = null;
-			return false;
+	private GeoElement getNotesTopHit() {
+		GeoElement topHit = view.getHits().get(0);
+		for (GeoElement geo : view.getHits()) {
+			if (priorityComparator.compare(geo, topHit, false) > 0) {
+				topHit = geo;
+			}
 		}
 
-		GeoElement topGeo = view.getHits().get(view.getHits().size() - 1);
+		return topHit;
+	}
 
-		if (topGeo == lastInline && !draggingOccured && !wasBoundingBoxHit
+	private void handleMowSelectionRelease() {
+		if (view.getHits().isEmpty()) {
+			clearSelections();
+			lastGroupHit = null;
+			lastMowHit = null;
+			return;
+		}
+
+		GeoElement topHit = getNotesTopHit();
+
+		if (!draggingOccured) {
+			selection.clearSelectedGeos(false, false);
+			selection.addSelectedGeoWithGroup(topHit);
+			updateBoundingBoxFromSelection(false);
+		}
+
+		boolean needsFocus = topHit.getParentGroup() != null;
+		if (shouldEnterFocusedSelection(topHit)) {
+			focusGroupElement(topHit);
+			needsFocus = false;
+		}
+
+		if (!draggingOccured) {
+			// TODO: this will be simplified when I refactor embeds and videos to
+			// 	act more like inlines (probably in the media rotation ticket)
+			if (!needsFocus && topHit instanceof GeoVideo) {
+				handleVideoHit(topHit);
+			}
+
+			if (!needsFocus && topHit instanceof GeoEmbed) {
+				handleEmbedHit(topHit);
+			}
+
+			if (!needsFocus && topHit instanceof GeoInline) {
+				handleInlineHit(topHit);
+			}
+		}
+
+		showDynamicStylebar();
+		view.repaintView();
+
+		lastGroupHit = topHit.getParentGroup();
+		lastMowHit = needsFocus ? null : topHit;
+	}
+
+	private boolean shouldEnterFocusedSelection(GeoElement topHit) {
+		return lastGroupHit != null && lastGroupHit == topHit.getParentGroup();
+	}
+
+	private void handleVideoHit(GeoElement topHit) {
+		VideoManager videoManager = app.getVideoManager();
+		if (videoManager != null) {
+			DrawVideo drawVideo = (DrawVideo) view.getDrawableFor(topHit);
+			if (videoHasError(drawVideo)) {
+				return;
+			}
+
+			videoManager.play(drawVideo);
+		}
+	}
+
+	private void handleEmbedHit(GeoElement topHit) {
+		EmbedManager embedManager = app.getEmbedManager();
+		if (embedManager != null) {
+			embedManager.play((GeoEmbed) topHit);
+		}
+	}
+
+	private void handleInlineHit(GeoElement topHit) {
+		if (topHit == lastMowHit
 				&& view.getHitHandler() == EuclidianBoundingBoxHandler.UNDEFINED) {
-			showDynamicStylebar();
-			DrawInlineText drawInlineText = (DrawInlineText) view.getDrawableFor(topGeo);
-			maybeFocusGroupElement(topGeo);
-			drawInlineText.getBoundingBox().setFixed(true);
-			((DrawInline) view.getDrawableFor(topGeo)).toForeground(mouseLoc.x, mouseLoc.y);
+			DrawInline drawInline = (DrawInline) view.getDrawableFor(topHit);
+			drawInline.toForeground(mouseLoc.x, mouseLoc.y);
 
 			// Fix weird multiselect bug.
 			setResizedShape(null);
 
-			return true;
-		} else if (topGeo instanceof GeoInlineText) {
-			lastInline = (GeoInline) topGeo;
-
-			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(lastInline));
-			String hyperlinkURL = drInlineText.urlByCoordinate(mouseLoc.x, mouseLoc.y);
-			if (!StringUtil.emptyOrZero(hyperlinkURL) && !draggingOccured) {
-				showDynamicStylebar();
-				drInlineText.toForeground(mouseLoc.x, mouseLoc.y);
-				app.showURLinBrowser(hyperlinkURL);
-				return true;
-			} else if (!topGeo.hasGroup() && isMultiSelection()) {
-				selectAndShowBoundingBox(topGeo);
-			}
-		} else if (topGeo instanceof GeoInline) {
-			lastInline = (GeoInline) topGeo;
-		} else {
-			lastInline = null;
+			return;
 		}
 
-		return false;
+		if (topHit instanceof GeoInlineText) {
+			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(topHit));
+			String hyperlinkURL = drInlineText.urlByCoordinate(mouseLoc.x, mouseLoc.y);
+			if (!StringUtil.emptyOrZero(hyperlinkURL)) {
+				drInlineText.toForeground(mouseLoc.x, mouseLoc.y);
+				app.showURLinBrowser(hyperlinkURL);
+			}
+		}
 	}
 
 	/**
@@ -9907,11 +9930,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            pointer event
 	 */
 	public void wrapMouseReleased(AbstractEvent event) {
-		if (handleInlineHit(event)) {
-			lastSelectionToolGeoToRemove = null;
-			return;
-		}
-
 		GeoPointND p = this.selPoints() == 1 ? getSelectedPointList().get(0)
 				: null;
 
@@ -9973,10 +9991,11 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 
-		// handle video/audio/embeded/text release (mow)
-		if (!app.isRightClick(event) && handleVideoEmbedReleased()) {
-			lastSelectionToolGeoToRemove = null;
-			return;
+		// handle mow specific mouse release behaviour (inline objects, embeds, group focus)
+		if (mode == EuclidianConstants.MODE_SELECT_MOW && !app.isRightClick(event)
+				&& !event.isControlDown() && view.getSelectionRectangle() == null
+				&& !wasBoundingBoxHit) {
+			handleMowSelectionRelease();
 		}
 
 		// after finished drag switch back mode
@@ -10117,7 +10136,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		final boolean alt = event.isAltDown();
 		final boolean meta = event.isPopupTrigger() || event.isMetaDown();
 		PointerEventType type = event.getType();
-		view.setFocusedGroupGeoBoundingBox(null);
+
 		if (isDraggingOccuredBeyondThreshold()) {
 			if (shouldClearSelectionAfterMove(right)) {
 				clearSelectionsKeepLists(true, true);
@@ -10133,8 +10152,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				} else if (lastSelectionPressResult == SelectionToolPressResult.EMPTY) {
 					selection.clearSelectedGeos(true, true);
 				}
-			} else if (mode == EuclidianConstants.MODE_SELECT_MOW) {
-				handleMowSelectionRelease(event.isRightClick());
 			}
 		}
 
@@ -10352,34 +10369,13 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		draggingOccurredBeforeRelease = false;
 	}
 
-	protected void handleMowSelectionRelease(boolean rightClick) {
-		if (lastSelectionPressResult == SelectionToolPressResult.EMPTY) {
-			clearSelections();
-		} else {
-			// select the geo that was clicked and set boundingbox
-			if (isMultiSelection() && !wasBoundingBoxHit
-					&& !rightClick
-					&& lastSelectionToolGeoToRemove != null) {
-				selection.clearSelectedGeos(false, false);
-				selection.addSelectedGeoWithGroup(lastSelectionToolGeoToRemove);
-				maybeFocusGroupElement(lastSelectionToolGeoToRemove);
-				view.repaintView();
-			} else {
-				selection.setFocusedGroupElement(null);
-			}
-			lastSelectionToolGeoToRemove = null;
-		}
-	}
-
-	private void maybeFocusGroupElement(GeoElement geo) {
-		if (geo.hasGroup()) {
-			selection.setFocusedGroupElement(geo);
-			BoundingBox<? extends GShape> bb = ((Drawable) view
-					.getDrawableFor(geo))
-					.getSelectionBoundingBox();
-			view.setFocusedGroupGeoBoundingBox(bb);
-			view.update(geo);
-		}
+	private void focusGroupElement(GeoElement geo) {
+		selection.setFocusedGroupElement(geo);
+		BoundingBox<? extends GShape> bb = ((Drawable) view
+				.getDrawableFor(geo))
+				.getSelectionBoundingBox();
+		view.setFocusedGroupGeoBoundingBox(bb);
+		view.update(geo);
 	}
 
 	private boolean shouldClearSelectionForMove() {
@@ -12330,7 +12326,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		GRectangle rect = AwtFactory.getPrototype().newRectangle(
 				(int) Math.round(minX), (int) Math.round(minY),
 				(int) Math.round(maxX - minX), (int) Math.round(maxY - minY));
-		BoundingBox boundingBox = new MultiBoundingBox(hasRotationHandler);
+		MultiBoundingBox boundingBox = new MultiBoundingBox(hasRotationHandler);
 		boundingBox.setRectangle(rect);
 		boundingBox.setFixed(fixed);
 		boundingBox.setColor(app.getPrimaryColor());

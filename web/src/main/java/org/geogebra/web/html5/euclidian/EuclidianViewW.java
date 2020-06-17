@@ -280,7 +280,7 @@ public class EuclidianViewW extends EuclidianView implements
 	public final void paintBackground(GGraphics2D g2) {
 		if (isGridOrAxesShown() || hasBackgroundImages() || isTraceDrawn()
 				|| appW.showResetIcon()
-				|| kernel.needToShowAnimationButton()
+		        || kernel.needToShowAnimationButton()
 				|| getSettings().getBackgroundType() != BackgroundType.NONE) {
 			g2.drawImage(bgImage, 0, 0);
 		} else {
@@ -1514,6 +1514,9 @@ public class EuclidianViewW extends EuclidianView implements
 	@Override
 	public void invalidateCache() {
 		cacheGraphics = null;
+		// fix for chromium bug with putImageData
+		// https://bugs.chromium.org/p/chromium/issues/detail?id=68495
+		forceResize(this);
 	}
 
 	/**

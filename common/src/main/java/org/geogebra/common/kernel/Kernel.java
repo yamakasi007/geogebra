@@ -206,9 +206,9 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 	/** Whether to move point on path together with path */
 	public PathRegionHandling usePathAndRegionParameters = PathRegionHandling.ON;
 	private GeoGebraCasInterface ggbCAS;
-	/** Angle type: radians */
+	/** Angle unit: radians */
 	final public static int ANGLE_RADIANT = 1;
-	/** Angle type: degrees */
+	/** Angle unit: degrees */
 	final public static int ANGLE_DEGREE = 2;
 	/** Coord system: cartesian */
 	final public static int COORD_CARTESIAN = 3;
@@ -2395,7 +2395,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 				break;
 
 			case LATEX:
-				sbFormatAngle.append("\\;rad");
+				sbFormatAngle.append(" \\; rad");
 				break;
 
 			case GEOGEBRA_XML:
@@ -4541,9 +4541,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 		if (cons.requires3D()) {
 			// DO NOT REMOVE
 			// it's important we pick up errors involving this quickly
-			Log.error("************************************");
-			Log.error("****** file has 3D objects *********");
-			Log.error("************************************");
+			Log.error("file has 3D objects");
 			sb.append("\t<uses3D val=\"true\"/>\n");
 		}
 

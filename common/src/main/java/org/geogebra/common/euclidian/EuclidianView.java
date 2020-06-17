@@ -22,9 +22,7 @@ import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.awt.GShape;
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.background.DrawBackground;
-import org.geogebra.common.euclidian.draw.CanvasDrawable;
 import org.geogebra.common.euclidian.draw.DrawAngle;
-import org.geogebra.common.euclidian.draw.DrawAudio;
 import org.geogebra.common.euclidian.draw.DrawConic;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.draw.DrawImage;
@@ -1375,8 +1373,10 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				// app.updateStatusLabelAxesRatio();
 			}
 		}
-		// tells app that set coord system occured
-		app.setCoordSystemOccured();
+		// tells app that set coord system occured during user interaction
+		if (!app.getKernel().getLoadingMode()) {
+			app.setCoordSystemOccured();
+		}
 	}
 
 	/**
@@ -1873,7 +1873,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	@Override
 	public void update(GeoElement geo) {
 		DrawableND d = drawableMap.get(geo);
-		invalidateCache();
 		if (d != null) {
 			if (!d.isCompatibleWithGeo()) {
 				remove(geo);
@@ -1889,7 +1888,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			} else {
 				d.update();
 			}
-			if (geo == app.getSelectionManager().getFocusedGroupElement()) {
+			if (geo == app.getSelectionManager().getFocusedGroupElement()
+					&& focusedGroupGeoBoundingBox != null) {
 				focusedGroupGeoBoundingBox.setRectangle(d.getBoundsForStylebarPosition());
 			}
 		} else if (drawableNeeded(geo) && geosWaiting.contains(geo)) {
@@ -1914,7 +1914,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	@Override
 	public void add(GeoElement geo) {
-		invalidateCache();
 		// G.Sturr 2010-6-30
 		// filter out any geo not marked for this view
 		if (!drawableNeeded(geo)) {
@@ -2128,19 +2127,17 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 
 		for (Drawable d : allDrawableList) {
-			if ((d.isCanvasDrawable())
+			if (d instanceof DrawInputBox
 					&& (d.hit(x, y, app.getCapturingThreshold(type))
 					|| d.hitLabel(x, y))) {
 				GeoElement geo = d.getGeoElement();
 				if (geo.isEuclidianVisible() && geo.isSelectionAllowed(this)) {
-					if (geo instanceof GeoInputBox) {
-						focusTextField((GeoInputBox) geo);
-					}
-					((CanvasDrawable) d).setWidgetVisible(true);
+					focusTextField((GeoInputBox) geo);
+					((DrawInputBox) d).setWidgetVisible(true);
 					return true;
 				}
 
-				((CanvasDrawable) d).setWidgetVisible(false);
+				((DrawInputBox) d).setWidgetVisible(false);
 			}
 		}
 
@@ -3417,7 +3414,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	}
 
 	private void updateSizeChange() {
-		invalidateCache();
 		updateSizeKeepDrawables();
 		updateAllDrawablesForView(true);
 	}
@@ -4054,7 +4050,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		DrawDropDownList selected = null;
 		DrawDropDownList opened = null;
 		for (Drawable d : allDrawableList) {
-			if (d instanceof DrawDropDownList && d.isCanvasDrawable()) {
+			if (d instanceof DrawDropDownList) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				if (dl.needsUpdate()) {
 					dl.setNeedsUpdate(false);
@@ -4072,13 +4068,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				dl.draw(g);
 			} else if (d instanceof DrawInputBox) {
 
-				if (d.needsUpdate()) {
-					d.setNeedsUpdate(false);
-					d.update();
-				}
-
-				d.draw(g);
-			} else if (d instanceof DrawAudio) {
 				if (d.needsUpdate()) {
 					d.setNeedsUpdate(false);
 					d.update();
@@ -5701,7 +5690,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public void exportPaintPre(GGraphics2D g2d, double scale,
 			boolean transparency) {
-		invalidateCache();
 		exportPaintPreScale(g2d, scale);
 
 		// clipping on selection rectangle
@@ -5932,7 +5920,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	public void closeDropDowns(int x, int y) {
 		boolean repaintNeeded = false;
 		for (Drawable d : allDrawableList) {
-			if (d instanceof DrawDropDownList && d.isCanvasDrawable()) {
+			if (d instanceof DrawDropDownList) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				if (!(dl.isControlHit(x, y) || dl.isOptionsHit(x, y))) {
 					repaintNeeded = repaintNeeded || dl.closeOptions();
@@ -6207,7 +6195,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	protected void resetBackgroundAndCache() {
 		bgImage = null;
 		bgGraphics = null;
-		invalidateCache();
 	}
 
 	/**

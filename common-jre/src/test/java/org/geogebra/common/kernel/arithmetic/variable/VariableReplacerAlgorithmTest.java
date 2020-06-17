@@ -27,6 +27,13 @@ public class VariableReplacerAlgorithmTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void testDecimal() {
+		// opposite ordering would be better, part of WLY-98
+		shouldReplaceAs("pi8.1",
+				  "8.1 * " + Unicode.PI_STRING);
+	}
+
+	@Test
 	public void testIndexProduct() {
 		allowTokenizer();
 		add("a_{1} = 4");
@@ -39,8 +46,8 @@ public class VariableReplacerAlgorithmTest extends BaseUnitTest {
 
 	@Ignore
 	@Test
-	public void testFunctionProducts() {
-		shouldReplaceAs("sina", "sin(a)");
+		public void testFunctionProducts() {
+			shouldReplaceAs("sina", "sin(a)");
 	}
 
 	@Test
