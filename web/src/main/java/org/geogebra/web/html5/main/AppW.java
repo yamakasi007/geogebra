@@ -1737,7 +1737,8 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			if (getLAF() != null && getLAF().supportsGoogleDrive()) {
 				initGoogleDriveEventFlow();
 			}
-			if (getArticleElement().getDataParamEnableFileFeatures()) {
+			if (!StringUtil.empty(articleElement.getDataParamTubeID())
+					|| articleElement.getDataParamEnableFileFeatures()) {
 				loginOperation.performTokenLogin();
 			}
 		} else {
