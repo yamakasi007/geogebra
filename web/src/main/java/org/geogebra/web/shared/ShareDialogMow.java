@@ -2,6 +2,7 @@ package org.geogebra.web.shared;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -86,7 +87,7 @@ public class ShareDialogMow extends ComponentDialog
 					material.setVisibility("P");
 				}
 			}
-			shareWithGroups(this::showTooltip);
+			shareWithGroups(this::onGroupShareChanged);
 		});
 	}
 
@@ -321,18 +322,21 @@ public class ShareDialogMow extends ComponentDialog
 	protected void getGroupsSharedWith() {
 		app.getLoginOperation().getGeoGebraTubeAPI()
 				.getGroups(material.getSharingKeyOrId(),
-								this::updateOnSharedGroups);
+						this::updateOnSharedGroups);
 	}
 
 	/**
 	 * @param success
 	 *            shared with group successful or not
 	 */
-	protected void showTooltip(Boolean success) {
+	protected void onGroupShareChanged(boolean success) {
 		ToolTipManagerW.sharedInstance().showBottomMessage(
 				((AppW) app).getLocalization()
 						.getMenu(success ? "GroupShareOk"
 								: "GroupShareFail"),
 				true, ((AppW) app));
+		if (success) {
+			callback.onLoaded(Collections.singletonList(material), null);
+		}
 	}
 }
