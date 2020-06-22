@@ -9,7 +9,8 @@ import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.util.MyMath;
 import org.geogebra.common.util.StringUtil;
 
-public abstract class GeoInline extends GeoElement implements Translateable, PointRotateable {
+public abstract class GeoInline extends GeoElement implements Translateable,
+		PointRotateable, RectangleTransformable {
 
 	private GPoint2D location;
 
@@ -157,6 +158,10 @@ public abstract class GeoInline extends GeoElement implements Translateable, Poi
 	@Override
 	public void rotate(NumberValue r, GeoPointND S) {
 		angle -= r.getDouble();
+		rotate(location, r, S);
+	}
+
+	protected static void rotate(GPoint2D location, NumberValue r, GeoPointND S){
 		double phi = r.getDouble();
 		double cos = MyMath.cos(phi);
 		double sin = Math.sin(phi);
@@ -184,4 +189,5 @@ public abstract class GeoInline extends GeoElement implements Translateable, Poi
 
 		XMLBuilder.appendPosition(sb, this);
 	}
+
 }
