@@ -10,6 +10,7 @@ import jsinterop.annotations.JsType;
  */
 @JsType(isNative = true, namespace = JsPackage.GLOBAL)
 public class XMLUtil {
+
 	/**
 	 * Sets xml content
 	 * @param content to set.

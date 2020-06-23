@@ -14,6 +14,6 @@ XMLUtil.prototype.getContent = function() {
 };
 
 XMLUtil.prototype.setContent = function(text) {
-    this.doc = this.parser.parseFromString(text,"image/svg+xml");
+	this.doc = this.parser.parseFromString(text,"image/svg+xml");
 };
 

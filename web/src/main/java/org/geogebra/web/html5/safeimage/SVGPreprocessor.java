@@ -10,6 +10,7 @@ import org.geogebra.web.html5.Browser;
 public class SVGPreprocessor implements ImagePreprocessor {
 	private static final List<String> tagsToCut = Arrays.asList("script",
 			"foreignObject");
+	public static final String BASE_64 = "base64,";
 	private XMLUtil xml = new XMLUtil();
 
 	@Override
@@ -19,9 +20,17 @@ public class SVGPreprocessor implements ImagePreprocessor {
 
 	@Override
 	public void process(ImageFile imageFile, SafeImageProvider provider) {
-		xml.setContent(imageFile.getContent());
+		String content = toDecoded(imageFile.getContent());
+		xml.setContent(ImageManager.fixSVG(content));
 		removeTags();
 		provider.onReady(new ImageFile(imageFile.getFileName(), encodeSVG()));
+	}
+
+	private String toDecoded(String content) {
+		if (content.contains(BASE_64)) {
+			return Browser.decodeBase64(content.split(BASE_64)[1]);
+		}
+		return content;
 	}
 
 	private void removeTags() {
@@ -31,6 +40,6 @@ public class SVGPreprocessor implements ImagePreprocessor {
 	}
 
 	private String encodeSVG() {
-		return Browser.encodeSVG(ImageManager.fixSVG(xml.getContent()));
+		return Browser.encodeSVG(xml.getContent());
 	}
 }

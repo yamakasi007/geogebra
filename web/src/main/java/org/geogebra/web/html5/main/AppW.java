@@ -1486,15 +1486,14 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	/**
 	 * Loads an image and puts it on the canvas (this happens by drag & drop)
 	 *
-	 * @param imgFileName
+	 * @param fileName
 	 *            - the file name of the image
-	 * @param fileStr
+	 * @param content
 	 *            - the image data url
 	 */
-	public void imageDropHappened(String imgFileName, String fileStr) {
-		String fn = ImageManagerW.getMD5FileName(imgFileName, fileStr);
-
-		createImageFromString(fn, fileStr, null, true, null, null, null);
+	public void imageDropHappened(String fileName, String content) {
+		SafeGeoImageFactory factory = new SafeGeoImageFactory(this);
+		factory.create(fileName, content);
 	}
 
 	/**
