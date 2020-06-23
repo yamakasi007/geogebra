@@ -9,18 +9,16 @@ import org.geogebra.web.html5.util.ImageManagerW;
 
 /**
  * Loader of images in the ggb archive.
- * It ensures that no suspicious content will be in the
- * loaded images.
  *
  * @author laszlo
  */
-public class SafeImageLoader implements SafeImageProvider {
+public class ImageLoader {
 	private final ImageManagerW imageManager;
 	private final GgbFile archiveContent;
 	private AppW app;
 	private Runnable afterImages;
 	private final HashMap<String, String> images;
-	private int imagesRequested;
+	private int loadCount;
 
 	/**
 	 *
@@ -28,7 +26,7 @@ public class SafeImageLoader implements SafeImageProvider {
 	 * @param archive the ggb file to load images from.
 	 * @param afterImages callback to run after all images are loaded.
 	 */
-	public SafeImageLoader(AppW app, GgbFile archive, Runnable afterImages) {
+	public ImageLoader(AppW app, GgbFile archive, Runnable afterImages) {
 		this.app = app;
 		this.imageManager = app.getImageManager();
 		this.archiveContent = archive;
@@ -40,24 +38,16 @@ public class SafeImageLoader implements SafeImageProvider {
 	 * Do the loading itself.
 	 */
 	public void load() {
-		imagesRequested = 0;
-
 		for (Map.Entry<String, String> entry : archiveContent.entrySet()) {
 			ImageFile imageFile = new ImageFile(entry.getKey(), entry.getValue());
 			if (isValid(imageFile)) {
-				requestSafeImage(imageFile);
+				addImage(imageFile);
 			}
 		}
 
-		if (imagesRequested == 0) {
+		if (isAllImagesLoaded()) {
 			onLoadAll();
 		}
-	}
-
-	private void requestSafeImage(ImageFile imageFile) {
-		imagesRequested++;
-		SafeImage safeImage = new SafeImage(imageFile, this);
-		safeImage.process();
 	}
 
 	private boolean isValid(ImageFile imageFile) {
@@ -69,21 +59,17 @@ public class SafeImageLoader implements SafeImageProvider {
 		return imageManager.getExternalImage(key, app, false) != null;
 	}
 
-	@Override
-	public void onReady(ImageFile processedImage) {
-		imageManager.addExternalImage(processedImage.getFileName(),
-				processedImage.getContent());
+	public void addImage(ImageFile imageFile) {
+		imageManager.addExternalImage(imageFile.getFileName(),
+				imageFile.getContent());
 
-		images.put(processedImage.getFileName(),
-				processedImage.getContent());
-
-		if (isAllImagesLoaded()) {
-			onLoadAll();
-		}
+		images.put(imageFile.getFileName(),
+				imageFile.getContent());
+		loadCount++;
 	}
 
 	private boolean isAllImagesLoaded() {
-		return images.size() == imagesRequested;
+		return images.size() == loadCount;
 	}
 
 	private void onLoadAll() {

@@ -130,7 +130,7 @@ import org.geogebra.web.html5.kernel.commands.CommandDispatcherW;
 import org.geogebra.web.html5.main.settings.DefaultSettingsW;
 import org.geogebra.web.html5.main.settings.SettingsBuilderW;
 import org.geogebra.web.html5.move.googledrive.GoogleDriveOperation;
-import org.geogebra.web.html5.safeimage.SafeImageLoader;
+import org.geogebra.web.html5.safeimage.ImageLoader;
 import org.geogebra.web.html5.sound.GTimerW;
 import org.geogebra.web.html5.sound.SoundManagerW;
 import org.geogebra.web.html5.util.ArticleElement;
@@ -846,7 +846,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 		}
 
-		SafeImageLoader imageLoader = new SafeImageLoader(this, archive,
+		ImageLoader imageLoader = new ImageLoader(this, archive,
 				new Runnable() {
 					@Override
 					public void run() {
