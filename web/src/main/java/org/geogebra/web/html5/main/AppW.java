@@ -1474,13 +1474,13 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		// "a04c62e6a065b47476607ac815d022cc\liar.gif"
 		imgFileName = zipDirectory + '/' + fn;
 
-		GeoImage ret = createImageFromString(imgFileName, url, null,
-				corner1 == null, corner1, corner2, corner4);
+		SafeGeoImageFactory factory =
+				new SafeGeoImageFactory(this).withAutoCorners(corner1 == null)
+						.withCorners(corner1, corner2, corner4);
 		if (insertImageCallback != null) {
 			this.insertImageCallback.run();
 		}
-
-		return ret;
+		return factory.create(imgFileName, url);
 	}
 
 	/**
@@ -1505,6 +1505,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			String imageAsString, GeoImage imageOld,
 			final boolean autoCorners, final String c1, final String c2,
 			final String c4) {
+		Log.printStacktrace("c1: " + c1 + " c2: " + c2 + " c4: " + c4);
 		final Construction cons = getKernel().getConstruction();
 		String fileStr = imageAsString;
 		if (fileStr.startsWith(StringUtil.svgMarker)) {
