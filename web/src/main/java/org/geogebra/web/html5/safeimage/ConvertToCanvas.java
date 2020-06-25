@@ -2,12 +2,12 @@ package org.geogebra.web.html5.safeimage;
 
 import org.geogebra.common.util.FileExtensions;
 import org.geogebra.common.util.StringUtil;
+import org.geogebra.web.html5.util.ImageLoadCallback;
+import org.geogebra.web.html5.util.ImageWrapper;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
-import org.geogebra.web.html5.util.ImageLoadCallback;
-import org.geogebra.web.html5.util.ImageWrapper;
 
 public class ConvertToCanvas implements ImagePreprocessor {
 	private final Canvas canvas;
@@ -20,7 +20,8 @@ public class ConvertToCanvas implements ImagePreprocessor {
 	public boolean match(FileExtensions extension) {
 		return FileExtensions.PNG.equals(extension)
 				|| FileExtensions.JPG.equals(extension)
-				|| FileExtensions.JPEG.equals(extension);
+				|| FileExtensions.JPEG.equals(extension)
+				|| FileExtensions.BMP.equals(extension);
 	}
 
 	@Override
