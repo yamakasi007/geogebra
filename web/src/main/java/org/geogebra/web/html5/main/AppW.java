@@ -42,8 +42,6 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoElementGraphicsAdapter;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoNumeric;
-import org.geogebra.common.kernel.geos.GeoPoint;
-import org.geogebra.common.kernel.kernelND.GeoPointND;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppConfig;
 import org.geogebra.common.main.AppConfigDefault;
@@ -77,7 +75,6 @@ import org.geogebra.common.sound.SoundManager;
 import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.GTimer;
 import org.geogebra.common.util.GTimerListener;
-import org.geogebra.common.util.ImageManager;
 import org.geogebra.common.util.MD5EncrypterGWTImpl;
 import org.geogebra.common.util.NormalizerMinimal;
 import org.geogebra.common.util.StringUtil;
@@ -137,9 +134,7 @@ import org.geogebra.web.html5.util.ArticleElement;
 import org.geogebra.web.html5.util.ArticleElementInterface;
 import org.geogebra.web.html5.util.CopyPasteW;
 import org.geogebra.web.html5.util.Dom;
-import org.geogebra.web.html5.util.ImageLoadCallback;
 import org.geogebra.web.html5.util.ImageManagerW;
-import org.geogebra.web.html5.util.ImageWrapper;
 import org.geogebra.web.html5.util.NetworkW;
 import org.geogebra.web.html5.util.UUIDW;
 import org.geogebra.web.html5.util.ViewW;
@@ -1505,82 +1500,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			String imageAsString, GeoImage imageOld,
 			final boolean autoCorners, final String c1, final String c2,
 			final String c4) {
-		Log.printStacktrace("c1: " + c1 + " c2: " + c2 + " c4: " + c4);
-		final Construction cons = getKernel().getConstruction();
-		String fileStr = imageAsString;
-		if (fileStr.startsWith(StringUtil.svgMarker)) {
-			fileStr = Browser.decodeBase64(
-					fileStr.substring(StringUtil.svgMarker.length()));
-			fileStr = ImageManager.fixSVG(fileStr);
-			fileStr = Browser.encodeSVG(fileStr);
-		} else if (fileStr.startsWith("<svg") || fileStr.startsWith("<?xml")) {
-			fileStr = Browser.encodeSVG(fileStr);
-		}
-		getImageManager().addExternalImage(imgFileName, fileStr);
-		final GeoImage geoImage = imageOld != null ? imageOld
-				: new GeoImage(cons);
-		getImageManager().triggerSingleImageLoading(imgFileName, geoImage);
-
-		final App app = this;
-
-		final ImageWrapper img = new ImageWrapper(
-				getImageManager().getExternalImage(imgFileName, this, true));
-		img.attachNativeLoadHandler(getImageManager(), new ImageLoadCallback() {
-			@Override
-			public void onLoad() {
-				geoImage.setImageFileName(imgFileName,
-						img.getElement().getWidth(),
-						img.getElement().getHeight());
-				if (autoCorners) {
-					getGuiManager().setImageCornersFromSelection(geoImage);
-				} else {
-
-					if (c1 != null) {
-
-						GeoPointND corner1 = kernel.getAlgebraProcessor()
-								.evaluateToPoint(c1, null, true);
-						geoImage.setCorner(corner1, 0);
-
-						GeoPoint corner2;
-						if (c2 != null) {
-							corner2 = (GeoPoint) kernel.getAlgebraProcessor()
-									.evaluateToPoint(c2, null, true);
-						} else {
-							corner2 = new GeoPoint(cons, 0, 0, 1);
-							geoImage.calculateCornerPoint(corner2,
-									2);
-						}
-						geoImage.setCorner(corner2, 1);
-
-						// make sure 2nd corner is on screen
-						ImageManager.ensure2ndCornerOnScreen(
-								corner1.getInhomX(), corner2, app);
-
-						if (c4 != null) {
-							GeoPointND corner4 = kernel.getAlgebraProcessor()
-									.evaluateToPoint(c4, null, true);
-							geoImage.setCorner(corner4, 2);
-						}
-
-					}
-
-					geoImage.setLabel(null);
-					GeoImage.updateInstances(app);
-
-				}
-				if (getImageManager().isPreventAuxImage()) {
-					geoImage.setAuxiliaryObject(false);
-				}
-				if (app.isWhiteboardActive()) {
-					app.getActiveEuclidianView().getEuclidianController()
-							.selectAndShowSelectionUI(geoImage);
-				}
-				setDefaultCursor();
-				storeUndoInfo();
-			}
-		});
-
-		return geoImage;
+		SafeGeoImageFactory factory =
+				new SafeGeoImageFactory(this).withAutoCorners(c1 == null)
+						.withCorners(c1, c2, c4);
+		return factory.create(imgFileName, imageAsString);
 	}
 
 	/**
