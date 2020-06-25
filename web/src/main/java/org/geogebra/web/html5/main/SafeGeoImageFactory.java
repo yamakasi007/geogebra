@@ -18,7 +18,7 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 	private final Construction construction;
 	private final AlgebraProcessor algebraProcessor;
 	private final ImageManagerW imageManager;
-	private final GeoImage geoImage;
+	private GeoImage geoImage;
 	private ImageFile imageFile;
 	private ImageWrapper wrapper;
 	private boolean autoCorners;
@@ -32,14 +32,25 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 		algebraProcessor = app.getKernel().getAlgebraProcessor();
 		imageManager = app.getImageManager();
 		autoCorners = true;
-		geoImage = new GeoImage(construction);
+	}
+
+	public SafeGeoImageFactory(AppW app, GeoImage image) {
+		this(app);
+		geoImage = image;
 	}
 
 	public GeoImage create(String fileName, String content) {
+		ensureResultImageExists();
 		ImageFile imageFile = new ImageFile(fileName, content);
 		SafeImage safeImage = new SafeImage(imageFile, this);
 		safeImage.process();
 		return geoImage;
+	}
+
+	private void ensureResultImageExists() {
+		if (geoImage == null) {
+			geoImage = new GeoImage(construction);
+		}
 	}
 
 	@Override
@@ -105,6 +116,8 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 						.evaluateToPoint(cornerLabel4, null, true);
 				geoImage.setCorner(corner4, 2);
 			}
+			geoImage.setLabel(null);
+			GeoImage.updateInstances(app);
 		}
 	}
 

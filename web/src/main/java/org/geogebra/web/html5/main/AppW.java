@@ -1472,10 +1472,11 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		SafeGeoImageFactory factory =
 				new SafeGeoImageFactory(this).withAutoCorners(corner1 == null)
 						.withCorners(corner1, corner2, corner4);
+		GeoImage geoImage = factory.create(imgFileName, url);
 		if (insertImageCallback != null) {
 			this.insertImageCallback.run();
 		}
-		return factory.create(imgFileName, url);
+		return geoImage;
 	}
 
 	/**
@@ -1501,7 +1502,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			final boolean autoCorners, final String c1, final String c2,
 			final String c4) {
 		SafeGeoImageFactory factory =
-				new SafeGeoImageFactory(this).withAutoCorners(c1 == null)
+				new SafeGeoImageFactory(this, imageOld).withAutoCorners(c1 == null)
 						.withCorners(c1, c2, c4);
 		return factory.create(imgFileName, imageAsString);
 	}
