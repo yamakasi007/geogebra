@@ -1135,6 +1135,15 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	}
 
 	@Test
+	public void testRedefinitionKeepsConstant() {
+		add("f(x) = Integral(x)");
+		// redefine geo
+		add("f(x) = Integral(x)");
+		GeoElement element = lookup("c_2");
+		assertThat(element, is(nullValue()));
+	}
+
+	@Test
 	public void testRadians() {
 		GeoSymbolic angle = add("1rad");
 		assertThat(
@@ -1154,15 +1163,6 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		add("eq2: x - y = 3");
 		GeoSymbolic element = add("Solve({eq1, eq2}, {x, y})");
 		assertThat(element.showInEuclidianView(), is(false));
-	}
-
-	@Test
-	public void testRedefinitionKeepsConstant() {
-		add("f(x) = Integral(x)");
-		// redefine geo
-		add("f(x) = Integral(x)");
-		GeoElement element = lookup("c_2");
-		assertThat(element, is(nullValue()));
 	}
 
 	@Test
