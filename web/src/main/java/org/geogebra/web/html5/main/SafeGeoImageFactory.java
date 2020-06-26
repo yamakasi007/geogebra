@@ -13,6 +13,11 @@ import org.geogebra.web.html5.util.ImageLoadCallback;
 import org.geogebra.web.html5.util.ImageManagerW;
 import org.geogebra.web.html5.util.ImageWrapper;
 
+/**
+ * Factory to create a GeoImage from content and corner points optionally.
+ *
+ * @author laszlo
+ */
 public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback {
 	private final AppW app;
 	private final Construction construction;
@@ -26,6 +31,11 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 	private String cornerLabel2 = null;
 	private String cornerLabel4 = null;
 
+	/**
+	 * Constructor
+	 *
+	 * @param app the Application
+	 */
 	public SafeGeoImageFactory(AppW app) {
 		this.app = app;
 		construction = app.getKernel().getConstruction();
@@ -34,11 +44,23 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 		autoCorners = true;
 	}
 
+	/**
+	 * Constructor
+	 *
+	 * @param app the application
+	 * @param image the base object of the resulting image.
+	 */
 	public SafeGeoImageFactory(AppW app, GeoImage image) {
 		this(app);
 		geoImage = image;
 	}
 
+	/**
+	 * Create the GeoImage setup by the factory.
+	 * @param fileName of the image.
+	 * @param content of the image
+	 * @return the corresponding GeoImage object
+	 */
 	public GeoImage create(String fileName, String content) {
 		ensureResultImageExists();
 		ImageFile imageFile = new ImageFile(fileName, content);
@@ -62,7 +84,7 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 				geoImage);
 		wrapper = new ImageWrapper(
 				imageManager.getExternalImage(imageFile.getFileName(), app, true));
-		wrapper.attachNativeLoadHandler(imageManager,this);
+		wrapper.attachNativeLoadHandler(imageManager, this);
 	}
 
 	@Override
@@ -76,7 +98,6 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 		} else {
 			setManualCorners();
 		}
-
 
 		if (imageManager.isPreventAuxImage()) {
 			geoImage.setAuxiliaryObject(false);
@@ -121,12 +142,24 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 		}
 	}
 
+	/**
+	 *
+	 * @param autoCorners if factory should create corners auotmatically
+	 * @return factory object with autoCorners set.
+	 */
 	public SafeGeoImageFactory withAutoCorners(boolean autoCorners) {
 		this.autoCorners = autoCorners;
 		return this;
 	}
 
-
+	/**
+	 * Sets corners for the image
+	 *
+ 	 * @param cornerLabel1 Corner1
+	 * @param cornerLabel2 Corner2
+	 * @param cornerLabel4 Corner4
+	 * @return factory object with corners set.
+	 */
 	public SafeGeoImageFactory withCorners(String cornerLabel1, String cornerLabel2,
 			String cornerLabel4) {
 		this.cornerLabel1 = cornerLabel1;
