@@ -15,13 +15,13 @@ public class SVGPreprocessor implements ImagePreprocessor {
 
 	@Override
 	public boolean match(FileExtensions extension) {
-		return FileExtensions.SVG.equals(extension);
+		return SVGUtil.match(extension);
 	}
 
 	@Override
 	public void process(ImageFile imageFile, SafeImageProvider provider) {
 		String content = toDecoded(imageFile.getContent());
-		xml.setContent(ImageManager.fixSVG(content));
+		xml.setContent(content);
 		removeTags();
 		provider.onReady(new ImageFile(imageFile.getFileName(), encodeSVG()));
 	}
@@ -40,6 +40,6 @@ public class SVGPreprocessor implements ImagePreprocessor {
 	}
 
 	private String encodeSVG() {
-		return Browser.encodeSVG(xml.getContent());
+		return SVGUtil.fixAndEncode(xml.getContent());
 	}
 }

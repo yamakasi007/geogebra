@@ -60,11 +60,14 @@ public class ImageLoader {
 	}
 
 	public void addImage(ImageFile imageFile) {
+		String content = SVGUtil.match(imageFile.getExtension())
+				? SVGUtil.fixAndEncode(imageFile.getContent())
+				: imageFile.getContent();
 		imageManager.addExternalImage(imageFile.getFileName(),
-				imageFile.getContent());
+				content);
 
 		images.put(imageFile.getFileName(),
-				imageFile.getContent());
+				content);
 		loadCount++;
 	}
 
