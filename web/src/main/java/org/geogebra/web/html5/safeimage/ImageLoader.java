@@ -59,7 +59,7 @@ public class ImageLoader {
 		return imageManager.getExternalImage(key, app, false) != null;
 	}
 
-	private void addImage(ImageFile imageFile) {
+	private	 void addImage(ImageFile imageFile) {
 		String content = SVGUtil.match(imageFile.getExtension())
 				? SVGUtil.fixAndEncode(imageFile.getContent())
 				: imageFile.getContent();

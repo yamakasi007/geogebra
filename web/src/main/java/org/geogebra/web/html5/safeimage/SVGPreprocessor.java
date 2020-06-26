@@ -4,14 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.geogebra.common.util.FileExtensions;
-import org.geogebra.common.util.ImageManager;
 import org.geogebra.web.html5.Browser;
 
 public class SVGPreprocessor implements ImagePreprocessor {
 	private static final List<String> tagsToCut = Arrays.asList("script",
 			"foreignObject");
 	public static final String BASE_64 = "base64,";
-	private XMLUtil xml = new XMLUtil();
+	private final XMLUtil xml = new XMLUtil();
 
 	@Override
 	public boolean match(FileExtensions extension) {

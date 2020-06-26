@@ -822,8 +822,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			kernel.setLibraryJavaScript(libraryJS);
 		}
 
-		if (getEmbedManager() != null) {
-			getEmbedManager().loadEmbeds(archive);
+		// just to make SpotBugs happy
+		EmbedManager embedManager = getEmbedManager();
+		if (embedManager != null) {
+			embedManager.loadEmbeds(archive);
 		}
 
 		if (!def.hasConstruction()) {
