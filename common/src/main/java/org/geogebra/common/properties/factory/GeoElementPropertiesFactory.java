@@ -82,7 +82,8 @@ public class GeoElementPropertiesFactory {
 		List<Property> properties = new ArrayList<>();
 		addPropertyIfNotNull(properties, createPointStyleProperty(localization, elements));
 		addPropertyIfNotNull(properties, createPointSizeProperty(localization, elements));
-		return createPropertiesArray(localization, properties, elements);
+		return new PropertiesArray(localization.getMenu("Properties.Style"),
+				properties.toArray(new Property[0]));
 	}
 
 	/**
@@ -96,7 +97,8 @@ public class GeoElementPropertiesFactory {
 		List<Property> properties = new ArrayList<>();
 		addPropertyIfNotNull(properties, createLineStyleProperty(localization, elements));
 		addPropertyIfNotNull(properties, createThicknessProperty(localization, elements));
-		return createPropertiesArray(localization, properties, elements);
+		return new PropertiesArray(localization.getMenu("Properties.Style"),
+				properties.toArray(new Property[0]));
 	}
 
 	/**
