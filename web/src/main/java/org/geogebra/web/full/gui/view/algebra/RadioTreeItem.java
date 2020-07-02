@@ -1172,6 +1172,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 
 	@Override
 	public void ensureEditing() {
+		setFocusedStyle(true);
 		if (!controller.isEditing()) {
 			enterEditMode(geo == null || isMoveablePoint(geo));
 
@@ -1678,6 +1679,10 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		mf.setPixelRatio(app.getPixelRatio());
 		mf.setScale(app.getArticleElement().getScaleX());
 		mf.setOnBlur(getLatexController());
+		mf.setOnFocus(focusEvent -> {
+			setFocusedStyle(true);
+			app.getAppletFrame().doShowKeyBoard(true, this);
+		});
 	}
 
 	private void updateEditorAriaLabel(String text) {
@@ -1707,6 +1712,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 			if (isInputTreeItem()) {
 				MinMaxPanel.closeMinMaxPanel();
 				getAV().restoreWidth(true);
+				setFocusedStyle(true);
 			}
 		} else {
 			if (isInputTreeItem()) {
@@ -2159,5 +2165,34 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	public int getEditHeight() {
 		int outputHeight = outputPanel == null ? 0 : outputPanel.getOffsetHeight();
 		return getOffsetHeight() - outputHeight;
+	}
+
+	/**
+	 * set the focused style for inputbar
+	 * @param focused - true if editing started
+	 */
+	public void setFocusedStyle(boolean focused) {
+		if (isInputTreeItem()) {
+			if (focused) {
+				getWidget().getElement().getParentElement().addClassName("focused");
+			} else {
+				getWidget().getElement().getParentElement().removeClassName("focused");
+			}
+		}
+	}
+
+	/**
+	 * if empty input bar remove cursor, put help text,
+	 * and disable focus
+	 */
+	public void resetInputBarOnBlur() {
+		if (isEmpty() && isInputTreeItem()) {
+			addDummyLabel();
+		}
+		getController().setEditing(false);
+		setFocusedStyle(false);
+		if (app.getAppletFrame().isKeyboardShowing()) {
+			app.hideKeyboard();
+		}
 	}
 }
