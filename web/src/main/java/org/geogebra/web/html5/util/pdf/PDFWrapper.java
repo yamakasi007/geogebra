@@ -4,6 +4,10 @@ import org.geogebra.common.util.ExternalAccess;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+import elemental2.dom.File;
+import elemental2.dom.FileReader;
+import jsinterop.base.Js;
+
 /**
  * Wrapper class for pdf.js
  * 
@@ -56,7 +60,7 @@ public class PDFWrapper {
 	 * @param listener
 	 *            to communicate with PDF container.
 	 */
-	public PDFWrapper(JavaScriptObject file, PDFListener listener) {
+	public PDFWrapper(File file, PDFListener listener) {
 		this.listener = listener;
 		read(file);
 	}
@@ -71,30 +75,22 @@ public class PDFWrapper {
 		listener.setProgressBarPercent(percent);
 	}
 
-	private native void read(JavaScriptObject file) /*-{
-		var reader = new FileReader();
-		var that = this;
-
-		reader.onprogress = function(event) {
+	private void read(File file) {
+		FileReader reader = new FileReader();
+		reader.onprogress = event -> {
 			if (event.lengthComputable) {
-				var percent = (event.loaded / event.total) * 100;
-				that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setProgressBarPercent(D)(percent);
+				double percent = (event.loaded / event.total) * 100;
+				setProgressBarPercent(percent);
 			}
+			return null;
 		};
-
-		reader
-				.addEventListener(
-						"load",
-						function() {
-							var src = reader.result;
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::load(Ljava/lang/String;)(src);
-						}, false);
-
-		if (file) {
+		reader.addEventListener("load", evt -> {
+			load(reader.result.asString());
+		});
+		if (Js.isTruthy(file)) {
 			reader.readAsDataURL(file);
 		}
-
-	}-*/;
+	}
 
 	@ExternalAccess
 	private native void load(String src) /*-{
