@@ -54,8 +54,8 @@ public class VariableReplacerAlgorithmTest extends BaseUnitTest {
 
 	@Ignore
 	@Test
-		public void testFunctionProducts() {
-			shouldReplaceAs("sina", "sin(a)");
+	public void testFunctionProducts() {
+		shouldReplaceAs("sina", "sin(a)");
 	}
 
 	@Test
