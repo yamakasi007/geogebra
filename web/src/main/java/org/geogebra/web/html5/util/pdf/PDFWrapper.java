@@ -117,44 +117,32 @@ public class PDFWrapper {
 	}-*/;
 
 	private native void renderPage() /*-{
-		var that = this;
-		var pdf = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pdf;
-		var pageNumber = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pageNumber;
-		var svgCallback = function(svg) {
-			svgs = (new XMLSerializer()).serializeToString(svg);
-			// convert to base64 URL for <img>
-			var callback = function(svg) {
-				var data = "data:image/svg+xml;base64,"
-						+ btoa(unescape(encodeURIComponent(svg)));
-				that.@org.geogebra.web.html5.util.pdf.PDFWrapper::onPageDisplay(Ljava/lang/String;)(data);
-				// convert to base64 URL for <img>
-			}
-
-			svgs = that.@org.geogebra.web.html5.util.pdf.PDFWrapper::convertBlobs(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(svgs, callback);
-
+	  // Fetch the first page
+	  var pageNumber = 1;
+	  var that = this;
+	  var pdf = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pdf;
+	  pdf.getPage(pageNumber).then(function(page) {
+		var scale = 1.5;
+		var viewport = page.getViewport({scale: scale});
+		// Prepare canvas using PDF page dimensions
+		var canvas = document.createElement('canvas');
+		document.body.appendChild(canvas);
+	  	canvas.height = viewport.height;
+		canvas.width = viewport.width;
+		// Render PDF page into canvas context
+		var context = canvas.getContext('2d');
+		var renderContext = {
+		  canvasContext: context,
+		  viewport: viewport
 		};
-		pdf
-				.getPage(pageNumber)
-				.then(
-						function(page) {
-							@org.geogebra.common.util.debug.Log::debug(Ljava/lang/Object;)('Page loaded');
 
-							var scale = 1;
-							var viewport = page.getViewport(scale);
-
-							return page
-									.getOperatorList()
-									.then(
-											function(opList) {
-												var svgGfx = new $wnd.PDFJS.SVGGraphics(
-														page.commonObjs,
-														page.objs);
-												return svgGfx.getSVG(opList,
-														viewport).then(
-														svgCallback);
-											});
-						});
-	}-*/;
+		var renderTask = page.render(renderContext);
+		   renderTask.promise.then(function () {
+			  $wnd.console.log('Page rendered: URL is ' + canvas.toDataURL());
+			that.@org.geogebra.web.html5.util.pdf.PDFWrapper::onPageDisplay(Ljava/lang/String;)(canvas.toDataURL());
+			});
+	  });
+}-*/;
 
 	@ExternalAccess
 	private void onPageDisplay(String src) {
@@ -252,10 +240,10 @@ public class PDFWrapper {
 			var index = svg.indexOf('xlink:href="blob:');
 			var index2 = svg.indexOf('"', index + 17);
 			var blobURI = svg.substr(index + 12, index2 - (index + 12));
-			svg = svg
-					.replace(
-							blobURI,
-							this.@org.geogebra.web.html5.util.pdf.PDFWrapper::blobToBase64(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(blobURI, svg, callback));
+//			svg = svg
+//					.replace(
+//							blobURI,
+//							this.@org.geogebra.web.html5.util.pdf.PDFWrapper::blobToBase64(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(blobURI, svg, callback));
 		} else {
 			callback(svg);
 		}
@@ -279,7 +267,7 @@ public class PDFWrapper {
 			canvas.height = h;
 
 			c.drawImage(img, 0, 0);
-			svg = svg.replace(blobURI, canvas.toDataURL());
+//			svg = svg.replace(blobURI, canvas.toDataURL());
 
 			// convert next blob (or finish)
 			that.@org.geogebra.web.html5.util.pdf.PDFWrapper::convertBlobs(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(svg, callback);
