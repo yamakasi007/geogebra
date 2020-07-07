@@ -1,11 +1,18 @@
 package org.geogebra.web.html5.util.pdf;
 
 import org.geogebra.common.util.ExternalAccess;
+import org.geogebra.common.util.debug.Log;
 
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.user.client.ui.Image;
 
 import elemental2.dom.File;
 import elemental2.dom.FileReader;
+import elemental2.promise.Promise;
 import jsinterop.base.Js;
 
 /**
@@ -19,7 +26,7 @@ public class PDFWrapper {
 	private PDFListener listener;
 	private int pageCount;
 	private int pageNumber = 1;
-	private JavaScriptObject pdf = null;
+	private PDFDocumentProxy document;
 
 	/**
 	 * Interface to communicate with PDF Container.
@@ -69,7 +76,6 @@ public class PDFWrapper {
 	private void finishLoading(boolean result) {
 		listener.finishLoading(result);
 	}
-
 	@ExternalAccess
 	private void setProgressBarPercent(double percent) {
 		listener.setProgressBarPercent(percent);
@@ -85,11 +91,23 @@ public class PDFWrapper {
 			return null;
 		};
 		reader.addEventListener("load", evt -> {
-			load(reader.result.asString());
+			loadElemental2(reader.result.asString());
 		});
+
 		if (Js.isTruthy(file)) {
 			reader.readAsDataURL(file);
 		}
+	}
+
+	private void loadElemental2(String src) {
+		PdfDocumentLoadingTask task = PdfJs.getDocument(src);
+
+		task.then(document -> {
+			Log.debug("E2: PDF Loaded");
+			setDocument(document);
+			setPageCount(document.pdfInfo.getNumPages());
+	 		finishLoading(true);
+		}).catch_(Promise::reject);
 	}
 
 	@ExternalAccess
@@ -101,8 +119,8 @@ public class PDFWrapper {
 				.then(
 						function(pdf) {
 							@org.geogebra.common.util.debug.Log::debug(Ljava/lang/Object;)('PDF loaded');
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setPdf(Lcom/google/gwt/core/client/JavaScriptObject;)(pdf);
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setPageCount(I)(pdf.numPages);
+//							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setDocument(Lcom/google/gwt/core/client/JavaScriptObject;)(pdf);
+//							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setPageCount(I)(pdf.numPages);
 							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::finishLoading(Z)(true);
 						},
 						function(reason) {
@@ -114,12 +132,13 @@ public class PDFWrapper {
 
 	private native void renderPage() /*-{
 		var that = this;
-		var pdf = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pdf;
+		var pdf = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::document;
 		var pageNumber = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pageNumber;
 		var svgCallback = function(svg) {
 			svgs = (new XMLSerializer()).serializeToString(svg);
 			// convert to base64 URL for <img>
 			var callback = function(svg) {
+
 				var data = "data:image/svg+xml;base64,"
 						+ btoa(unescape(encodeURIComponent(svg)));
 				that.@org.geogebra.web.html5.util.pdf.PDFWrapper::onPageDisplay(Ljava/lang/String;)(data);
@@ -179,20 +198,20 @@ public class PDFWrapper {
 
 	/**
 	 * 
-	 * @return PDF as JavaScriptObject
+	 * @return PDF as PDFDocumentProxy
 	 */
-	public JavaScriptObject getPdf() {
-		return pdf;
+	public PDFDocumentProxy getPdf() {
+		return document;
 	}
 
 	/**
-	 * sets PDF as JavaScriptObject
-	 * 
-	 * @param pdf
+	 * sets PDF as PDFDocumentProxy
+	 *
+	 * @param document
 	 *            the JavaScriptObject to set.
 	 */
-	public void setPdf(JavaScriptObject pdf) {
-		this.pdf = pdf;
+	public void setDocument(PDFDocumentProxy document) {
+		this.document = document;
 	}
 
 	/**
@@ -234,6 +253,10 @@ public class PDFWrapper {
 			return true;
 		}
 		return false;
+	}
+
+	private void renderPageElemental2() {
+
 	}
 
 	// convert something like
@@ -281,4 +304,39 @@ public class PDFWrapper {
 			that.@org.geogebra.web.html5.util.pdf.PDFWrapper::convertBlobs(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(svg, callback);
 		}
 	}-*/;
-}
+
+	private void blobToBase64(String blobUri, String svg0) {
+		final Image image = new Image();
+		image.setUrl(blobUri);
+		Canvas canvas = Canvas.createIfSupported();
+		image.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent event) {
+				canvas.setCoordinateSpaceHeight(image.getHeight());
+				canvas.setCoordinateSpaceWidth(image.getWidth());
+				canvas.getContext2d().drawImage(ImageElement.as(image.getElement()), 0, 0);
+				String svg = svg0.replace(blobUri, canvas.toDataUrl());
+				convertBlobs(svg, () -> PDFWrapper.this.onConvertBlobs(svg));
+			}
+
+		});
+	};
+
+	private void convertBlobs(String svg, Runnable runnable) {
+
+		if (svg.indexOf("xlink:href=\"blob:") > 0) {
+
+			int index = svg.indexOf("xlink:href=\"blob:");
+			int index2 = svg.indexOf('"', index + 17);
+			String blobURI = svg.substring(index + 12, index2 - (index + 12));
+//			svg = svg
+//					.replace(blobURI, blobToBase64(blobURI, svg));
+		} else {
+			onConvertBlobs(svg);
+		}
+	}
+
+	private void onConvertBlobs(String svg) {
+
+	}
+	}
