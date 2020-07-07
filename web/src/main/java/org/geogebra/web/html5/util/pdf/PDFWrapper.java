@@ -98,16 +98,36 @@ public class PDFWrapper {
 
 	@ExternalAccess
 	private native void load(String src) /*-{
-		var loadingTask = $wnd.PDFJS.getDocument(src);
+		var loadingTask = $wnd.pdfjsLib.getDocument(src);
 		var that = this;
 
 		loadingTask.promise
 				.then(
 						function(pdf) {
-							@org.geogebra.common.util.debug.Log::debug(Ljava/lang/Object;)('PDF loaded');
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setPdf(Lcom/google/gwt/core/client/JavaScriptObject;)(pdf);
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::setPageCount(I)(pdf.numPages);
-							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::finishLoading(Z)(true);
+						  // Fetch the first page
+			    		  that.@org.geogebra.web.html5.util.pdf.PDFWrapper::finishLoading(Z)(true);
+						  var pageNumber = 1;
+						  pdf.getPage(pageNumber).then(function(page) {
+							var scale = 1.5;
+							var viewport = page.getViewport({scale: scale});
+							// Prepare canvas using PDF page dimensions
+							var canvas = $doc.createElement('canvas');
+							var context = canvas.getContext('2d');
+							canvas.height = viewport.height;
+							canvas.width = viewport.width;
+							// Render PDF page into canvas context
+							var renderContext = {
+							  canvasContext: context,
+							  viewport: viewport
+							};
+
+							var renderTask = page.render(renderContext);
+							   renderTask.promise.then(function () {
+								  $wnd.console.log('Page rendered: URL is ' + canvas.toDataURL());
+					    		  that.@org.geogebra.web.html5.util.pdf.PDFWrapper::onPageDisplay(Ljava/lang/String;)(canvas.toDataURL());
+								});
+						  });
+
 						},
 						function(reason) {
 							// PDF loading error
@@ -115,34 +135,6 @@ public class PDFWrapper {
 							that.@org.geogebra.web.html5.util.pdf.PDFWrapper::finishLoading(Z)(false);
 						});
 	}-*/;
-
-	private native void renderPage() /*-{
-	  // Fetch the first page
-	  var pageNumber = 1;
-	  var that = this;
-	  var pdf = this.@org.geogebra.web.html5.util.pdf.PDFWrapper::pdf;
-	  pdf.getPage(pageNumber).then(function(page) {
-		var scale = 1.5;
-		var viewport = page.getViewport({scale: scale});
-		// Prepare canvas using PDF page dimensions
-		var canvas = document.createElement('canvas');
-		document.body.appendChild(canvas);
-	  	canvas.height = viewport.height;
-		canvas.width = viewport.width;
-		// Render PDF page into canvas context
-		var context = canvas.getContext('2d');
-		var renderContext = {
-		  canvasContext: context,
-		  viewport: viewport
-		};
-
-		var renderTask = page.render(renderContext);
-		   renderTask.promise.then(function () {
-			  $wnd.console.log('Page rendered: URL is ' + canvas.toDataURL());
-			that.@org.geogebra.web.html5.util.pdf.PDFWrapper::onPageDisplay(Ljava/lang/String;)(canvas.toDataURL());
-			});
-	  });
-}-*/;
 
 	@ExternalAccess
 	private void onPageDisplay(String src) {
@@ -222,7 +214,6 @@ public class PDFWrapper {
 	public boolean setPageNumber(int num) {
 		if (num > 0 && num <= pageCount) {
 			pageNumber = num;
-			renderPage();
 			return true;
 		}
 		return false;
