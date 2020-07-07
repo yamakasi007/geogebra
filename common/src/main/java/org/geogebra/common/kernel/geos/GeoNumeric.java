@@ -219,7 +219,7 @@ public class GeoNumeric extends GeoElement
 
 	@Override
 	public boolean isFillable() {
-		return isDrawable;
+		return isDrawable && !isSlider() && getDrawAlgorithm() != null;
 	}
 
 	/**
@@ -696,7 +696,7 @@ public class GeoNumeric extends GeoElement
 		super.setAllVisualPropertiesExceptEuclidianVisible(geo, keepAdvanced,
 				setAuxiliaryProperty);
 
-		if (geo.isGeoNumeric()) {
+		if (geo.isGeoNumeric() && !geo.isGeoAngle()) {
 			isDrawable = ((GeoNumeric) geo).isDrawable;
 		}
 	}
@@ -2063,7 +2063,7 @@ public class GeoNumeric extends GeoElement
 
 	@Override
 	public boolean showLineProperties() {
-		return isDrawable() && !isSlider();
+		return isDrawable() && !isSlider() && getDrawAlgorithm() != null;
 	}
 
 	/**
