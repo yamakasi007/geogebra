@@ -356,7 +356,7 @@ public class CASLaTeXEditor extends FlowPanel implements CASEditorW,
 
 	@Override
 	public void onInsertString() {
-		mf.setFormula(GeoGebraSerializer.reparse(this.mf.getFormula()));
+		// nothing to do
 	}
 
 	@Override
