@@ -96,26 +96,27 @@ public class PDFWrapper {
 	}
 
 	private void loadElemental2(String src) {
-		PdfDocumentLoadingTask task = PdfJsLib.getDocument(src);
+		PdfDocumentLoadingTask task = PdfJsLib.get().getDocument(src);
 
 		task.promise.then(document -> {
 			Log.debug("E2: PDF Loaded. numPages: " + document.numPages);
 			setDocument(document);
 			setPageCount(document.numPages);
-			document.getPage(pageNumber).then(p -> {
-				Log.debug("PAGE LOADED");
-				JsPropertyMap<Object> viewportOptions = JsPropertyMap.of();
-				viewportOptions.set("scale", 1);
-				PageViewPort viewport = p.getViewport(viewportOptions);
-				Canvas canvas = Canvas.createIfSupported();
-				canvas.setCoordinateSpaceWidth(viewport.width);
-				canvas.setCoordinateSpaceHeight(viewport.height);
-				JsPropertyMap<Object> rendererContext = JsPropertyMap.of();
-				rendererContext.set("canvasContext", canvas.getContext2d());
-				rendererContext.set("viewport", viewport);
-				p.render(rendererContext);
-			});
-	 		finishLoading(true);
+			finishLoading(true);
+			return document.getPage(pageNumber);
+		}).then(p -> {
+			Log.debug("PAGE LOADED");
+			JsPropertyMap<Object> viewportOptions = JsPropertyMap.of();
+			viewportOptions.set("scale", 1);
+			PageViewPort viewport = p.getViewport(viewportOptions);
+			Canvas canvas = Canvas.createIfSupported();
+			canvas.setCoordinateSpaceWidth(viewport.width);
+			canvas.setCoordinateSpaceHeight(viewport.height);
+			JsPropertyMap<Object> rendererContext = JsPropertyMap.of();
+			rendererContext.set("canvasContext", canvas.getContext2d());
+			rendererContext.set("viewport", viewport);
+			p.render(rendererContext);
+			return null;
 		}).catch_(Promise::reject);
 	}
 
