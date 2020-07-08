@@ -106,7 +106,8 @@ public class PDFInputDialog extends DialogBoxW implements FastClickHandler, PDFL
 		this.appW = app;
 		initGui();
 		initActions();
-		JavaScriptInjector.inject(PDFResources.INSTANCE.pdfCombinedJs());
+		JavaScriptInjector.inject(PDFResources.INSTANCE.pdfJs());
+		JavaScriptInjector.inject(PDFResources.INSTANCE.pdfWorkerJs());
 	}
 
 	private void initGui() {
