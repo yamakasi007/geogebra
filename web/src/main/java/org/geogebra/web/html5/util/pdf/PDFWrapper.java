@@ -97,7 +97,7 @@ public class PDFWrapper {
 		DomGlobal.console.log(task.getPromise());
 
 		task.getPromise().then(document -> {
-			DomGlobal.console.log("E2: PDF Loaded. numPages: ");
+			DomGlobal.console.log("E2: PDF Loaded. numPages: " + document.getNumPages());
 			return null;
 		});
 	}
