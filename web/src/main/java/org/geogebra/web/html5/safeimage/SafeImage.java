@@ -14,9 +14,9 @@ public class SafeImage {
 	private ImageFile imageFile;
 
 	/**
-	 *  @param imageFile the original image.
+	 * @param imageFile the original image.
 	 * @param provider to notify when safe image is done.
-	 * @param preprocessors
+	 * @param preprocessors list of preprocessors
 	 */
 	public SafeImage(ImageFile imageFile, SafeImageProvider provider,
 			List<ImagePreprocessor> preprocessors) {
