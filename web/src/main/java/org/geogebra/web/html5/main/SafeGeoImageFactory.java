@@ -1,12 +1,19 @@
 package org.geogebra.web.html5.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.commands.AlgebraProcessor;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoPoint;
 import org.geogebra.common.kernel.kernelND.GeoPointND;
 import org.geogebra.common.util.ImageManager;
+import org.geogebra.web.html5.gui.laf.VendorSettings;
+import org.geogebra.web.html5.safeimage.ConvertToCanvas;
 import org.geogebra.web.html5.safeimage.ImageFile;
+import org.geogebra.web.html5.safeimage.ImagePreprocessor;
+import org.geogebra.web.html5.safeimage.SVGPreprocessor;
 import org.geogebra.web.html5.safeimage.SafeImage;
 import org.geogebra.web.html5.safeimage.SafeImageProvider;
 import org.geogebra.web.html5.util.ImageLoadCallback;
@@ -23,6 +30,7 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 	private final Construction construction;
 	private final AlgebraProcessor algebraProcessor;
 	private final ImageManagerW imageManager;
+	private final VendorSettings vendor;
 	private GeoImage geoImage;
 	private ImageFile imageFile;
 	private ImageWrapper wrapper;
@@ -42,6 +50,7 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 		algebraProcessor = app.getKernel().getAlgebraProcessor();
 		imageManager = app.getImageManager();
 		autoCorners = true;
+		vendor = app.getVendorSettings();
 	}
 
 	/**
@@ -64,9 +73,20 @@ public class SafeGeoImageFactory implements SafeImageProvider, ImageLoadCallback
 	public GeoImage create(String fileName, String content) {
 		ensureResultImageExists();
 		ImageFile imageFile = new ImageFile(fileName, content);
-		SafeImage safeImage = new SafeImage(imageFile, this);
+		SafeImage safeImage = new SafeImage(imageFile, this, getPreprocessors());
 		safeImage.process();
 		return geoImage;
+	}
+
+	private List<ImagePreprocessor> getPreprocessors() {
+		ArrayList<ImagePreprocessor> preprocessors = new ArrayList<>();
+		preprocessors.add(new SVGPreprocessor());
+
+		if (vendor.hasBitmapSecurity()) {
+			preprocessors.add(new ConvertToCanvas());
+		}
+
+		return preprocessors;
 	}
 
 	private void ensureResultImageExists() {

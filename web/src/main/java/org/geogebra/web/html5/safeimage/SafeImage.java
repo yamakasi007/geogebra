@@ -1,6 +1,5 @@
 package org.geogebra.web.html5.safeimage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,20 +14,15 @@ public class SafeImage {
 	private ImageFile imageFile;
 
 	/**
-	 *
-	 * @param imageFile the original image.
+	 *  @param imageFile the original image.
 	 * @param provider to notify when safe image is done.
+	 * @param preprocessors
 	 */
-	public SafeImage(ImageFile imageFile, SafeImageProvider provider) {
+	public SafeImage(ImageFile imageFile, SafeImageProvider provider,
+			List<ImagePreprocessor> preprocessors) {
 		this.imageFile = imageFile;
 		this.provider = provider;
-		preprocessors = new ArrayList<>();
-		addPreprocessors();
-	}
-
-	private void addPreprocessors() {
-		preprocessors.add(new ConvertToCanvas());
-		preprocessors.add(new SVGPreprocessor());
+		this.preprocessors = preprocessors;
 	}
 
 	/**
