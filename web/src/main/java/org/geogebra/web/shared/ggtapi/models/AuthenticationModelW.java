@@ -7,9 +7,8 @@ import org.geogebra.common.util.GTimerListener;
 import org.geogebra.common.util.MD5EncrypterGWTImpl;
 import org.geogebra.web.full.gui.dialog.SessionExpireNotifyDialog;
 import org.geogebra.web.html5.main.AppW;
-import org.geogebra.web.shared.components.DialogData;
-
 import org.geogebra.web.html5.util.BrowserStorage;
+import org.geogebra.web.shared.components.DialogData;
 
 import elemental2.dom.DomGlobal;
 
