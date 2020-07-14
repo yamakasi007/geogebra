@@ -16,7 +16,17 @@ public class CarotaTable {
 	@JsProperty
 	public native int getTotalHeight();
 
+	@JsOverlay
+	public final void reload() {
+		if (Carota.get() != null) {
+			Carota.get().getText().getCache().clear();
+		}
+		load(save());
+	}
+
 	public native void draw(Context2d ctx);
+
+	public native void repaint();
 
 	public native void init(int rows, int cols);
 

@@ -11,12 +11,16 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.inline.InlineTableController;
 import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
+import org.geogebra.common.move.ggtapi.models.json.JSONArray;
+import org.geogebra.common.move.ggtapi.models.json.JSONException;
+import org.geogebra.common.move.ggtapi.models.json.JSONObject;
+import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.awt.GGraphics2DW;
+import org.geogebra.web.html5.euclidian.FontLoader;
 import org.geogebra.web.richtext.impl.Carota;
 import org.geogebra.web.richtext.impl.CarotaTable;
 import org.geogebra.web.richtext.impl.CarotaUtil;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
@@ -43,6 +47,28 @@ public class InlineTableControllerW implements InlineTableController {
 		this.view = view;
 		CarotaUtil.ensureInitialized(view.getFontSize());
 		initTable(parent);
+		if (table.getContent() != null) {
+			checkFonts();
+		}
+	}
+
+	private void checkFonts() {
+		try {
+			JSONObject tableData = new JSONObject(table.getContent());
+			JSONArray tableContent = tableData.getJSONArray("content");
+			for (int i = 0; i < tableContent.length(); i++) {
+				JSONArray row = tableContent.getJSONArray(i);
+				for (int j = 0; j < row.length(); j++) {
+					JSONObject cell = row.getJSONObject(j);
+					if (cell.has("content")) {
+						InlineTextControllerW
+								.checkFonts(cell.getJSONArray("content"), getCallback());
+					}
+				}
+			}
+		} catch (JSONException | RuntimeException e) {
+			Log.debug("cannot parse fonts");
+		}
 	}
 
 	@Override
@@ -96,10 +122,8 @@ public class InlineTableControllerW implements InlineTableController {
 	@Override
 	public void toForeground(int x, int y) {
 		if (style != null) {
-			Scheduler.get().scheduleDeferred(() -> {
-				style.setVisibility(VISIBLE);
-				tableImpl.startEditing(x, y);
-			});
+			style.setVisibility(VISIBLE);
+			tableImpl.startEditing(x, y);
 		}
 	}
 
@@ -117,6 +141,9 @@ public class InlineTableControllerW implements InlineTableController {
 		tableImpl.setFormatting(key, val);
 		table.setContent(getContent());
 		table.updateRepaint();
+		if ("font".equals(key)) {
+			FontLoader.loadFont(String.valueOf(val), getCallback());
+		}
 	}
 
 	@Override
@@ -263,5 +290,14 @@ public class InlineTableControllerW implements InlineTableController {
 		);
 
 		update();
+	}
+
+	private Runnable getCallback() {
+		return () -> {
+			tableImpl.stopEditing();
+			tableImpl.reload();
+			tableImpl.repaint();
+			table.getKernel().notifyRepaint();
+		};
 	}
 }
