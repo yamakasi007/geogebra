@@ -36,8 +36,9 @@ import org.geogebra.web.full.main.embed.GraspableEmbedElement;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.MyImageW;
 import org.geogebra.web.html5.main.ScriptManagerW;
-import org.geogebra.web.html5.main.TestArticleElement;
+import org.geogebra.web.html5.util.AppletParameters;
 import org.geogebra.web.html5.util.Dom;
+import org.geogebra.web.html5.util.GeoGebraElement;
 import org.geogebra.web.html5.util.ImageManagerW;
 import org.geogebra.web.resources.SVGResource;
 
@@ -129,25 +130,28 @@ public class EmbedManagerW implements EmbedManager {
 	}
 
 	private CalcEmbedElement createCalcEmbed(DrawEmbed drawEmbed) {
-		TestArticleElement parameters = new TestArticleElement("graphing");
+		FlowPanel scaler = new FlowPanel();
+		addToGraphics(scaler);
+
+		AppletParameters parameters = new AppletParameters("graphing");
 		GeoGebraFrameFull fr = new GeoGebraFrameFull(
 				(AppletFactory) GWT.create(AppletFactory.class), app.getLAF(),
-				app.getDevice(), parameters);
+				app.getDevice(), GeoGebraElement.as(scaler.getElement()), parameters);
+		scaler.add(fr);
 
-		parameters
-				.attr("scaleContainerClass", "embedContainer")
-				.attr("allowUpscale", "true")
-				.attr("width", drawEmbed.getGeoEmbed().getContentWidth() + "")
-				.attr("height", drawEmbed.getGeoEmbed().getContentHeight() + "")
-				.attr("appName", drawEmbed.getGeoEmbed().getAppName())
-				.attr("borderColor", "#CCC");
+		parameters.setAttribute("scaleContainerClass", "embedContainer")
+				.setAttribute("allowUpscale", "true")
+				.setAttribute("width", drawEmbed.getGeoEmbed().getContentWidth() + "")
+				.setAttribute("height", drawEmbed.getGeoEmbed().getContentHeight() + "")
+				.setAttribute("appName", drawEmbed.getGeoEmbed().getAppName())
+				.setAttribute("borderColor", "#CCC");
 		for (Entry<String, String> entry: drawEmbed.getGeoEmbed().getSettings()) {
-			parameters.attr(entry.getKey(), entry.getValue());
+			parameters.setAttribute(entry.getKey(), entry.getValue());
 		}
 		String currentBase64 = base64.get(drawEmbed.getEmbedID());
 		if (currentBase64 != null) {
-			parameters.attr("appName", "auto")
-					.attr("ggbBase64", currentBase64);
+			parameters.setAttribute("appName", "auto")
+					.setAttribute("ggbBase64", currentBase64);
 		}
 		fr.setComputedWidth(parameters.getDataParamWidth()
 				- parameters.getBorderThickness());
@@ -155,11 +159,6 @@ public class EmbedManagerW implements EmbedManager {
 				- parameters.getBorderThickness());
 		fr.runAsyncAfterSplash();
 
-		FlowPanel scaler = new FlowPanel();
-		scaler.add(fr);
-		parameters.setParentElement(scaler.getElement());
-
-		addToGraphics(scaler);
 		CalcEmbedElement element = new CalcEmbedElement(fr, this, drawEmbed.getEmbedID());
 		if (currentBase64 != null) {
 			fr.getApp().registerOpenFileListener(
@@ -233,7 +232,7 @@ public class EmbedManagerW implements EmbedManager {
 	}
 
 	private static OpenFileListener getListener(final DrawEmbed drawEmbed,
-			final TestArticleElement parameters) {
+			final AppletParameters parameters) {
 		return () -> {
 			drawEmbed.getGeoEmbed()
 					.setAppName(parameters.getDataParamAppName());

@@ -1323,8 +1323,8 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		helpPopup.setPopupPositionAndShow(new GPopupPanel.PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
-				double scale = app.getArticleElement().getScaleX();
-				double renderScale = app.getArticleElement().getDataParamApp()
+				double scale = app.getGeoGebraElement().getScaleX();
+				double renderScale = app.getAppletParameters().getDataParamApp()
 						? scale : 1;
 				helpPopup.getElement().getStyle()
 						.setProperty("left",
@@ -1682,7 +1682,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		updateEditorAriaLabel("");
 		mf.setFontSize(getFontSize());
 		mf.setPixelRatio(app.getPixelRatio());
-		mf.setScale(app.getArticleElement().getScaleX());
+		mf.setScale(app.getGeoGebraElement().getScaleX());
 		mf.setOnBlur(getLatexController());
 		mf.setOnFocus(focusEvent -> {
 			setFocusedStyle(true);
@@ -1927,7 +1927,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	public void setPixelRatio(double pixelRatio) {
 		if (mf != null) {
 			mf.setPixelRatio(pixelRatio);
-			mf.setScale(app.getArticleElement().getScaleX());
+			mf.setScale(app.getGeoGebraElement().getScaleX());
 			mf.repaint();
 		}
 	}
