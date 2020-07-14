@@ -1,11 +1,12 @@
 package org.geogebra.web.full.gui.pagecontrolpanel;
 
 import org.geogebra.common.awt.GPoint;
+import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.util.ContextMenuButtonCard;
+import org.geogebra.web.html5.gui.util.AriaMenuItem;
 import org.geogebra.web.html5.main.AppW;
-
-import com.google.gwt.user.client.Command;
+import org.geogebra.web.html5.util.BrowserStorage;
 
 /**
  * Context Menu of Page Preview Cards
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.Command;
 public class ContextMenuButtonPreviewCard extends ContextMenuButtonCard {
 
 	private PagePreviewCard card;
+	private AriaMenuItem paste;
 
 	/**
 	 * @param app
@@ -32,33 +34,38 @@ public class ContextMenuButtonPreviewCard extends ContextMenuButtonCard {
 	protected void initPopup() {
 		super.initPopup();
 		addDeleteItem();
-		addDuplicateItem();
+		addCutItem();
+		addCopyItem();
+		addPasteItem();
 	}
 
 	private void addDeleteItem() {
 		addItem(MaterialDesignResources.INSTANCE.delete_black(),
-				loc.getMenu("Delete"), new Command() {
-					@Override
-					public void execute() {
-						onDelete();
-					}
-				});
+				loc.getMenu("Delete"), this::onDelete);
 	}
 
-	private void addDuplicateItem() {
-		addItem(MaterialDesignResources.INSTANCE.duplicate_black(),
-				loc.getMenu("Duplicate"), new Command() {
-					@Override
-					public void execute() {
-						onDuplicate();
-					}
-				});
+	private void addCutItem() {
+		addItem(MaterialDesignResources.INSTANCE.cut_black(),
+				loc.getMenu("Cut"), () -> {
+			onCopy();
+			onDelete();
+		});
+	}
+
+	private void addCopyItem() {
+		addItem(MaterialDesignResources.INSTANCE.copy_black(),
+				loc.getMenu("Copy"), this::onCopy);
+	}
+
+	private void addPasteItem() {
+		paste = addItem(MaterialDesignResources.INSTANCE.paste_black(),
+				loc.getMenu("Paste"), this::onPaste);
 	}
 
 	/**
 	 * execute delete action
 	 */
-	protected void onDelete() {
+	private void onDelete() {
 		hide();
 		frame.getPageControlPanel().removePage(card.getPageIndex());
 	}
@@ -66,9 +73,17 @@ public class ContextMenuButtonPreviewCard extends ContextMenuButtonCard {
 	/**
 	 * execute duplicate action
 	 */
-	protected void onDuplicate() {
+	private void onPaste() {
 		hide();
-		frame.getPageControlPanel().duplicatePage(card);
+		frame.getPageControlPanel().pastePage(card,
+				BrowserStorage.LOCAL.getItem(BrowserStorage.COPY_SLIDE));
+	}
+
+	private void onCopy() {
+		hide();
+		frame.getPageControlPanel().saveSlide(card);
+		BrowserStorage.LOCAL.setItem(BrowserStorage.COPY_SLIDE,
+				app.getGgbApi().toJson(card.getFile()));
 	}
 
 	@Override
@@ -76,5 +91,9 @@ public class ContextMenuButtonPreviewCard extends ContextMenuButtonCard {
 		super.show();
 		wrappedPopup.show(
 				new GPoint(getAbsoluteLeft() - 122, getAbsoluteTop() + 36));
+		String slideContent = BrowserStorage.LOCAL.getItem(BrowserStorage.COPY_SLIDE);
+		if (paste != null && StringUtil.empty(slideContent)) {
+			paste.setEnabled(false);
+		}
 	}
 }
