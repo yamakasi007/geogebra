@@ -750,11 +750,7 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 			if (focuser != null) {
 				focuser.cancel();
 			}
-			instances.remove(this);
-			// last repaint with no cursor
-			CursorBox.setBlink(false);
-			repaintWeb();
-
+			removeCursor();
 		}
 		this.focused = focus;
 	}
@@ -907,10 +903,18 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 
 	@Override
 	public void onBlur(BlurEvent event) {
-		instances.remove(this);
+		removeCursor();
 		resetFlags();
 		event.stopPropagation();
 		runBlurCallback(event);
+	}
+
+	private void removeCursor() {
+		instances.remove(this);
+		if (CursorBox.visible()) {
+			CursorBox.setBlink(false);
+			repaintWeb();
+		}
 	}
 
 	/**

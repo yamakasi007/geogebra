@@ -212,6 +212,14 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	}
 
 	/**
+	 * context menu -> delete action
+	 */
+	public void onClear() {
+		setText("");
+		addDummyLabel();
+	}
+
+	/**
 	 * Creates a new RadioTreeItem for displaying/editing an existing GeoElement
 	 *
 	 * @param geo0
@@ -1766,15 +1774,15 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	}
 
 	@Override
-	public void setText(String text0) {
-		if (!"".equals(text0)) {
+	public void setText(String text) {
+		if (!"".equals(text)) {
 			removeDummy();
 		}
 		if (mf != null) {
-			mf.setText(text0, this.isTextItem());
+			mf.setText(text, this.isTextItem());
 		}
 		inputControl.ensureInputMoreMenu();
-		updateEditorAriaLabel(text0);
+		updateEditorAriaLabel(text);
 		updatePreview();
 	}
 
