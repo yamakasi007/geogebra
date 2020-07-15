@@ -53,39 +53,21 @@ public abstract class GeoInline extends GeoElement implements Translateable, Poi
 		return HitType.ON_FILLING;
 	}
 
-	/**
-	 * Get the height of the element.
-	 *
-	 * @return height
-	 */
 	@Override
 	public double getHeight() {
 		return height;
 	}
 
-	/**
-	 * Get the width of the element.
-	 *
-	 * @return width
-	 */
 	@Override
 	public double getWidth() {
 		return width;
 	}
 
-	/**
-	 * @return rotation angle in radians
-	 */
 	@Override
 	public double getAngle() {
 		return angle;
 	}
 
-	/**
-	 * Get the location of the text.
-	 *
-	 * @return location
-	 */
 	@Override
 	public GPoint2D getLocation() {
 		return location;
