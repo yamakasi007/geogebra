@@ -13,6 +13,7 @@ import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.draw.DrawEmbed;
 import org.geogebra.common.euclidian.draw.DrawFormula;
 import org.geogebra.common.euclidian.draw.DrawImage;
+import org.geogebra.common.euclidian.draw.DrawImageResizable;
 import org.geogebra.common.euclidian.draw.DrawImplicitCurve;
 import org.geogebra.common.euclidian.draw.DrawInequality;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
@@ -310,7 +311,7 @@ public class EuclidianDraw {
 			break;
 
 		case IMAGE:
-			d = new DrawImage(ev, (GeoImage) geo);
+			d = createDrawImage(ev, (GeoImage) geo);
 			break;
 
 		case LOCUS:
@@ -356,6 +357,17 @@ public class EuclidianDraw {
 		case INLINE_TEXT:
 			d = new DrawInlineText(ev, (GeoInlineText) geo);
 		}
+		return d;
+	}
+
+	private static DrawableND createDrawImage(EuclidianView ev, GeoImage geo) {
+		DrawableND d;
+		if (ev.getApplication().isWhiteboardActive()) {
+			d = new DrawImageResizable(ev, geo);
+		} else {
+			d = new DrawImage(ev, geo);
+		}
+		d.update();
 		return d;
 	}
 
