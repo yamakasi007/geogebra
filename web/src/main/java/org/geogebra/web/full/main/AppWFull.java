@@ -121,6 +121,7 @@ import org.geogebra.web.html5.gui.ToolBarInterface;
 import org.geogebra.web.html5.gui.laf.GLookAndFeelI;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW;
 import org.geogebra.web.html5.gui.tooltip.ToolTipManagerW.ToolTipLinkType;
+import org.geogebra.web.html5.gui.util.BrowserStorage;
 import org.geogebra.web.html5.gui.util.CancelEventTimer;
 import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
@@ -142,7 +143,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -1107,12 +1107,12 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	private boolean shouldShowRecentChangesDialog(String key) {
-		String shown = Cookies.getCookie(getRecentChangesCookieKey(key));
+		String shown = BrowserStorage.LOCAL.getItem(getRecentChangesCookieKey(key));
 		return !"true".equals(shown);
 	}
 
 	private void setHideRecentChanges(String key) {
-		Cookies.setCookie(getRecentChangesCookieKey(key), "true");
+		BrowserStorage.LOCAL.setItem(getRecentChangesCookieKey(key), "true");
 	}
 
 	private void maybeStartAutosave() {
