@@ -23,7 +23,6 @@ import org.geogebra.common.awt.GShape;
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.background.DrawBackground;
 import org.geogebra.common.euclidian.draw.DrawAngle;
-import org.geogebra.common.euclidian.draw.DrawAudio;
 import org.geogebra.common.euclidian.draw.DrawConic;
 import org.geogebra.common.euclidian.draw.DrawDropDownList;
 import org.geogebra.common.euclidian.draw.DrawImage;
@@ -2193,7 +2192,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			return null;
 		}
 		for (Drawable d : allDrawableList) {
-			hitHandler = d.hitBoundingBoxHandler(p.x, p.y, getThresholdForDrawable(type, d));
+			hitHandler = d.hitBoundingBoxHandler(p.x, p.y, app.getCapturingThreshold(type));
 			if (hitHandler != EuclidianBoundingBoxHandler.UNDEFINED) {
 				GeoElement geo = d.getGeoElement();
 				if (geo.isEuclidianVisible()) {
@@ -2202,21 +2201,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * 
-	 * @param type
-	 *            The event type.
-	 * @param d
-	 *            {@link Drawable}
-	 * @return threshold for grabbing the BouingBox
-	 */
-	public int getThresholdForDrawable(PointerEventType type, Drawable d) {
-		if (d == null) {
-			return 0;
-		}
-		return app.getCapturingThreshold(type);
 	}
 
 	/**
@@ -4075,13 +4059,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				}
 
 				d.draw(g);
-			} else if (d instanceof DrawAudio) {
-				if (d.needsUpdate()) {
-					d.setNeedsUpdate(false);
-					d.update();
-				}
-
-				d.draw(g);
 			}
 		}
 
@@ -5931,7 +5908,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			if (d instanceof DrawDropDownList) {
 				DrawDropDownList dl = (DrawDropDownList) d;
 				if (!(dl.isControlHit(x, y) || dl.isOptionsHit(x, y))) {
-					repaintNeeded = repaintNeeded || dl.closeOptions();
+					dl.closeOptions();
+					repaintNeeded = true;
 				}
 			}
 		}
