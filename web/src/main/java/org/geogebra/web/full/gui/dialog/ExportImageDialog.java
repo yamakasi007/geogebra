@@ -5,6 +5,7 @@ import org.geogebra.common.util.StringUtil;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.gui.util.NoDragImage;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.main.Clipboard;
 import org.geogebra.web.html5.util.ImageWrapper;
 import org.geogebra.web.shared.components.ComponentDialog;
 import org.geogebra.web.shared.components.DialogData;
@@ -42,15 +43,13 @@ public class ExportImageDialog extends ComponentDialog {
 		} else {
 			setPreviewImage(getExportDataURL(app));
 		}
-		buildContent(app);
+		buildContent();
 
 		setOnPositiveAction(() -> {
 			Browser.exportImage(base64Url,
 					app.getExportTitle() + getExtension(base64Url));
 		});
-		setOnNegativeAction(() -> {
-			app.copyGraphicsViewToClipboard();
-		});
+		setOnNegativeAction(app::copyGraphicsViewToClipboard);
 	}
 
 	/**
@@ -82,10 +81,10 @@ public class ExportImageDialog extends ComponentDialog {
 						false, greyscale);
 	}
 
-	private void buildContent(AppW appW) {
+	private void buildContent() {
 		contentPanel = new FlowPanel();
 		contentPanel.addStyleName("expImgContent");
-		if (!appW.isCopyImageToClipboardAvailable()) {
+		if (!Clipboard.isCopyImageToClipboardAvailable()) {
 			Label rightClickText = new Label(app.getLocalization().getMenu("expImgRightClickMsg"));
 			rightClickText.addStyleName("rightClickHelpText");
 			contentPanel.add(rightClickText);
