@@ -2483,6 +2483,7 @@ var __giac = [ {},
 { cat:"Limit", cmd:"limit(1/(1+sqrt(2)*cos(x))*sin(x-3*pi/4),x=3*pi/4)", result:"-1" },
 { cat:"IntegralSymbolic.1", cmd:"IntegralSymbolic(x+3)", result:"1 / 2 x\u00B2 +3 x + c_1"},
 { cat:"IntegralSymbolic.2", cmd:"IntegralSymbolic(y+3, y)", result:"1 / 2 y\u00B2 +3 y + c_1"},
+{ cat:"PlotSolve.1", cmd:"PlotSolve(x^2-2)", result:"{(-sqrt(2), 0), (sqrt(2), 0)}" },
 //JSONEND
 // { cat:"Integral", cmd:"Integral(sqrt(sin(x))/(sqrt(sin(x)+sqrt(cos(x)))),x,0,pi/2)", result:"?" },
 // 3/44*sqrt(22)*pi*sign(sqrt(22))*sign(cbrt(3))-3/44*sqrt(22)*pi*sign(sqrt(22))+3/22*sqrt(22)*atan(11/(4*sqrt(22)))-3/22*sqrt(22)*atan(22/(sqrt(22)*cbrt(3)))+11*ln((cbrt(3))^2+22)-11*ln(86)-1/2*(cbrt(3))^2+32

@@ -1175,4 +1175,9 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 				is(solveA.getDefinition().getTopLevelCommand().getName()));
 	}
 
+	@Test
+	public void testPlotSolveIsEuclidianVisible() {
+		GeoSymbolic symbolic = add("PlotSolve(x^2-2)");
+		assertThat(symbolic.isEuclidianVisible(), is(true));
+	}
 }

@@ -1164,6 +1164,8 @@ public enum Commands implements CommandsConstants,
 
 	Solve(TABLE_ALGEBRA),
 
+	PlotSolve(TABLE_FUNCTION),
+
 	SolveCubic(TABLE_CAS),
 
 	SolveQuartic(TABLE_CAS),
