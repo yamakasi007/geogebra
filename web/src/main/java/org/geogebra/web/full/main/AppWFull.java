@@ -2118,4 +2118,14 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 		Element parentElement = ((EuclidianViewW) view).getAbsolutePanel().getParent().getElement();
 		return new InlineTableControllerW(geo, view, parentElement);
 	}
+
+	@Override
+	public void closeMenuHideKeyboard() {
+		if (menuShowing) {
+			toggleMenu();
+		}
+		if (getAppletFrame().isKeyboardShowing()) {
+			hideKeyboard();
+		}
+	}
 }
