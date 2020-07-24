@@ -277,7 +277,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		setUndoRedoEnabled(appletParameters.getDataParamEnableUndoRedo()
 				&& (laf == null || laf.undoRedoSupported()));
 
-		this.loc = new LocalizationW(dimension);
+		this.loc = new LocalizationW(getConfig(), dimension);
 		this.laf = laf;
 
 		getTimerSystem();
