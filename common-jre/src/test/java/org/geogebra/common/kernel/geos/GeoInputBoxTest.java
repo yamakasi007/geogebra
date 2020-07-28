@@ -581,4 +581,12 @@ public class GeoInputBoxTest extends BaseUnitTest {
 		assertThat(lookup("b").isDefined(), equalTo(false));
 		assertThat(inputBox2.getText(), equalTo("")); // still preserves user input
 	}
+
+	@Test
+	public void testCommandLikeImplicitMultiplicationParsesCorrectly() {
+		add("f(g, L) = ?");
+		GeoInputBox inputBox = addAvInput("ib = InputBox(f)");
+		inputBox.updateLinkedGeo("gL(L+1)");
+		assertEquals("g L (L + 1)", inputBox.getText());
+	}
 }
