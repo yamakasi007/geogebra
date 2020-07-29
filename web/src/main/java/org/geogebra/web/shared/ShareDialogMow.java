@@ -128,7 +128,7 @@ public class ShareDialogMow extends ComponentDialog
 
 	private void addGroup(FlowPanel groupsPanel, String groupStr,
 			boolean selected) {
-		groupsPanel.add(new GroupButtonMow(((AppW) app), groupStr, selected,
+		groupsPanel.add(new GroupButtonMow((AppW) app, groupStr, selected,
 				this::updateChangedGroupList));
 	}
 
@@ -331,10 +331,10 @@ public class ShareDialogMow extends ComponentDialog
 	 */
 	protected void onGroupShareChanged(boolean success) {
 		ToolTipManagerW.sharedInstance().showBottomMessage(
-				((AppW) app).getLocalization()
+				app.getLocalization()
 						.getMenu(success ? "GroupShareOk"
 								: "GroupShareFail"),
-				true, ((AppW) app));
+				true, (AppW) app);
 		if (success) {
 			callback.onLoaded(Collections.singletonList(material), null);
 		}

@@ -24,6 +24,7 @@ public class HyperlinkDialog extends ComponentDialog {
 	 *
 	 * @param app see {@link AppW}
 	 * @param data dialog transkeys
+	 * @param formatter text formatter
 	 *
 	 */
 	public HyperlinkDialog(AppW app, DialogData data, HasTextFormat formatter) {
