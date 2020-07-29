@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianController;
-import org.geogebra.common.euclidian.draw.DrawSurface;
 import org.geogebra.common.euclidian.plot.CurvePlotter;
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.geogebra3D.euclidian3D.Hitting;
-import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterBrush;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterSurface;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.geogebra3D.kernel3D.geos.GeoCurveCartesian3D;
@@ -28,7 +26,6 @@ import org.geogebra.common.kernel.kernelND.SurfaceEvaluable;
 import org.geogebra.common.kernel.kernelND.SurfaceEvaluable.LevelOfDetail;
 import org.geogebra.common.kernel.matrix.Coords;
 import org.geogebra.common.kernel.matrix.Coords3;
-import org.geogebra.common.kernel.matrix.CoordsDouble3;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.debug.Log;
@@ -44,16 +41,13 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	final static private boolean DEBUG = false;
 
 	/** The function being rendered */
-	SurfaceEvaluable surfaceGeo;
+	private SurfaceEvaluable surfaceGeo;
 
 	// number of intervals in root mesh (for each parameters, if parameters
 	// delta are equals)
 	private static final short ROOT_MESH_INTERVALS_SPEED = 10;
 	private static final short ROOT_MESH_INTERVALS_SPEED_SQUARE = ROOT_MESH_INTERVALS_SPEED
 			* ROOT_MESH_INTERVALS_SPEED;
-
-	// number of split for boundary
-	private static final short BOUNDARY_SPLIT = 10;
 
 	// max split array size ( size +=4 for one last split)
 	private static final int MAX_SPLIT_SPEED = 4096;
@@ -65,7 +59,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	final private static int HIT_SAMPLES = 10;
 	final private static double DELTA_SAMPLES = 1.0 / HIT_SAMPLES;
 
-	private SurfaceEvaluable.LevelOfDetail levelOfDetail = SurfaceEvaluable.LevelOfDetail.QUALITY;
+	private SurfaceEvaluable.LevelOfDetail levelOfDetail;
 
 	private int maxSplit;
 
@@ -79,21 +73,21 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 */
 	private int maxSplitsInOneUpdate;
 
-	private DrawSurface3D.Corner[] currentSplit;
-	private DrawSurface3D.Corner[] nextSplit;
-	protected DrawSurface3D.Corner[] cornerList;
+	private Corner[] currentSplit;
+	private Corner[] nextSplit;
+	Corner[] cornerList;
 
 	/**
 	 * list of things to draw
 	 */
-	protected CornerAndCenter[] drawList;
+	CornerAndCenter[] drawList;
 
 	private int currentSplitIndex;
 	private int nextSplitIndex;
-	protected int cornerListIndex;
+	int cornerListIndex;
 	private int currentSplitStoppedIndex;
-	protected int loopSplitIndex;
-	protected int drawListIndex;
+	int loopSplitIndex;
+	int drawListIndex;
 	private boolean drawFromScratch = true;
 	private boolean drawUpToDate = false;
 	// previously set thickness (-1 means needs update)
@@ -114,8 +108,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	/**
 	 * used to draw "still to split" corners
 	 */
-	protected Corner[] cornerForStillToSplit;
-	protected Corner[] cornerToDrawStillToSplit;
+	Corner[] cornerForStillToSplit;
+	Corner[] cornerToDrawStillToSplit;
 
 	/**
 	 * max distance in real world from view
@@ -128,19 +122,15 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	/**
 	 * max distance in real world under which we don't check angles
 	 */
-	protected double maxRWDistanceNoAngleCheck;
-	protected double maxBend;
-	protected int notDrawn;
+	double maxRWDistanceNoAngleCheck;
+	double maxBend;
+	int notDrawn;
 
 	private boolean splitsStartedNotFinished;
 	private boolean stillRoomLeft;
 
 	private Coords boundsMin = new Coords(3);
 	private Coords boundsMax = new Coords(3);
-	/**
-	 * first corner from root mesh
-	 */
-	private Corner firstCorner;
 
 	private CurveHitting curveHitting;
 
@@ -149,11 +139,11 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	private SurfaceParameter uParam = new SurfaceParameter();
 	private SurfaceParameter vParam = new SurfaceParameter();
 
-	private static class NotEnoughCornersException extends Exception {
+	static class NotEnoughCornersException extends Exception {
 		private static final long serialVersionUID = 1L;
 		private DrawSurface3D surface;
 
-		public NotEnoughCornersException(DrawSurface3D surface,
+		NotEnoughCornersException(DrawSurface3D surface,
 				String message) {
 			super(message);
 			this.surface = surface;
@@ -217,10 +207,10 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		cornerListSize = maxDraw * 3;
 
 		// create arrays
-		currentSplit = new DrawSurface3D.Corner[maxSplit + 4];
-		nextSplit = new DrawSurface3D.Corner[maxSplit + 4];
+		currentSplit = new Corner[maxSplit + 4];
+		nextSplit = new Corner[maxSplit + 4];
 		drawList = new CornerAndCenter[maxDraw + 100];
-		cornerList = new DrawSurface3D.Corner[cornerListSize];
+		cornerList = new Corner[cornerListSize];
 
 	}
 
@@ -249,7 +239,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 * @param s
 	 *            message
 	 */
-	final static protected void debug(String s) {
+	static protected void debug(String s) {
 		if (DEBUG) {
 			Log.debug(s);
 		}
@@ -280,7 +270,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				return;
 			}
 
-			if (!drawWireframe.isWireframeVisible()) {
+			if (drawWireframe.isWireframeHidden()) {
 				return;
 			}
 
@@ -304,7 +294,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				return;
 			}
 
-			if (!drawWireframe.isWireframeVisible()) {
+			if (drawWireframe.isWireframeHidden()) {
 				return;
 			}
 
@@ -330,7 +320,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			}
 		}
 
-		boolean drawOccured = false;
+		boolean drawOccurred = false;
 
 		if (drawFromScratch) {
 			borders.clear();
@@ -339,7 +329,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			if (levelOfDetail == LevelOfDetail.QUALITY
 					&& splitsStartedNotFinished) {
 				draw();
-				drawOccured = true;
+				drawOccurred = true;
 			}
 
 			// maybe set to null after redefine
@@ -386,7 +376,10 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			cornerListIndex = 0;
 
 			try {
-				firstCorner = createRootMesh();
+				/*
+				  first corner from root mesh
+				 */
+				Corner firstCorner = createRootMesh();
 
 				// split root mesh as start
 				currentSplitIndex = 0;
@@ -397,7 +390,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				splitRootMesh(firstCorner);
 				debug("\nnot drawn after split root mesh: " + notDrawn);
 
-				// now splitted root mesh is ready
+				// now split root mesh is ready
 				drawFromScratch = false;
 			} catch (NotEnoughCornersException e) {
 				e.caught();
@@ -452,7 +445,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			splitsStartedNotFinished = splitsStartedNotFinished
 					&& stillRoomLeft;
 			if (!splitsStartedNotFinished) {
-				if (!drawOccured) {
+				if (!drawOccurred) {
 					// no draw at start: can do the draw now
 					draw();
 					drawUpToDate = true;
@@ -481,7 +474,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            surface plotter
 	 * 
 	 */
-	static final private void endGeometry(PlotterSurface surface) {
+	static private void endGeometry(PlotterSurface surface) {
 		surface.endGeometryDirect();
 	}
 
@@ -496,7 +489,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		// used with GL.drawElements()
 	}
 
-	protected void startTriangles(PlotterSurface surface) {
+	private void startTriangles(PlotterSurface surface) {
 		surface.startTriangles(cornerListIndex * 16);
 	}
 
@@ -507,7 +500,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		// point were already scaled
 		renderer.getGeometryManager().setScalerIdentity();
 
-		// draw splitted, still to split, and next to split
+		// draw split, still to split, and next to split
 		PlotterSurface surface = renderer.getGeometryManager().getSurface();
 		setPackSurface(true);
 		surface.start(getReusableSurfaceIndex());
@@ -563,7 +556,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	}
 
 	private void setWireframeInvisible() {
-		drawWireframe.setWireframeVisible(false);
+		drawWireframe.setWireframeInvisible();
 		if (shouldBePackedForManager()) {
 			setGeometryIndexNotVisible();
 		}
@@ -617,7 +610,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 	}
 
-	private boolean updateCullingBox() {
+	private void updateCullingBox() {
 		EuclidianView3D view = getView3D();
 		double off = maxRWPixelDistance * 4;
 		double offScaled = off / getView3D().getXscale();
@@ -629,19 +622,13 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		offScaled = off / getView3D().getZscale();
 		cullingBox[4] = view.getZmin() - offScaled;
 		cullingBox[5] = view.getZmax() + offScaled;
-		return true;
 	}
 
 	private boolean inCullingBox(Coords3 p) {
-
 		// check point is in culling box
-		if ((p.getXd() > cullingBox[0]) && (p.getXd() < cullingBox[1])
+		return (p.getXd() > cullingBox[0]) && (p.getXd() < cullingBox[1])
 				&& (p.getYd() > cullingBox[2]) && (p.getYd() < cullingBox[3])
-				&& (p.getZd() > cullingBox[4]) && (p.getZd() < cullingBox[5])) {
-			return true;
-		}
-
-		return false;
+				&& (p.getZd() > cullingBox[4]) && (p.getZd() < cullingBox[5]);
 	}
 
 	private void initBounds() {
@@ -776,14 +763,14 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		return first;
 	}
 
-	final private Corner addLeftToMesh(Corner right, double u, double v)
+	private Corner addLeftToMesh(Corner right, double u, double v)
 			throws NotEnoughCornersException {
 		Corner left = newCorner(u, v);
 		right.l = left;
 		return left;
 	}
 
-	final private Corner addRowAboveToMesh(Corner bottomRight, double v,
+	private Corner addRowAboveToMesh(Corner bottomRight, double v,
 			double uBorderMin, double uBorderMax, double uMax, int uN)
 			throws NotEnoughCornersException {
 		Corner below = bottomRight;
@@ -811,7 +798,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			nextAbove = current.a;
 			while (current.l != null) {
 				nextLeft = current.l;
-				if (nextLeft.a == null) { // already splitted by last row
+				if (nextLeft.a == null) { // already split by last row
 					nextLeft = nextLeft.l;
 				}
 				// Log.debug(current.u + "," + current.v);
@@ -861,11 +848,11 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	}
 
-	final private void scaleXYZ(Coords3 p) {
+	private void scaleXYZ(Coords3 p) {
 		getView3D().scaleXYZ(p);
 	}
 
-	final private void scaleAndNormalizeNormalXYZ(Coords3 n) {
+	private void scaleAndNormalizeNormalXYZ(Coords3 n) {
 		getView3D().scaleAndNormalizeNormalXYZ(n);
 	}
 
@@ -951,1272 +938,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	}
 
-	class Corner {
-		Coords3 p;
-		Coords3 normal;
-		double u;
-		double v;
-		boolean isNotEnd;
-		Corner a; // above
-		Corner l; // left
-		int id;
-		DrawSurface3D drawSurface3D;
-
-		public Corner(int id, DrawSurface3D drawSurface3D) {
-			this.id = id;
-			this.drawSurface3D = drawSurface3D;
-		}
-
-		public Corner(double u, double v, int id, DrawSurface3D drawSurface3D) {
-			this.id = id;
-			this. drawSurface3D = drawSurface3D;
-			set(u, v);
-		}
-
-		public void set(double u, double v) {
-			this.u = u;
-			this.v = v;
-			p = evaluatePoint(u, v, p);
-			if (p.isFinalUndefined()) {
-				normal = Coords3.UNDEFINED;
-			} else {
-				normal = evaluateNormal(p, u, v, normal);
-			}
-			isNotEnd = true;
-			a = null;
-			l = null;
-		}
-
-		public void set(Corner c) {
-			u = c.u;
-			v = c.v;
-			p = c.p;
-			normal = c.normal;
-			id = c.id;
-		}
-
-		public Corner(double u, double v, Coords3 p) {
-			set(u, v, p);
-		}
-
-		public void set(double u, double v, Coords3 p) {
-			this.u = u;
-			this.v = v;
-			this.p = p;
-			normal = evaluateNormal(p, u, v, normal);
-
-			isNotEnd = true;
-			a = null;
-			l = null;
-		}
-
-		/**
-		 * draw this corner as part of "next to split" list
-		 * 
-		 * @param surface
-		 *            surface plotter
-		 */
-		public void drawAsNextToSplit(PlotterSurface surface) {
-
-			// if (this.p.isNotFinalUndefined()){
-			// if (a.p.isNotFinalUndefined()){
-			// if (l.p.isNotFinalUndefined()){
-			// drawTriangle(surface, this, a, l);
-			// if (l.a.p.isNotFinalUndefined()){
-			// drawTriangle(surface, l, a, l.a);
-			// }
-			// }else{
-			// if (l.a.p.isNotFinalUndefined()){
-			// drawTriangle(surface, this, a, l.a);
-			// }
-			// }
-			// }else{
-			// if (l.p.isNotFinalUndefined() && l.a.p.isNotFinalUndefined()){
-			// drawTriangle(surface, this, l.a, l);
-			// }
-			// }
-			// }else{ // this undefined
-			// if (l.p.isNotFinalUndefined() && a.p.isNotFinalUndefined() &&
-			// l.a.p.isNotFinalUndefined()){
-			// drawTriangle(surface, l, a, l.a);
-			// }
-			// }
-
-			drawAsStillToSplit(surface);
-
-		}
-
-		/**
-		 * draw this corner as part of "still to split" list
-		 * 
-		 * @param surface
-		 *            surface plotter
-		 */
-		public void drawAsStillToSplit(PlotterSurface surface) {
-
-			// prevent keeping old element id
-			for (int i = 0; i < cornerToDrawStillToSplit.length; i++) {
-				cornerToDrawStillToSplit[i].id = -1;
-			}
-
-			// create ring about corners
-			int length;
-
-			cornerForStillToSplit[0] = this;
-			cornerForStillToSplit[1] = this.l;
-
-			if (this.l.a == null) { // a split occurred
-				cornerForStillToSplit[2] = this.l.l;
-				cornerForStillToSplit[3] = this.l.l.a;
-				length = 4;
-			} else {
-				cornerForStillToSplit[2] = this.l.a;
-				length = 3;
-			}
-
-			if (this.a.l == null) { // a split occurred
-				cornerForStillToSplit[length] = this.a.a;
-				length++;
-				cornerForStillToSplit[length] = this.a;
-				length++;
-			} else {
-				cornerForStillToSplit[length] = this.a;
-				length++;
-			}
-
-			// check defined and create intermediate corners if needed
-			Corner previous = cornerForStillToSplit[length - 1];
-			int index = 0;
-			for (int i = 0; i < length; i++) {
-				Corner current = cornerForStillToSplit[i];
-
-				if (current.p.isNotFinalUndefined()) {
-					if (previous.p.isFinalUndefined()) {
-						// previous undefined -- current defined : create
-						// intermediate
-						if (DoubleUtil.isEqual(previous.u, current.u)) {
-							findV(current, previous, BOUNDARY_SPLIT,
-									cornerToDrawStillToSplit[index]);
-						} else {
-							findU(current, previous, BOUNDARY_SPLIT,
-									cornerToDrawStillToSplit[index]);
-						}
-						index++;
-					}
-					// add current for drawing
-					cornerToDrawStillToSplit[index].set(current);
-					index++;
-				} else {
-					if (previous.p.isNotFinalUndefined()) {
-						// previous defined -- current undefined : create
-						// intermediate
-						if (DoubleUtil.isEqual(previous.u, current.u)) {
-							findV(previous, current, BOUNDARY_SPLIT,
-									cornerToDrawStillToSplit[index]);
-						} else {
-							findU(previous, current, BOUNDARY_SPLIT,
-									cornerToDrawStillToSplit[index]);
-						}
-						index++;
-					}
-				}
-
-				previous = current;
-			}
-
-			if (index < 3) {
-				// Log.debug("index = "+index);
-				return;
-			}
-
-			Coords3 v0 = new CoordsDouble3(), n0 = new CoordsDouble3();
-			setBarycenter(v0, n0, index, cornerToDrawStillToSplit);
-
-			for (int i = 0; i < index; i++) {
-				drawTriangle(surface, v0, n0,
-						cornerToDrawStillToSplit[(i + 1) % index],
-						cornerToDrawStillToSplit[i]);
-			}
-
-		}
-
-		public void split(boolean draw) throws NotEnoughCornersException {
-
-			Corner left, above, subLeft, subAbove;
-
-			if (l.a == null) {
-				left = l.l;
-				subLeft = l;
-			} else {
-				left = l;
-				subLeft = null;
-			}
-
-			if (a.l == null) {
-				above = a.a;
-				subAbove = a;
-			} else {
-				above = a;
-				subAbove = null;
-			}
-
-			if (p.isFinalUndefined()) {
-				if (left.p.isFinalUndefined()) {
-					if (above.p.isFinalUndefined()) {
-						if (left.a.p.isFinalUndefined()) {
-							// all undefined: nothing to draw /0/
-							notDrawn++;
-						} else {
-							// l.a is defined /1/
-							// find defined between l.a and a
-							Corner n = newCorner();
-							findU(left.a, above, BOUNDARY_SPLIT, n);
-							// find defined between l.a and l
-							Corner w = newCorner();
-							findV(left.a, left, BOUNDARY_SPLIT, w);
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (n.p.isFinalUndefined()
-									|| w.p.isFinalUndefined()) { // some
-																	// undefined
-																	// point:
-																	// force
-																	// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(left.a, n, w);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left.a, n, w)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// new neighbors
-								n.l = left.a;
-								above.l = n;
-								// new neighbors
-								w.a = left.a;
-								left.a = w;
-
-								// draw
-								addToDrawList(w.a, n, w, w.a);
-							}
-						}
-					} else {
-						if (left.a.p.isFinalUndefined()) {
-							// a defined /1/
-							// find defined between a and l.a
-							Corner n = newCorner();
-							findU(above, left.a, BOUNDARY_SPLIT, n);
-							// find defined between a and this
-							Corner e;
-							if (subAbove != null) {
-								e = subAbove;
-							} else {
-								e = newCorner();
-								findV(above, this, BOUNDARY_SPLIT, e);
-							}
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (n.p.isFinalUndefined()
-									|| e.p.isFinalUndefined()) { // some
-																	// undefined
-																	// point:
-																	// force
-																	// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(above, n, e);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, above, n, e)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// new neighbors
-								if (subAbove == null) {
-									this.a = e;
-									e.a = above;
-								}
-								n.l = left.a;
-								above.l = n;
-
-								// drawing
-								addToDrawList(left.a, n, e, above);
-							}
-						} else {
-							// a and l.a defined /2/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subAbove != null
-									&& subAbove.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(above, left.a);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, above, left.a)) { // angle
-																				// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between a and this
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(above, this, BOUNDARY_SPLIT, e);
-								}
-								// find defined between l.a and left
-								Corner w = newCorner();
-								findV(left.a, left, BOUNDARY_SPLIT, w);
-
-								if (!draw) {
-									// check distances
-									double d = getDistanceNoLoop(above, e, w,
-											left.a);
-									if (Double.isInfinite(d)) { // d >
-																// maxRWDistance
-										split = true;
-									} else if (d > maxRWDistanceNoAngleCheck) { // check
-																				// angle
-										if (isAngleOKNoLoop(maxBend, above, e,
-												w, left.a)) { // angle ok
-											split = false;
-										} else { // angle not ok
-											split = true;
-										}
-									} else { // no need to check angle
-										split = false;
-									}
-								}
-
-								if (split) {
-									split(subLeft, left, subAbove, above);
-								} else {
-									if (subAbove == null) {
-										// new neighbors
-										this.a = e;
-										e.a = above;
-									}
-									// new neighbors
-									w.a = left.a;
-									left.a = w;
-
-									// drawing
-									addToDrawList(w.a, e, above, left.a, w);
-								}
-							}
-						}
-					}
-				} else {
-					if (above.p.isFinalUndefined()) {
-						if (left.a.p.isFinalUndefined()) {
-							// l defined /1/
-							// find defined between l and this
-							Corner s;
-							if (subLeft != null) {
-								s = subLeft;
-							} else {
-								s = newCorner();
-								findU(left, this, BOUNDARY_SPLIT, s);
-							}
-							// find defined between l and l.a
-							Corner w = newCorner();
-							findV(left, left.a, BOUNDARY_SPLIT, w);
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (s.p.isFinalUndefined()
-									|| w.p.isFinalUndefined()) { // some
-																	// undefined
-																	// point:
-																	// force
-																	// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(left, s, w);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left, s, w)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// new neighbors
-								if (subLeft == null) {
-									this.l = s;
-									s.l = left;
-								}
-								w.a = left.a;
-								left.a = w;
-
-								// drawing
-								addToDrawList(w.a, s, w, left);
-
-							}
-						} else {
-							// l and l.a defined /2/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subLeft != null
-									&& subLeft.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(left.a, left);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left.a, left)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between l and this
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(left, this, BOUNDARY_SPLIT, s);
-								}
-								// find defined between l.a and a
-								Corner n = newCorner();
-								findU(left.a, above, BOUNDARY_SPLIT, n);
-
-								if (!draw) {
-									// check distances
-									double d = getDistanceNoLoop(left.a, n, s,
-											left);
-									if (Double.isInfinite(d)) { // d >
-																// maxRWDistance
-										split = true;
-									} else if (d > maxRWDistanceNoAngleCheck) { // check
-																				// angle
-										if (isAngleOKNoLoop(maxBend, left.a, n,
-												s, left)) { // angle ok
-											split = false;
-										} else { // angle not ok
-											split = true;
-										}
-									} else { // no need to check angle
-										split = false;
-									}
-								}
-
-								if (split) {
-									split(subLeft, left, subAbove, above);
-								} else {
-									if (subLeft == null) {
-										// new neighbors
-										this.l = s;
-										s.l = left;
-									}
-									// new neighbors
-									n.l = left.a;
-									above.l = n;
-
-									// drawing
-									addToDrawList(left.a, s, n, left.a, left);
-								}
-							}
-						}
-					} else {
-						if (left.a.p.isFinalUndefined()) {
-							// l and a not undefined /2/diag/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else { // check distance
-								double d = getDistance(left, above);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left, above)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between l and this
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(left, this, BOUNDARY_SPLIT, s);
-									// new neighbors
-									this.l = s;
-									s.l = left;
-								}
-								// find defined between a and this
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(above, this, BOUNDARY_SPLIT, e);
-									// new neighbors
-									this.a = e;
-									e.a = above;
-								}
-								// find defined between l and l.a
-								Corner w = newCorner();
-								findV(left, left.a, BOUNDARY_SPLIT, w);
-								w.a = left.a;
-								left.a = w;
-								// find defined between a and l.a
-								Corner n = newCorner();
-								findU(above, left.a, BOUNDARY_SPLIT, n);
-								n.l = above.l;
-								above.l = n;
-
-								// drawing
-								addToDrawList(w.a, left, above);
-
-							}
-						} else {
-							// l, a and l.a not undefined /3/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subLeft != null
-									&& subLeft.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else if (subAbove != null
-									&& subAbove.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(left.a, left, above);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left.a, left,
-											above)) { // angle ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between l and this
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(left, this, BOUNDARY_SPLIT, s);
-									// new neighbors
-									this.l = s;
-									s.l = left;
-								}
-								// find defined between a and this
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(above, this, BOUNDARY_SPLIT, e);
-									// new neighbors
-									this.a = e;
-									e.a = above;
-								}
-
-								// drawing
-								addToDrawList(left.a, left, above, left.a);
-							}
-						}
-					}
-				}
-			} else {
-				if (left.p.isFinalUndefined()) {
-					if (above.p.isFinalUndefined()) {
-						if (left.a.p.isFinalUndefined()) {
-							// this defined /1/
-							// find defined between this and l
-							Corner s;
-							if (subLeft != null) {
-								s = subLeft;
-							} else {
-								s = newCorner();
-								findU(this, left, BOUNDARY_SPLIT, s);
-							}
-							// find defined between this and a
-							Corner e;
-							if (subAbove != null) {
-								e = subAbove;
-							} else {
-								e = newCorner();
-								findV(this, above, BOUNDARY_SPLIT, e);
-							}
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (s.p.isFinalUndefined()
-									|| e.p.isFinalUndefined()) { // some
-																	// undefined
-																	// point:
-																	// force
-																	// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(this, s, e);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, this, s, e)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// new neighbors
-								if (subLeft == null) {
-									this.l = s;
-									s.l = left;
-								}
-								if (subAbove == null) {
-									this.a = e;
-									e.a = above;
-								}
-
-								// drawing
-								addToDrawList(left.a, s, e, this);
-							}
-						} else {
-							// this and l.a not undefined /2/diag/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else { // check distance
-								double d = getDistance(left.a, this);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left.a, this)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between l and this
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(this, left, BOUNDARY_SPLIT, s);
-									// new neighbors
-									this.l = s;
-									s.l = left;
-								}
-								// find defined between a and this
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(this, above, BOUNDARY_SPLIT, e);
-									// new neighbors
-									this.a = e;
-									e.a = above;
-								}
-								// find defined between l and l.a
-								Corner w = newCorner();
-								findV(left.a, left, BOUNDARY_SPLIT, w);
-								w.a = left.a;
-								left.a = w;
-								// find defined between a and l.a
-								Corner n = newCorner();
-								findU(left.a, above, BOUNDARY_SPLIT, n);
-								n.l = above.l;
-								above.l = n;
-
-								// drawing
-								addToDrawList(w.a, this, left.a);
-							}
-						}
-					} else {
-						if (left.a.p.isFinalUndefined()) {
-							// this and a defined /2/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subLeft != null
-									&& subLeft.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(this, above);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, this, above)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between this and l
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(this, left, BOUNDARY_SPLIT, s);
-								}
-								// find defined between a and l.a
-								Corner n = newCorner();
-								findU(above, left.a, BOUNDARY_SPLIT, n);
-
-								if (!draw) {
-									// check distances
-									double d = getDistanceNoLoop(this, s, n,
-											above);
-									if (Double.isInfinite(d)) { // d >
-																// maxRWDistance
-										split = true;
-									} else if (d > maxRWDistanceNoAngleCheck) { // check
-																				// angle
-										if (isAngleOKNoLoop(maxBend, this, s, n,
-												above)) { // angle ok
-											split = false;
-										} else { // angle not ok
-											split = true;
-										}
-									} else { // no need to check angle
-										split = false;
-									}
-								}
-
-								if (split) {
-									split(subLeft, left, subAbove, above);
-								} else {
-									if (subLeft == null) {
-										// new neighbors
-										this.l = s;
-										s.l = left;
-									}
-									// new neighbors
-									n.l = left.a;
-									above.l = n;
-
-									// drawing
-									addToDrawList(left.a, this, above, n, s);
-
-								}
-							}
-						} else {
-							// this, a and l.a defined /3/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subLeft != null
-									&& subLeft.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(above, left.a, this);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, above, left.a,
-											this)) { // angle ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between this and l
-								Corner s;
-								if (subLeft != null) {
-									s = subLeft;
-								} else {
-									s = newCorner();
-									findU(this, left, BOUNDARY_SPLIT, s);
-									// new neighbors
-									this.l = s;
-									s.l = left;
-								}
-								// find defined between l.a and l
-								Corner w = newCorner();
-								findV(left.a, left, BOUNDARY_SPLIT, w);
-								// new neighbors
-								w.a = left.a;
-								left.a = w;
-
-								// drawing
-								addToDrawList(w.a, above, left.a, this);
-							}
-						}
-					}
-				} else {
-					if (above.p.isFinalUndefined()) {
-						if (left.a.p.isFinalUndefined()) {
-							// this and l defined /2/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subAbove != null
-									&& subAbove.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(this, left);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, this, left)) { // angle
-																			// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between this and a
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(this, above, BOUNDARY_SPLIT, e);
-								}
-								// find defined between l and l.a
-								Corner w = newCorner();
-								findV(left, left.a, BOUNDARY_SPLIT, w);
-
-								if (!draw) {
-									// check distances
-									double d = getDistanceNoLoop(this, e, w,
-											left);
-									if (Double.isInfinite(d)) { // d >
-																// maxRWDistance
-										split = true;
-									} else if (d > maxRWDistanceNoAngleCheck) { // check
-																				// angle
-										if (isAngleOKNoLoop(maxBend, this, e, w,
-												left)) { // angle ok
-											split = false;
-										} else { // angle not ok
-											split = true;
-										}
-									} else { // no need to check angle
-										split = false;
-									}
-								}
-
-								if (split) {
-									split(subLeft, left, subAbove, above);
-								} else {
-									if (subAbove == null) {
-										// new neighbors
-										this.a = e;
-										e.a = above;
-									}
-									// new neighbors
-									w.a = left.a;
-									left.a = w;
-
-									// drawing
-									addToDrawList(w.a, this, e, w, left);
-								}
-							}
-						} else {
-							// this, l and l.a not undefined /3/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else if (subAbove != null
-									&& subAbove.p.isFinalUndefined()) { // some
-																		// undefined
-																		// point:
-																		// force
-																		// split
-								split = true;
-							} else { // check distance
-								double d = getDistance(left, left.a, this);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, left, left.a,
-											this)) { // angle ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between l.a and a
-								Corner n = newCorner();
-								findU(left.a, above, BOUNDARY_SPLIT, n);
-								// find defined between this and a
-								Corner e;
-								if (subAbove != null) {
-									e = subAbove;
-								} else {
-									e = newCorner();
-									findV(this, above, BOUNDARY_SPLIT, e);
-									// new neighbors
-									this.a = e;
-									e.a = above;
-								}
-								// new neighbors
-								n.l = left.a;
-								above.l = n;
-
-								// drawing
-								addToDrawList(left.a, left, left.a, this);
-							}
-						}
-					} else {
-						if (left.a.p.isFinalUndefined()) {
-							// this, l and a not undefined /3/
-							boolean split;
-							if (draw) { // time to draw
-								split = false;
-							} else { // check distance
-								double d = getDistance(this, left, above);
-								if (Double.isInfinite(d)) { // d > maxRWDistance
-									split = true;
-								} else if (d > maxRWDistanceNoAngleCheck) { // check
-																			// angle
-									if (isAngleOK(maxBend, this, left, above)) { // angle
-																					// ok
-										split = false;
-									} else { // angle not ok
-										split = true;
-									}
-								} else { // no need to check angle
-									split = false;
-								}
-							}
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								// find defined between a and l.a
-								Corner n = newCorner();
-								findU(above, left.a, BOUNDARY_SPLIT, n);
-								// find defined between l and l.a
-								Corner w = newCorner();
-								findV(left, left.a, BOUNDARY_SPLIT, w);
-								// new neighbors
-								n.l = left.a;
-								above.l = n;
-								// new neighbors
-								w.a = left.a;
-								left.a = w;
-
-								// drawing
-								addToDrawList(w.a, this, left, above);
-
-							}
-						} else {
-							// this, l, a and l.a defined /4/
-							if (draw) {
-								// drawing
-								addToDrawList(left.a, this, left, above,
-										left.a);
-							} else {
-								// check distances
-								double d = getDistance(this, left, above,
-										left.a);
-								if (Double.isInfinite(d)
-										|| (d > maxRWDistanceNoAngleCheck
-												&& !isAngleOK(maxBend, this,
-														left, above, left.a))) {
-									split(subLeft, left, subAbove, above);
-								} else {
-									// drawing
-									addToDrawList(left.a, this, left, above,
-											left.a);
-								}
-							}
-						}
-					}
-				}
-			}
-
-		}
-
-		private void split(Corner subLeft, Corner left, Corner subAbove,
-				Corner above) throws NotEnoughCornersException {
-			// new corners
-			double um = (u + left.u) / 2;
-			double vm = (v + above.v) / 2;
-			if (subLeft != null) {
-				um = subLeft.u;
-			}
-			if (subAbove != null) {
-				vm = subAbove.v;
-			}
-			Corner e;
-			if (subAbove != null) {
-				e = subAbove;
-			} else {
-				e = newCorner(u, vm);
-				// new neighbors
-				this.a = e;
-				e.a = above;
-			}
-			Corner s;
-			if (subLeft != null) {
-				s = subLeft;
-			} else {
-				s = newCorner(um, v);
-				// new neighbors
-				this.l = s;
-				s.l = left;
-			}
-			Corner m = newCorner(um, vm);
-			s.a = m;
-			e.l = m;
-			Corner n = newCorner(um, above.v);
-			n.l = above.l;
-			above.l = n;
-			m.a = n;
-			Corner w = newCorner(left.u, vm);
-			w.a = left.a;
-			left.a = w;
-			m.l = w;
-			// next split
-			addToNextSplit(this);
-			addToNextSplit(s);
-			addToNextSplit(e);
-			addToNextSplit(m);
-
-			loopSplitIndex += 4;
-		}
-
-		private void addToDrawList(Corner end, Corner... corners) {
-
-			CornerAndCenter cc = drawList[drawListIndex];
-			if (cc == null) {
-				cc = new CornerAndCenter(drawSurface3D, this, drawListIndex);
-				drawList[drawListIndex] = cc;
-			} else {
-				cc.setCorner(this);
-			}
-			drawListIndex++;
-			loopSplitIndex++;
-
-			setBarycenter(cc.getCenter(), cc.getCenterNormal(), corners);
-
-			end.isNotEnd = false;
-		}
-
-		private void findU(Corner defined, Corner undefined, int depth,
-				Corner corner) {
-			findU(defined.p, defined.u, defined.u, undefined.u, defined.v,
-					depth, corner, true);
-		}
-
-		private void findU(Coords3 lastDefined, double uLastDef, double uDef,
-				double uUndef, double vRow, int depth, Corner corner,
-				boolean lastDefinedIsFirst) {
-
-			double uNew = (uDef + uUndef) / 2;
-			Coords3 coords = evaluatePoint(uNew, vRow);
-
-			if (depth == 0) { // no more split
-				if (coords.isFinalUndefined()) {
-					// return last defined point
-					if (lastDefinedIsFirst) {
-						corner.set(uLastDef, vRow, lastDefined.copyVector());
-					} else {
-						corner.set(uLastDef, vRow, lastDefined);
-					}
-				} else {
-					corner.set(uNew, vRow, coords);
-				}
-			} else {
-				if (coords.isFinalUndefined()) {
-					findU(lastDefined, uLastDef, uDef, uNew, vRow, depth - 1,
-							corner, lastDefinedIsFirst);
-				} else {
-					findU(coords, uNew, uNew, uUndef, vRow, depth - 1, corner,
-							false);
-				}
-			}
-
-		}
-
-		private void findV(Corner defined, Corner undefined, int depth,
-				Corner corner) {
-			findV(defined.p, defined.v, defined.v, undefined.v, defined.u,
-					depth, corner, true);
-		}
-
-		private void findV(Coords3 lastDefined, double vLastDef, double vDef,
-				double vUndef, double uRow, int depth, Corner corner,
-				boolean lastDefinedIsFirst) {
-
-			double vNew = (vDef + vUndef) / 2;
-			Coords3 coords = evaluatePoint(uRow, vNew);
-
-			if (depth == 0) { // no more split
-				if (coords.isFinalUndefined()) {
-					// return last defined point
-					if (lastDefinedIsFirst) {
-						corner.set(uRow, vLastDef, lastDefined.copyVector());
-					} else {
-						corner.set(uRow, vLastDef, lastDefined);
-					}
-				} else {
-					corner.set(uRow, vNew, coords);
-				}
-			} else {
-				if (coords.isFinalUndefined()) {
-					findV(lastDefined, vLastDef, vDef, vNew, uRow, depth - 1,
-							corner, lastDefinedIsFirst);
-				} else {
-					findV(coords, vNew, vNew, vUndef, uRow, depth - 1, corner,
-							false);
-				}
-			}
-
-		}
-
-	}
-
 	/**
 	 * set center as barycenter for points
 	 * 
@@ -2228,7 +949,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            corners
 	 * 
 	 */
-	static protected void setBarycenter(Coords3 center, Coords3 normal,
+	static void setBarycenter(Coords3 center, Coords3 normal,
 			Corner... c) {
 		setBarycenter(center, normal, c.length, c);
 	}
@@ -2246,7 +967,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            corners
 	 * 
 	 */
-	static protected void setBarycenter(Coords3 center, Coords3 normal,
+	static void setBarycenter(Coords3 center, Coords3 normal,
 			int length, Corner... c) {
 		double f = 1.0 / length;
 
@@ -2344,7 +1065,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *         POSITIVE_INFINITY if distance is more than maxRWDistance
 	 */
 	protected double getDistance(Corner c1, Corner c2, Corner c3, Corner c4) {
-		double ret = 0;
+		double ret;
 		double d;
 
 		d = getDistance(c1, c2);
@@ -2393,9 +1114,9 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 * @return max distance between c1-c2 / c2-c3 / c3-c4, or POSITIVE_INFINITY
 	 *         if distance is more than maxRWDistance
 	 */
-	protected double getDistanceNoLoop(Corner c1, Corner c2, Corner c3,
+	double getDistanceNoLoop(Corner c1, Corner c2, Corner c3,
 			Corner c4) {
-		double ret = 0;
+		double ret;
 		double d;
 
 		d = getDistance(c1, c2);
@@ -2435,7 +1156,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *         if distance is more than maxRWDistance
 	 */
 	protected double getDistance(Corner c1, Corner c2, Corner c3) {
-		double ret = 0;
+		double ret;
 		double d;
 
 		d = getDistance(c1, c2);
@@ -2461,6 +1182,33 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 
 		return ret;
+	}
+
+	double getDistance(Corner... corners) {
+		switch (corners.length) {
+		case 2:
+			return getDistance(corners[0], corners[1]);
+		case 3:
+			return getDistance(corners[0], corners[1], corners[2]);
+		case 4:
+			return getDistance(corners[0], corners[1], corners[2], corners[3]);
+		}
+		return 0;
+	}
+
+	boolean isAngleOK(double bend, boolean loops, Corner... corners) {
+		if (loops) {
+			return isAngleOKNoLoop(bend, corners[0], corners[1], corners[2], corners[3]);
+		}
+		switch (corners.length) {
+		case 2:
+			return isAngleOK(bend, corners[0], corners[1]);
+		case 3:
+			return isAngleOK(bend, corners[0], corners[1], corners[2]);
+		case 4:
+			return isAngleOK(bend, corners[0], corners[1], corners[2], corners[3]);
+		}
+		return false;
 	}
 
 	/**
@@ -2504,7 +1252,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            second corner
 	 * @return true if angle is ok between c1-c2
 	 */
-	protected static boolean isAngleOK(double bend, Corner c1, Corner c2) {
+	static boolean isAngleOK(double bend, Corner c1, Corner c2) {
 		return isAngleOK(c1.normal, c2.normal, bend);
 	}
 
@@ -2520,7 +1268,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            third corner
 	 * @return true if angle is ok between c1-c2 and c2-c3 and c3-c1
 	 */
-	protected static boolean isAngleOK(double bend, Corner c1, Corner c2,
+	static boolean isAngleOK(double bend, Corner c1, Corner c2,
 			Corner c3) {
 		return isAngleOK(c1.normal, c2.normal, bend)
 				&& isAngleOK(c2.normal, c3.normal, bend)
@@ -2541,7 +1289,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            fourth corner
 	 * @return true if angle is ok between c1-c2 and c2-c3 and c3-c4 and c4-c1
 	 */
-	protected static boolean isAngleOK(double bend, Corner c1, Corner c2,
+	static boolean isAngleOK(double bend, Corner c1, Corner c2,
 			Corner c3, Corner c4) {
 		return isAngleOK(c1.normal, c2.normal, bend)
 				&& isAngleOK(c2.normal, c3.normal, bend)
@@ -2563,7 +1311,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            fourth corner
 	 * @return true if angle is ok between c1-c2 and c2-c3 and c3-c4
 	 */
-	protected static boolean isAngleOKNoLoop(double bend, Corner c1, Corner c2,
+	static boolean isAngleOKNoLoop(double bend, Corner c1, Corner c2,
 			Corner c3, Corner c4) {
 		return isAngleOK(c1.normal, c2.normal, bend)
 				&& isAngleOK(c2.normal, c3.normal, bend)
@@ -2576,7 +1324,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 * @param corner
 	 *            corner
 	 */
-	protected void addToNextSplit(Corner corner) {
+	void addToNextSplit(Corner corner) {
 		nextSplit[nextSplitIndex] = corner;
 		nextSplitIndex++;
 	}
@@ -2591,7 +1339,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *             if no new corner left in array
 	 * @return new corner calculated for parameters u, v
 	 */
-	protected Corner newCorner(double u, double v)
+	Corner newCorner(double u, double v)
 			throws NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
 			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
@@ -2613,7 +1361,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 * @throws NotEnoughCornersException
 	 *             if no new corner left in array
 	 */
-	protected Corner newCorner() throws NotEnoughCornersException {
+	Corner newCorner() throws NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
 			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
@@ -2723,7 +1471,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				xyzf[GeoFunctionNVar.DICHO_LAST]);
 		boolean isLessZ0 = false, isLessZ1;
 		isLessZ1 = GeoFunctionNVar.isLessZ(xyzf[GeoFunctionNVar.DICHO_LAST]);
-		double t = 0;
+		double t;
 
 		for (int i = 1; i <= HIT_SAMPLES; i++) {
 			double[] tmp = xyzf[GeoFunctionNVar.DICHO_FIRST];
@@ -2815,7 +1563,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	/**
 	 * set there is no more corner available
 	 */
-	public void setNoRoomLeft() {
+	private void setNoRoomLeft() {
 		drawFromScratch = false;
 		stillRoomLeft = false;
 	}
@@ -2846,7 +1594,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            third point
 	 */
 	protected void drawTriangle(PlotterSurface surface, Coords3 p0, Coords3 n0,
-			DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+			Corner c1, Corner c2) {
 
 		surface.normalDirect(n0);
 		surface.vertexDirect(p0);
@@ -2870,7 +1618,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            second corner
 	 */
 	protected void drawTriangle(PlotterSurface surface, CornerAndCenter cc,
-			DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+			Corner c1, Corner c2) {
 		drawTriangle(surface, cc.center, cc.centerNormal, c1, c2);
 	}
 
@@ -2889,7 +1637,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	 *            third point
 	 */
 	void drawTriangleCheckCorners(PlotterSurface surface,
-			CornerAndCenter cc, DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+			CornerAndCenter cc, Corner c1, Corner c2) {
 		if (c1.p.isFinalUndefined()) {
 			return;
 		}

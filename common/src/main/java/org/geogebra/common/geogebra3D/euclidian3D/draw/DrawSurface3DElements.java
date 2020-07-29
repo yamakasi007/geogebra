@@ -37,7 +37,7 @@ public class DrawSurface3DElements extends DrawSurface3D {
 	protected void drawTriangle(PlotterSurface surface, CornerAndCenter cc,
 			Corner c1, Corner c2) {
 
-		if (!checkIdsAreShort(cornerListIndex + cc.id, c1.id, c2.id)) {
+		if (checkIdsAreNotShort(cornerListIndex + cc.id, c1.id, c2.id)) {
 			return;
 		}
 
@@ -67,7 +67,7 @@ public class DrawSurface3DElements extends DrawSurface3D {
 	protected void drawTriangle(PlotterSurface surface, Coords3 p0, Coords3 n0,
 			Corner c1, Corner c2) {
 
-		if (!checkIdsAreShort(lastIndex, c1.id, c2.id)) {
+		if (checkIdsAreNotShort(lastIndex, c1.id, c2.id)) {
 			return;
 		}
 
@@ -78,7 +78,7 @@ public class DrawSurface3DElements extends DrawSurface3D {
 
 	}
 
-	final private void draw(PlotterSurface surface, Coords3 p0, Coords3 n0) {
+	private void draw(PlotterSurface surface, Coords3 p0, Coords3 n0) {
 		// add normal and vertex
 		surface.normalDirect(n0);
 		surface.vertexDirect(p0);
@@ -88,7 +88,7 @@ public class DrawSurface3DElements extends DrawSurface3D {
 		lastIndex++;
 	}
 
-	final private void draw(PlotterSurface surface, Corner c) {
+	private void draw(PlotterSurface surface, Corner c) {
 
 		if (c.id < 0) { // needs new id
 			draw(surface, c.p, c.normal);
@@ -98,30 +98,12 @@ public class DrawSurface3DElements extends DrawSurface3D {
 
 	}
 
-	final private static boolean checkIdsAreShort(int id1, int id2, int id3) {
-		if (checkIdIsNotShort(id1)) {
-			return false;
-		}
-
-		if (checkIdIsNotShort(id2)) {
-			return false;
-		}
-
-		if (checkIdIsNotShort(id3)) {
-			return false;
-		}
-
-		return true;
-
+	private static boolean checkIdsAreNotShort(int id1, int id2, int id3) {
+		return checkIdIsNotShort(id1) || checkIdIsNotShort(id2) || checkIdIsNotShort(id3);
 	}
 
-	final private static boolean checkIdIsNotShort(int id) {
-
-		if (id > Short.MAX_VALUE) {
-			return true;
-		}
-
-		return false;
+	private static boolean checkIdIsNotShort(int id) {
+		return id >= Short.MAX_VALUE;
 	}
 
 	@Override

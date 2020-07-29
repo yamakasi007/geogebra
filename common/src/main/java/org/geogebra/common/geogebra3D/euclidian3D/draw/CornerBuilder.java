@@ -3,7 +3,7 @@ package org.geogebra.common.geogebra3D.euclidian3D.draw;
 import org.geogebra.common.kernel.matrix.Coords3;
 import org.geogebra.common.kernel.matrix.CoordsDouble3;
 
-public class CornerBuilder {
+class CornerBuilder {
 
 	/**
 	 *

@@ -5,13 +5,13 @@ import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterSurface;
 import org.geogebra.common.kernel.matrix.Coords3;
 
 class CornerAndCenter {
-	private DrawSurface3D.Corner corner;
+	private Corner corner;
 	Coords3 center;
 	Coords3 centerNormal;
 	int id;
 	private DrawSurface3D drawSurface3D;
 
-	public CornerAndCenter(DrawSurface3D drawSurface3D, DrawSurface3D.Corner corner, int id) {
+	CornerAndCenter(DrawSurface3D drawSurface3D, Corner corner, int id) {
 		center = CornerBuilder.newCoords3();
 		centerNormal = CornerBuilder.newCoords3();
 		setCorner(corner);
@@ -25,7 +25,7 @@ class CornerAndCenter {
 	 * @param corner
 	 *            corner
 	 */
-	public void setCorner(DrawSurface3D.Corner corner) {
+	public void setCorner(Corner corner) {
 		this.corner = corner;
 	}
 
@@ -33,7 +33,7 @@ class CornerAndCenter {
 	 *
 	 * @return corner
 	 */
-	public DrawSurface3D.Corner getCorner() {
+	public Corner getCorner() {
 		return corner;
 	}
 
@@ -49,7 +49,7 @@ class CornerAndCenter {
 	 *
 	 * @return center normal
 	 */
-	public Coords3 getCenterNormal() {
+	Coords3 getCenterNormal() {
 		return centerNormal;
 	}
 
@@ -66,13 +66,13 @@ class CornerAndCenter {
 	}
 
 	public void draw(PlotterSurface surface) {
-		DrawSurface3D.Corner p1, p2;
+		Corner p1, p2;
 
 		// go left
-		DrawSurface3D.Corner current = corner;
+		Corner current = corner;
 		// get first defined point on south (if exists)
-		DrawSurface3D.Corner sw1 = current;
-		DrawSurface3D.Corner sw2 = sw1;
+		Corner sw1 = current;
+		Corner sw2 = sw1;
 		// draw south
 		p1 = sw1;
 		do {
@@ -90,13 +90,13 @@ class CornerAndCenter {
 			current = current.l;
 		} while (current.a == null);
 
-		DrawSurface3D.Corner sw = current;
+		Corner sw = current;
 
 		// go above
 		current = corner;
 		// get first defined point on east (if exists)
-		DrawSurface3D.Corner ne1 = current;
-		DrawSurface3D.Corner ne2 = ne1;
+		Corner ne1 = current;
+		Corner ne2 = ne1;
 		// draw east
 		p1 = ne1;
 		do {
@@ -113,7 +113,7 @@ class CornerAndCenter {
 			}
 			current = current.a;
 		} while (current.l == null);
-		DrawSurface3D.Corner ne = current;
+		Corner ne = current;
 
 		// west side
 		current = sw;
@@ -171,6 +171,5 @@ class CornerAndCenter {
 			drawSurface3D.drawTriangleCheckCorners(surface, this, ne1, ne2);
 		}
 	}
-
 }
 
