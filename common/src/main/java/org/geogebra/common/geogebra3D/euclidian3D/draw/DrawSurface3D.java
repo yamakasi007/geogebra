@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.euclidian.EuclidianController;
+import org.geogebra.common.euclidian.draw.DrawSurface;
 import org.geogebra.common.euclidian.plot.CurvePlotter;
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.geogebra3D.euclidian3D.Hitting;
@@ -98,18 +99,18 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	// previously set thickness (-1 means needs update)
 	private int oldThickness = -1;
 
-	private boolean wireframeVisible = false;
+	private DrawWireframe drawWireframe;
 
 	/** Current culling box - set to view3d.(x|y|z)(max|min) */
 	private double[] cullingBox = new double[6];
 	// corners for drawing wireframe (bottom and right sides)
-	private Corner[] wireframeBottomCorners;
-	private Corner[] wireframeRightCorners;
-	private int wireframeBottomCornersLength;
-	private int wireframeRightCornersLength;
+//	private Corner[] wireframeBottomCorners;
+//	private Corner[] wireframeRightCorners;
+//	private int wireframeBottomCornersLength;
+//	private int wireframeRightCornersLength;
 
-	private Coords3 evaluatedPoint = newCoords3();
-	private Coords3 evaluatedNormal = newCoords3();
+	private Coords3 evaluatedPoint = CornerBuilder.newCoords3();
+	private Coords3 evaluatedNormal = CornerBuilder.newCoords3();
 	/**
 	 * used to draw "still to split" corners
 	 */
@@ -181,10 +182,12 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		cornerForStillToSplit = new Corner[6];
 		cornerToDrawStillToSplit = new Corner[12];
 		for (int i = 0; i < 12; i++) {
-			cornerToDrawStillToSplit[i] = new Corner(-1);
+			cornerToDrawStillToSplit[i] = new Corner(-1, this);
 		}
 
 		splitsStartedNotFinished = false;
+
+		drawWireframe = new DrawWireframe();
 
 	}
 
@@ -277,7 +280,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				return;
 			}
 
-			if (!wireframeVisible) {
+			if (!drawWireframe.isWireframeVisible()) {
 				return;
 			}
 
@@ -301,7 +304,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				return;
 			}
 
-			if (!wireframeVisible) {
+			if (!drawWireframe.isWireframeVisible()) {
 				return;
 			}
 
@@ -559,16 +562,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		drawWireframe(renderer);
 	}
 
-	static final private boolean isDefinedForWireframe(Corner corner) {
-		if (corner.p.isFinalUndefined()) {
-			return false;
-		}
-
-		return corner.p.isDefined();
-	}
-
 	private void setWireframeInvisible() {
-		wireframeVisible = false;
+		drawWireframe.setWireframeVisible(false);
 		if (shouldBePackedForManager()) {
 			setGeometryIndexNotVisible();
 		}
@@ -580,88 +575,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			return;
 		}
 
-		int thickness = getGeoElement().getLineThickness();
-		if (thickness == 0) {
-			setWireframeInvisible();
-			return;
-		}
-
-		// wireframe is visible
-		wireframeVisible = true;
-
-		if (thickness == oldThickness) {
-			// surface and thickness have not changed
-			return;
-		}
-
-		oldThickness = thickness;
-
-		PlotterBrush brush = renderer.getGeometryManager().getBrush();
-
-		// point were already scaled
-		renderer.getGeometryManager().setScalerIdentity();
-
-		setPackCurve(true);
-		brush.start(getReusableGeometryIndex());
-		brush.setThickness(thickness, (float) getView3D().getScale());
-		brush.setAffineTexture(0f, 0f);
-		brush.setLength(1f);
-
-		for (int i = 0; i < wireframeBottomCornersLength; i++) {
-			Corner above = wireframeBottomCorners[i];
-			boolean currentPointIsDefined = isDefinedForWireframe(above);
-			if (currentPointIsDefined) {
-				brush.moveTo(above.p.getXd(), above.p.getYd(), above.p.getZd());
-			}
-			boolean lastPointIsDefined = currentPointIsDefined;
-			above = above.a;
-			while (above != null) {
-				currentPointIsDefined = isDefinedForWireframe(above);
-				if (currentPointIsDefined) {
-					if (lastPointIsDefined) {
-						brush.drawTo(above.p.getXd(), above.p.getYd(),
-								above.p.getZd(), true);
-					} else {
-						brush.moveTo(above.p.getXd(), above.p.getYd(),
-								above.p.getZd());
-					}
-				}
-				lastPointIsDefined = currentPointIsDefined;
-				above = above.a;
-			}
-			brush.endPlot();
-		}
-
-		for (int i = 0; i < wireframeRightCornersLength; i++) {
-			Corner left = wireframeRightCorners[i];
-			boolean currentPointIsDefined = isDefinedForWireframe(left);
-			if (currentPointIsDefined) {
-				brush.moveTo(left.p.getXd(), left.p.getYd(), left.p.getZd());
-			}
-			boolean lastPointIsDefined = currentPointIsDefined;
-			left = left.l;
-			while (left != null) {
-				currentPointIsDefined = isDefinedForWireframe(left);
-				if (currentPointIsDefined) {
-					if (lastPointIsDefined) {
-						brush.drawTo(left.p.getXd(), left.p.getYd(),
-								left.p.getZd(), true);
-					} else {
-						brush.moveTo(left.p.getXd(), left.p.getYd(),
-								left.p.getZd());
-					}
-				}
-				lastPointIsDefined = currentPointIsDefined;
-				left = left.l;
-			}
-			brush.endPlot();
-		}
-
-		setGeometryIndex(brush.end());
-		endPacking();
-
-		// point were already scaled
-		renderer.getGeometryManager().setScalerView();
+		drawWireframe.drawWireframe(this, renderer, oldThickness);
 	}
 
 	@Override
@@ -771,15 +685,15 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	private Corner createRootMesh() throws NotEnoughCornersException {
 		if (wireframeNeeded()) {
-			wireframeBottomCorners = new Corner[uParam.getCornerCount()];
-			wireframeRightCorners = new Corner[vParam.getCornerCount()];
+			drawWireframe.wireframeBottomCorners = new Corner[uParam.getCornerCount()];
+			drawWireframe.wireframeRightCorners = new Corner[vParam.getCornerCount()];
 		}
 
 		Corner bottomRight = newCorner(uParam.borderMax, vParam.borderMax);
 		Corner first = bottomRight;
 
-		wireframeBottomCornersLength = 0;
-		wireframeRightCornersLength = 0;
+		drawWireframe.wireframeBottomCornersLength = 0;
+		drawWireframe.wireframeRightCornersLength = 0;
 		int wireFrameSetU = uParam.wireFrameStep,
 				wireFrameSetV = vParam.wireFrameStep;
 		if (wireframeNeeded()) {
@@ -787,16 +701,16 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				wireFrameSetU = 0;
 			}
 			if (uParam.wireframeBorder == 1) { // draw edges
-				wireframeBottomCorners[0] = first;
-				wireframeBottomCornersLength = 1;
+				drawWireframe.wireframeBottomCorners[0] = first;
+				drawWireframe.wireframeBottomCornersLength = 1;
 				wireFrameSetU = 1;
 			}
 			if (vParam.wireframeUnique) {
 				wireFrameSetV = 0;
 			}
 			if (vParam.wireframeBorder == 1) { // draw edges
-				wireframeRightCorners[0] = first;
-				wireframeRightCornersLength = 1;
+				drawWireframe.wireframeRightCorners[0] = first;
+				drawWireframe.wireframeRightCornersLength = 1;
 				wireFrameSetV = 1;
 			}
 		}
@@ -809,8 +723,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 					vParam.borderMax);
 			if (wireframeNeeded()) {
 				if (wireFrameSetU == uParam.wireFrameStep) { // set wireframe
-					wireframeBottomCorners[wireframeBottomCornersLength] = right;
-					wireframeBottomCornersLength++;
+					drawWireframe.wireframeBottomCorners[drawWireframe.wireframeBottomCornersLength] = right;
+					drawWireframe.wireframeBottomCornersLength++;
 					if (uParam.wireframeUnique) {
 						wireFrameSetU++;
 					} else {
@@ -824,8 +738,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		right = addLeftToMesh(right, uParam.borderMin, vParam.borderMax);
 		if (wireframeNeeded()) {
 			if (uParam.wireframeBorder == 1) {
-				wireframeBottomCorners[wireframeBottomCornersLength] = right;
-				wireframeBottomCornersLength++;
+				drawWireframe.wireframeBottomCorners[drawWireframe.wireframeBottomCornersLength] = right;
+				drawWireframe.wireframeBottomCornersLength++;
 			}
 		}
 		int vN = vParam.n;
@@ -836,8 +750,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 					uParam.borderMax, uParam.max, uN);
 			if (wireframeNeeded()) {
 				if (wireFrameSetV == vParam.wireFrameStep) { // set wireframe
-					wireframeRightCorners[wireframeRightCornersLength] = bottomRight;
-					wireframeRightCornersLength++;
+					drawWireframe.wireframeRightCorners[drawWireframe.wireframeRightCornersLength] = bottomRight;
+					drawWireframe.wireframeRightCornersLength++;
 					if (vParam.wireframeUnique) {
 						wireFrameSetV++;
 					} else {
@@ -854,8 +768,8 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				uParam.borderMin, uParam.borderMax, uParam.max, uN);
 		if (wireframeNeeded()) {
 			if (vParam.wireframeBorder == 1) {
-				wireframeRightCorners[wireframeRightCornersLength] = bottomRight;
-				wireframeRightCornersLength++;
+				drawWireframe.wireframeRightCorners[drawWireframe.wireframeRightCornersLength] = bottomRight;
+				drawWireframe.wireframeRightCornersLength++;
 			}
 		}
 
@@ -945,14 +859,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 		return true; // went to end of loop
 
-	}
-
-	/**
-	 * 
-	 * @return new coords 3
-	 */
-	final static protected Coords3 newCoords3() {
-		return new CoordsDouble3();
 	}
 
 	final private void scaleXYZ(Coords3 p) {
@@ -1054,13 +960,16 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		Corner a; // above
 		Corner l; // left
 		int id;
+		DrawSurface3D drawSurface3D;
 
-		public Corner(int id) {
+		public Corner(int id, DrawSurface3D drawSurface3D) {
 			this.id = id;
+			this.drawSurface3D = drawSurface3D;
 		}
 
-		public Corner(double u, double v, int id) {
+		public Corner(double u, double v, int id, DrawSurface3D drawSurface3D) {
 			this.id = id;
+			this. drawSurface3D = drawSurface3D;
 			set(u, v);
 		}
 
@@ -2221,7 +2130,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 			CornerAndCenter cc = drawList[drawListIndex];
 			if (cc == null) {
-				cc = new CornerAndCenter(this, drawListIndex);
+				cc = new CornerAndCenter(drawSurface3D, this, drawListIndex);
 				drawList[drawListIndex] = cc;
 			} else {
 				cc.setCorner(this);
@@ -2661,244 +2570,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				&& isAngleOK(c3.normal, c4.normal, bend);
 	}
 
-	class CornerAndCenter {
-		private Corner corner;
-		Coords3 center;
-		Coords3 centerNormal;
-		int id;
-
-		public CornerAndCenter(Corner corner, int id) {
-			center = newCoords3();
-			centerNormal = newCoords3();
-			setCorner(corner);
-			this.id = id;
-		}
-
-		/**
-		 * set the corner
-		 * 
-		 * @param corner
-		 *            corner
-		 */
-		public void setCorner(Corner corner) {
-			this.corner = corner;
-		}
-
-		/**
-		 * 
-		 * @return corner
-		 */
-		public Corner getCorner() {
-			return corner;
-		}
-
-		/**
-		 * 
-		 * @return center
-		 */
-		public Coords3 getCenter() {
-			return center;
-		}
-
-		/**
-		 * 
-		 * @return center normal
-		 */
-		public Coords3 getCenterNormal() {
-			return centerNormal;
-		}
-
-		public void drawDebug(PlotterSurface surface) {
-
-			surface.startTrianglesWireFrame();
-			draw(surface);
-			surface.endGeometryDirect();
-
-			surface.startTrianglesWireFrameSurface();
-			draw(surface);
-			surface.endGeometryDirect();
-
-		}
-
-		public void draw(PlotterSurface surface) {
-			Corner p1, p2;
-
-			// go left
-			Corner current = corner;
-			// get first defined point on south (if exists)
-			Corner sw1 = current;
-			Corner sw2 = sw1;
-			// draw south
-			p1 = sw1;
-			do {
-				p2 = current.l;
-				if (p2.p.isNotFinalUndefined()) {
-					if (p1.p.isNotFinalUndefined()) {
-						if (sw1.p.isFinalUndefined()) {
-							sw1 = p1;
-						}
-						drawTriangle(surface, this, p2, p1);
-					}
-					p1 = p2;
-					sw2 = p2;
-				}
-				current = current.l;
-			} while (current.a == null);
-
-			Corner sw = current;
-
-			// go above
-			current = corner;
-			// get first defined point on east (if exists)
-			Corner ne1 = current;
-			Corner ne2 = ne1;
-			// draw east
-			p1 = ne1;
-			do {
-				p2 = current.a;
-				if (p2.p.isNotFinalUndefined()) {
-					if (p1.p.isNotFinalUndefined()) {
-						drawTriangle(surface, this, p1, p2);
-						if (ne1.p.isFinalUndefined()) {
-							ne1 = p1;
-						}
-					}
-					p1 = p2;
-					ne2 = p2;
-				}
-				current = current.a;
-			} while (current.l == null);
-			Corner ne = current;
-
-			// west side
-			current = sw;
-			p1 = sw2;
-			if (sw1.p.isFinalUndefined()) {
-				sw1 = p1;
-			}
-			do {
-				p2 = current.a;
-				if (p2.p.isNotFinalUndefined()) {
-					if (p1.p.isNotFinalUndefined()) {
-						drawTriangle(surface, this, p2, p1);
-						if (sw1.p.isFinalUndefined()) {
-							sw1 = p1;
-						}
-					}
-					p1 = p2;
-					sw2 = p2;
-				}
-				current = current.a;
-			} while (current.isNotEnd);
-
-			// north side
-			current = ne;
-			p1 = ne2;
-			if (ne1.p.isFinalUndefined()) {
-				ne1 = p1;
-			}
-			do {
-				p2 = current.l;
-				if (p2.p.isNotFinalUndefined()) {
-					if (p1.p.isNotFinalUndefined()) {
-						drawTriangle(surface, this, p1, p2);
-						if (ne1.p.isFinalUndefined()) {
-							ne1 = p1;
-						}
-					}
-					p1 = p2;
-					ne2 = p2;
-				}
-				current = current.l;
-			} while (current.isNotEnd);
-
-			// closure triangles if needed
-			if (sw1 != ne1) {
-				drawTriangleCheckCorners(surface, this, sw1, ne1);
-			}
-			if (sw2 != ne2) {
-				drawTriangleCheckCorners(surface, this, ne2, sw2);
-			}
-			if (ne1.p.isFinalUndefined() && ne2.p.isFinalUndefined()) {
-				drawTriangleCheckCorners(surface, this, sw2, sw1);
-			}
-			if (sw1.p.isFinalUndefined() && sw2.p.isFinalUndefined()) {
-				drawTriangleCheckCorners(surface, this, ne1, ne2);
-			}
-		}
-
-	}
-
-	/**
-	 * draw triangle with surface plotter
-	 * 
-	 * @param surface
-	 *            surface plotter
-	 * @param p0
-	 *            first point
-	 * @param n0
-	 *            first point normal
-	 * 
-	 * @param c1
-	 *            second point
-	 * @param c2
-	 *            third point
-	 */
-	protected void drawTriangle(PlotterSurface surface, Coords3 p0, Coords3 n0,
-			Corner c1, Corner c2) {
-
-		surface.normalDirect(n0);
-		surface.vertexDirect(p0);
-		surface.normalDirect(c2.normal);
-		surface.vertexDirect(c2.p);
-		surface.normalDirect(c1.normal);
-		surface.vertexDirect(c1.p);
-
-	}
-
-	/**
-	 * draws triangle between center and two corners
-	 * 
-	 * @param surface
-	 *            surface plotter
-	 * @param cc
-	 *            center
-	 * @param c1
-	 *            first corner
-	 * @param c2
-	 *            second corner
-	 */
-	protected void drawTriangle(PlotterSurface surface, CornerAndCenter cc,
-			Corner c1, Corner c2) {
-		drawTriangle(surface, cc.center, cc.centerNormal, c1, c2);
-	}
-
-	/**
-	 * draw triangle with surface plotter, check if second and third points are
-	 * defined
-	 * 
-	 * @param surface
-	 *            surface plotter
-	 * @param cc
-	 *            first point and normal
-	 * 
-	 * @param c1
-	 *            second point
-	 * @param c2
-	 *            third point
-	 */
-	final protected void drawTriangleCheckCorners(PlotterSurface surface,
-			CornerAndCenter cc, Corner c1, Corner c2) {
-		if (c1.p.isFinalUndefined()) {
-			return;
-		}
-		if (c2.p.isFinalUndefined()) {
-			return;
-		}
-
-		drawTriangle(surface, cc, c1, c2);
-	}
-
 	/**
 	 * add the corner to next split array
 	 * 
@@ -2928,7 +2599,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 		Corner c = cornerList[cornerListIndex];
 		if (c == null) {
-			c = new Corner(u, v, cornerListIndex);
+			c = new Corner(u, v, cornerListIndex, this);
 			cornerList[cornerListIndex] = c;
 		} else {
 			c.set(u, v);
@@ -2949,7 +2620,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 		Corner c = cornerList[cornerListIndex];
 		if (c == null) {
-			c = new Corner(cornerListIndex);
+			c = new Corner(cornerListIndex, this);
 			cornerList[cornerListIndex] = c;
 		}
 		cornerListIndex++;
@@ -3159,4 +2830,73 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 	}
 
+	/**
+	 * draw triangle with surface plotter
+	 *
+	 * @param surface
+	 *            surface plotter
+	 * @param p0
+	 *            first point
+	 * @param n0
+	 *            first point normal
+	 *
+	 * @param c1
+	 *            second point
+	 * @param c2
+	 *            third point
+	 */
+	protected void drawTriangle(PlotterSurface surface, Coords3 p0, Coords3 n0,
+			DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+
+		surface.normalDirect(n0);
+		surface.vertexDirect(p0);
+		surface.normalDirect(c2.normal);
+		surface.vertexDirect(c2.p);
+		surface.normalDirect(c1.normal);
+		surface.vertexDirect(c1.p);
+
+	}
+
+	/**
+	 * draws triangle between center and two corners
+	 *
+	 * @param surface
+	 *            surface plotter
+	 * @param cc
+	 *            center
+	 * @param c1
+	 *            first corner
+	 * @param c2
+	 *            second corner
+	 */
+	protected void drawTriangle(PlotterSurface surface, CornerAndCenter cc,
+			DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+		drawTriangle(surface, cc.center, cc.centerNormal, c1, c2);
+	}
+
+	/**
+	 * draw triangle with surface plotter, check if second and third points are
+	 * defined
+	 *
+	 * @param surface
+	 *            surface plotter
+	 * @param cc
+	 *            first point and normal
+	 *
+	 * @param c1
+	 *            second point
+	 * @param c2
+	 *            third point
+	 */
+	void drawTriangleCheckCorners(PlotterSurface surface,
+			CornerAndCenter cc, DrawSurface3D.Corner c1, DrawSurface3D.Corner c2) {
+		if (c1.p.isFinalUndefined()) {
+			return;
+		}
+		if (c2.p.isFinalUndefined()) {
+			return;
+		}
+
+		drawTriangle(surface, cc, c1, c2);
+	}
 }
