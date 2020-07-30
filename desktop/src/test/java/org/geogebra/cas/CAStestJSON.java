@@ -1426,4 +1426,14 @@ public class CAStestJSON {
 	public void testPlotSolve() {
 		testCat("PlotSolve.1");
 	}
+
+	@Test
+	public void testRemoveUndefined() {
+		testCat("RemoveUndefined.1");
+	}
+
+	@Test
+	public void testIsInteger() {
+		testCat("IsInteger.1");
+	}
 }
