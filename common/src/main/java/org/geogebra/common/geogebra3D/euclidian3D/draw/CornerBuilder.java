@@ -29,14 +29,14 @@ class CornerBuilder {
 	 *            first parameter
 	 * @param v
 	 *            second parameter
-	 * @throws NotEnoughCornersException
+	 * @throws Corner.NotEnoughCornersException
 	 *             if no new corner left in array
 	 * @return new corner calculated for parameters u, v
 	 */
 	Corner newCorner(double u, double v)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException("Index " + cornerListIndex
+			throw new Corner.NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];
@@ -56,14 +56,14 @@ class CornerBuilder {
 	 *            first parameter
 	 * @param v
 	 *            second parameter
-	 * @throws NotEnoughCornersException
+	 * @throws Corner.NotEnoughCornersException
 	 *             if no new corner left in array
 	 * @return new corner calculated for parameters u, v
 	 */
 	Corner newCorner(double u, double v, DrawSurface3D surface)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException("Index " + cornerListIndex
+			throw new Corner.NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];
@@ -79,12 +79,12 @@ class CornerBuilder {
 
 	/**
 	 * @return new corner
-	 * @throws NotEnoughCornersException
+	 * @throws Corner.NotEnoughCornersException
 	 *             if no new corner left in array
 	 */
-	Corner newCorner() throws NotEnoughCornersException {
+	Corner newCorner() throws Corner.NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException("Index " + cornerListIndex
+			throw new Corner.NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];

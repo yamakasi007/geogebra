@@ -22,7 +22,7 @@ class DrawWireframe {
 	}
 
 	Corner createRootMesh(boolean wireframeNeeded)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 		if (wireframeNeeded) {
 			wireframeBottomCorners = new Corner[uParam.getCornerCount()];
 			wireframeRightCorners = new Corner[vParam.getCornerCount()];
@@ -116,7 +116,7 @@ class DrawWireframe {
 	}
 
 	static void splitRootMesh(Corner first)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 
 		Corner nextAbove, nextLeft;
 
@@ -139,7 +139,7 @@ class DrawWireframe {
 
 	private Corner addRowAboveToMesh(Corner bottomRight, double v,
 			double uBorderMin, double uBorderMax, double uMax, int uN)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 		Corner below = bottomRight;
 		Corner right = cornerBuilder.newCorner(uBorderMax, v);
 		below.a = right;
@@ -156,7 +156,7 @@ class DrawWireframe {
 	}
 
 	private Corner addLeftToMesh(Corner right, double u, double v)
-			throws NotEnoughCornersException {
+			throws Corner.NotEnoughCornersException {
 		Corner left = cornerBuilder.newCorner(u, v);
 		right.l = left;
 		return left;

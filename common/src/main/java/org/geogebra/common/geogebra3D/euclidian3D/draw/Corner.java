@@ -8,14 +8,6 @@ import org.geogebra.common.kernel.matrix.Coords3;
 import org.geogebra.common.kernel.matrix.CoordsDouble3;
 import org.geogebra.common.util.DoubleUtil;
 
-class NotEnoughCornersException extends Exception {
-	private static final long serialVersionUID = 1L;
-
-	NotEnoughCornersException(String message) {
-		super(message);
-	}
-}
-
 class Corner {
 	Coords3 p;
 	Coords3 normal;
@@ -30,6 +22,14 @@ class Corner {
 
 	// number of split for boundary
 	private static final short BOUNDARY_SPLIT = 10;
+
+	static class NotEnoughCornersException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		NotEnoughCornersException(String message) {
+			super(message);
+		}
+	}
 
 	Corner(int id, DrawSurface3D drawSurface3D, CornerBuilder cornerBuilder) {
 		this.id = id;
