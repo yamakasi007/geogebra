@@ -49,7 +49,7 @@ public class DrawSurface3DElements extends DrawSurface3D {
 	@Override
 	protected void drawCornersAndCenters(PlotterSurface surface) {
 		for (int i = 0; i < cornerListIndex; i++) {
-			Corner c = cornerList[i];
+			Corner c = cornerArray[i];
 			surface.normalDirect(c.normal);
 			surface.vertexDirect(c.p);
 		}

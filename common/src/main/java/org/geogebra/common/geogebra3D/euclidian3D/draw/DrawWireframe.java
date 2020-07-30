@@ -6,10 +6,144 @@ import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 class DrawWireframe {
 
 	private boolean wireframeVisible = false;
-	Corner[] wireframeBottomCorners;
-	Corner[] wireframeRightCorners;
-	int wireframeBottomCornersLength;
-	int wireframeRightCornersLength;
+	private Corner[] wireframeBottomCorners;
+	private Corner[] wireframeRightCorners;
+	private int wireframeBottomCornersLength;
+	private int wireframeRightCornersLength;
+	private DrawSurface3D drawSurface3D;
+	private SurfaceParameter uParam;
+	private SurfaceParameter vParam;
+
+	DrawWireframe(DrawSurface3D drawSurface3D, SurfaceParameter uParam,
+			SurfaceParameter vParam) {
+		this.drawSurface3D = drawSurface3D;
+		this.uParam = uParam;
+		this.vParam = vParam;
+	}
+
+	Corner createRootMesh(boolean wireframeNeeded)
+			throws DrawSurface3D.NotEnoughCornersException {
+		if (wireframeNeeded) {
+			wireframeBottomCorners = new Corner[uParam.getCornerCount()];
+			wireframeRightCorners = new Corner[vParam.getCornerCount()];
+		}
+
+		Corner bottomRight = newCorner(uParam.borderMax, vParam.borderMax);
+		Corner first = bottomRight;
+
+		wireframeBottomCornersLength = 0;
+		wireframeRightCornersLength = 0;
+		int wireFrameSetU = uParam.wireFrameStep,
+				wireFrameSetV = vParam.wireFrameStep;
+		if (wireframeNeeded) {
+			if (uParam.wireframeUnique) {
+				wireFrameSetU = 0;
+			}
+			if (uParam.wireframeBorder == 1) { // draw edges
+				wireframeBottomCorners[0] = first;
+				wireframeBottomCornersLength = 1;
+				wireFrameSetU = 1;
+			}
+			if (vParam.wireframeUnique) {
+				wireFrameSetV = 0;
+			}
+			if (vParam.wireframeBorder == 1) { // draw edges
+				wireframeRightCorners[0] = first;
+				wireframeRightCornersLength = 1;
+				wireFrameSetV = 1;
+			}
+		}
+
+		// first row
+		Corner right = bottomRight;
+		int uN = uParam.n;
+		for (int i = 0; i < uN - 1; i++) {
+			right = addLeftToMesh(right, uParam.max - (uParam.delta * i) / uN,
+					vParam.borderMax);
+			if (wireframeNeeded) {
+				if (wireFrameSetU == uParam.wireFrameStep) { // set wireframe
+					wireframeBottomCorners[wireframeBottomCornersLength] = right;
+					wireframeBottomCornersLength++;
+					if (uParam.wireframeUnique) {
+						wireFrameSetU++;
+					} else {
+						wireFrameSetU = 1;
+					}
+				} else {
+					wireFrameSetU++;
+				}
+			}
+		}
+		right = addLeftToMesh(right, uParam.borderMin, vParam.borderMax);
+		if (wireframeNeeded) {
+			if (uParam.wireframeBorder == 1) {
+				wireframeBottomCorners[wireframeBottomCornersLength] = right;
+				wireframeBottomCornersLength++;
+			}
+		}
+		int vN = vParam.n;
+		// all intermediate rows
+		for (int j = 0; j < vN - 1; j++) {
+			bottomRight = addRowAboveToMesh(bottomRight,
+					vParam.max - (vParam.delta * j) / vN, uParam.borderMin,
+					uParam.borderMax, uParam.max, uN);
+			if (wireframeNeeded) {
+				if (wireFrameSetV == vParam.wireFrameStep) { // set wireframe
+					wireframeRightCorners[wireframeRightCornersLength] = bottomRight;
+					wireframeRightCornersLength++;
+					if (vParam.wireframeUnique) {
+						wireFrameSetV++;
+					} else {
+						wireFrameSetV = 1;
+					}
+				} else {
+					wireFrameSetV++;
+				}
+			}
+		}
+
+		// last row
+		bottomRight = addRowAboveToMesh(bottomRight, vParam.borderMin,
+				uParam.borderMin, uParam.borderMax, uParam.max, uN);
+		if (wireframeNeeded) {
+			if (vParam.wireframeBorder == 1) {
+				wireframeRightCorners[wireframeRightCornersLength] = bottomRight;
+				wireframeRightCornersLength++;
+			}
+		}
+
+		return first;
+	}
+
+	private Corner addRowAboveToMesh(Corner bottomRight, double v,
+			double uBorderMin, double uBorderMax, double uMax, int uN)
+			throws DrawSurface3D.NotEnoughCornersException {
+		Corner below = bottomRight;
+		Corner right = newCorner(uBorderMax, v);
+		below.a = right;
+		for (int i = 0; i < uN - 1; i++) {
+			right = addLeftToMesh(right, uMax - (uParam.delta * i) / uN, v);
+			below = below.l;
+			below.a = right;
+		}
+		right = addLeftToMesh(right, uBorderMin, v);
+		below = below.l;
+		below.a = right;
+
+		return bottomRight.a;
+	}
+
+	private Corner addLeftToMesh(Corner right, double u, double v)
+			throws DrawSurface3D.NotEnoughCornersException {
+		Corner left = newCorner(u, v);
+		right.l = left;
+		return left;
+	}
+
+	private Corner newCorner(double u, double v)
+			throws DrawSurface3D.NotEnoughCornersException {
+		return DrawSurface3D.newCorner(u, v, drawSurface3D);
+	}
 
 	void drawWireframe(Drawable3D drawable, Renderer renderer, int oldThickness) {
 

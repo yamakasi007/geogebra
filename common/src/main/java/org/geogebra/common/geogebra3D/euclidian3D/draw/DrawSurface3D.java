@@ -75,7 +75,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	private Corner[] currentSplit;
 	private Corner[] nextSplit;
-	Corner[] cornerList;
+	Corner[] cornerArray;
 
 	/**
 	 * list of things to draw
@@ -97,11 +97,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	/** Current culling box - set to view3d.(x|y|z)(max|min) */
 	private double[] cullingBox = new double[6];
-	// corners for drawing wireframe (bottom and right sides)
-//	private Corner[] wireframeBottomCorners;
-//	private Corner[] wireframeRightCorners;
-//	private int wireframeBottomCornersLength;
-//	private int wireframeRightCornersLength;
 
 	private Coords3 evaluatedPoint = CornerBuilder.newCoords3();
 	private Coords3 evaluatedNormal = CornerBuilder.newCoords3();
@@ -177,8 +172,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 		splitsStartedNotFinished = false;
 
-		drawWireframe = new DrawWireframe();
-
+		drawWireframe = new DrawWireframe(this, uParam, vParam);
 	}
 
 	private void setLevelOfDetail() {
@@ -210,8 +204,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		currentSplit = new Corner[maxSplit + 4];
 		nextSplit = new Corner[maxSplit + 4];
 		drawList = new CornerAndCenter[maxDraw + 100];
-		cornerList = new Corner[cornerListSize];
-
+		cornerArray = new Corner[cornerListSize];
 	}
 
 	private void setTolerances() {
@@ -379,7 +372,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				/*
 				  first corner from root mesh
 				 */
-				Corner firstCorner = createRootMesh();
+				Corner firstCorner = drawWireframe.createRootMesh(wireframeNeeded());
 
 				// split root mesh as start
 				currentSplitIndex = 0;
@@ -591,7 +584,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	}
 
 	private static boolean wireframeNeeded() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -668,124 +661,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			}
 			enlargeBounds(min, max, boundsMin, boundsMax);
 		}
-	}
-
-	private Corner createRootMesh() throws NotEnoughCornersException {
-		if (wireframeNeeded()) {
-			drawWireframe.wireframeBottomCorners = new Corner[uParam.getCornerCount()];
-			drawWireframe.wireframeRightCorners = new Corner[vParam.getCornerCount()];
-		}
-
-		Corner bottomRight = newCorner(uParam.borderMax, vParam.borderMax);
-		Corner first = bottomRight;
-
-		drawWireframe.wireframeBottomCornersLength = 0;
-		drawWireframe.wireframeRightCornersLength = 0;
-		int wireFrameSetU = uParam.wireFrameStep,
-				wireFrameSetV = vParam.wireFrameStep;
-		if (wireframeNeeded()) {
-			if (uParam.wireframeUnique) {
-				wireFrameSetU = 0;
-			}
-			if (uParam.wireframeBorder == 1) { // draw edges
-				drawWireframe.wireframeBottomCorners[0] = first;
-				drawWireframe.wireframeBottomCornersLength = 1;
-				wireFrameSetU = 1;
-			}
-			if (vParam.wireframeUnique) {
-				wireFrameSetV = 0;
-			}
-			if (vParam.wireframeBorder == 1) { // draw edges
-				drawWireframe.wireframeRightCorners[0] = first;
-				drawWireframe.wireframeRightCornersLength = 1;
-				wireFrameSetV = 1;
-			}
-		}
-
-		// first row
-		Corner right = bottomRight;
-		int uN = uParam.n;
-		for (int i = 0; i < uN - 1; i++) {
-			right = addLeftToMesh(right, uParam.max - (uParam.delta * i) / uN,
-					vParam.borderMax);
-			if (wireframeNeeded()) {
-				if (wireFrameSetU == uParam.wireFrameStep) { // set wireframe
-					drawWireframe.wireframeBottomCorners[drawWireframe.wireframeBottomCornersLength] = right;
-					drawWireframe.wireframeBottomCornersLength++;
-					if (uParam.wireframeUnique) {
-						wireFrameSetU++;
-					} else {
-						wireFrameSetU = 1;
-					}
-				} else {
-					wireFrameSetU++;
-				}
-			}
-		}
-		right = addLeftToMesh(right, uParam.borderMin, vParam.borderMax);
-		if (wireframeNeeded()) {
-			if (uParam.wireframeBorder == 1) {
-				drawWireframe.wireframeBottomCorners[drawWireframe.wireframeBottomCornersLength] = right;
-				drawWireframe.wireframeBottomCornersLength++;
-			}
-		}
-		int vN = vParam.n;
-		// all intermediate rows
-		for (int j = 0; j < vN - 1; j++) {
-			bottomRight = addRowAboveToMesh(bottomRight,
-					vParam.max - (vParam.delta * j) / vN, uParam.borderMin,
-					uParam.borderMax, uParam.max, uN);
-			if (wireframeNeeded()) {
-				if (wireFrameSetV == vParam.wireFrameStep) { // set wireframe
-					drawWireframe.wireframeRightCorners[drawWireframe.wireframeRightCornersLength] = bottomRight;
-					drawWireframe.wireframeRightCornersLength++;
-					if (vParam.wireframeUnique) {
-						wireFrameSetV++;
-					} else {
-						wireFrameSetV = 1;
-					}
-				} else {
-					wireFrameSetV++;
-				}
-			}
-		}
-
-		// last row
-		bottomRight = addRowAboveToMesh(bottomRight, vParam.borderMin,
-				uParam.borderMin, uParam.borderMax, uParam.max, uN);
-		if (wireframeNeeded()) {
-			if (vParam.wireframeBorder == 1) {
-				drawWireframe.wireframeRightCorners[drawWireframe.wireframeRightCornersLength] = bottomRight;
-				drawWireframe.wireframeRightCornersLength++;
-			}
-		}
-
-		return first;
-	}
-
-	private Corner addLeftToMesh(Corner right, double u, double v)
-			throws NotEnoughCornersException {
-		Corner left = newCorner(u, v);
-		right.l = left;
-		return left;
-	}
-
-	private Corner addRowAboveToMesh(Corner bottomRight, double v,
-			double uBorderMin, double uBorderMax, double uMax, int uN)
-			throws NotEnoughCornersException {
-		Corner below = bottomRight;
-		Corner right = newCorner(uBorderMax, v);
-		below.a = right;
-		for (int i = 0; i < uN - 1; i++) {
-			right = addLeftToMesh(right, uMax - (uParam.delta * i) / uN, v);
-			below = below.l;
-			below.a = right;
-		}
-		right = addLeftToMesh(right, uBorderMin, v);
-		below = below.l;
-		below.a = right;
-
-		return bottomRight.a;
 	}
 
 	private static void splitRootMesh(Corner first)
@@ -1345,14 +1220,41 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
-		Corner c = cornerList[cornerListIndex];
+		Corner c = cornerArray[cornerListIndex];
 		if (c == null) {
 			c = new Corner(u, v, cornerListIndex, this);
-			cornerList[cornerListIndex] = c;
+			cornerArray[cornerListIndex] = c;
 		} else {
 			c.set(u, v);
 		}
 		cornerListIndex++;
+		return c;
+	}
+
+	/**
+	 *
+	 * @param u
+	 *            first parameter
+	 * @param v
+	 *            second parameter
+	 * @throws NotEnoughCornersException
+	 *             if no new corner left in array
+	 * @return new corner calculated for parameters u, v
+	 */
+	static Corner newCorner(double u, double v, DrawSurface3D surface)
+			throws NotEnoughCornersException {
+		if (surface.cornerListIndex >= surface.cornerListSize) {
+			throw new NotEnoughCornersException(surface, "Index " + surface.cornerListIndex
+					+ " is larger than size " + surface.cornerListSize);
+		}
+		Corner c = surface.cornerArray[surface.cornerListIndex];
+		if (c == null) {
+			c = new Corner(u, v, surface.cornerListIndex, surface);
+			surface.cornerArray[surface.cornerListIndex] = c;
+		} else {
+			c.set(u, v);
+		}
+		surface.cornerListIndex++;
 		return c;
 	}
 
@@ -1366,10 +1268,10 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
-		Corner c = cornerList[cornerListIndex];
+		Corner c = cornerArray[cornerListIndex];
 		if (c == null) {
 			c = new Corner(cornerListIndex, this);
-			cornerList[cornerListIndex] = c;
+			cornerArray[cornerListIndex] = c;
 		}
 		cornerListIndex++;
 		return c;
