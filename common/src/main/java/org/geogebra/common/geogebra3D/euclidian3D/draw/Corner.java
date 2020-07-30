@@ -8,6 +8,22 @@ import org.geogebra.common.kernel.matrix.Coords3;
 import org.geogebra.common.kernel.matrix.CoordsDouble3;
 import org.geogebra.common.util.DoubleUtil;
 
+class NotEnoughCornersException extends Exception {
+	private static final long serialVersionUID = 1L;
+	private DrawSurface3D surface;
+
+	NotEnoughCornersException(DrawSurface3D surface,
+			String message) {
+		super(message);
+		this.surface = surface;
+	}
+
+	public void caught() {
+		printStackTrace();
+		surface.setNoRoomLeft();
+	}
+}
+
 class Corner {
 	Coords3 p;
 	Coords3 normal;

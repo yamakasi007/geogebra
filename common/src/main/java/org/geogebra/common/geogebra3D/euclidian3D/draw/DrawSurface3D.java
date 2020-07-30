@@ -134,22 +134,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	private SurfaceParameter uParam = new SurfaceParameter();
 	private SurfaceParameter vParam = new SurfaceParameter();
 
-	static class NotEnoughCornersException extends Exception {
-		private static final long serialVersionUID = 1L;
-		private DrawSurface3D surface;
-
-		NotEnoughCornersException(DrawSurface3D surface,
-				String message) {
-			super(message);
-			this.surface = surface;
-		}
-
-		public void caught() {
-			printStackTrace();
-			surface.setNoRoomLeft();
-		}
-	}
-
 	/**
 	 * common constructor
 	 * 
@@ -1465,7 +1449,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	/**
 	 * set there is no more corner available
 	 */
-	private void setNoRoomLeft() {
+	void setNoRoomLeft() {
 		drawFromScratch = false;
 		stillRoomLeft = false;
 	}
