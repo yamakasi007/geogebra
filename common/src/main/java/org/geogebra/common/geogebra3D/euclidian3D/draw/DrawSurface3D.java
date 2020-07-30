@@ -368,7 +368,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				// now split root mesh is ready
 				drawFromScratch = false;
 			} catch (NotEnoughCornersException e) {
-				e.caught();
+				caught(e);
 			}
 		}
 
@@ -386,7 +386,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		try {
 			stillRoomLeft = split();
 		} catch (NotEnoughCornersException e) {
-			e.caught();
+			caught(e);
 		}
 
 		// time = System.currentTimeMillis() - time;
@@ -489,7 +489,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 					nextSplit[i].split(true);
 				}
 			} catch (NotEnoughCornersException e) {
-				e.caught();
+				caught(e);
 			}
 			debug("\n--- draw size : " + drawListIndex);
 			if (drawListIndex > 0) {
@@ -1352,7 +1352,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	/**
 	 * set there is no more corner available
 	 */
-	void setNoRoomLeft() {
+	private void setNoRoomLeft() {
 		drawFromScratch = false;
 		stillRoomLeft = false;
 	}
@@ -1439,5 +1439,10 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	CornerBuilder getCornerBuilder() {
 		return cornerBuilder;
+	}
+
+	private void caught(Exception e) {
+		e.printStackTrace();
+		setNoRoomLeft();
 	}
 }

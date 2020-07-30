@@ -36,7 +36,7 @@ class CornerBuilder {
 	Corner newCorner(double u, double v)
 			throws NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException(drawSurface3D, "Index " + cornerListIndex
+			throw new NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];
@@ -63,7 +63,7 @@ class CornerBuilder {
 	Corner newCorner(double u, double v, DrawSurface3D surface)
 			throws NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException(surface, "Index " + cornerListIndex
+			throw new NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];
@@ -84,7 +84,7 @@ class CornerBuilder {
 	 */
 	Corner newCorner() throws NotEnoughCornersException {
 		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException(drawSurface3D, "Index " + cornerListIndex
+			throw new NotEnoughCornersException("Index " + cornerListIndex
 					+ " is larger than size " + cornerListSize);
 		}
 		Corner c = cornerArray[cornerListIndex];

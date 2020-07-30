@@ -10,17 +10,9 @@ import org.geogebra.common.util.DoubleUtil;
 
 class NotEnoughCornersException extends Exception {
 	private static final long serialVersionUID = 1L;
-	private DrawSurface3D surface;
 
-	NotEnoughCornersException(DrawSurface3D surface,
-			String message) {
+	NotEnoughCornersException(String message) {
 		super(message);
-		this.surface = surface;
-	}
-
-	public void caught() {
-		printStackTrace();
-		surface.setNoRoomLeft();
 	}
 }
 
@@ -47,7 +39,7 @@ class Corner {
 
 	Corner(double u, double v, int id, DrawSurface3D drawSurface3D, CornerBuilder cornerBuilder) {
 		this.id = id;
-		this. drawSurface3D = drawSurface3D;
+		this.drawSurface3D = drawSurface3D;
 		this.cornerBuilder = cornerBuilder;
 		set(u, v);
 	}
@@ -339,18 +331,7 @@ class Corner {
 							findV(left.a, left, w);
 
 							if (!draw) {
-								// check distances
-								double d = drawSurface3D.getDistanceNoLoop(above, e, w,
-										left.a);
-								if (Double.isInfinite(d)) { // d >
-									// maxRWDistance
-									split = true;
-								} else if (d > drawSurface3D.maxRWDistanceNoAngleCheck) { // check
-									split = !isAngleOKNoLoop(drawSurface3D.maxBend, above, e,
-													w, left.a);
-								} else { // no need to check angle
-									split = false;
-								}
+								split = !isDistanceAndAngelOK(above, e, w, left);
 							}
 
 							if (split) {
@@ -459,35 +440,20 @@ class Corner {
 							findU(left.a, above, n);
 
 							if (!draw) {
-								// check distances
-								double d = drawSurface3D.getDistanceNoLoop(left.a, n, s,
-										left);
-								if (Double.isInfinite(d)) { // d >
-									// maxRWDistance
-									split = true;
-								} else if (d > drawSurface3D.maxRWDistanceNoAngleCheck) { // check
-									split = !isAngleOKNoLoop(drawSurface3D.maxBend, left.a, n,
-													s, left);
-								} else { // no need to check angle
-									split = false;
-								}
+								isDistanceAndAngelOK(left.a, n, s, left);
 							}
 
-							if (split) {
-								split(subLeft, left, subAbove, above);
-							} else {
-								if (subLeft == null) {
-									// new neighbors
-									this.l = s;
-									s.l = left;
-								}
+							if (subLeft == null) {
 								// new neighbors
-								n.l = left.a;
-								above.l = n;
-
-								// drawing
-								addToDrawList(left.a, s, n, left.a, left);
+								this.l = s;
+								s.l = left;
 							}
+							// new neighbors
+							n.l = left.a;
+							above.l = n;
+
+							// drawing
+							addToDrawList(left.a, s, n, left.a, left);
 						}
 					}
 				} else {
@@ -747,18 +713,7 @@ class Corner {
 							findU(above, left.a, n);
 
 							if (!draw) {
-								// check distances
-								double d = drawSurface3D.getDistanceNoLoop(this, s, n,
-										above);
-								if (Double.isInfinite(d)) { // d >
-									// maxRWDistance
-									split = true;
-								} else if (d > drawSurface3D.maxRWDistanceNoAngleCheck) { // check
-									split = !isAngleOKNoLoop(drawSurface3D.maxBend, this, s, n,
-													above);
-								} else { // no need to check angle
-									split = false;
-								}
+								split = !isDistanceAndAngelOK(this, s, n, above);
 							}
 
 							if (split) {
@@ -865,18 +820,7 @@ class Corner {
 							findV(left, left.a, w);
 
 							if (!draw) {
-								// check distances
-								double d = drawSurface3D.getDistanceNoLoop(this, e, w,
-										left);
-								if (Double.isInfinite(d)) { // d >
-									// maxRWDistance
-									split = true;
-								} else if (d > drawSurface3D.maxRWDistanceNoAngleCheck) { // check
-									split = !isAngleOKNoLoop(drawSurface3D.maxBend, this, e, w,
-													left);
-								} else { // no need to check angle
-									split = false;
-								}
+								split = !isDistanceAndAngelOK(this, e, w, left);
 							}
 
 							if (split) {
@@ -1003,6 +947,21 @@ class Corner {
 			}
 		}
 
+	}
+
+	private boolean isDistanceAndAngelOK(Corner cA, Corner cB, Corner cC, Corner cD) {
+		// check distances
+		double d = drawSurface3D.getDistanceNoLoop(cA, cB, cC,
+				cD);
+		if (Double.isInfinite(d)) { // d >
+			// maxRWDistance
+			return false;
+		} else if (d > drawSurface3D.maxRWDistanceNoAngleCheck) { // check
+			return isAngleOKNoLoop(drawSurface3D.maxBend, cA, cB, cC,
+					cD);
+		} else { // no need to check angle
+			return true;
+		}
 	}
 
 	private void split(Corner subLeft, Corner left, Corner subAbove,
