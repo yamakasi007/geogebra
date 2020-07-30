@@ -534,7 +534,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 					currentSplit[i].drawAsStillToSplit(surface);
 				}
 				for (int i = 0; i < nextSplitIndex; i++) {
-					nextSplit[i].drawAsNextToSplit(surface);
+					nextSplit[i].drawAsStillToSplit(surface);
 				}
 
 				endGeometry(surface);
@@ -584,7 +584,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	}
 
 	private static boolean wireframeNeeded() {
-		return false;
+		return true;
 	}
 
 	@Override

@@ -71,16 +71,6 @@ class Corner {
 	}
 
 	/**
-	 * draw this corner as part of "next to split" list
-	 *
-	 * @param surface
-	 *            surface plotter
-	 */
-	void drawAsNextToSplit(PlotterSurface surface) {
-		drawAsStillToSplit(surface);
-	}
-
-	/**
 	 * draw this corner as part of "still to split" list
 	 *
 	 * @param surface
