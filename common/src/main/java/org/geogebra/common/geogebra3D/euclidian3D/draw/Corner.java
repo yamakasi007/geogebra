@@ -34,18 +34,21 @@ class Corner {
 	Corner l; // left
 	int id;
 	private DrawSurface3D drawSurface3D;
+	private CornerBuilder cornerBuilder;
 
 	// number of split for boundary
 	private static final short BOUNDARY_SPLIT = 10;
 
-	Corner(int id, DrawSurface3D drawSurface3D) {
+	Corner(int id, DrawSurface3D drawSurface3D, CornerBuilder cornerBuilder) {
 		this.id = id;
 		this.drawSurface3D = drawSurface3D;
+		this.cornerBuilder = cornerBuilder;
 	}
 
-	Corner(double u, double v, int id, DrawSurface3D drawSurface3D) {
+	Corner(double u, double v, int id, DrawSurface3D drawSurface3D, CornerBuilder cornerBuilder) {
 		this.id = id;
 		this. drawSurface3D = drawSurface3D;
+		this.cornerBuilder = cornerBuilder;
 		set(u, v);
 	}
 
@@ -209,10 +212,10 @@ class Corner {
 					} else {
 						// l.a is defined /1/
 						// find defined between l.a and a
-						Corner n = drawSurface3D.newCorner();
+						Corner n = cornerBuilder.newCorner();
 						findU(left.a, above, n);
 						// find defined between l.a and l
-						Corner w = drawSurface3D.newCorner();
+						Corner w = cornerBuilder.newCorner();
 						findV(left.a, left, w);
 						boolean split;
 
@@ -254,14 +257,14 @@ class Corner {
 					if (left.a.p.isFinalUndefined()) {
 						// a defined /1/
 						// find defined between a and l.a
-						Corner n = drawSurface3D.newCorner();
+						Corner n = cornerBuilder.newCorner();
 						findU(above, left.a, n);
 						// find defined between a and this
 						Corner e;
 						if (subAbove != null) {
 							e = subAbove;
 						} else {
-							e = drawSurface3D.newCorner();
+							e = cornerBuilder.newCorner();
 							findV(above, this, e);
 						}
 						boolean split;
@@ -328,11 +331,11 @@ class Corner {
 							if (subAbove != null) {
 								e = subAbove;
 							} else {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(above, this, e);
 							}
 							// find defined between l.a and left
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left.a, left, w);
 
 							if (!draw) {
@@ -377,11 +380,11 @@ class Corner {
 						if (subLeft != null) {
 							s = subLeft;
 						} else {
-							s = drawSurface3D.newCorner();
+							s = cornerBuilder.newCorner();
 							findU(left, this, s);
 						}
 						// find defined between l and l.a
-						Corner w = drawSurface3D.newCorner();
+						Corner w = cornerBuilder.newCorner();
 						findV(left, left.a, w);
 						boolean split;
 						if (draw) { // time to draw
@@ -448,11 +451,11 @@ class Corner {
 							if (subLeft != null) {
 								s = subLeft;
 							} else {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(left, this, s);
 							}
 							// find defined between l.a and a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(left.a, above, n);
 
 							if (!draw) {
@@ -509,7 +512,7 @@ class Corner {
 							// find defined between l and this
 							Corner s;
 							if (subLeft == null) {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(left, this, s);
 								// new neighbors
 								this.l = s;
@@ -518,19 +521,19 @@ class Corner {
 							// find defined between a and this
 							Corner e;
 							if (subAbove == null) {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(above, this, e);
 								// new neighbors
 								this.a = e;
 								e.a = above;
 							}
 							// find defined between l and l.a
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left, left.a, w);
 							w.a = left.a;
 							left.a = w;
 							// find defined between a and l.a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(above, left.a, n);
 							n.l = above.l;
 							above.l = n;
@@ -575,7 +578,7 @@ class Corner {
 							// find defined between l and this
 							Corner s;
 							if (subLeft == null) {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(left, this, s);
 								// new neighbors
 								this.l = s;
@@ -584,7 +587,7 @@ class Corner {
 							// find defined between a and this
 							Corner e;
 							if (subAbove == null) {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(above, this, e);
 								// new neighbors
 								this.a = e;
@@ -607,7 +610,7 @@ class Corner {
 						if (subLeft != null) {
 							s = subLeft;
 						} else {
-							s = drawSurface3D.newCorner();
+							s = cornerBuilder.newCorner();
 							findU(this, left, s);
 						}
 						// find defined between this and a
@@ -615,7 +618,7 @@ class Corner {
 						if (subAbove != null) {
 							e = subAbove;
 						} else {
-							e = drawSurface3D.newCorner();
+							e = cornerBuilder.newCorner();
 							findV(this, above, e);
 						}
 						boolean split;
@@ -675,7 +678,7 @@ class Corner {
 							// find defined between l and this
 							Corner s;
 							if (subLeft == null) {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(this, left, s);
 								// new neighbors
 								this.l = s;
@@ -684,19 +687,19 @@ class Corner {
 							// find defined between a and this
 							Corner e;
 							if (subAbove == null) {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(this, above, e);
 								// new neighbors
 								this.a = e;
 								e.a = above;
 							}
 							// find defined between l and l.a
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left.a, left, w);
 							w.a = left.a;
 							left.a = w;
 							// find defined between a and l.a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(left.a, above, n);
 							n.l = above.l;
 							above.l = n;
@@ -736,11 +739,11 @@ class Corner {
 							if (subLeft != null) {
 								s = subLeft;
 							} else {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(this, left, s);
 							}
 							// find defined between a and l.a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(above, left.a, n);
 
 							if (!draw) {
@@ -804,14 +807,14 @@ class Corner {
 							// find defined between this and l
 							Corner s;
 							if (subLeft == null) {
-								s = drawSurface3D.newCorner();
+								s = cornerBuilder.newCorner();
 								findU(this, left, s);
 								// new neighbors
 								this.l = s;
 								s.l = left;
 							}
 							// find defined between l.a and l
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left.a, left, w);
 							// new neighbors
 							w.a = left.a;
@@ -854,11 +857,11 @@ class Corner {
 							if (subAbove != null) {
 								e = subAbove;
 							} else {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(this, above, e);
 							}
 							// find defined between l and l.a
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left, left.a, w);
 
 							if (!draw) {
@@ -919,12 +922,12 @@ class Corner {
 							split(subLeft, left, subAbove, above);
 						} else {
 							// find defined between l.a and a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(left.a, above, n);
 							// find defined between this and a
 							Corner e;
 							if (subAbove == null) {
-								e = drawSurface3D.newCorner();
+								e = cornerBuilder.newCorner();
 								findV(this, above, e);
 								// new neighbors
 								this.a = e;
@@ -958,10 +961,10 @@ class Corner {
 							split(subLeft, left, subAbove, above);
 						} else {
 							// find defined between a and l.a
-							Corner n = drawSurface3D.newCorner();
+							Corner n = cornerBuilder.newCorner();
 							findU(above, left.a, n);
 							// find defined between l and l.a
-							Corner w = drawSurface3D.newCorner();
+							Corner w = cornerBuilder.newCorner();
 							findV(left, left.a, w);
 							// new neighbors
 							n.l = left.a;
@@ -1017,7 +1020,7 @@ class Corner {
 		if (subAbove != null) {
 			e = subAbove;
 		} else {
-			e = drawSurface3D.newCorner(u, vm);
+			e = cornerBuilder.newCorner(u, vm);
 			// new neighbors
 			this.a = e;
 			e.a = above;
@@ -1026,19 +1029,19 @@ class Corner {
 		if (subLeft != null) {
 			s = subLeft;
 		} else {
-			s = drawSurface3D.newCorner(um, v);
+			s = cornerBuilder.newCorner(um, v);
 			// new neighbors
 			this.l = s;
 			s.l = left;
 		}
-		Corner m = drawSurface3D.newCorner(um, vm);
+		Corner m = cornerBuilder.newCorner(um, vm);
 		s.a = m;
 		e.l = m;
-		Corner n = drawSurface3D.newCorner(um, above.v);
+		Corner n = cornerBuilder.newCorner(um, above.v);
 		n.l = above.l;
 		above.l = n;
 		m.a = n;
-		Corner w = drawSurface3D.newCorner(left.u, vm);
+		Corner w = cornerBuilder.newCorner(left.u, vm);
 		w.a = left.a;
 		left.a = w;
 		m.l = w;

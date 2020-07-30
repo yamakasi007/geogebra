@@ -10,13 +10,13 @@ class DrawWireframe {
 	private Corner[] wireframeRightCorners;
 	private int wireframeBottomCornersLength;
 	private int wireframeRightCornersLength;
-	private DrawSurface3D drawSurface3D;
 	private SurfaceParameter uParam;
 	private SurfaceParameter vParam;
+	private CornerBuilder cornerBuilder;
 
-	DrawWireframe(DrawSurface3D drawSurface3D, SurfaceParameter uParam,
+	DrawWireframe(CornerBuilder cornerBuilder, SurfaceParameter uParam,
 			SurfaceParameter vParam) {
-		this.drawSurface3D = drawSurface3D;
+		this.cornerBuilder = cornerBuilder;
 		this.uParam = uParam;
 		this.vParam = vParam;
 	}
@@ -28,7 +28,7 @@ class DrawWireframe {
 			wireframeRightCorners = new Corner[vParam.getCornerCount()];
 		}
 
-		Corner bottomRight = newCorner(uParam.borderMax, vParam.borderMax);
+		Corner bottomRight = cornerBuilder.newCorner(uParam.borderMax, vParam.borderMax);
 		Corner first = bottomRight;
 
 		wireframeBottomCornersLength = 0;
@@ -115,11 +115,33 @@ class DrawWireframe {
 		return first;
 	}
 
+	static void splitRootMesh(Corner first)
+			throws NotEnoughCornersException {
+
+		Corner nextAbove, nextLeft;
+
+		Corner current = first;
+		while (current.a != null) {
+			nextAbove = current.a;
+			while (current.l != null) {
+				nextLeft = current.l;
+				if (nextLeft.a == null) { // already split by last row
+					nextLeft = nextLeft.l;
+				}
+				// Log.debug(current.u + "," + current.v);
+				current.split(false);
+				current = nextLeft;
+			}
+			current = nextAbove;
+		}
+
+	}
+
 	private Corner addRowAboveToMesh(Corner bottomRight, double v,
 			double uBorderMin, double uBorderMax, double uMax, int uN)
 			throws NotEnoughCornersException {
 		Corner below = bottomRight;
-		Corner right = newCorner(uBorderMax, v);
+		Corner right = cornerBuilder.newCorner(uBorderMax, v);
 		below.a = right;
 		for (int i = 0; i < uN - 1; i++) {
 			right = addLeftToMesh(right, uMax - (uParam.delta * i) / uN, v);
@@ -135,14 +157,9 @@ class DrawWireframe {
 
 	private Corner addLeftToMesh(Corner right, double u, double v)
 			throws NotEnoughCornersException {
-		Corner left = newCorner(u, v);
+		Corner left = cornerBuilder.newCorner(u, v);
 		right.l = left;
 		return left;
-	}
-
-	private Corner newCorner(double u, double v)
-			throws NotEnoughCornersException {
-		return DrawSurface3D.newCorner(u, v, drawSurface3D);
 	}
 
 	void drawWireframe(Drawable3D drawable, Renderer renderer, int oldThickness) {

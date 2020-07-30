@@ -66,8 +66,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	// draw array size ( size +=1 for one last draw)
 	private int maxDraw;
 
-	private int cornerListSize;
-
+	CornerBuilder cornerBuilder;
 	/**
 	 * max splits in one update loop
 	 */
@@ -75,7 +74,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	private Corner[] currentSplit;
 	private Corner[] nextSplit;
-	Corner[] cornerArray;
 
 	/**
 	 * list of things to draw
@@ -84,7 +82,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 
 	private int currentSplitIndex;
 	private int nextSplitIndex;
-	int cornerListIndex;
 	private int currentSplitStoppedIndex;
 	int loopSplitIndex;
 	int drawListIndex;
@@ -145,18 +142,19 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	public DrawSurface3D(EuclidianView3D a_view3d, SurfaceEvaluable surface) {
 		super(a_view3d, (GeoElement) surface);
 		this.surfaceGeo = surface;
+		cornerBuilder = new CornerBuilder(this);
 
 		levelOfDetail = null;
 
 		cornerForStillToSplit = new Corner[6];
 		cornerToDrawStillToSplit = new Corner[12];
 		for (int i = 0; i < 12; i++) {
-			cornerToDrawStillToSplit[i] = new Corner(-1, this);
+			cornerToDrawStillToSplit[i] = new Corner(-1, this, cornerBuilder);
 		}
 
 		splitsStartedNotFinished = false;
 
-		drawWireframe = new DrawWireframe(this, uParam, vParam);
+		drawWireframe = new DrawWireframe(cornerBuilder, uParam, vParam);
 	}
 
 	private void setLevelOfDetail() {
@@ -182,13 +180,13 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 
 		maxDraw = maxSplit;
-		cornerListSize = maxDraw * 3;
+		cornerBuilder.setCornerListSize(maxDraw * 3);
 
 		// create arrays
 		currentSplit = new Corner[maxSplit + 4];
 		nextSplit = new Corner[maxSplit + 4];
 		drawList = new CornerAndCenter[maxDraw + 100];
-		cornerArray = new Corner[cornerListSize];
+		cornerBuilder.setCornerArray(new Corner[cornerBuilder.getCornerListSize()]);
 	}
 
 	private void setTolerances() {
@@ -350,7 +348,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			vParam.init(levelOfDetail);
 
 			debug("grids: " + uParam.n + ", " + vParam.n);
-			cornerListIndex = 0;
+			cornerBuilder.resetCornerListIndex();
 
 			try {
 				/*
@@ -364,7 +362,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				nextSplitIndex = 0;
 				drawListIndex = 0;
 				notDrawn = 0;
-				splitRootMesh(firstCorner);
+				DrawWireframe.splitRootMesh(firstCorner);
 				debug("\nnot drawn after split root mesh: " + notDrawn);
 
 				// now split root mesh is ready
@@ -400,7 +398,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 				+ "\nstill to split : "
 				+ (currentSplitIndex - currentSplitStoppedIndex)
 				+ "\nnext to split : " + nextSplitIndex
-				+ "\ncorner list size : " + cornerListIndex
+				+ "\ncorner list size : " + cornerBuilder.getCornerListIndex()
 				+ "\nstill room left : " + stillRoomLeft);
 
 		splitsStartedNotFinished = (currentSplitIndex
@@ -467,7 +465,7 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 	}
 
 	private void startTriangles(PlotterSurface surface) {
-		surface.startTriangles(cornerListIndex * 16);
+		surface.startTriangles(cornerBuilder.getCornerListIndex() * 16);
 	}
 
 	private void draw() {
@@ -645,28 +643,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 			}
 			enlargeBounds(min, max, boundsMin, boundsMax);
 		}
-	}
-
-	private static void splitRootMesh(Corner first)
-			throws NotEnoughCornersException {
-
-		Corner nextAbove, nextLeft;
-
-		Corner current = first;
-		while (current.a != null) {
-			nextAbove = current.a;
-			while (current.l != null) {
-				nextLeft = current.l;
-				if (nextLeft.a == null) { // already split by last row
-					nextLeft = nextLeft.l;
-				}
-				// Log.debug(current.u + "," + current.v);
-				current.split(false);
-				current = nextLeft;
-			}
-			current = nextAbove;
-		}
-
 	}
 
 	private boolean split() throws NotEnoughCornersException {
@@ -1188,79 +1164,6 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		nextSplitIndex++;
 	}
 
-	/**
-	 * 
-	 * @param u
-	 *            first parameter
-	 * @param v
-	 *            second parameter
-	 * @throws NotEnoughCornersException
-	 *             if no new corner left in array
-	 * @return new corner calculated for parameters u, v
-	 */
-	Corner newCorner(double u, double v)
-			throws NotEnoughCornersException {
-		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
-					+ " is larger than size " + cornerListSize);
-		}
-		Corner c = cornerArray[cornerListIndex];
-		if (c == null) {
-			c = new Corner(u, v, cornerListIndex, this);
-			cornerArray[cornerListIndex] = c;
-		} else {
-			c.set(u, v);
-		}
-		cornerListIndex++;
-		return c;
-	}
-
-	/**
-	 *
-	 * @param u
-	 *            first parameter
-	 * @param v
-	 *            second parameter
-	 * @throws NotEnoughCornersException
-	 *             if no new corner left in array
-	 * @return new corner calculated for parameters u, v
-	 */
-	static Corner newCorner(double u, double v, DrawSurface3D surface)
-			throws NotEnoughCornersException {
-		if (surface.cornerListIndex >= surface.cornerListSize) {
-			throw new NotEnoughCornersException(surface, "Index " + surface.cornerListIndex
-					+ " is larger than size " + surface.cornerListSize);
-		}
-		Corner c = surface.cornerArray[surface.cornerListIndex];
-		if (c == null) {
-			c = new Corner(u, v, surface.cornerListIndex, surface);
-			surface.cornerArray[surface.cornerListIndex] = c;
-		} else {
-			c.set(u, v);
-		}
-		surface.cornerListIndex++;
-		return c;
-	}
-
-	/**
-	 * @return new corner
-	 * @throws NotEnoughCornersException
-	 *             if no new corner left in array
-	 */
-	Corner newCorner() throws NotEnoughCornersException {
-		if (cornerListIndex >= cornerListSize) {
-			throw new NotEnoughCornersException(this, "Index " + cornerListIndex
-					+ " is larger than size " + cornerListSize);
-		}
-		Corner c = cornerArray[cornerListIndex];
-		if (c == null) {
-			c = new Corner(cornerListIndex, this);
-			cornerArray[cornerListIndex] = c;
-		}
-		cornerListIndex++;
-		return c;
-	}
-
 	@Override
 	public boolean hit(Hitting hitting) {
 
@@ -1532,5 +1435,9 @@ public class DrawSurface3D extends Drawable3DSurfaces implements HasZPick {
 		}
 
 		drawTriangle(surface, cc, c1, c2);
+	}
+
+	CornerBuilder getCornerBuilder() {
+		return cornerBuilder;
 	}
 }

@@ -37,29 +37,20 @@ public class DrawSurface3DElements extends DrawSurface3D {
 	protected void drawTriangle(PlotterSurface surface, CornerAndCenter cc,
 			Corner c1, Corner c2) {
 
-		if (checkIdsAreNotShort(cornerListIndex + cc.id, c1.id, c2.id)) {
+		if (checkIdsAreNotShort(cornerBuilder.getCornerListIndex() + cc.id, c1.id, c2.id)) {
 			return;
 		}
 
-		((PlotterSurfaceElements) surface).drawIndex(cornerListIndex + cc.id);
+		((PlotterSurfaceElements) surface).drawIndex
+				(cornerBuilder.getCornerListIndex() + cc.id);
 		((PlotterSurfaceElements) surface).drawIndex(c2.id);
 		((PlotterSurfaceElements) surface).drawIndex(c1.id);
 	}
 
 	@Override
 	protected void drawCornersAndCenters(PlotterSurface surface) {
-		for (int i = 0; i < cornerListIndex; i++) {
-			Corner c = cornerArray[i];
-			surface.normalDirect(c.normal);
-			surface.vertexDirect(c.p);
-		}
-		for (int i = 0; i < drawListIndex; i++) {
-			CornerAndCenter cc = drawList[i];
-			surface.normalDirect(cc.centerNormal);
-			surface.vertexDirect(cc.center);
-		}
-
-		lastIndex = cornerListIndex + drawListIndex;
+		cornerBuilder.drawCornersAndCenters(surface, drawListIndex, drawList);
+		lastIndex = cornerBuilder.getCornerListIndex() + drawListIndex;
 
 	}
 
