@@ -39,6 +39,8 @@ abstract public class Manager {
 	private PlotterMouseCursor mouseCursor;
 	/** completing task cursor */
 	private PlotterCompletingCursor completingCursor;
+	/** wireframe */
+	private PlotterWireframe wireframe;
 
 	// geogebra stuff
 	private EuclidianView3D view3D;
@@ -82,16 +84,12 @@ abstract public class Manager {
 
 		brush = newPlotterBrush();
 		surface = newPlotterSurface();
-
 		text = new PlotterText(this);
-
 		cursor = new PlotterCursor(this);
 		viewInFrontOf = new PlotterViewInFrontOf(this);
-
 		mouseCursor = new PlotterMouseCursor(this);
-
 		completingCursor = new PlotterCompletingCursor(this);
-
+		wireframe = new PlotterWireframe(this);
 	}
 
 	/**
@@ -163,6 +161,10 @@ abstract public class Manager {
 
 	public PlotterCompletingCursor getCompletingCursor() {
 		return completingCursor;
+	}
+
+	public PlotterWireframe getWireframe() {
+		return wireframe;
 	}
 
 	// ///////////////////////////////////////////

@@ -6,7 +6,10 @@ import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.Previewable;
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianView3D;
 import org.geogebra.common.geogebra3D.euclidian3D.Hitting;
+import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterBrush;
+import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterBrushElements;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterSurface;
+import org.geogebra.common.geogebra3D.euclidian3D.openGL.PlotterWireframe;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer;
 import org.geogebra.common.geogebra3D.euclidian3D.openGL.Renderer.PickingType;
 import org.geogebra.common.geogebra3D.euclidian3D.printer3D.ExportToPrinter3D;
@@ -21,7 +24,7 @@ import org.geogebra.common.kernel.matrix.Coords;
 
 /**
  * Class for drawing quadrics.
- * 
+ *
  * @author mathieu
  *
  */
@@ -57,7 +60,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 
 	/**
 	 * common constructor
-	 * 
+	 *
 	 * @param a_view3d
 	 *            view
 	 * @param a_quadric
@@ -237,7 +240,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 
 	/**
 	 * Visibility flag
-	 * 
+	 *
 	 * @author mathieu
 	 *
 	 */
@@ -254,7 +257,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 
 	/**
 	 * check if the sphere is (at least partially) visible
-	 * 
+	 *
 	 * @param center
 	 *            sphere center
 	 * @param radius
@@ -604,9 +607,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 		Coords center = quadric.getMidpoint3D();
 		double r0 = quadric.getHalfAxis(0);
 		double r1 = quadric.getHalfAxis(1);
-		PlotterSurface surface = renderer.getGeometryManager().getSurface();
-		setPackSurface();
-		surface.start(getReusableSurfaceIndex());
+
 		Coords ev0 = quadric.getEigenvec3D(0);
 		Coords ev1 = quadric.getEigenvec3D(1);
 		Coords ev2 = quadric.getEigenvec3D(2);
@@ -616,10 +617,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 		}
 		initVminMax();
 		getView3D().getMinIntervalOutsideClipping(vMinMax, center, ev2);
-		if (vMinMax[1] < 0) {
-			// nothing to draw
-			setSurfaceIndex(surface.end());
-		} else {
+		if (vMinMax[1] >= 0) {
 			scale = getView3D().getMaxScale();
 			// get radius at max
 			if (vMinMax[0] <= 0) {
@@ -629,12 +627,25 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 			}
 			vMinMax[1] = Math.sqrt(vMinMax[1]);
 			double radius = Math.max(r0, r1) * vMinMax[1];
+
+			PlotterSurface surface = renderer.getGeometryManager().getSurface();
+			setPackSurface();
+			surface.start(getReusableSurfaceIndex());
 			longitude = surface.calcSphereLongitudesNeeded(radius, scale);
+
 			surface.drawParaboloid(center, ev0, ev1, ev2, r0, r1, longitude,
-					vMinMax[0], vMinMax[1], !getView3D().useClippingCube());
+					vMinMax[0], vMinMax[1], false);
 			setSurfaceIndex(surface.end());
+			endPacking();
+
+			PlotterWireframe wireframe = renderer.getGeometryManager().getWireframe();
+			setPackCurve();
+			wireframe.start(getReusableGeometryIndex());
+			wireframe.drawParaboloid(center, ev0, ev1, ev2, r0, r1, longitude,
+					vMinMax[0], vMinMax[1]);
+			setGeometryIndex(wireframe.end());
+			endPacking();
 		}
-		endPacking();
 	}
 
 	private void updateParabolicCylinder(GeoQuadric3D quadric,
@@ -995,7 +1006,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return min and max value along the axis of the quadric
 	 */
 	protected double[] getMinMax() {
@@ -1015,7 +1026,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 
 	/**
 	 * set min and max value along the axis of the quadric
-	 * 
+	 *
 	 * @param minmax
 	 *            min/max values
 	 */
@@ -1247,7 +1258,7 @@ public class DrawQuadric3D extends Drawable3DSurfaces implements Previewable {
 
 	/**
 	 * constructor for previewable
-	 * 
+	 *
 	 * @param view3D
 	 *            view
 	 * @param selectedPoints

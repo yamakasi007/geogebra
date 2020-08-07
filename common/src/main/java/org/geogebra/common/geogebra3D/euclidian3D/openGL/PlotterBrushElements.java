@@ -97,7 +97,7 @@ public class PlotterBrushElements extends PlotterBrush {
 		if (sectionSize < SECTION_SIZE_STARTED) {
 			// no curve drawn
 			sectionSize = SECTION_SIZE_NOT_STARTED;
-			return;
+			return;	
 		}
 
 		// last tube rule
