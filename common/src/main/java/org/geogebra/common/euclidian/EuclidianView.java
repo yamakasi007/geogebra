@@ -6410,4 +6410,12 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	public void embed(GGraphics2D g2, DrawWidget drawEmbed) {
 		//web only
 	}
+
+	public void updateInlines() {
+		for(Drawable drawable: allDrawableList) {
+			if (drawable instanceof DrawInline) {
+				((DrawInline) drawable).updateContent();
+			}
+		}
+	}
 }

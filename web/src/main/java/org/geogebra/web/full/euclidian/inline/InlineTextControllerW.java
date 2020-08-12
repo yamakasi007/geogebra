@@ -90,6 +90,7 @@ public class InlineTextControllerW implements InlineTextController {
 				if (!content.equals(geo.getContent())) {
 					geo.setContent(content);
 					geo.getKernel().storeUndoInfo();
+					geo.notifyUpdate();
 				}
 			}
 
@@ -105,7 +106,7 @@ public class InlineTextControllerW implements InlineTextController {
 
 			@Override
 			public void onSelectionChanged() {
-				geo.getKernel().notifyUpdateVisualStyle(geo, GProperty.FONT);
+				geo.getKernel().notifyUpdateVisualStyle(geo, GProperty.TEXT_SELECTION);
 			}
 		});
 	}

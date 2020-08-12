@@ -143,6 +143,7 @@ public abstract class GgbAPI implements JavaScriptAPI {
 		sb.append("</construction>\n");
 		sb.append("</geogebra>\n");
 		getApplication().setXML(sb.toString(), false);
+		getApplication().getActiveEuclidianView().updateInlines();
 	}
 
 	/**

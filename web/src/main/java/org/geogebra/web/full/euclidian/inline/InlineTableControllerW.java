@@ -288,20 +288,23 @@ public class InlineTableControllerW implements InlineTableController {
 			if (tableImpl.getTotalWidth() < 1 || tableImpl.getTotalHeight() < 1) {
 				table.remove();
 			} else {
-				table.setContent(getContent());
+				updateGeo();
 			}
 			view.getApplication().storeUndoInfo();
 		});
 
-		tableImpl.sizeChanged(() -> {
-			table.setContent(getContent());
-		});
+		tableImpl.sizeChanged(this::updateGeo);
 
 		tableImpl.selectionChanged(() ->
-			table.getKernel().notifyUpdateVisualStyle(table, GProperty.FONT)
+			table.getKernel().notifyUpdateVisualStyle(table, GProperty.TEXT_SELECTION)
 		);
 
 		update();
+	}
+
+	private void updateGeo() {
+		table.setContent(getContent());
+		table.notifyUpdate();
 	}
 
 	private Runnable getCallback() {
