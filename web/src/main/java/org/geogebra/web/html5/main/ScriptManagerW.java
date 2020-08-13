@@ -1,6 +1,5 @@
 package org.geogebra.web.html5.main;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,8 +8,8 @@ import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.commands.CommandNotLoadedError;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.plugin.Event;
+import org.geogebra.common.plugin.JsReference;
 import org.geogebra.common.plugin.ScriptManager;
-import org.geogebra.common.plugin.script.JsScript;
 import org.geogebra.common.util.ExternalAccess;
 import org.geogebra.common.util.debug.Log;
 
@@ -24,7 +23,6 @@ public class ScriptManagerW extends ScriptManager {
 
 	@ExternalAccess
 	private JavaScriptObject exportedApi;
-	private HashMap<String, JavaScriptObject> listeners = new HashMap<>();
 	private ApiExporter exporter;
 
 	/**
@@ -105,15 +103,16 @@ public class ScriptManagerW extends ScriptManager {
 
 	@Override
 	protected void callListener(String listener, String... args) {
-		if (listener.charAt(0) <= '9') {
-			JsEval.callNativeJavaScript(listeners.get(listener), args);
-		} else {
-			JsEval.callNativeJavaScript(listener, args);
-		}
+		JsEval.callNativeJavaScript(listener, args);
 	}
 
 	@Override
-	protected void callClientListeners(List<JsScript> listeners, Event evt) {
+	protected void callNativeListener(Object listener, String... args) {
+		JsEval.callNativeJavaScript((JavaScriptObject) listener, args);
+	}
+
+	@Override
+	protected void callClientListeners(List<JsReference> listeners, Event evt) {
 		if (listeners.isEmpty()) {
 			return;
 		}
@@ -151,9 +150,9 @@ public class ScriptManagerW extends ScriptManager {
 			addToJsObject(args, evt.jsonArgument);
 		}
 
-		for (JsScript listener : listeners) {
-			if (listener.getText().charAt(0) <= '9') {
-				JsEval.callNativeJavaScript(this.listeners.get(listener.getText()), args);
+		for (JsReference listener : listeners) {
+			if (listener.getNativeRunnable() != null) {
+				JsEval.callNativeJavaScript((JavaScriptObject) listener.getNativeRunnable(), args);
 			} else {
 				JsEval.callNativeJavaScript(listener.getText(), args);
 			}
@@ -192,34 +191,10 @@ public class ScriptManagerW extends ScriptManager {
 			String globalName) {
 		JavaScriptObject api = JavaScriptObject.createObject();
 		exporter.addFunctions(api, ggbAPI);
-		exporter.addListenerFunctions(api, ggbAPI,
-				getListenerMappingFunction());
+		exporter.addListenerFunctions(api, ggbAPI);
 		export(api, ggbAPI, globalName);
 		return api;
 	}
-
-	@ExternalAccess
-	private String getListenerID(JavaScriptObject listener) {
-		for (Entry<String, JavaScriptObject> entry : listeners.entrySet()) {
-			if (entry.getValue() == listener) {
-				return entry.getKey();
-			}
-		}
-		String newID = listeners.size() + "";
-		listeners.put(newID, listener);
-		return newID;
-	}
-
-	private native JavaScriptObject getListenerMappingFunction() /*-{
-		var that = this;
-		return function(listener) {
-			if (typeof listener === 'string') {
-				return listener;
-			} else {
-				return that.@org.geogebra.web.html5.main.ScriptManagerW::getListenerID(Lcom/google/gwt/core/client/JavaScriptObject;)(listener);
-			}
-		}
-	}-*/;
 
 	private native void export(JavaScriptObject api, GgbAPIW ggbAPI, String globalName) /*-{
 		api.remove = function() {
