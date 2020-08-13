@@ -350,4 +350,5 @@ public class PageListPanel
 	public void saveSlide(PagePreviewCard card) {
 		pageController.refreshSlide(card);
 	}
+
 }
