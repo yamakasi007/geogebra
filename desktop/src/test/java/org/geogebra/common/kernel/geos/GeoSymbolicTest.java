@@ -1194,6 +1194,7 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		GeoNumeric numeric = (GeoNumeric) element;
 		assertThat(numeric.getValue(), is(closeTo(10, 0.001)));
 	}
+
 	@Test
 	public void testPrecision() {
 		GeoSymbolic derivative = add("Derivative(25.8-0.2ℯ^(-0.025x))");
