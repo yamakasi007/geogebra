@@ -1202,4 +1202,11 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 				derivative.toValueString(StringTemplate.defaultTemplate),
 				equalTo("1 / 200 ℯ^((-1) / 40 x)"));
 	}
+
+	@Test
+	public void testFunctionRedefinition() {
+		add("f(x) = x");
+		GeoSymbolic function = add("f(x) = xx");
+		assertThat(function.getTwinGeo(), CoreMatchers.<GeoElementND>instanceOf(GeoFunction.class));
+	}
 }
