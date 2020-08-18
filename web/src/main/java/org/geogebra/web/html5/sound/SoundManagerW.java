@@ -39,7 +39,7 @@ public class SoundManagerW implements SoundManager {
 
 	@Override
 	public void pauseResumeSound(boolean b) {
-		FunctionSoundW.INSTANCE.pause(b);
+		FunctionSoundW.getInstance().pause(b);
 		mp3active = b;
 	}
 
@@ -60,7 +60,7 @@ public class SoundManagerW implements SoundManager {
 
 	@Override
 	public void playFunction(GeoFunction geoFunction, double min, double max) {
-		FunctionSoundW.INSTANCE.playFunction(geoFunction, min, max);
+		FunctionSoundW.getInstance().playFunction(geoFunction, min, max);
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public class SoundManagerW implements SoundManager {
 	@Override
 	public void playFunction(GeoFunction geoFunction, double min, double max,
 			int sampleRate, int bitDepth) {
-		FunctionSoundW.INSTANCE.playFunction(geoFunction, min, max, sampleRate,
+		FunctionSoundW.getInstance().playFunction(geoFunction, min, max, sampleRate,
 				bitDepth);
 	}
 
