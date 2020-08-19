@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.App;
+import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.MaterialDesignResources;
@@ -91,7 +92,11 @@ public class PageListPanel
 				MaterialDesignResources.INSTANCE.add_white(), null, 24, app);
 		plusButton.setStyleName("mowFloatingButton");
 		plusButton.addStyleName("mowPlusButton");
-		plusButton.addFastClickHandler(source -> loadNewPage(false));
+		plusButton.addFastClickHandler(source -> {
+			app.dispatchEvent(new Event(EventType.ADD_SLIDE,
+					null, null));
+			loadNewPage(false);
+		});
 		add(plusButton);
 		showPlusButton(false);
 	}
@@ -128,6 +133,10 @@ public class PageListPanel
 	 * opens the page control panel
 	 */
 	public void open() {
+		if (isVisible()) {
+			return;
+		}
+
 		dockPanel.hideZoomPanel();
 		toolbarMow.showPageControlButton(false);
 
