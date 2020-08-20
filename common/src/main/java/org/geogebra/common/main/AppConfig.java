@@ -276,5 +276,9 @@ public interface AppConfig {
 	 */
 	PropertiesFactory createPropertiesFactory();
 
+	/**
+	 * @return true if trace is enabled in context menu
+	 */
+	boolean disableTraceCM();
 }
 
