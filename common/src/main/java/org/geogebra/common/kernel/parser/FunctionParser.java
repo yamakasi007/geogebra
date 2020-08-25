@@ -11,6 +11,7 @@ import org.geogebra.common.kernel.arithmetic.Equation;
 import org.geogebra.common.kernel.arithmetic.Evaluatable;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
 import org.geogebra.common.kernel.arithmetic.ExpressionValue;
+import org.geogebra.common.kernel.arithmetic.Function;
 import org.geogebra.common.kernel.arithmetic.FunctionNVar;
 import org.geogebra.common.kernel.arithmetic.FunctionVariable;
 import org.geogebra.common.kernel.arithmetic.ListValue;
@@ -28,8 +29,8 @@ import org.geogebra.common.kernel.arithmetic3D.MyVec3DNode;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoCasCell;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoFunctionNVar;
-import org.geogebra.common.kernel.geos.GeoFunctionable;
 import org.geogebra.common.kernel.geos.GeoSymbolic;
 import org.geogebra.common.kernel.geos.ParametricCurve;
 import org.geogebra.common.kernel.parser.cashandlers.CommandDispatcherGiac;
@@ -231,10 +232,11 @@ public class FunctionParser {
 		// a(b) becomes a*b because a is not a function, no list, and no curve
 		// e.g. a(1+x) = a*(1+x) when a is a number
 
-		if (inputBoxParsing && geoExp.wrap().getRight() instanceof GeoFunctionable) {
+		if (inputBoxParsing && geoExp.wrap().getRight() instanceof GeoFunction) {
 			ExpressionValue left = geoExp.wrap().getLeft();
+			GeoFunction function = (GeoFunction) geoExp.wrap().getRight();
 
-			return new ExpressionNode(kernel, geoExp.wrap().getRight(),
+			return new ExpressionNode(kernel, function,
 					Operation.FUNCTION, toFunctionArgument(myList, funcName)).multiply(left);
 		}
 
