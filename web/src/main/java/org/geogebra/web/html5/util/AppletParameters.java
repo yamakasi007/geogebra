@@ -677,4 +677,12 @@ public class AppletParameters {
 	public boolean getParamTextMode() {
 		return getBoolDataParam("textMode", false);
 	}
+
+	public String getDataParamEditorBackgroundColor() {
+		return getStringDataParam("editorBackgroundColor", "white");
+	}
+
+	public String getDataParamEditorForegroundColor() {
+		return getStringDataParam("editorForegroundColor", "black");
+	}
 }
