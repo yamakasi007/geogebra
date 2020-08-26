@@ -499,6 +499,11 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	}
 
 	@Override
+	public void openH5PTool() {
+		// implement me
+	}
+
+	@Override
 	public void initAppEmbed(GeoEmbed ge) {
 		ge.setEmbedId(nextID());
 		ge.attr("showToolBar", true);
