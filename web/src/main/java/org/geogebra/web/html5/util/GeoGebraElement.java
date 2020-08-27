@@ -22,8 +22,6 @@ public final class GeoGebraElement extends Element implements AttributeProvider 
 		if (element != null) {
 			element.setTabIndex(-1);
 		}
-		// assert element.getTagName().equalsIgnoreCase(TAG);
-		//addNativeHandlers(element);
 		return (GeoGebraElement) element;
 	}
 

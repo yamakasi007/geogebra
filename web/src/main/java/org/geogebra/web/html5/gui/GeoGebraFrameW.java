@@ -92,7 +92,7 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 		this.geoGebraElement = geoGebraElement;
 		this.appletParameters = appletParameters;
 
-		if (appletParameters.getDataParamApp()) {
+		if (!appletParameters.getDataParamApp()) {
 			addFocusHandlers(this.geoGebraElement.getElement());
 		}
 	}
