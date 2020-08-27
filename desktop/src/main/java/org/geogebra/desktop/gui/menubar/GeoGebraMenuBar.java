@@ -145,10 +145,7 @@ public class GeoGebraMenuBar extends JMenuBar implements EventRenderable {
 		// "Window"
 		windowMenu = new WindowMenuD(app);
 
-		if (!app.isApplet()) // just add the menu if this is not an applet we're
-		{
-			add(windowMenu);
-		}
+		add(windowMenu);
 
 		// "Help"
 		helpMenu = new HelpMenuD(app);
@@ -156,35 +153,29 @@ public class GeoGebraMenuBar extends JMenuBar implements EventRenderable {
 
 		// applets might be running in Java 6 (no JavaFX)
 		// and not wanted for applets anyway
-		if (!app.isApplet()) {
-			// Add the Sign in button (force it to the far right)
+		// Add the Sign in button (force it to the far right)
 
-			boolean javaFx22Available = false;
-			try {
-				this.getClass().getClassLoader()
-						.loadClass("javafx.embed.swing.JFXPanel");
-				javaFx22Available = true;
-			} catch (Throwable e) {
-				Log.error("JavaFX 2.2 not available");
-			}
-
-			// JavaFX 2.2 available by default only on Java 7u6 or higher
-			// http://www.oracle.com/us/corporate/press/1735645
-			if (javaFx22Available) {
-
-				// try needed for eg OSX 10.6 with fake jfxrt.jar
-				try {
-					add(Box.createHorizontalGlue());
-					addSignIn();
-				} catch (Exception e) {
-					Log.error("problem starting JavaFX");
-				}
-			}
-
+		boolean javaFx22Available = false;
+		try {
+			this.getClass().getClassLoader()
+					.loadClass("javafx.embed.swing.JFXPanel");
+			javaFx22Available = true;
+		} catch (Throwable e) {
+			Log.error("JavaFX 2.2 not available");
 		}
 
-		// "flag" to select language
-		// addFlag();
+		// JavaFX 2.2 available by default only on Java 7u6 or higher
+		// http://www.oracle.com/us/corporate/press/1735645
+		if (javaFx22Available) {
+
+			// try needed for eg OSX 10.6 with fake jfxrt.jar
+			try {
+				add(Box.createHorizontalGlue());
+				addSignIn();
+			} catch (Exception e) {
+				Log.error("problem starting JavaFX");
+			}
+		}
 
 		// support for right-to-left languages
 		app.setComponentOrientation(this);
@@ -372,9 +363,7 @@ public class GeoGebraMenuBar extends JMenuBar implements EventRenderable {
 		// if (perspectivesMenu != null)
 		// perspectivesMenu.update();
 
-		if (!app.isApplet()) {
-			windowMenu.update();
-		}
+		windowMenu.update();
 
 		helpMenu.update();
 
