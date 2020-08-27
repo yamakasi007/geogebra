@@ -1,16 +1,14 @@
 package org.geogebra.web.html5.util.h5pviewer;
 
-import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsProperty;
+import elemental2.dom.Element;
 import jsinterop.annotations.JsType;
+import jsinterop.base.JsPropertyMap;
 
-@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "window")
+@JsType(isNative = true, namespace = "H5PStandalone")
 final public class H5P {
 
-	private H5P() {
-		// use H5P.get() instead, may return null
+	public H5P(Element element, String location,
+			JsPropertyMap<Object> options, JsPropertyMap<Object> displayOptions) {
+		// leave empty
 	}
-
-	@JsProperty(name = "h5p-standalone")
-	public static native H5P get();
 }
