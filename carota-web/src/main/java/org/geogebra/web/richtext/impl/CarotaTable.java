@@ -74,6 +74,14 @@ public class CarotaTable implements HasContent {
 
 	public native String getCellProperty(String property);
 
+	public native void setBorderThickness(int borderThickness);
+
+	public native int getBorderThickness();
+
+	public native void setBorderStyle(String borderType);
+
+	public native String getBorderStyle();
+
 	public native void setWidth(double width);
 
 	public native void setHeight(double height);
