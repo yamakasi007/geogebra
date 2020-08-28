@@ -33,6 +33,8 @@ public class H5PWrapper {
 
 	private static JsPropertyMap<Object> getOptions() {
 		JsPropertyMap<Object> options = JsPropertyMap.of();
+		options.set("frameJs", "../public/h5p/frame.bundle.js");
+		options.set("frameCss", "../public/h5p/styles/h5p.css");
 		return options;
 	}
 
