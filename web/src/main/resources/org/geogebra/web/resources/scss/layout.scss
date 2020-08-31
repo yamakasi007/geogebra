@@ -2,6 +2,10 @@
 
 .GeoGebraFrame {
 
+	&.multiuserApplet {
+		overflow: hidden;
+	}
+
 	div[data-title]:after {
 		opacity: 0;
 		content: "";
