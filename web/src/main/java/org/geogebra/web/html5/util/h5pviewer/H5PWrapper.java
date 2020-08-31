@@ -2,6 +2,7 @@ package org.geogebra.web.html5.util.h5pviewer;
 
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
+import org.geogebra.common.util.debug.Log;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -20,14 +21,21 @@ public class H5PWrapper {
 		geoEmbed.initDefaultPosition(app.getActiveEuclidianView());
 	}
 
-	public static void init(FlowPanel container) {
-		init(container, DEFAULT_DATA);
+	public static void init(FlowPanel container, final GeoEmbed geoEmbed) {
+		init(container, DEFAULT_DATA, geoEmbed);
 	}
 
-	public static void init(FlowPanel container, String url) {
-		H5P h5P =
-				new H5P(Js.cast(container.getElement()), url,
+	public static void init(FlowPanel container, String url, final GeoEmbed geoEmbed) {
+		H5P h5P = new H5P(Js.cast(container.getElement()), url,
 						getOptions(), getDisplayOptions());
+		h5P.then( p-> {
+			Log.debug("H5P Content is loaded: " + container.getOffsetWidth()
+			+ " x " + container.getOffsetHeight());
+			geoEmbed.setContentHeight(container.getOffsetHeight());
+			geoEmbed.setContentWidth(container.getOffsetWidth());
+			return null;
+					});
+
 	}
 
 

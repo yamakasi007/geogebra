@@ -19,6 +19,9 @@ public final class ExportLoader {
 	@JsProperty(name = "C2S")
 	public static native Object getCanvas2Svg();
 
+	@JsProperty(name = "H5P")
+	public static native Object getH5P();
+
 	/**
 	 *
 	 * @return true if canvas2pdf is already loaded

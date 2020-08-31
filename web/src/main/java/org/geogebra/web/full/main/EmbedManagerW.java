@@ -104,7 +104,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 
 	private void addHP5Viewer(DrawEmbed drawEmbed) {
 		FlowPanel container = createH5PContainer(drawEmbed.getEmbedID());
-		H5PWrapper.init(container);
+		H5PWrapper.init(container, drawEmbed.getGeoEmbed());
 		addWidgetToCache(drawEmbed, container);
 	}
 

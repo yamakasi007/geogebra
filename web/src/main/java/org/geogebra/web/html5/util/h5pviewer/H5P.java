@@ -1,6 +1,8 @@
 package org.geogebra.web.html5.util.h5pviewer;
 
 import elemental2.dom.Element;
+import elemental2.promise.IThenable;
+import elemental2.promise.Promise;
 import jsinterop.annotations.JsType;
 import jsinterop.base.JsPropertyMap;
 
@@ -11,4 +13,8 @@ final public class H5P {
 			JsPropertyMap<Object> options, JsPropertyMap<Object> displayOptions) {
 		// leave empty
 	}
+
+
+	public native <H5P> Promise<H5P> then(IThenable.ThenOnFulfilledCallbackFn<H5P, H5P> onFulfilled);
+
 }
