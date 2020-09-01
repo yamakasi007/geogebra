@@ -16,7 +16,9 @@ import jsinterop.base.JsPropertyMap;
 public class H5PWrapper {
 
 	public static final String DEFAULT_DATA = "http://tafel.dlb-dev01.alp-dlg.net/public/data/h5p";
+	public static final int BOTTOM_BAR = 48;
 	private final GeoEmbed geoEmbed;
+	public static final int SCALE = 3;
 
 	/**
 	 *
@@ -27,7 +29,6 @@ public class H5PWrapper {
 		geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
 		geoEmbed.setEmbedId(embedId);
 		geoEmbed.setAppName("h5p");
-		geoEmbed.initDefaultPosition(app.getActiveEuclidianView());
 	}
 
 	/**
@@ -41,7 +42,7 @@ public class H5PWrapper {
 	}
 
 	/**
-	 * Renders H5P content to the given container widget
+	 * Renders H5P content to the given widget widget
 	 *
 	 * @param container widget to render to.
 	 * @param url to the H5P resource.
@@ -51,10 +52,15 @@ public class H5PWrapper {
 		H5P h5P = new H5P(Js.cast(container.getElement()), url,
 						getOptions(), getDisplayOptions());
 		h5P.then(p -> {
-			geoEmbed.setContentHeight(container.getOffsetHeight());
-			geoEmbed.setContentWidth(container.getOffsetWidth());
+			double w = container.getOffsetWidth() ;
+			double h = container.getOffsetHeight() ;
+			double ratio = h / w;
+			geoEmbed.setSize(SCALE * w, SCALE * ratio * w + BOTTOM_BAR);
+			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
+			geoEmbed.updateRepaint();
 			return null;
 		});
+
 	}
 
 	private static JsPropertyMap<Object> getOptions() {
