@@ -1943,24 +1943,6 @@ public class GuiManagerW extends GuiManager
 	/**
 	 * @param title
 	 *            construction title
-	 * @return local file saving callback for base64
-	 */
-	native JavaScriptObject getStringCallback(String title) /*-{
-
-		return function(base64) {
-			var a = $doc.createElement("a");
-			$doc.body.appendChild(a);
-			a.style = "display: none";
-			a.href = @org.geogebra.common.util.StringUtil::ggbMarker + base64;
-			a.download = title;
-			a.click();
-		}
-
-	}-*/;
-
-	/**
-	 * @param title
-	 *            construction title
 	 * @return local file saving callback for binary file
 	 */
 	native JavaScriptObject getDownloadCallback(String title) /*-{
