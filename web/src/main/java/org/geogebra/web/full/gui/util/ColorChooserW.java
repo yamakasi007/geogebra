@@ -26,7 +26,6 @@ import org.geogebra.web.html5.gui.util.SliderInputHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.TextBaseline;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -39,6 +38,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import elemental2.dom.HTMLImageElement;
 
 public class ColorChooserW extends FlowPanel implements ICustomColor {
 
@@ -89,7 +90,7 @@ public class ColorChooserW extends FlowPanel implements ICustomColor {
 		private List<GColor> palette;
 		private int width;
 		private int height;
-		private ImageElement checkMark;
+		private HTMLImageElement checkMark;
 		private int checkX;
 		private int checkY;
 		private boolean checkNeeded;
@@ -123,9 +124,9 @@ public class ColorChooserW extends FlowPanel implements ICustomColor {
 			setWidth(col * colorIconSize.getWidth() + padding);
 			setHeight(row * colorIconSize.getHeight() + padding);
 
-			checkMark = ImageElement.as(new Image(
-					AppResources.INSTANCE.color_chooser_check().getSafeUri())
-							.getElement());
+			checkMark = new HTMLImageElement();
+			checkMark.src = AppResources.INSTANCE.color_chooser_check().getSafeUri().asString();
+
 			final int checkSize = 12;
 			checkX = (colorIconSize.getWidth() - checkSize) / 2 + padding;
 			checkY = (colorIconSize.getHeight() - checkSize) / 2 + padding;

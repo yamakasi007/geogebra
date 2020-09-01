@@ -2,8 +2,9 @@ package org.geogebra.web.full.gui;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
+
+import elemental2.dom.HTMLImageElement;
 
 /**
  * Utility class for resizing Images
@@ -24,9 +25,10 @@ public class ImageResizer {
 	 *         case of no resize happened
 	 */
 	public static String resizeImage(String imgDataURL, int width, int height) {
-		Image image = new Image(imgDataURL);
-		int sWidth = image.getWidth();
-		int sHeight = image.getHeight();
+		HTMLImageElement image = new HTMLImageElement();
+		image.src = imgDataURL;
+		int sWidth = image.width;
+		int sHeight = image.height;
 		String dImgDataURL;
 
 		if (!(sWidth == width && sHeight == height)) {
@@ -35,8 +37,7 @@ public class ImageResizer {
 			canvasTmp.setCoordinateSpaceWidth(width);
 			canvasTmp.setCoordinateSpaceHeight(height);
 
-			ImageElement im = ImageElement.as(image.getElement());
-			context.drawImage(im, 0, 0, sWidth, sHeight, 0, 0, width, height);
+			context.drawImage(image, 0, 0, sWidth, sHeight, 0, 0, width, height);
 
 			dImgDataURL = canvasTmp.toDataUrl();
 		} else {

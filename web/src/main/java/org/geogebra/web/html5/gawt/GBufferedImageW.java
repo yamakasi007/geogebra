@@ -10,15 +10,16 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.ImageData;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.DOM;
+
+import elemental2.dom.HTMLImageElement;
 
 /**
  * Image that can be used for drawing.
  */
 public class GBufferedImageW implements GBufferedImage {
 	/** img element */
-	ImageElement img = null; // necessary
+	private HTMLImageElement img = null; // necessary
 
 	/** Canvas */
 	Canvas canv = null; // not necessary, but if present, this is the main one
@@ -104,7 +105,7 @@ public class GBufferedImageW implements GBufferedImage {
 	 * @param imageElement
 	 *            img element
 	 */
-	public GBufferedImageW(ImageElement imageElement) {
+	public GBufferedImageW(HTMLImageElement imageElement) {
 		if (imageElement != null) {
 			img = imageElement;
 		} else {
@@ -153,7 +154,7 @@ public class GBufferedImageW implements GBufferedImage {
 	@Override
 	public int getWidth() {
 		if (canv == null) {
-			return img.getWidth();
+			return img.width;
 		}
 		return canv.getCoordinateSpaceWidth();
 		// programmers should make sure that
@@ -163,7 +164,7 @@ public class GBufferedImageW implements GBufferedImage {
 	@Override
 	public int getHeight() {
 		if (canv == null) {
-			return img.getHeight();
+			return img.height;
 		}
 		return canv.getCoordinateSpaceHeight();
 	}
@@ -173,12 +174,12 @@ public class GBufferedImageW implements GBufferedImage {
 	 * 
 	 * @return image element
 	 */
-	public ImageElement getImageElement() {
+	public HTMLImageElement getImageElement() {
 		if (canv != null) {
-			img = ImageElement.as(DOM.createImg());
-			img.setWidth(canv.getCoordinateSpaceWidth());
-			img.setHeight(canv.getCoordinateSpaceHeight());
-			img.setSrc(canv.toDataUrl());
+			img = new HTMLImageElement();
+			img.width = canv.getCoordinateSpaceWidth();
+			img.height = canv.getCoordinateSpaceHeight();
+			img.src = canv.toDataUrl();
 		}
 		return img;
 	}
@@ -197,7 +198,7 @@ public class GBufferedImageW implements GBufferedImage {
 		if (canv != null) {
 			return new GBufferedImageW(canv);
 		}
-		return new GBufferedImageW((ImageElement) img.cloneNode(true));
+		return new GBufferedImageW((HTMLImageElement) img.cloneNode(true));
 	}
 
 	/**
@@ -207,8 +208,8 @@ public class GBufferedImageW implements GBufferedImage {
 		if (canv == null) {
 			canv = makeCanvas();
 			if (canv != null) {
-				canv.setCoordinateSpaceWidth(img.getWidth());
-				canv.setCoordinateSpaceHeight(img.getHeight());
+				canv.setCoordinateSpaceWidth(img.width);
+				canv.setCoordinateSpaceHeight(img.height);
 				canv.setWidth(getWidth() + "px");
 				canv.setHeight(getWidth() + "px");
 				Context2d c2d = canv.getContext2d();
@@ -226,7 +227,7 @@ public class GBufferedImageW implements GBufferedImage {
 	 * @return whether this is canvas or loaded img
 	 */
 	public boolean isLoaded() {
-		return img == null || img.getPropertyBoolean("complete");
+		return img == null || img.complete;
 	}
 
 	@Override
@@ -265,7 +266,7 @@ public class GBufferedImageW implements GBufferedImage {
 			Log.error("img null");
 			return null;
 		}
-		return img.getSrc();
+		return img.src;
 	}
 
 	/**

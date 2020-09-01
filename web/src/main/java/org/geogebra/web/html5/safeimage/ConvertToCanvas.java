@@ -2,12 +2,10 @@ package org.geogebra.web.html5.safeimage;
 
 import org.geogebra.common.util.FileExtensions;
 import org.geogebra.common.util.StringUtil;
-import org.geogebra.web.html5.util.ImageLoadCallback;
-import org.geogebra.web.html5.util.ImageWrapper;
 
 import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.user.client.ui.Image;
+
+import elemental2.dom.HTMLImageElement;
 
 public class ConvertToCanvas implements ImagePreprocessor {
 	private final Canvas canvas;
@@ -26,25 +24,22 @@ public class ConvertToCanvas implements ImagePreprocessor {
 
 	@Override
 	public void process(final ImageFile imageFile, final SafeImageProvider provider) {
-		final Image image = new Image();
+		HTMLImageElement image = new HTMLImageElement();
 
-		ImageWrapper.nativeon(image.getElement(), "load", new ImageLoadCallback() {
-			@Override
-			public void onLoad() {
-				drawImageToCanvas(image);
-				String fileName = StringUtil.changeFileExtension(imageFile.getFileName(),
-						FileExtensions.PNG);
+		image.addEventListener("load", (event) -> {
+			drawImageToCanvas(image);
+			String fileName = StringUtil.changeFileExtension(imageFile.getFileName(),
+					FileExtensions.PNG);
 
-				provider.onReady(new ImageFile(fileName, canvas.toDataUrl()));
-			}
+			provider.onReady(new ImageFile(fileName, canvas.toDataUrl()));
 		});
 
-		image.setUrl(imageFile.getContent());
+		image.src = imageFile.getContent();
 	}
 
-	private void drawImageToCanvas(Image image)  {
-		canvas.setCoordinateSpaceWidth(image.getWidth());
-		canvas.setCoordinateSpaceHeight(image.getHeight());
-		canvas.getContext2d().drawImage(ImageElement.as(image.getElement()), 0, 0);
+	private void drawImageToCanvas(HTMLImageElement image)  {
+		canvas.setCoordinateSpaceWidth(image.width);
+		canvas.setCoordinateSpaceHeight(image.height);
+		canvas.getContext2d().drawImage(image, 0, 0);
 	}
 }

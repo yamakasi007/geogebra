@@ -24,8 +24,6 @@ import org.geogebra.ggbjdk.java.awt.geom.Shape;
 import org.geogebra.web.html5.euclidian.GGraphics2DWI;
 import org.geogebra.web.html5.gawt.GBufferedImageW;
 import org.geogebra.web.html5.main.MyImageW;
-import org.geogebra.web.html5.util.ImageLoadCallback;
-import org.geogebra.web.html5.util.ImageWrapper;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CanvasPattern;
@@ -34,9 +32,7 @@ import com.google.gwt.canvas.dom.client.Context2d.Repetition;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayNumber;
-import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
 import com.himamis.retex.renderer.web.graphics.JLMContext2d;
 
 public class GGraphics2DW implements GGraphics2DWI {
@@ -362,19 +358,14 @@ public class GGraphics2DW implements GGraphics2DWI {
 					context.setFillStyle(ptr);
 					color = null;
 				} else {
-					ImageWrapper.nativeon(bi.getImageElement(), "load",
-					        new ImageLoadCallback() {
-						        @Override
-								public void onLoad() {
-							        currentPaint = new GTexturePaintW(
-							                (GTexturePaintW) paint);
-									CanvasPattern ptr1 = context.createPattern(
-							                bi.getImageElement(),
-							                Repetition.REPEAT);
-									context.setFillStyle(ptr1);
-							        color = null;
-						        }
-					        });
+					bi.getImageElement().addEventListener("load", (event) -> {
+							currentPaint = new GTexturePaintW(
+									(GTexturePaintW) paint);
+							CanvasPattern ptr1 = context.createPattern(
+									bi.getImageElement(), Repetition.REPEAT);
+							context.setFillStyle(ptr1);
+							color = null;
+					});
 				}
 			} catch (Throwable e) {
 				Log.error(e.getMessage());
@@ -923,38 +914,6 @@ public class GGraphics2DW implements GGraphics2DWI {
 			return fullSize;
 		}
 		return realSize;
-	}
-
-	/**
-	 * @param img
-	 *            image
-	 * @param x
-	 *            left offset
-	 * @param y
-	 *            top offset
-	 */
-	public void drawImage(ImageElement img, int x, int y) {
-		try {
-			context.drawImage(img, x, y);
-		} catch (Exception e) {
-			Log.error(e.getMessage());
-		}
-	}
-
-	/**
-	 * @param canvasImg
-	 *            canvas image
-	 * @param x
-	 *            left offset
-	 * @param y
-	 *            top offset
-	 */
-	public void drawImage(CanvasElement canvasImg, int x, int y) {
-		try {
-			context.drawImage(canvasImg, x, y);
-		} catch (Exception e) {
-			Log.error(e.getMessage());
-		}
 	}
 
 	@Override
