@@ -150,7 +150,7 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 					.setTop((height - splashHeight) / 2d, Unit.PX);
 			if (!geoGebraElement.isRTL()) {
 				splash.getElement().getStyle()
-						.setLeft((width - splashWidth) / 2d, Unit.PX);
+					.setLeft((width - splashWidth) / 2d, Unit.PX);
 			} else {
 				splash.getElement().getStyle()
 						.setRight((width - splashWidth) / 2d, Unit.PX);
