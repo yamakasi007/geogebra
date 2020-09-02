@@ -169,16 +169,18 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		ExpressionValue casInputArg = getDefinition().deepCopy(kernel)
 				.traverse(FunctionExpander.getCollector());
 		Command casInput = getCasInput(casInputArg);
-		String s = evaluateGeoGebraCAS(casInput.wrap());
+
+		MyArbitraryConstant constant = getArbitraryConstant();
+		constant.setSymbolic(!shouldBeEuclidianVisible(casInput));
+
+		String s = evaluateGeoGebraCAS(casInput.wrap(), constant);
 
 		if (Commands.Solve.name().equals(casInput.getName()) && GeoFunction.isUndefined(s)) {
 			getDefinition().getTopLevelCommand().setName(Commands.NSolve.name());
 			casInput = getCasInput(getDefinition().deepCopy(kernel)
 					.traverse(FunctionExpander.getCollector()));
-			s = evaluateGeoGebraCAS(casInput.wrap());
+			s = evaluateGeoGebraCAS(casInput.wrap(), constant);
 		}
-		MyArbitraryConstant constant = getArbitraryConstant();
-		constant.setSymbolic(!shouldBeEuclidianVisible(casInput));
 
 		this.casOutputString = s;
 		ExpressionValue casOutput = parseOutputString(s);
@@ -201,9 +203,9 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		return casInput;
 	}
 
-	private String evaluateGeoGebraCAS(ValidExpression exp) {
+	private String evaluateGeoGebraCAS(ValidExpression exp, MyArbitraryConstant constant) {
 		return kernel.getGeoGebraCAS().evaluateGeoGebraCAS(
-				exp, getArbitraryConstant(), StringTemplate.prefixedDefault, null, kernel);
+				exp, constant, StringTemplate.prefixedDefault, null, kernel);
 	}
 
 	private boolean shouldBeEuclidianVisible(Command input) {
