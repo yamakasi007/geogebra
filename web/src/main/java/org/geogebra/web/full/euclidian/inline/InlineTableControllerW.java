@@ -237,17 +237,6 @@ public class InlineTableControllerW implements InlineTableController {
 	}
 
 	@Override
-	public void setWrapping(String setting) {
-		tableImpl.setCellProperty("wrapping", setting);
-		table.updateRepaint();
-	}
-
-	@Override
-	public String getWrapping() {
-		return tableImpl.getCellProperty("wrapping");
-	}
-
-	@Override
 	public void setBorderThickness(int borderThickness) {
 		tableImpl.setBorderThickness(borderThickness);
 		table.updateRepaint();
@@ -274,6 +263,17 @@ public class InlineTableControllerW implements InlineTableController {
 			case "none": return BorderType.NONE;
 			default: return BorderType.ALL;
 		}
+	}
+
+	@Override
+	public void setWrapping(String setting) {
+		tableImpl.setCellProperty("wrapping", setting);
+		table.updateRepaint();
+	}
+
+	@Override
+	public String getWrapping() {
+		return tableImpl.getCellProperty("wrapping");
 	}
 
 	@Override
