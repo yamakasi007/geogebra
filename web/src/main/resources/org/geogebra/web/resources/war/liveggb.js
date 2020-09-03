@@ -230,11 +230,6 @@
                 } else if (last.type == "addImage") {
                     var file = JSON.parse(last.content);
                     target.api.addImage(file.fileName, file.fileContent);
-                } else if (last.type == "evalGMContent") {
-                    var gmApi = target.api.getEmbeddedCalculators()[last.label];
-                    if (gmApi) {
-                        gmApi.loadFromJSON(last.content);
-                    }
                 } else if (last.type == "addSlide"
                     || last.type == "removeSlide"
                     || last.type == "moveSlide"
@@ -248,6 +243,11 @@
                     target.api.previewRefresh();
                 } else if (last.type == "pasteSlide") {
                     target.api.handleSlideAction(last.type, last.content, last.label);
+                } else if (last.type == "evalGMContent") {
+                    var gmApi = target.api.getEmbeddedCalculators()[last.label];
+                    if (gmApi) {
+                        gmApi.loadFromJSON(last.content);
+                    }
                 }
             }
         };

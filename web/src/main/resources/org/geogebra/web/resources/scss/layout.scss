@@ -1,7 +1,10 @@
 @import 'colors';
 
 .GeoGebraFrame {
-	overflow: hidden;
+
+	&.appletStyle {
+		overflow: hidden;
+	}
 
 	div[data-title]:after {
 		opacity: 0;
