@@ -58,6 +58,14 @@ public class GeoInputBoxForComplexTest extends BaseUnitTest {
 	public void testImaginaryShouldRenderedAsRegularI() {
 		GeoInputBox inputBox = withComplexLinkedGeo();
 		assertEquals("3 + 2 \\; i", inputBox.getText());
+		assertEquals("3+2 i", inputBox.getTextForEditor());
+	}
+
+	@Test
+	public void testImaginaryShouldRenderedAsRegularIForFunctions() {
+		GeoInputBox inputBox = withLinkedGeo("f", "x + i");
+		assertEquals("x + i", inputBox.getText());
+		assertEquals("x+i", inputBox.getTextForEditor());
 	}
 
 	protected GeoInputBox withLinkedGeo(String definition, String label, String value) {
