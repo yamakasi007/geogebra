@@ -2,7 +2,6 @@ package org.geogebra.web.html5.util.h5pviewer;
 
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
-import org.geogebra.common.util.debug.Log;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
@@ -21,10 +20,9 @@ public class H5PWrapper {
 	public static final int BOTTOM_BAR = 48;
 	private final GeoEmbed geoEmbed;
 	public static final int SCALE = 3;
-	private Widget container;
 	private double initialHeight;
-	private double initialWidth;
 	private elemental2.dom.Element frame;
+	private double initialRatio;
 
 	/**
 	 *
@@ -53,19 +51,17 @@ public class H5PWrapper {
 	 * @param url to the H5P resource.
 	 */
 	public void render(Widget container, String url) {
-		this.container = container;
 		Element element = container.getElement();
 		H5P h5P = new H5P(Js.cast(element), url,
 						getOptions(), getDisplayOptions());
 		h5P.then(p -> {
-			initialWidth = container.getOffsetWidth();
+			double w = container.getOffsetWidth();
 			double h = container.getOffsetHeight() ;
-			double ratio = h / initialWidth;
-			initialHeight = SCALE * ratio * initialWidth + BOTTOM_BAR;
-			geoEmbed.setSize(SCALE * initialWidth, initialHeight);
+			initialRatio = h / w;
+			initialHeight = SCALE * initialRatio * w + BOTTOM_BAR;
+			geoEmbed.setSize(SCALE * w, initialHeight);
 			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
 			geoEmbed.updateRepaint();
-//			container.getParent().getElement().getStyle().clearHeight();
 			frame = Js.cast(element.getOwnerDocument().
 					getElementById("h5p-iframe-example"));
 			return null;
@@ -90,15 +86,9 @@ public class H5PWrapper {
 	}
 
 	public void update(int width, int height) {
-		double ratio = 1 / (initialWidth / width);
-		Log.debug("embed " + dim(width, height) + " container "
-			+ dim(container.getOffsetWidth(), initialHeight)
-		 + "ratio " + ratio);
-		frame.setAttribute("style", "transform-origin: 0 0;" +
-				"transform: scale(" + ratio +")");
-	}
-
-	private String dim(double width, double height) {
-		return width + " x " + height;
+		double h = width * initialRatio + BOTTOM_BAR;
+		double ratioY =1/(initialHeight / h);
+		frame.parentElement.setAttribute("style", "transform-origin: 0 0;" +
+				"transform: scale(1, " + ratioY +")");
 	}
 }
