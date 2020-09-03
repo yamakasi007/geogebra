@@ -208,8 +208,9 @@ public interface AppConfig {
 
 	/**
 	 * @return creates app specific parser functions
+	 * @param inputBox
 	 */
-	ParserFunctions createParserFunctions();
+	ParserFunctions createParserFunctions(boolean inputBox);
 
 	/**
 	 * @return true if it has 'ans' button in the AV.

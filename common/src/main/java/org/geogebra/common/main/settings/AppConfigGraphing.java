@@ -299,8 +299,8 @@ public class AppConfigGraphing implements AppConfig {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions() {
-		return ParserFunctionsFactory.createGraphingParserFunctions();
+	public ParserFunctions createParserFunctions(boolean inputBox) {
+		return ParserFunctionsFactory.createGraphingParserFunctions(inputBox);
 	}
 
 	@Override

@@ -23,8 +23,8 @@ public class ParserFunctionsFactory {
 	 *
 	 * @return parser functions
 	 */
-	public static ParserFunctions createParserFunctions() {
-		return createParserFunctions(true);
+	public static ParserFunctions createParserFunctions(boolean inputBox) {
+		return createParserFunctions(true, inputBox);
 	}
 
 	/**
@@ -32,15 +32,18 @@ public class ParserFunctionsFactory {
 	 *
 	 * @return parser functions
 	 */
-	public static ParserFunctions createGraphingParserFunctions() {
-		return createParserFunctions(false);
+	public static ParserFunctions createGraphingParserFunctions(boolean inputBox) {
+		return createParserFunctions(false, inputBox);
 	}
 
-	private static ParserFunctions createParserFunctions(boolean addExtra) {
+	private static ParserFunctions createParserFunctions(boolean addExtra, boolean inputBox) {
 		ParserFunctionsImpl parserFunctions = new ParserFunctionsImpl();
 		addFunctions(parserFunctions);
 		if (addExtra) {
 			addExtraFunctions(parserFunctions);
+		}
+		if (!inputBox) {
+			addFunctionsExcludedFromInputBox(parserFunctions);
 		}
 		addReservedFunctions(parserFunctions);
 		addTranslatable(parserFunctions);
@@ -79,27 +82,21 @@ public class ParserFunctionsFactory {
 		put(pf, 2, "atan2d", Operation.ARCTAN2D, "( <y>, <x> )");
 		put(pf, 2, "arctan2d", Operation.ARCTAN2D, "( <y>, <x> )");
 
-		put(pf, 1, "asin", Operation.ARCSIN);
 		put(pf, 1, "arsin", Operation.ARCSIN);
 		put(pf, 1, "arcsin", Operation.ARCSIN);
 
-		put(pf, 1, "acos", Operation.ARCCOS);
 		put(pf, 1, "arcos", Operation.ARCCOS);
 		put(pf, 1, "arccos", Operation.ARCCOS);
 
-		put(pf, 1, "atan", Operation.ARCTAN);
 		put(pf, 1, "artan", Operation.ARCTAN);
 		put(pf, 1, "arctan", Operation.ARCTAN);
 
-		put(pf, 1, "asinh", Operation.ASINH);
 		put(pf, 1, "arsinh", Operation.ASINH);
 		put(pf, 1, "arcsinh", Operation.ASINH);
 
-		put(pf, 1, "acosh", Operation.ACOSH);
 		put(pf, 1, "arcosh", Operation.ACOSH);
 		put(pf, 1, "arccosh", Operation.ACOSH);
 
-		put(pf, 1, "atanh", Operation.ATANH);
 		put(pf, 1, "artanh", Operation.ATANH);
 		put(pf, 1, "arctanh", Operation.ATANH);
 
@@ -202,6 +199,15 @@ public class ParserFunctionsFactory {
 	private static void addExtraFunctions(ParserFunctionsImpl pf) {
 		put2(pf, 1, "arg", Operation.ARG);
 		put2(pf, 1, "alt", Operation.ALT, "( (x, y, z) )");
+	}
+
+	private static void addFunctionsExcludedFromInputBox(ParserFunctionsImpl pf) {
+		put(pf, 1, "atanh", Operation.ATANH);
+		put(pf, 1, "acosh", Operation.ACOSH);
+		put(pf, 1, "asinh", Operation.ASINH);
+		put(pf, 1, "atan", Operation.ARCTAN);
+		put(pf, 1, "acos", Operation.ARCCOS);
+		put(pf, 1, "asin", Operation.ARCSIN);
 	}
 
 	private static void put(ParserFunctionsImpl pf, int size, String name,

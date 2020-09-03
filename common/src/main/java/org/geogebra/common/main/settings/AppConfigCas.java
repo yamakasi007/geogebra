@@ -125,8 +125,8 @@ public class AppConfigCas extends AppConfigGraphing {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions() {
-		return ParserFunctionsFactory.createParserFunctions();
+	public ParserFunctions createParserFunctions(boolean inputBox) {
+		return ParserFunctionsFactory.createParserFunctions(inputBox);
 	}
 
 	@Override
