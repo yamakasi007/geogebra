@@ -3740,7 +3740,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	@Override
 	final public String getXMLtypeString() {
 		// don't use getTypeString() as it's overridden
-		return StringUtil.toLowerCaseUS(getGeoClassType().xmlName);
+		return getGeoClassType().xmlName;
 	}
 
 	/**
@@ -5211,9 +5211,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 		return false;
 	}
 
-	/**
-	 * @return true for cartesian surfaces
-	 */
+	@Override
 	public boolean isGeoSurfaceCartesian() {
 		return false;
 	}
