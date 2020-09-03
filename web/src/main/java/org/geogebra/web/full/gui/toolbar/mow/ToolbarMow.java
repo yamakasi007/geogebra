@@ -9,6 +9,7 @@ import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.layout.panels.EuclidianDockPanelW;
 import org.geogebra.web.full.gui.pagecontrolpanel.PageListPanel;
+import org.geogebra.web.full.gui.toolbarpanel.MenuToggleButton;
 import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.gui.FastClickHandler;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
@@ -24,9 +25,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Toolbar for mow
- * 
- * @author csilla
- *
  */
 public class ToolbarMow extends FlowPanel
 		implements FastClickHandler, SetLabels {
@@ -43,6 +41,8 @@ public class ToolbarMow extends FlowPanel
 	protected StandardButton btnUndo;
 	/** redo button */
 	protected StandardButton btnRedo;
+	private MenuToggleButton btnMenu;
+	private FocusableWidget focusableMenuButton;
 	private PenSubMenu penPanel;
 	private ToolsSubMenu toolsPanel;
 	private MediaSubMenu mediaPanel;
@@ -99,6 +99,9 @@ public class ToolbarMow extends FlowPanel
 		toolbarPanel = new FlowPanel();
 		toolbarPanel.addStyleName("toolbarMowPanel");
 		add(toolbarPanel);
+		if (appW.getArticleElement().getDataParamShowMenuBar(false)) {
+			createMenuButton();
+		}
 		createUndoRedoButtons();
 		createPageControlButton();
 		createPanels();
@@ -225,9 +228,6 @@ public class ToolbarMow extends FlowPanel
 			toolbarPanelContent.removeStyleName("slideCenter");
 			toolbarPanelContent.removeStyleName("slideRight");
 			switch (tab) {
-			case PEN:
-				toolbarPanelContent.addStyleName("slideLeft");
-				break;
 			case TOOLS:
 				toolbarPanelContent.addStyleName("slideCenter");
 				break;
@@ -257,6 +257,10 @@ public class ToolbarMow extends FlowPanel
 			appW.getGuiManager().undo();
 		} else if (source == btnRedo) {
 			appW.getGuiManager().redo();
+		}
+		if ((source == btnRedo || source == btnUndo)
+			&& focusableMenuButton != null) {
+			appW.getAccessibilityManager().setAnchor(focusableMenuButton);
 		}
 		getFrame().deselectDragBtn();
 	}
@@ -302,8 +306,33 @@ public class ToolbarMow extends FlowPanel
 		btnRedo.addStyleName("flatButton");
 		btnRedo.addStyleName("buttonActive");
 		new FocusableWidget(AccessibilityGroup.REDO, null, btnRedo).attachTo(appW);
+		if (btnMenu != null) {
+			undoRedoPanel.add(btnMenu);
+			focusableMenuButton.attachTo(appW);
+		}
 		undoRedoPanel.add(btnUndo);
 		undoRedoPanel.add(btnRedo);
+	}
+
+	private void createMenuButton() {
+		btnMenu = new MenuToggleButton(appW);
+		btnMenu.addStyleName("flatButton");
+		btnMenu.addStyleName("buttonActive");
+		focusableMenuButton = new FocusableWidget(AccessibilityGroup.MENU, null, btnMenu);
+		markMenuAsExpanded(false);
+	}
+
+	/**
+	 * @param expanded
+	 *            whether menu is expanded
+	 */
+	public void markMenuAsExpanded(boolean expanded) {
+		if (btnMenu != null) {
+			btnMenu.getElement().setAttribute("aria-expanded",
+					String.valueOf(expanded));
+			btnMenu.getElement().removeAttribute("aria-pressed");
+			Dom.toggleClass(btnMenu, "selected", expanded);
+		}
 	}
 
 	/**

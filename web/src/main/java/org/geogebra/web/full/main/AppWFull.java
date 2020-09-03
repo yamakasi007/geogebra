@@ -1787,6 +1787,10 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 				toolbarPanel.markMenuAsExpanded(expanded);
 			}
 		}
+		ToolbarMow toolbarMow = frame.getToolbarMow();
+		if (toolbarMow != null) {
+			toolbarMow.markMenuAsExpanded(expanded);
+		}
 	}
 
 	@Override
