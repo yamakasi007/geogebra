@@ -208,7 +208,8 @@ public interface AppConfig {
 
 	/**
 	 * @return creates app specific parser functions
-	 * @param inputBox
+	 * @param inputBox whether or not to create the correct parser functions for
+	 * an input box
 	 */
 	ParserFunctions createParserFunctions(boolean inputBox);
 

@@ -114,7 +114,7 @@ public class InputTokenizerTest extends TokenizerBaseTest {
 	}
 
 	private void shouldBeSplitTo(String input, String... tokens) {
-		InputTokenizer tokenizer = new InputTokenizer(getKernel(), input);
+		InputTokenizer tokenizer = new InputTokenizer(getKernel(), getApp().getParserFunctions(), input);
 		assertEquals(Arrays.asList(tokens), getTokens(tokenizer));
 	}
 
