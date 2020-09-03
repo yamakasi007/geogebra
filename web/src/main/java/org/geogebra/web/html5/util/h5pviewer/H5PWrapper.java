@@ -2,7 +2,9 @@ package org.geogebra.web.html5.util.h5pviewer;
 
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
+import org.geogebra.common.util.debug.Log;
 
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
 import jsinterop.base.Js;
@@ -19,6 +21,10 @@ public class H5PWrapper {
 	public static final int BOTTOM_BAR = 48;
 	private final GeoEmbed geoEmbed;
 	public static final int SCALE = 3;
+	private Widget container;
+	private double initialHeight;
+	private double initialWidth;
+	private elemental2.dom.Element frame;
 
 	/**
 	 *
@@ -35,10 +41,9 @@ public class H5PWrapper {
 	 * Renders a predefined, example H5P content to the given container widget.
 	 *
 	 * @param container widget to render to.
-	 * @param geoEmbed associated with the example content.
 	 */
-	public static void render(Widget container, final GeoEmbed geoEmbed) {
-		render(container, DEFAULT_DATA, geoEmbed);
+	public void render(Widget container) {
+		render(container, DEFAULT_DATA);
 	}
 
 	/**
@@ -46,39 +51,54 @@ public class H5PWrapper {
 	 *
 	 * @param container widget to render to.
 	 * @param url to the H5P resource.
-	 * @param geoEmbed associated with the given H5P content.
 	 */
-	public static void render(Widget container, String url, final GeoEmbed geoEmbed) {
-		H5P h5P = new H5P(Js.cast(container.getElement()), url,
+	public void render(Widget container, String url) {
+		this.container = container;
+		Element element = container.getElement();
+		H5P h5P = new H5P(Js.cast(element), url,
 						getOptions(), getDisplayOptions());
 		h5P.then(p -> {
-			double w = container.getOffsetWidth() ;
+			initialWidth = container.getOffsetWidth();
 			double h = container.getOffsetHeight() ;
-			double ratio = h / w;
-			geoEmbed.setSize(SCALE * w, SCALE * ratio * w + BOTTOM_BAR);
+			double ratio = h / initialWidth;
+			initialHeight = SCALE * ratio * initialWidth + BOTTOM_BAR;
+			geoEmbed.setSize(SCALE * initialWidth, initialHeight);
 			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
 			geoEmbed.updateRepaint();
+//			container.getParent().getElement().getStyle().clearHeight();
+			frame = Js.cast(element.getOwnerDocument().
+					getElementById("h5p-iframe-example"));
 			return null;
 		});
 
 	}
 
-	private static JsPropertyMap<Object> getOptions() {
+	private JsPropertyMap<Object> getOptions() {
 		JsPropertyMap<Object> options = JsPropertyMap.of();
+		options.set("id", "example");
 		options.set("frameJs", "../public/h5p/frame.bundle.js");
 		options.set("frameCss", "../public/h5p/styles/h5p.css");
 		return options;
 	}
 
 	private static JsPropertyMap<Object> getDisplayOptions() {
-		JsPropertyMap<Object> displayOptions = JsPropertyMap.of();
-//		displayOptions.set("frame", true);
-//		displayOptions.set("embed", false);
-//		displayOptions.set("download", false);
-		return displayOptions;
+		return JsPropertyMap.of();
 	}
 
 	public GeoEmbed getGeoEmbed() {
 		return geoEmbed;
+	}
+
+	public void update(int width, int height) {
+		double ratio = 1 / (initialWidth / width);
+		Log.debug("embed " + dim(width, height) + " container "
+			+ dim(container.getOffsetWidth(), initialHeight)
+		 + "ratio " + ratio);
+		frame.setAttribute("style", "transform-origin: 0 0;" +
+				"transform: scale(" + ratio +")");
+	}
+
+	private String dim(double width, double height) {
+		return width + " x " + height;
 	}
 }
