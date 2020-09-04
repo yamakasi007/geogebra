@@ -1,5 +1,6 @@
 package org.geogebra.web.html5.util.h5pviewer;
 
+import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
 
@@ -24,6 +25,8 @@ public class H5PWrapper {
 	private double initialHeight;
 	private elemental2.dom.Element frame;
 	private double initialRatio;
+	private EuclidianController euclidianController;
+	private boolean firstUpdate;
 
 	/**
 	 *
@@ -33,8 +36,11 @@ public class H5PWrapper {
 	public H5PWrapper(App app, int embedId) {
 		geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
 		this.embedId = embedId;
+		euclidianController = geoEmbed.getApp().getActiveEuclidianView().getEuclidianController();
+
 		geoEmbed.setEmbedId(embedId);
 		geoEmbed.setAppName("h5p");
+		firstUpdate = true;
 	}
 
 	/**
@@ -100,10 +106,18 @@ public class H5PWrapper {
 	 * @param width of the resized embed
 	 */
 	public void update(int width) {
+		ensureStylebarFirstPosition();
 		double h = width * initialRatio + BOTTOM_BAR;
 		double ratioY = 1 / (initialHeight / h);
 
 		frame.parentElement.setAttribute("style", scale(ratioY));
+	}
+
+	protected void ensureStylebarFirstPosition() {
+		if (firstUpdate) {
+			euclidianController.showDynamicStylebar();
+			firstUpdate = false;
+		}
 	}
 
 	private String scale(double ratio) {
