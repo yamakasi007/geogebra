@@ -644,11 +644,10 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param expanded
-	 *            whether menu is open
+	 * @return menu button widget
 	 */
-	public void markMenuAsExpanded(boolean expanded) {
-		header.markMenuAsExpanded(expanded);
+	public Widget getMenuButton() {
+		return header.getMenuButton();
 	}
 
 	/**

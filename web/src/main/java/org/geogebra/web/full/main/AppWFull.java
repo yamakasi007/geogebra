@@ -1780,16 +1780,37 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	}
 
 	private void updateMenuBtnStatus(boolean expanded) {
+		Widget menuBtn = null;
+
 		if (getGuiManager() != null) {
 			ToolbarPanel toolbarPanel = getGuiManager()
 					.getUnbundledToolbar();
 			if (toolbarPanel != null) {
-				toolbarPanel.markMenuAsExpanded(expanded);
+				menuBtn = toolbarPanel.getMenuButton();
 			}
 		}
+
 		ToolbarMow toolbarMow = frame.getToolbarMow();
 		if (toolbarMow != null) {
-			toolbarMow.markMenuAsExpanded(expanded);
+			menuBtn = toolbarMow.getMenuButton();
+		}
+
+		markMenuAsExpanded(menuBtn, expanded);
+	}
+
+	/**
+	 *
+	 * @param btnMenu
+	 * 			  menu button
+	 * @param expanded
+	 *            whether menu is expanded
+	 */
+	public void markMenuAsExpanded(Widget btnMenu, boolean expanded) {
+		if (btnMenu != null) {
+			btnMenu.getElement().setAttribute("aria-expanded",
+					String.valueOf(expanded));
+			btnMenu.getElement().removeAttribute("aria-pressed");
+			Dom.toggleClass(btnMenu, "selected", expanded);
 		}
 	}
 

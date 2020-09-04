@@ -5,10 +5,10 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.io.layout.DockPanelData.TabIds;
 import org.geogebra.common.io.layout.PerspectiveDecoder;
-import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.exam.ExamLogAndExitDialog;
 import org.geogebra.web.full.gui.menubar.FileMenuW;
+import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.gui.FastClickHandler;
 import org.geogebra.web.html5.gui.util.AriaHelper;
 import org.geogebra.web.html5.gui.util.ClickStartHandler;
@@ -454,23 +454,17 @@ class Header extends FlowPanel implements KeyDownHandler {
 	}
 
 	/**
-	 * @param expanded
-	 *            whether menu is expanded
+	 * @return menu button
 	 */
-	public void markMenuAsExpanded(boolean expanded) {
-		if (btnMenu != null) {
-			btnMenu.getElement().setAttribute("aria-expanded",
-					String.valueOf(expanded));
-			btnMenu.getElement().removeAttribute("aria-pressed");
-			Dom.toggleClass(btnMenu, "selected", expanded);
-		}
+	public Widget getMenuButton() {
+		return btnMenu;
 	}
 
 	private void createMenuButton() {
 		btnMenu = new MenuToggleButton(app);
 		focusableMenuButton = new FocusableWidget(AccessibilityGroup.MENU, null, btnMenu);
 		updateMenuPosition();
-		markMenuAsExpanded(false);
+		((AppWFull) app).markMenuAsExpanded(btnMenu, false);
 	}
 
 	private void updateMenuPosition() {
@@ -492,15 +486,11 @@ class Header extends FlowPanel implements KeyDownHandler {
 	}
 
 	private void addShareButton() {
-		GlobalHeader.INSTANCE.initShareButton(new AsyncOperation<Widget>() {
-
-			@Override
-			public void callback(Widget share) {
-				if (app.isMenuShowing()) {
-					app.toggleMenu();
-				}
-				FileMenuW.share(app, share);
+		GlobalHeader.INSTANCE.initShareButton(share -> {
+			if (app.isMenuShowing()) {
+				app.toggleMenu();
 			}
+			FileMenuW.share(app, share);
 		});
 	}
 

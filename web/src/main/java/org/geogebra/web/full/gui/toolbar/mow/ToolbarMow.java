@@ -319,20 +319,14 @@ public class ToolbarMow extends FlowPanel
 		btnMenu.addStyleName("flatButton");
 		btnMenu.addStyleName("buttonActive");
 		focusableMenuButton = new FocusableWidget(AccessibilityGroup.MENU, null, btnMenu);
-		markMenuAsExpanded(false);
+		((AppWFull) appW).markMenuAsExpanded(btnMenu, false);
 	}
 
 	/**
-	 * @param expanded
-	 *            whether menu is expanded
+	 * @return menu button
 	 */
-	public void markMenuAsExpanded(boolean expanded) {
-		if (btnMenu != null) {
-			btnMenu.getElement().setAttribute("aria-expanded",
-					String.valueOf(expanded));
-			btnMenu.getElement().removeAttribute("aria-pressed");
-			Dom.toggleClass(btnMenu, "selected", expanded);
-		}
+	public Widget getMenuButton() {
+		return btnMenu;
 	}
 
 	/**
