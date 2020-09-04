@@ -3,7 +3,7 @@ package org.geogebra.web.html5.util.h5pviewer;
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
 
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
 import jsinterop.base.Js;
@@ -19,6 +19,7 @@ public class H5PWrapper {
 	public static final String DEFAULT_DATA = "http://tafel.dlb-dev01.alp-dlg.net/public/data/h5p";
 	public static final int BOTTOM_BAR = 48;
 	private final GeoEmbed geoEmbed;
+	private final int embedId;
 	public static final int SCALE = 3;
 	private double initialHeight;
 	private elemental2.dom.Element frame;
@@ -31,6 +32,7 @@ public class H5PWrapper {
 	 */
 	public H5PWrapper(App app, int embedId) {
 		geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
+		this.embedId = embedId;
 		geoEmbed.setEmbedId(embedId);
 		geoEmbed.setAppName("h5p");
 	}
@@ -52,6 +54,10 @@ public class H5PWrapper {
 	 */
 	public void render(Widget container, String url) {
 		Element element = container.getElement();
+		if (element == null) {
+			return;
+		}
+
 		H5P h5P = new H5P(Js.cast(element), url,
 						getOptions(), getDisplayOptions());
 		h5P.then(p -> {
@@ -62,16 +68,15 @@ public class H5PWrapper {
 			geoEmbed.setSize(SCALE * w, initialHeight);
 			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
 			geoEmbed.updateRepaint();
-			frame = Js.cast(element.getOwnerDocument().
-					getElementById("h5p-iframe-example"));
+			frame = Js.cast(element.getOwnerDocument()
+					.getElementById("h5p-iframe-embed" + embedId));
 			return null;
 		});
-
 	}
 
 	private JsPropertyMap<Object> getOptions() {
 		JsPropertyMap<Object> options = JsPropertyMap.of();
-		options.set("id", "example");
+		options.set("id", "embed" + embedId);
 		options.set("frameJs", "../public/h5p/frame.bundle.js");
 		options.set("frameCss", "../public/h5p/styles/h5p.css");
 		return options;
@@ -81,14 +86,30 @@ public class H5PWrapper {
 		return JsPropertyMap.of();
 	}
 
+	/**
+	 *
+	 * @return embed associated with the H5P content.
+	 */
 	public GeoEmbed getGeoEmbed() {
 		return geoEmbed;
 	}
 
-	public void update(int width, int height) {
+	/**
+	 * Updates embed size keeping aspect ratio
+	 *
+	 * @param width of the resized embed
+	 */
+	public void update(int width) {
 		double h = width * initialRatio + BOTTOM_BAR;
-		double ratioY =1/(initialHeight / h);
-		frame.parentElement.setAttribute("style", "transform-origin: 0 0;" +
-				"transform: scale(1, " + ratioY +")");
+		double ratioY = 1 / (initialHeight / h);
+
+		frame.parentElement.setAttribute("style", scale(ratioY));
+	}
+
+	private String scale(double ratio) {
+		return "transform-origin: 0 0;"
+				+ "transform: scale(1, "
+				+ ratio
+				+ ");";
 	}
 }

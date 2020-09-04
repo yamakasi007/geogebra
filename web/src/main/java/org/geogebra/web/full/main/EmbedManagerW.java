@@ -71,7 +71,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private int counter;
 	private HashMap<Integer, String> content = new HashMap<>();
 	private HashMap<Integer, String> base64 = new HashMap<>();
-	private H5PWrapper h5p;
+	private HashMap<Integer, H5PWrapper> h5pContent = new HashMap<>();
 
 	/**
 	 * @param app
@@ -104,8 +104,9 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	}
 
 	private void addHP5Viewer(DrawEmbed drawEmbed) {
-		FlowPanel container = createH5PContainer(drawEmbed.getEmbedID());
-		h5p.render(container);
+		int embedID = drawEmbed.getEmbedID();
+		FlowPanel container = createH5PContainer(embedID);
+		h5pContent.get(embedID).render(container);
 		addWidgetToCache(drawEmbed, container);
 	}
 
@@ -301,7 +302,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 			int contentHeight = drawEmbed.getGeoEmbed().getContentHeight();
 			embedElement.setSize(contentWidth, contentHeight);
 			if ("h5p".equals(drawEmbed.getGeoEmbed().getAppName())) {
-				h5p.update(contentWidth, contentHeight);
+				h5pContent.get(drawEmbed.getEmbedID()).update(contentWidth);
 			}
 		}
 	}
@@ -538,7 +539,9 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 
 	@Override
 	public void openH5PTool() {
-		this.h5p = new H5PWrapper(app, nextID());
+		int embedId = nextID();
+		H5PWrapper h5p = new H5PWrapper(app, embedId);
+		h5pContent.put(embedId, h5p);
 		showAndSelect(h5p.getGeoEmbed());
 	}
 
