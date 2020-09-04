@@ -147,4 +147,9 @@ class ParserFunctionsImpl implements ParserFunctions {
 		}
 		return op;
 	}
+
+	@Override
+	public void addTrigShorthandFunctions() {
+		ParserFunctionsFactory.addFunctionsExcludedFromInputBox(this);
+	}
 }

@@ -16,7 +16,7 @@ public class ParserFunctionsFactoryTest {
 
 	@Test
 	public void testDefaultParserFunctions() {
-		ParserFunctions functions = ParserFunctionsFactory.createParserFunctions(false);
+		ParserFunctions functions = ParserFunctionsFactory.createParserFunctions();
 		Assert.assertEquals(functions.get("sin", 1), Operation.SIN);
 		Assert.assertEquals(functions.get("alt", 1), Operation.ALT);
 		Assert.assertEquals(functions.get("arg", 1), Operation.ARG);

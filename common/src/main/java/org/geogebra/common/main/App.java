@@ -2934,8 +2934,9 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public ParserFunctions getParserFunctions(boolean inputBox) {
 		if (pf == null) {
-			pf = getConfig().createParserFunctions(false);
-			pfInputBox = getConfig().createParserFunctions(true);
+			pf = getConfig().createParserFunctions();
+			pf.addTrigShorthandFunctions();
+			pfInputBox = getConfig().createParserFunctions();
 		}
 		pf.setInverseTrig(
 				kernel.getLoadingMode() && kernel.getInverseTrigReturnsAngle());

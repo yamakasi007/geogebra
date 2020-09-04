@@ -23,8 +23,8 @@ public class ParserFunctionsFactory {
 	 *
 	 * @return parser functions
 	 */
-	public static ParserFunctions createParserFunctions(boolean inputBox) {
-		return createParserFunctions(true, inputBox);
+	public static ParserFunctions createParserFunctions() {
+		return createParserFunctions(true);
 	}
 
 	/**
@@ -32,19 +32,17 @@ public class ParserFunctionsFactory {
 	 *
 	 * @return parser functions
 	 */
-	public static ParserFunctions createGraphingParserFunctions(boolean inputBox) {
-		return createParserFunctions(false, inputBox);
+	public static ParserFunctions createGraphingParserFunctions() {
+		return createParserFunctions(false);
 	}
 
-	private static ParserFunctions createParserFunctions(boolean addExtra, boolean inputBox) {
+	private static ParserFunctions createParserFunctions(boolean addExtra) {
 		ParserFunctionsImpl parserFunctions = new ParserFunctionsImpl();
 		addFunctions(parserFunctions);
 		if (addExtra) {
 			addExtraFunctions(parserFunctions);
 		}
-		if (!inputBox) {
-			addFunctionsExcludedFromInputBox(parserFunctions);
-		}
+
 		addReservedFunctions(parserFunctions);
 		addTranslatable(parserFunctions);
 
@@ -201,7 +199,7 @@ public class ParserFunctionsFactory {
 		put2(pf, 1, "alt", Operation.ALT, "( (x, y, z) )");
 	}
 
-	private static void addFunctionsExcludedFromInputBox(ParserFunctionsImpl pf) {
+	static void addFunctionsExcludedFromInputBox(ParserFunctionsImpl pf) {
 		put(pf, 1, "atanh", Operation.ATANH);
 		put(pf, 1, "acosh", Operation.ACOSH);
 		put(pf, 1, "asinh", Operation.ASINH);

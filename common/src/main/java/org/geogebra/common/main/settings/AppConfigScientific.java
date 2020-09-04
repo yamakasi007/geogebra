@@ -142,8 +142,8 @@ public class AppConfigScientific extends AppConfigGraphing {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions(boolean inputBox) {
-		return ParserFunctionsFactory.createParserFunctions(inputBox);
+	public ParserFunctions createParserFunctions() {
+		return ParserFunctionsFactory.createParserFunctions();
 	}
 
 	@Override
