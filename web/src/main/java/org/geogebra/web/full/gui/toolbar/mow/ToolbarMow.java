@@ -99,7 +99,8 @@ public class ToolbarMow extends FlowPanel
 		toolbarPanel = new FlowPanel();
 		toolbarPanel.addStyleName("toolbarMowPanel");
 		add(toolbarPanel);
-		if (appW.getArticleElement().getDataParamShowMenuBar(false)) {
+		if (appW.isApplet()
+				&& appW.getArticleElement().getDataParamShowMenuBar(false)) {
 			createMenuButton();
 		}
 		createUndoRedoButtons();
