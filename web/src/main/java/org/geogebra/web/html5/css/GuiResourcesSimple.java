@@ -24,6 +24,9 @@ public interface GuiResourcesSimple extends ClientBundle {
 	@Source("org/geogebra/web/resources/js/canvas2pdf_min.js")
 	TextResource canvas2Pdf();
 
+	@Source("org/geogebra/web/resources/js/h5p.bundle.js")
+	TextResource h5pViewerJs();
+
 	@Source("org/geogebra/web/resources/js/xmlutil.js")
 	TextResource xmlUtil();
 
