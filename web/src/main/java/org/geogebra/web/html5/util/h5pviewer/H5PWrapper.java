@@ -17,7 +17,7 @@ import jsinterop.base.JsPropertyMap;
  */
 public class H5PWrapper {
 
-	public static final String DEFAULT_DATA = "http://tafel.dlb-dev01.alp-dlg.net/public/data/h5p";
+	public static final String DEFAULT_DATA = "../public/data/h5p";
 	public static final int BOTTOM_BAR = 48;
 	private final GeoEmbed geoEmbed;
 	private final int embedId;

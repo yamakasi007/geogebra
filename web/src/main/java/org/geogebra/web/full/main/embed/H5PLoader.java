@@ -15,8 +15,7 @@ import com.google.gwt.dom.client.ScriptElement;
 public class H5PLoader {
 	public static final H5PLoader INSTANCE = new H5PLoader();
 	private boolean loadingStarted;
-	private static final String H5PJS = "http://tafel.dlb-dev01.alp-dlg.net/laszlo/public/h5p/" +
-			"main.bundle.js";
+	private static final String H5PJS = "../public/h5p/main.bundle.js";
 
 	public void load() {
 		if (loadingStarted) {
