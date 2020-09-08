@@ -22,7 +22,7 @@ public class H5PEmbedElement extends EmbedElement{
 	private elemental2.dom.Element frame;
 	private double initialRatio;
 	private final EuclidianController euclidianController;
-	private boolean firstUpdate;
+	private boolean firstUpdate=true;
 
 	/**
 	 * @param widget UI widget
@@ -87,7 +87,6 @@ public class H5PEmbedElement extends EmbedElement{
 		resizeKeepingAspectRatio(contentWidth);
 	}
 
-
 	private void resizeKeepingAspectRatio(int width) {
 		ensureStylebarFirstPosition();
 		double h = width * initialRatio + BOTTOM_BAR;
@@ -102,12 +101,4 @@ public class H5PEmbedElement extends EmbedElement{
 			firstUpdate = false;
 		}
 	}
-
-	private String scale(double ratio) {
-		return "transform-origin: 0 0;"
-				+ "transform: scale(1, "
-				+ ratio
-				+ ");";
-	}
-
 }
