@@ -290,19 +290,37 @@ public class Browser {
 	 *            origin y-coord in %
 	 */
 	public static void scale(Element parent, double externalScale, int x, int y) {
-		if (externalScale < 0 || parent == null) {
+
+	}
+
+	/**
+	 * @param parent
+	 *            element to be scaled
+	 * @param scaleX
+	 *            scale in x direction
+	 * @param scaleY
+	 *            scale in y direction
+	 * @param x
+	 *            origin x-coord in %
+	 * @param y
+	 *            origin y-coord in %
+	 */
+	public static void scale(Element parent, double scaleX, double scaleY, int x, int y) {
+		if (scaleX < 0 || scaleY < 0 || parent == null) {
 			return;
 		}
 
 		if (isSafariByVendor()) {
-			zoom(parent, externalScale);
+			zoom(parent, scaleX);
 			return;
 		}
 
-		String transform = "scale(" + externalScale + ")";
+		String transform = scaleX == scaleY
+				? "scale(" + scaleX + ")"
+				: "scale(" + scaleX + ", " + scaleY +")";
 		parent.addClassName("ggbTransform");
 
-		if (DoubleUtil.isEqual(externalScale, 1)) {
+		if (DoubleUtil.isEqual(scaleX, 1)) {
 			transform = "none";
 		}
 		String pos = x + "% " + y + "%";

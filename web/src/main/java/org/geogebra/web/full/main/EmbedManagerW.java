@@ -35,6 +35,7 @@ import org.geogebra.web.full.html5.Sandbox;
 import org.geogebra.web.full.main.embed.CalcEmbedElement;
 import org.geogebra.web.full.main.embed.EmbedElement;
 import org.geogebra.web.full.main.embed.GraspableEmbedElement;
+import org.geogebra.web.full.main.embed.H5PEmbedElement;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.MyImageW;
 import org.geogebra.web.html5.main.ScriptManagerW;
@@ -42,7 +43,7 @@ import org.geogebra.web.html5.util.AppletParameters;
 import org.geogebra.web.html5.util.Dom;
 import org.geogebra.web.html5.util.GeoGebraElement;
 import org.geogebra.web.html5.util.ImageManagerW;
-import org.geogebra.web.html5.util.h5pviewer.H5PWrapper;
+import org.geogebra.web.html5.util.h5pviewer.H5PPaths;
 import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -72,7 +73,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private int counter;
 	private HashMap<Integer, String> content = new HashMap<>();
 	private HashMap<Integer, String> base64 = new HashMap<>();
-	private HashMap<Integer, H5PWrapper> h5pContent = new HashMap<>();
+	private HashMap<Integer, EmbedElement> h5pEmbeds = new HashMap<>();
 
 	/**
 	 * @param app
@@ -107,8 +108,8 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private void addHP5Viewer(DrawEmbed drawEmbed) {
 		int embedID = drawEmbed.getEmbedID();
 		FlowPanel container = createH5PContainer(embedID);
-		h5pContent.get(embedID).render(container);
 		addWidgetToCache(drawEmbed, container);
+		h5pEmbeds.get(embedID).setContent(H5PPaths.SAMPLE_CONTENT);
 	}
 
 	@Override
@@ -225,17 +226,28 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 
 		EmbedElement old = cache.get(drawEmbed.getEmbedID());
 		if (old == null) {
-			EmbedElement value = drawEmbed.getGeoEmbed().isGraspableMath()
-					? new GraspableEmbedElement(parentPanel, this)
-					: new EmbedElement(parentPanel);
-			widgets.put(drawEmbed, value);
-			value.addListeners(drawEmbed.getEmbedID());
+			EmbedElement embed = createEmbedElement(drawEmbed, parentPanel);
+			widgets.put(drawEmbed, embed);
+			embed.addListeners(drawEmbed.getEmbedID());
 		} else {
 			old.setVisible(true);
 			widgets.put(drawEmbed, old);
 			cache.remove(drawEmbed.getEmbedID());
 			// the cached widget is in correct state
 			content.remove(drawEmbed.getEmbedID());
+		}
+	}
+
+	private EmbedElement createEmbedElement(DrawEmbed drawEmbed, Widget parentPanel) {
+		GeoEmbed geoEmbed = drawEmbed.getGeoEmbed();
+		if (geoEmbed.isGraspableMath()) {
+			return new GraspableEmbedElement(parentPanel, this);
+		} else if (geoEmbed.isH5P()) {
+			H5PEmbedElement h5PEmbed = new H5PEmbedElement(parentPanel, geoEmbed);
+			h5pEmbeds.put(geoEmbed.getEmbedID(), h5PEmbed);
+			return h5PEmbed;
+		} else {
+			return new EmbedElement(parentPanel);
 		}
 	}
 
@@ -304,7 +316,8 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 			int contentHeight = drawEmbed.getGeoEmbed().getContentHeight();
 			embedElement.setSize(contentWidth, contentHeight);
 			if ("h5p".equals(drawEmbed.getGeoEmbed().getAppName())) {
-				h5pContent.get(drawEmbed.getEmbedID()).update(contentWidth);
+				h5pEmbeds.get(drawEmbed.getEmbedID())
+						.setSize(contentWidth, contentHeight);
 			}
 		}
 	}
@@ -542,9 +555,10 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	@Override
 	public void openH5PTool() {
 		int embedId = nextID();
-		H5PWrapper h5p = new H5PWrapper(app, embedId);
-		h5pContent.put(embedId, h5p);
-		showAndSelect(h5p.getGeoEmbed());
+		GeoEmbed geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
+		geoEmbed.setEmbedId(embedId);
+		geoEmbed.setAppName("h5p");
+		showAndSelect(geoEmbed);
 	}
 
 	@Override

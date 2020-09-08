@@ -8,8 +8,7 @@ import jsinterop.base.JsPropertyMap;
 
 @JsType(isNative = true, namespace = "H5PStandalone")
 final public class H5P {
-
- 	@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	public H5P(Element element, String location,
 			JsPropertyMap<Object> options, JsPropertyMap<Object> displayOptions) {
 		// leave empty
