@@ -4,7 +4,6 @@ import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.gui.toolbar.ToolBar;
 import org.geogebra.common.main.Feature;
-import org.geogebra.web.full.main.embed.H5PLoader;
 import org.geogebra.web.html5.main.AppW;
 
 /**
@@ -28,11 +27,6 @@ public class MediaSubMenu extends SubMenuPanel {
 		super.createContentPanel();
 		boolean graspableMath = app.getVendorSettings().isGraspableMathEnabled();
 		boolean h5p = app.getVendorSettings().isH5PEnabled();
-		if (h5p) {
-			// TODO: move this to the chooser dialog if it will be implemented.
-			H5PLoader.INSTANCE.load();
-//			JavaScriptInjector.inject(GuiResourcesSimple.INSTANCE.h5pViewerJs());
-		}
 		super.createPanelRow(ToolBar.getMOWMediaToolBarDefString(graspableMath, h5p));
 		makeButtonsAccessible(AccessibilityGroup.NOTES_TOOL_MEDIA);
 	}

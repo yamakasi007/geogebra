@@ -317,7 +317,7 @@ public class Browser {
 
 		String transform = scaleX == scaleY
 				? "scale(" + scaleX + ")"
-				: "scale(" + scaleX + ", " + scaleY +")";
+				: "scale(" + scaleX + ", " + scaleY + ")";
 		parent.addClassName("ggbTransform");
 
 		if (DoubleUtil.isEqual(scaleX, 1)) {

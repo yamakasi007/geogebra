@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
 
-public class H5PEmbedElement extends EmbedElement{
+public class H5PEmbedElement extends EmbedElement {
 	private final Widget widget;
 	private final GeoEmbed geoEmbed;
 	public static final int BOTTOM_BAR = 48;
@@ -22,7 +22,8 @@ public class H5PEmbedElement extends EmbedElement{
 	private elemental2.dom.Element frame;
 	private double initialRatio;
 	private final EuclidianController euclidianController;
-	private boolean firstUpdate=true;
+	private boolean firstUpdate = true;
+	private String url;
 
 	/**
 	 * @param widget UI widget
@@ -33,15 +34,20 @@ public class H5PEmbedElement extends EmbedElement{
 		this.geoEmbed = geoEmbed;
 		embedId = geoEmbed.getEmbedID();
 		euclidianController = geoEmbed.getApp().getActiveEuclidianView().getEuclidianController();
+		load();
 	}
 
 	@Override
 	public void setContent(String url) {
-		render(widget, url);
+		this.url = url;
+
+		if (H5PLoader.isLoaded()) {
+			render();
+		}
 	}
 
-	private void render(Widget container, String url) {
-		Element element = container.getElement();
+	private void render() {
+		Element element = widget.getElement();
 		if (element == null) {
 			return;
 		}
@@ -49,8 +55,8 @@ public class H5PEmbedElement extends EmbedElement{
 		H5P h5P = new H5P(Js.cast(element), url,
 				getOptions(), getDisplayOptions());
 		h5P.then(p -> {
-			double w = container.getOffsetWidth();
-			double h = container.getOffsetHeight() ;
+			double w = widget.getOffsetWidth();
+			double h = widget.getOffsetHeight() ;
 			initialRatio = h / w;
 			initialHeight = SCALE * initialRatio * w + BOTTOM_BAR;
 			geoEmbed.setSize(SCALE * w, initialHeight);
@@ -100,5 +106,12 @@ public class H5PEmbedElement extends EmbedElement{
 			euclidianController.showDynamicStylebar();
 			firstUpdate = false;
 		}
+	}
+
+	private void load() {
+		if (H5PLoader.isLoaded()) {
+			return;
+		}
+		H5PLoader.INSTANCE.load(this::render);
 	}
 }
