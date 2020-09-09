@@ -94,6 +94,8 @@ public class SymbolicEditorD extends SymbolicEditor {
 		setInputBox(geoInputBox);
 		getDrawInputBox().setEditing(true);
 
+		mathField.getInternal().setType(getGeoInputBox().isSerifFont()
+				? TeXFont.SERIF	:  TeXFont.SANSSERIF);
 		mathField.getInternal().parse(getGeoInputBox().getTextForEditor());
 		mathField.setBounds(GRectangleD.getAWTRectangle(bounds));
 		mathField.getInternal().setSize(geoInputBox.getFontSizeMultiplier()
