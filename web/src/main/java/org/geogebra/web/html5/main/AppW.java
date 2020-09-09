@@ -520,7 +520,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 * inits factories
 	 */
 	protected void initFactories() {
-
 		if (FormatFactory.getPrototype() == null) {
 			FormatFactory.setPrototypeIfNull(new FormatFactoryW());
 		}
@@ -531,10 +530,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 		if (StringUtil.getPrototype() == null) {
 			StringUtil.setPrototypeIfNull(new StringUtil());
-		}
-
-		if (!CASFactory.isInitialized()) {
-			CASFactory.setPrototype((CASFactory) GWT.create(CASFactory.class));
 		}
 
 		if (UtilFactory.getPrototype() == null) {
