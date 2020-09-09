@@ -280,7 +280,8 @@ public class DrawInputBox extends CanvasDrawable {
 	}
 
 	private void updateStyle(AutoCompleteTextField tf) {
-		textFont = getTextFont(tf.getText(), geoInputBox.isSerifFont());
+		textFont = getTextFont(tf.getText(), geoInputBox.isSerifFont()
+				&& geoInputBox.isSymbolicMode());
 
 		tf.setFont(textFont);
 

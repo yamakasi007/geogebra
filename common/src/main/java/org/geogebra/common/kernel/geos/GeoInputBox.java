@@ -444,7 +444,7 @@ public class GeoInputBox extends GeoButton implements HasSymbolicMode, HasAlignm
 
 	@Override
 	public boolean isSerifFont() {
-		return super.isSerifFont() && isSymbolicMode();
+		return super.isSerifFont();
 	}
 
 	/**
