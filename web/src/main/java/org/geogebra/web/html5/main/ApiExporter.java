@@ -345,127 +345,111 @@ public class ApiExporter {
 		return ggbAPI.getCommandString(objName + "", localizedB);
 	}
 
-	public String getCaption(String objName, subst) {
-		return ggbAPI.getCaption(Ljava/lang/String;Z)(objName + "", Js.asBoolean(subst));
-	};
+	public String getCaption(String objName, Object subst) {
+		return ggbAPI.getCaption(objName + "", Js.asBoolean(subst));
+	}
 
-	public String setCaption(String objName, caption) {
-		ggbAPI.setCaption(Ljava/lang/String;Ljava/lang/String;)(objName + "", caption + "");
-	};
+	public void setCaption(String objName, String caption) {
+		ggbAPI.setCaption(objName + "", caption + "");
+	}
 
-	public String getXcoord(String objName) {
+	public double getXcoord(String objName) {
 		return ggbAPI.getXcoord(objName + "");
-	};
+	}
 
-	public String getYcoord(String objName) {
+	public double getYcoord(String objName) {
 		return ggbAPI.getYcoord(objName + "");
-	};
+	}
 
-	public String getZcoord(String objName) {
+	public double getZcoord(String objName) {
 		return ggbAPI.getZcoord(objName + "");
-	};
+	}
 
-	public String setCoords(String objName, x, y, z) {
-		if (typeof z === 'undefined') {
-			ggbAPI.setCoords(Ljava/lang/String;DD)(objName + "",x,y);
+	public void setCoords(String objName, double x, double y, double z) {
+		if ("undefined".equals(Js.typeof(z))) {
+			ggbAPI.setCoords(objName + "", x, y);
 		} else {
-			ggbAPI.setCoords(Ljava/lang/String;DDD)(objName + "",x,y,z);
+			ggbAPI.setCoords(objName + "", x, y, z);
 		}
-	};
+	}
 
-	public String getValue(String objName) {
+	public double getValue(String objName) {
 		return ggbAPI.getValue(objName + "");
-	};
+	}
 
 	public String getVersion() {
-		return ggbAPI.getVersion()();
-	};
+		return ggbAPI.getVersion();
+	}
 
-	public String getScreenshotBase64(callback) {
-		ggbAPI.getScreenshotBase64(Lcom/google/gwt/core/client/JavaScriptObject;)(callback);
-	};
+	public void getScreenshotBase64(JavaScriptObject callback) {
+		ggbAPI.getScreenshotBase64(callback);
+	}
 
 	public String getThumbnailBase64() {
-		return ggbAPI.getThumbnailBase64()();
-	};
+		return ggbAPI.getThumbnailBase64();
+	}
 
-	public String setValue(String objName, x) {
+	public void setValue(String objName, Object x) {
 		// #4035
 		// need to support possible syntax error
 		// eg setValue("a","3") rather than setValue("a",3)
-		if (typeof x === "string") {
-			if (x === "true") {
-				x = true;
-			} else if (x === "false") {
-				x = false;
-			} else {
-				// force string -> number (might give NaN)
-				x = x * 1;
-			}
+
+		double value;
+		if ("true".equals(x)) {
+			value = 1;
+		} else if ("false".equals(x)) {
+			value = 0;
+		} else {
+			// force string -> number (might give NaN)
+			value = Js.asDouble(x);
 		}
 
-		if (typeof x !== "number" && typeof x !== "boolean") {
-			// avoid possible strange effects
-			return;
-		}
-		ggbAPI.setValue(Ljava/lang/String;D)(objName + "",x);
+		ggbAPI.setValue(objName + "", value);
 	};
 
-	public String setTextValue(String objName, x) {
+	public void setTextValue(String objName, String x) {
+		ggbAPI.setTextValue(objName + "", x + "");
+	}
 
-		x = x + "";
-
-		if (typeof objName !== "string") {
-			// avoid possible strange effects
-			return;
-		}
-		ggbAPI.setTextValue(Ljava/lang/String;Ljava/lang/String;)(objName + "",x);
-	};
-
-	public String setListValue(String objName, x, y) {
+	public void setListValue(String objName, Object x, Object y) {
 		// #4035
 		// need to support possible syntax error
-		if (typeof x === "string") {
-			if (x === "true") {
-				x = 1;
-			} else if (x === "false") {
-				x = 0;
-			} else {
-				// force string -> number (might give NaN)
-				x = x * 1;
-			}
-		}
-
-		if (typeof y === "string") {
-			if (y === "true") {
-				y = 1;
-			} else if (y === "false") {
-				y = 0;
-			} else {
-				// force string -> number (might give NaN)
-				y = y * 1;
-			}
-		}
-
-		if (typeof x !== "number" || typeof y !== "number") {
-			// avoid possible strange effects
-			return;
-		}
-		ggbAPI.setListValue(Ljava/lang/String;DD)(objName + "",x,y);
-	};
-
-	public String setRepaintingActive(flag) {
-		ggbAPI.setRepaintingActive(Z)(Js.asBoolean(flag));
-	};
-
-	public String setCoordSystem(xmin, xmax, ymin, ymax, zmin, zmax,
-			verticalY) {
-		if (typeof zmin !== "number") {
-			ggbAPI.setCoordSystem(DDDD)(xmin,xmax,ymin,ymax);
+		double xValue;
+		if ("true".equals(x)) {
+			xValue = 1;
+		} else if ("false".equals(x)) {
+			xValue = 0;
 		} else {
-			ggbAPI.setCoordSystem(DDDDDDZ)(xmin,xmax,ymin,ymax,zmin,zmax, Js.asBoolean(verticalY));
+			// force string -> number (might give NaN)
+			xValue = Js.asDouble(x);
 		}
-	};
+
+		double yValue;
+		if ("true".equals(y)) {
+			yValue = 1;
+		} else if ("false".equals(y)) {
+			yValue = 0;
+		} else {
+			// force string -> number (might give NaN)
+			yValue = Js.asDouble(y);
+		}
+
+		ggbAPI.setListValue(objName + "", xValue, yValue);
+	}
+
+	public void setRepaintingActive(Object flag) {
+		ggbAPI.setRepaintingActive(Js.asBoolean(flag));
+	}
+
+	public void setCoordSystem(double xmin, double xmax, double ymin, double ymax, Object zmin,
+			Object zmax, Object verticalY) {
+		if (!"number".equals(Js.typeof(zmin))) {
+			ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
+		} else {
+			ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax, Js.asDouble(zmin), Js.asDouble(zmax),
+					Js.asBoolean(verticalY));
+		}
+	}
 
 	public String setAxesVisible(arg1, arg2, arg3, arg4) {
 		if (typeof arg3 === "undefined") {
