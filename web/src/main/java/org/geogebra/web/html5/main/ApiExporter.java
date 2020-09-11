@@ -1,7 +1,9 @@
 package org.geogebra.web.html5.main;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
 
+import elemental2.core.Global;
 import elemental2.promise.Promise;
 import jsinterop.annotations.JsType;
 import jsinterop.base.Js;
@@ -20,6 +22,10 @@ public class ApiExporter {
 
 	private static boolean isUndefined(Object o) {
 		return "undefined".equals(Js.typeof(o));
+	}
+
+	private static double doubleOrDefault(Object o, double def) {
+		return Js.isTruthy(o) ? Js.coerceToDouble(o) : def;
 	}
 
 	public String getXML(String objName) {
@@ -46,7 +52,7 @@ public class ApiExporter {
 			return ggbAPI.getBase64(true);
 		}
 		if (Js.isTruthy(param2)) {
-			ggbAPI.getBase64(Js.asBoolean(param1), param2);
+			ggbAPI.getBase64(Js.isTruthy(param1), param2);
 		} else if (Js.isTruthy(param1)) {
 			ggbAPI.getBase64(false, param1);
 		} else {
@@ -65,7 +71,7 @@ public class ApiExporter {
 	};
 
 	public void login(String token, Object ui) {
-		ggbAPI.login(token  + "", Js.asBoolean(ui));
+		ggbAPI.login(token  + "", Js.isTruthy(ui));
 	}
 
 	public void logout() {
@@ -114,14 +120,14 @@ public class ApiExporter {
 
 	public void setFixed(String objName, Object flag, Object selection) {
 		if (isUndefined(selection)) {
-			ggbAPI.setFixed(objName + "", Js.asBoolean(flag));
+			ggbAPI.setFixed(objName + "", Js.isTruthy(flag));
 		} else {
-			ggbAPI.setFixed(objName + "", Js.asBoolean(flag), Js.asBoolean(selection));
+			ggbAPI.setFixed(objName + "", Js.isTruthy(flag), Js.isTruthy(selection));
 		}
 	};
 
 	public void setOnTheFlyPointCreationActive(Object flag) {
-		ggbAPI.setOnTheFlyPointCreationActive(Js.asBoolean(flag));
+		ggbAPI.setOnTheFlyPointCreationActive(Js.isTruthy(flag));
 	}
 
 	public void setUndoPoint() {
@@ -141,7 +147,7 @@ public class ApiExporter {
 	};
 
 	public void setErrorDialogsActive(Object flag) {
-		ggbAPI.setErrorDialogsActive(Js.asBoolean(flag));
+		ggbAPI.setErrorDialogsActive(Js.isTruthy(flag));
 	}
 
 	public void reset() {//TODO: implement this in Desktop and Web
@@ -153,12 +159,12 @@ public class ApiExporter {
 	}
 
 	public void setVisible(String objName, Object visible) {
-		ggbAPI.setVisible(objName + "", Js.asBoolean(visible));
+		ggbAPI.setVisible(objName + "", Js.isTruthy(visible));
 	}
 
 	public boolean getVisible(String objName, Object view) {
 		if (!isUndefined(view)) {
-			return ggbAPI.getVisible(objName + "", Js.asInt(view));
+			return ggbAPI.getVisible(objName + "", Js.coerceToInt(view));
 		}
 		return ggbAPI.getVisible(objName + "");
 	};
@@ -172,11 +178,11 @@ public class ApiExporter {
 	}
 
 	public void setLayerVisible(int layer, Object visible) {
-		ggbAPI.setLayerVisible(layer, Js.asBoolean(visible));
+		ggbAPI.setLayerVisible(layer, Js.isTruthy(visible));
 	}
 
 	public void setTrace(String objName, Object flag) {
-		ggbAPI.setTrace(objName + "", Js.asBoolean(flag));
+		ggbAPI.setTrace(objName + "", Js.isTruthy(flag));
 	}
 
 	public boolean isTracing(String objName) {
@@ -184,7 +190,7 @@ public class ApiExporter {
 	}
 
 	public void setLabelVisible(String objName, Object visible) {
-		ggbAPI.setLabelVisible(objName + "", Js.asBoolean(visible));
+		ggbAPI.setLabelVisible(objName + "", Js.isTruthy(visible));
 	}
 
 	public void setLabelStyle(String objName, int style) {
@@ -279,7 +285,7 @@ public class ApiExporter {
 	}
 
 	public void setAnimating(String objName, Object animate) {
-		ggbAPI.setAnimating(objName + "", Js.asBoolean(animate));
+		ggbAPI.setAnimating(objName + "", Js.isTruthy(animate));
 	}
 
 	public void setAnimationSpeed(String objName, double speed) {
@@ -295,11 +301,11 @@ public class ApiExporter {
 	}
 
 	public void setAuxiliary(String objName, Object auxiliary) {
-		ggbAPI.setAuxiliary(objName + "", Js.asBoolean(auxiliary));
+		ggbAPI.setAuxiliary(objName + "", Js.isTruthy(auxiliary));
 	}
 
 	public void hideCursorWhenDragging(Object hideCursorWhenDragging) {
-		ggbAPI.hideCursorWhenDragging(Js.asBoolean(hideCursorWhenDragging));
+		ggbAPI.hideCursorWhenDragging(Js.isTruthy(hideCursorWhenDragging));
 	}
 
 	public boolean isAnimationRunning() {
@@ -311,7 +317,7 @@ public class ApiExporter {
 	}
 
 	public boolean renameObject(String oldName, String newName, Object force) {
-		return ggbAPI.renameObject(oldName + "",newName + "", Js.asBoolean(force));
+		return ggbAPI.renameObject(oldName + "",newName + "", Js.isTruthy(force));
 	}
 
 	public boolean exists(String objName) {
@@ -323,7 +329,7 @@ public class ApiExporter {
 	}
 
 	public String getValueString(String objName, Object localized) {
-		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.isTruthy(localized);
 		return ggbAPI.getValueString(objName + "", localizedB);
 	}
 
@@ -332,7 +338,7 @@ public class ApiExporter {
 	}
 
 	public String getDefinitionString(String objName, Object localized) {
-		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.isTruthy(localized);
 		return ggbAPI.getDefinitionString(objName + "",  localizedB);
 	}
 
@@ -341,16 +347,16 @@ public class ApiExporter {
 	}
 
 	public String getLaTeXBase64(String objName, Object value) {
-		return ggbAPI.getLaTeXBase64(objName + "", Js.asBoolean(value));
+		return ggbAPI.getLaTeXBase64(objName + "", Js.isTruthy(value));
 	}
 
 	public String getCommandString(String objName, Object localized) {
-		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.isTruthy(localized);
 		return ggbAPI.getCommandString(objName + "", localizedB);
 	}
 
 	public String getCaption(String objName, Object subst) {
-		return ggbAPI.getCaption(objName + "", Js.asBoolean(subst));
+		return ggbAPI.getCaption(objName + "", Js.isTruthy(subst));
 	}
 
 	public void setCaption(String objName, String caption) {
@@ -442,7 +448,7 @@ public class ApiExporter {
 	}
 
 	public void setRepaintingActive(Object flag) {
-		ggbAPI.setRepaintingActive(Js.asBoolean(flag));
+		ggbAPI.setRepaintingActive(Js.isTruthy(flag));
 	}
 
 	public void setCoordSystem(double xmin, double xmax, double ymin, double ymax, Object zmin,
@@ -451,16 +457,16 @@ public class ApiExporter {
 			ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
 		} else {
 			ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax, Js.asDouble(zmin), Js.asDouble(zmax),
-					Js.asBoolean(verticalY));
+					Js.isTruthy(verticalY));
 		}
 	}
 
 	public void setAxesVisible(Object arg1, Object arg2, Object arg3, Object arg4) {
 		if (isUndefined(arg3)) {
-			ggbAPI.setAxesVisible(Js.asBoolean(arg1), Js.asBoolean(arg2));
+			ggbAPI.setAxesVisible(Js.isTruthy(arg1), Js.isTruthy(arg2));
 		} else {
-			ggbAPI.setAxesVisible(Js.asInt(arg1), Js.asBoolean(arg2), Js.asBoolean(arg3),
-					Js.asBoolean(arg4));
+			ggbAPI.setAxesVisible(Js.coerceToInt(arg1), Js.isTruthy(arg2), Js.isTruthy(arg3),
+					Js.isTruthy(arg4));
 		}
 	}
 
@@ -477,18 +483,18 @@ public class ApiExporter {
 	}
 
 	public String[] getAxisUnits(Object arg1) {
-		return ggbAPI.getAxisUnits(Js.asInt(arg1));
+		return ggbAPI.getAxisUnits(Js.coerceToInt(arg1));
 	}
 
 	public String[] getAxisLabels(Object arg1) {
-		return ggbAPI.getAxisLabels(Js.asInt(arg1));
+		return ggbAPI.getAxisLabels(Js.coerceToInt(arg1));
 	}
 
 	public void setPointCapture(int view, Object capture) {
 		if (isUndefined(capture)) {
 			ggbAPI.setPointCapture(1, view);
 		} else {
-			ggbAPI.setPointCapture(view, Js.asInt(capture));
+			ggbAPI.setPointCapture(view, Js.coerceToInt(capture));
 		}
 	}
 
@@ -496,15 +502,15 @@ public class ApiExporter {
 		if (isUndefined(view)) {
 			return ggbAPI.getGridVisible(1);
 		} else {
-			return ggbAPI.getGridVisible(Js.asInt(view));
+			return ggbAPI.getGridVisible(Js.coerceToInt(view));
 		}
 	}
 
 	public void setGridVisible(Object arg1, Object arg2) {
 		if (isUndefined(arg2)) {
-			ggbAPI.setGridVisible(Js.asBoolean(arg1));
+			ggbAPI.setGridVisible(Js.isTruthy(arg1));
 		} else {
-			ggbAPI.setGridVisible(Js.asInt(arg1), Js.asBoolean(arg2));
+			ggbAPI.setGridVisible(Js.coerceToInt(arg1), Js.isTruthy(arg2));
 		}
 	}
 
@@ -545,11 +551,11 @@ public class ApiExporter {
 	}
 
 	public void undo(Object repaint) {
-		ggbAPI.undo(Js.asBoolean(repaint));
+		ggbAPI.undo(Js.isTruthy(repaint));
 	}
 
 	public void redo(Object repaint) {
-		ggbAPI.redo(Js.asBoolean(repaint));
+		ggbAPI.redo(Js.isTruthy(repaint));
 	}
 
 	public void newConstruction() {
@@ -573,19 +579,19 @@ public class ApiExporter {
 	}
 
 	public void enableRightClick(Object enable) {
-		ggbAPI.enableRightClick(Js.asBoolean(enable));
+		ggbAPI.enableRightClick(Js.isTruthy(enable));
 	}
 
 	public void enableLabelDrags(Object enable) {
-		ggbAPI.enableLabelDrags(Js.asBoolean(enable));
+		ggbAPI.enableLabelDrags(Js.isTruthy(enable));
 	};
 
 	public void enableShiftDragZoom(Object enable) {
-		ggbAPI.enableShiftDragZoom(Js.asBoolean(enable));
+		ggbAPI.enableShiftDragZoom(Js.isTruthy(enable));
 	};
 
 	public void showToolBar(Object show) {
-		ggbAPI.showToolBar(Js.asBoolean(show));
+		ggbAPI.showToolBar(Js.isTruthy(show));
 	};
 
 	public void setCustomToolBar(String toolbarDef) {
@@ -593,15 +599,15 @@ public class ApiExporter {
 	};
 
 	public void showMenuBar(Object show) {
-		ggbAPI.showMenuBar(Js.asBoolean(show));
+		ggbAPI.showMenuBar(Js.isTruthy(show));
 	};
 
 	public void showAlgebraInput(Object show) {
-		ggbAPI.showAlgebraInput(Js.asBoolean(show));
+		ggbAPI.showAlgebraInput(Js.isTruthy(show));
 	};
 
 	public void showResetIcon(Object show) {
-		ggbAPI.showResetIcon(Js.asBoolean(show));
+		ggbAPI.showResetIcon(Js.isTruthy(show));
 	}
 
 	public String getViewProperties(int view) {
@@ -609,8 +615,8 @@ public class ApiExporter {
 	}
 
 	public void setFont(String label, int size, Object bold, Object italic, Object serif) {
-		ggbAPI.setFont(label + "", size, Js.asBoolean(bold), Js.asBoolean(italic),
-				Js.asBoolean(serif));
+		ggbAPI.setFont(label + "", size, Js.isTruthy(bold), Js.isTruthy(italic),
+				Js.isTruthy(serif));
 	}
 
 	public String insertImage(String url, String corner1, String corner2, String corner4) {
@@ -638,27 +644,27 @@ public class ApiExporter {
 	}
 
 	public void enableCAS(Object enable) {
-		ggbAPI.enableCAS(Js.asBoolean(enable));
+		ggbAPI.enableCAS(Js.isTruthy(enable));
 	}
 
 	public void enable3D(Object enable) {
-		ggbAPI.enable3D(Js.asBoolean(enable));
+		ggbAPI.enable3D(Js.isTruthy(enable));
 	}
 
 	public String getPNGBase64(double exportScale, Object transparent, double dpi,
 			Object copyToClipboard, Object greyscale) {
-		return ggbAPI.getPNGBase64(exportScale, Js.asBoolean(transparent), dpi,
-				Js.asBoolean(copyToClipboard), Js.asBoolean(greyscale));
+		return ggbAPI.getPNGBase64(exportScale, Js.isTruthy(transparent), dpi,
+				Js.isTruthy(copyToClipboard), Js.isTruthy(greyscale));
 	};
 
 	public void exportGIF(String sliderLabel, double scale, double timeBetweenFrames,
 			Object isLoop, String filename, Object rotate) {
-		ggbAPI.exportGIF(sliderLabel, scale, timeBetweenFrames, Js.asBoolean(isLoop),
-				filename, Js.asInt(rotate));
+		ggbAPI.exportGIF(sliderLabel, scale, timeBetweenFrames, Js.isTruthy(isLoop),
+				filename, Js.coerceToInt(rotate));
 	}
 
 	public JavaScriptObject getFileJSON(Object thumbnail) {
-		return ggbAPI.getFileJSON(Js.asBoolean(thumbnail));
+		return ggbAPI.getFileJSON(Js.isTruthy(thumbnail));
 	}
 
 	public void setFileJSON(Object zip) {
@@ -697,8 +703,8 @@ public class ApiExporter {
 
 	public boolean writePNGtoFile(String filename, double exportScale, Object transparent,
 			double DPI, Object greyscale) {
-		return ggbAPI.writePNGtoFile(filename + "", exportScale, Js.asBoolean(transparent),
-				DPI, Js.asBoolean(greyscale));
+		return ggbAPI.writePNGtoFile(filename + "", exportScale, Js.isTruthy(transparent),
+				DPI, Js.isTruthy(greyscale));
 	}
 
 	public void exportPGF(JavaScriptObject callback) {
@@ -709,211 +715,199 @@ public class ApiExporter {
 		return ggbAPI.exportSVG(filename + "");
 	}
 
-	public String exportPDF(scale, filename, sliderLabel) {
-		return ggbAPI.exportPDF(DLjava/lang/String;Ljava/lang/String;)(scale | 1, filename, sliderLabel);
+	public String exportPDF(Object scale, String filename, String sliderLabel) {
+		return ggbAPI.exportPDF(Js.coerceToDouble(scale), filename, sliderLabel);
 	}
 
-	public String exportPSTricks(callback) {
-		return ggbAPI.exportPSTricks(Lcom/google/gwt/core/client/JavaScriptObject;)(callback);
-	};
+	public void exportPSTricks(JavaScriptObject callback) {
+		ggbAPI.exportPSTricks(callback);
+	}
 
-	public String exportAsymptote(callback) {
-		return ggbAPI.exportAsymptote(Lcom/google/gwt/core/client/JavaScriptObject;)(callback);
-	};
+	public void exportAsymptote(JavaScriptObject callback) {
+		ggbAPI.exportAsymptote(callback);
+	}
 
-	public String setRounding(digits) {
-		return ggbAPI.setRounding(digits + "");
-	};
+	public void setRounding(String digits) {
+		ggbAPI.setRounding(digits + "");
+	}
 
 	public String getRounding() {
-		return ggbAPI.getRounding()();
-	};
-
-	public String copyTextToClipboard(text) {
-		return ggbAPI.copyTextToClipboard(text + "");
-	};
-
-	public String evalLaTeX(text,mode) {
-		return ggbAPI.evalLaTeX(text + "", mode);
-	};
-
-	public String evalMathML(text) {
-		return ggbAPI.evalMathML(text + "");
-	};
-
-	public String getScreenReaderOutput(text) {
-		return ggbAPI.getScreenReaderOutput(text + "");
-	};
-
-	public String getEditorState() {
-		return ggbAPI.getEditorState()();
-	};
-
-	public String setEditorState(state, label) {
-		var stateString = typeof state == "string" ? state : JSON.stringify(state);
-		ggbAPI.setEditorState(Ljava/lang/String;Ljava/lang/String;)(stateString, label || "");
-	};
-
-	public String exportCollada(xmin, xmax, ymin, ymax, zmin, zmax,
-				xyScale, xzScale, xTickDistance, yTickDistance, zTickDistance) {
-		return ggbAPI.exportCollada(DDDDDDDDDDD)(
-			xmin || -5, xmax || 5, ymin || -5, ymax || 5, zmin || -5, zmax || 5, xyScale || 1,
-			xzScale || 1, xTickDistance || -1, yTickDistance || -1, zTickDistance || -1);
-	};
-
-	public String exportSimple3d(name, xmin, xmax, ymin, ymax, zmin, zmax,
-				xyScale, xzScale, xTickDistance, yTickDistance, zTickDistance) {
-		return ggbAPI.exportSimple3d(Ljava/lang/String;DDDDDDDDDDD)(
-			name + "", xmin, xmax, ymin, ymax, zmin, zmax, xyScale,
-			xzScale, xTickDistance, yTickDistance, zTickDistance);
-	};
-
-	public String translate(arg1, callback) {
-		return ggbAPI.translate(arg1 + "", callback);
-	};
-
-	public String exportConstruction(flags) {
-		return ggbAPI.exportConstruction(Lcom/google/gwt/core/client/JsArrayString;)(flags || ["color","name","definition","value"]);
-	};
-
-	public String getConstructionSteps(breakpoints) {
-		return ggbAPI.getConstructionSteps(Js.asBoolean(breakpoints));
-	};
-
-	public String setConstructionStep(n, breakpoints) {
-		ggbAPI.setConstructionStep(DZ)(n, Js.asBoolean(breakpoints));
-	};
-
-	public String previousConstructionStep() {
-		ggbAPI.previousConstructionStep()();
-	};
-
-	public String nextConstructionStep() {
-		ggbAPI.nextConstructionStep()();
-	};
-
-	public String getEmbeddedCalculators() {
-		return ggbAPI.getEmbeddedCalculators()();
-	};
-
-	public String getFrame(){
-		return ggbAPI.getFrame()();
+		return ggbAPI.getRounding();
 	}
 
-	public String enableFpsMeasurement() {
-		ggbAPI.enableFpsMeasurement()();
-	};
+	public void copyTextToClipboard(String text) {
+		ggbAPI.copyTextToClipboard(text + "");
+	}
 
-	public String disableFpsMeasurement() {
-		ggbAPI.disableFpsMeasurement()();
-	};
+	public void evalLaTeX(String text, int mode) {
+		ggbAPI.evalLaTeX(text + "", mode);
+	}
 
-	public String testDraw() {
-		ggbAPI.testDraw()();
-	};
+	public boolean evalMathML(String text) {
+		return ggbAPI.evalMathML(text + "");
+	}
 
-	public String startDrawRecording() {
-		ggbAPI.startDrawRecording()();
-	};
+	public String getScreenReaderOutput(String text) {
+		return ggbAPI.getScreenReaderOutput(text + "");
+	}
 
-	public String endDrawRecordingAndLogResults() {
-		ggbAPI.endDrawRecordingAndLogResults()();
-	};
-}
+	public String getEditorState() {
+		return ggbAPI.getEditorState();
+	}
 
-/**
- * @param api
- *            exported object
- * @param ggbAPI
- *            internal API
- * @param getId
- *            listener to ID mapping
- */
-protected final native void addClientListener(JavaScriptObject api,
-		GgbAPIW ggbAPI, JavaScriptObject getId) /*-{
-	public String registerClientListener(JSFunctionName) {
+	public void setEditorState(Object state, String label) {
+		String stateString = "string".equals(Js.typeof(state)) ? Js.asString(state)
+				: Global.JSON.stringify(state);
+		ggbAPI.setEditorState(stateString, label);
+	}
+
+	public String exportCollada(Object xmin, Object xmax, Object ymin, Object ymax, Object zmin,
+			Object zmax, Object xyScale, Object xzScale, Object xTickDistance,
+			Object yTickDistance, Object zTickDistance) {
+		return ggbAPI.exportCollada(doubleOrDefault(xmin, -5), doubleOrDefault(xmax, 5),
+				doubleOrDefault(ymin, -5), doubleOrDefault(ymax, 5),
+				doubleOrDefault(zmin, -5), doubleOrDefault(zmax, 5),
+				doubleOrDefault(xyScale, 1), doubleOrDefault(xzScale, 1),
+				doubleOrDefault(xTickDistance, -1), doubleOrDefault(yTickDistance, -1),
+				doubleOrDefault(zTickDistance, -1));
+	}
+
+	public String exportSimple3d(String name, double xmin, double xmax, double ymin, double ymax,
+			double zmin, double zmax, double xyScale, double xzScale, double xTickDistance,
+			double yTickDistance, double zTickDistance) {
+		return ggbAPI.exportSimple3d(
+			name + "", xmin, xmax, ymin, ymax, zmin, zmax, xyScale,
+			xzScale, xTickDistance, yTickDistance, zTickDistance);
+	}
+
+	public String translate(String arg1, JavaScriptObject callback) {
+		return ggbAPI.translate(arg1 + "", callback);
+	}
+
+	public String exportConstruction(String[] flags) {
+		if (Js.isTruthy(flags)) {
+			return ggbAPI.exportConstruction(flags);
+		} else {
+			return ggbAPI.exportConstruction("color", "name", "definition", "value");
+		}
+	}
+
+	public double getConstructionSteps(Object breakpoints) {
+		return ggbAPI.getConstructionSteps(Js.isTruthy(breakpoints));
+	}
+
+	public void setConstructionStep(double n, Object breakpoints) {
+		ggbAPI.setConstructionStep(n, Js.isTruthy(breakpoints));
+	}
+
+	public void previousConstructionStep() {
+		ggbAPI.previousConstructionStep();
+	}
+
+	public void nextConstructionStep() {
+		ggbAPI.nextConstructionStep();
+	}
+
+	public JavaScriptObject getEmbeddedCalculators() {
+		return ggbAPI.getEmbeddedCalculators();
+	}
+
+	public Element getFrame(){
+		return ggbAPI.getFrame();
+	}
+
+	public void enableFpsMeasurement() {
+		ggbAPI.enableFpsMeasurement();
+	}
+
+	public void disableFpsMeasurement() {
+		ggbAPI.disableFpsMeasurement();
+	}
+
+	public void testDraw() {
+		ggbAPI.testDraw();
+	}
+
+	public void startDrawRecording() {
+		ggbAPI.startDrawRecording();
+	}
+
+	public void endDrawRecordingAndLogResults() {
+		ggbAPI.endDrawRecordingAndLogResults();
+	}
+
+	public void registerClientListener(JSFunctionName) {
 		ggbAPI.registerClientListener(getId(JSFunctionName));
-	};
-}-*/;
+	}
 
-/**
- * Adds client listeners for specific events (add, update, click, ...)
- */
-private native void addSpecificListenerFunctionsNative(JavaScriptObject api,
-		GgbAPIW ggbAPI, JavaScriptObject listenerMappingFunction) /*-{
-	var getId = listenerMappingFunction;
-
-	public String registerAddListener(JSFunctionName) {
+	public void registerAddListener(JSFunctionName) {
 		ggbAPI.registerAddListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerStoreUndoListener(JSFunctionName) {
+	public void registerStoreUndoListener(JSFunctionName) {
 		ggbAPI.registerStoreUndoListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterAddListener(JSFunctionName) {
+	public void unregisterAddListener(JSFunctionName) {
 		ggbAPI.unregisterAddListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerRemoveListener(JSFunctionName) {
+	public void registerRemoveListener(JSFunctionName) {
 		ggbAPI.registerRemoveListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterRemoveListener(JSFunctionName) {
+	public void unregisterRemoveListener(JSFunctionName) {
 		ggbAPI.unregisterRemoveListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerClearListener(JSFunctionName) {
+	public void registerClearListener(JSFunctionName) {
 		ggbAPI.registerClearListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterClearListener(JSFunctionName) {
+	public void unregisterClearListener(JSFunctionName) {
 		ggbAPI.unregisterClearListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerRenameListener(JSFunctionName) {
+	public void registerRenameListener(JSFunctionName) {
 		ggbAPI.registerRenameListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterRenameListener(JSFunctionName) {
+	public void unregisterRenameListener(JSFunctionName) {
 		ggbAPI.registerRenameListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerUpdateListener(JSFunctionName) {
+	public void registerUpdateListener(JSFunctionName) {
 		ggbAPI.registerUpdateListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterUpdateListener(JSFunctionName) {
+	public void unregisterUpdateListener(JSFunctionName) {
 		ggbAPI.unregisterUpdateListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterClientListener(JSFunctionName) {
+	public void unregisterClientListener(JSFunctionName) {
 		ggbAPI.unregisterClientListener(getId(JSFunctionName));
-	};
+	}
 
-	public String registerObjectUpdateListener(String objName, JSFunctionName) {
+	public void registerObjectUpdateListener(String objName, JSFunctionName) {
 		ggbAPI.registerObjectUpdateListener(Ljava/lang/String;Ljava/lang/String;)(objname + "", getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterObjectUpdateListener(JSFunctionName) {
+	public void unregisterObjectUpdateListener(JSFunctionName) {
 		ggbAPI.unregisterObjectUpdateListener(getId(JSFunctionName));
 	};
-
-	public String registerObjectClickListener(String objName, JSFunctionName) {
+	public void registerObjectClickListener(String objName, JSFunctionName) {
 		ggbAPI.registerObjectClickListener(Ljava/lang/String;Ljava/lang/String;)(objname + "", getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterObjectClickListener(String objName) {
+	public void unregisterObjectClickListener(String objName) {
 		ggbAPI.unregisterObjectClickListener(objname + "");
-	};
+	}
 
-	public String registerClickListener(JSFunctionName) {
+	public void registerClickListener(JSFunctionName) {
 		ggbAPI.registerClickListener(getId(JSFunctionName));
-	};
+	}
 
-	public String unregisterClickListener(JSFunctionName) {
+	public void unregisterClickListener(JSFunctionName) {
 		ggbAPI.unregisterClickListener(getId(JSFunctionName));
-	};
-
-}-*/;
+	}
 }
