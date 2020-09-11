@@ -18,6 +18,10 @@ public class ApiExporter {
 		this.ggbAPI = ggbAPI;
 	}
 
+	private static boolean isUndefined(Object o) {
+		return "undefined".equals(Js.typeof(o));
+	}
+
 	public String getXML(String objName) {
 		if (Js.isTruthy(String objName)) {
 			return ggbAPI.getXML(objName + "");
@@ -109,7 +113,7 @@ public class ApiExporter {
 	}
 
 	public void setFixed(String objName, Object flag, Object selection) {
-		if ("undefined".equals(Js.typeof(selection))) {
+		if (isUndefined(selection)) {
 			ggbAPI.setFixed(objName + "", Js.asBoolean(flag));
 		} else {
 			ggbAPI.setFixed(objName + "", Js.asBoolean(flag), Js.asBoolean(selection));
@@ -153,7 +157,7 @@ public class ApiExporter {
 	}
 
 	public boolean getVisible(String objName, Object view) {
-		if (!"undefined".equals(Js.typeof(view))) {
+		if (!isUndefined(view)) {
 			return ggbAPI.getVisible(objName + "", Js.asInt(view));
 		}
 		return ggbAPI.getVisible(objName + "");
@@ -319,7 +323,7 @@ public class ApiExporter {
 	}
 
 	public String getValueString(String objName, Object localized) {
-		boolean localizedB = "undefined".equals(Js.typeof(localized)) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
 		return ggbAPI.getValueString(objName + "", localizedB);
 	}
 
@@ -328,7 +332,7 @@ public class ApiExporter {
 	}
 
 	public String getDefinitionString(String objName, Object localized) {
-		boolean localizedB = "undefined".equals(Js.typeof(localized)) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
 		return ggbAPI.getDefinitionString(objName + "",  localizedB);
 	}
 
@@ -341,7 +345,7 @@ public class ApiExporter {
 	}
 
 	public String getCommandString(String objName, Object localized) {
-		boolean localizedB = "undefined".equals(Js.typeof(localized)) || Js.asBoolean(localized);
+		boolean localizedB = isUndefined(localized) || Js.asBoolean(localized);
 		return ggbAPI.getCommandString(objName + "", localizedB);
 	}
 
@@ -366,7 +370,7 @@ public class ApiExporter {
 	}
 
 	public void setCoords(String objName, double x, double y, double z) {
-		if ("undefined".equals(Js.typeof(z))) {
+		if (isUndefined(z)) {
 			ggbAPI.setCoords(objName + "", x, y);
 		} else {
 			ggbAPI.setCoords(objName + "", x, y, z);
@@ -451,43 +455,42 @@ public class ApiExporter {
 		}
 	}
 
-	public String setAxesVisible(arg1, arg2, arg3, arg4) {
-		if (typeof arg3 === "undefined") {
-			ggbAPI.setAxesVisible(ZZ)(Js.asBoolean(arg)1, Js.asBoolean(arg)2);
+	public void setAxesVisible(Object arg1, Object arg2, Object arg3, Object arg4) {
+		if (isUndefined(arg3)) {
+			ggbAPI.setAxesVisible(Js.asBoolean(arg1), Js.asBoolean(arg2));
 		} else {
-			ggbAPI.setAxesVisible(IZZZ)(arg1, Js.asBoolean(arg)2, Js.asBoolean(arg)3, Js.asBoolean(arg)4);
+			ggbAPI.setAxesVisible(Js.asInt(arg1), Js.asBoolean(arg2), Js.asBoolean(arg3),
+					Js.asBoolean(arg4));
 		}
-	};
+	}
 
-	public String setAxisUnits(arg1, arg2, arg3, arg4) {
-		ggbAPI.setAxisUnits(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)(arg1, arg2 + "", arg3 + "", arg4 + "");
-	};
+	public void setAxisUnits(int arg1, String arg2, String arg3, String arg4) {
+		ggbAPI.setAxisUnits(arg1, arg2 + "", arg3 + "", arg4 + "");
+	}
 
-	public String setAxisLabels(arg1, arg2, arg3, arg4) {
-		ggbAPI.setAxisLabels(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)(arg1, arg2 + "", arg3 + "", arg4 + "");
-	};
+	public void setAxisLabels(int arg1, String arg2, String arg3, String arg4) {
+		ggbAPI.setAxisLabels(arg1, arg2 + "", arg3 + "", arg4 + "");
+	}
 
-	public String setAxisSteps(arg1, arg2, arg3, arg4) {
-		ggbAPI.setAxisSteps(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)(arg1, arg2 + "",arg3 + "", arg4 + "");
-	};
+	public void setAxisSteps(int arg1, String arg2, String arg3, String arg4) {
+		ggbAPI.setAxisSteps(arg1, arg2 + "",arg3 + "", arg4 + "");
+	}
 
-	api.getAxisUnits = $entry(function(arg1) {
-		return []
-				.concat(ggbAPI.getAxisUnits(I)(1 * arg1 || 1));
-	});
+	public String[] getAxisUnits(Object arg1) {
+		return ggbAPI.getAxisUnits(Js.asInt(arg1));
+	}
 
-	api.getAxisLabels = $entry(function(arg1) {
-		return []
-				.concat(ggbAPI.getAxisLabels(I)(1 * arg1 || 1));
-	});
+	public String[] getAxisLabels(Object arg1) {
+		return ggbAPI.getAxisLabels(Js.asInt(arg1));
+	}
 
-	public String setPointCapture(view, capture) {
-		if (typeof capture === "undefined") {
-			ggbAPI.setPointCapture(II)(1, view);
+	public void setPointCapture(int view, Object capture) {
+		if (isUndefined(capture)) {
+			ggbAPI.setPointCapture(1, view);
 		} else {
-			ggbAPI.setPointCapture(II)(view, capture);
+			ggbAPI.setPointCapture(view, Js.asInt(capture));
 		}
-	};
+	}
 
 	public String getGridVisible(view) {
 		return ggbAPI.getGridVisible(I)(view || 1);
