@@ -525,8 +525,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 		for (Entry<DrawWidget, EmbedElement> entry : widgets.entrySet()) {
 			EmbedElement embedElement = entry.getValue();
 			if (embedElement instanceof CalcEmbedElement) {
-				JavaScriptObject api = ((CalcEmbedElement) embedElement)
-						.getApi();
+				Object api = ((CalcEmbedElement) embedElement).getApi();
 				pushApisIntoNativeEntry(
 						entry.getKey().getGeoElement().getLabelSimple(), api,
 						jso);
@@ -547,9 +546,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	}
 
 	private static native void pushApisIntoNativeEntry(
-			String embedName,
-   			JavaScriptObject api,
-			JavaScriptObject jso) /*-{
+			String embedName, Object api, Object jso) /*-{
 		jso[embedName] = api;
 	}-*/;
 

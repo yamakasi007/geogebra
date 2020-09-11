@@ -11,7 +11,6 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.ScriptManager;
 import org.geogebra.common.plugin.script.JsScript;
-import org.geogebra.common.util.ExternalAccess;
 import org.geogebra.common.util.debug.Log;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -24,21 +23,21 @@ import jsinterop.base.Js;
  */
 public class ScriptManagerW extends ScriptManager {
 
-	@ExternalAccess
-	private JavaScriptObject exportedApi;
 	private HashMap<String, Object> listeners = new HashMap<>();
-	private ApiExporter exporter;
+	private ExportedApi exporter;
 
 	/**
 	 * @param app
 	 *            application
 	 */
-	public ScriptManagerW(AppW app, ApiExporter exporter) {
+	public ScriptManagerW(AppW app, ExportedApi exporter) {
 		super(app);
 		this.exporter = exporter;
+		exporter.setGgbAPI(app.ggbapi);
+		exporter.setScriptManager(this);
 		// this should contain alphanumeric characters only,
 		// but it is not checked otherwise
-		exportedApi = initAppletFunctions(app.getGgbApi(), app.getAppletId());
+		export(exporter, app.getGgbApi(), app.getAppletId());
 	}
 
 	public static native void runCallback(JavaScriptObject onLoadCallback) /*-{
@@ -55,7 +54,7 @@ public class ScriptManagerW extends ScriptManager {
 			$wnd.ggbOnInit();
 	}-*/;
 
-	public static native void ggbOnInit(String arg, JavaScriptObject self) /*-{
+	public static native void ggbOnInit(String arg, Object self) /*-{
 		if (typeof $wnd.ggbOnInit === 'function')
 			$wnd.ggbOnInit(arg, self);
 	}-*/;
@@ -63,8 +62,6 @@ public class ScriptManagerW extends ScriptManager {
 	@Override
 	public void ggbOnInit() {
 		try {
-			// Log.debug("almost there" + app.useBrowserForJavaScript());
-			// assignGgbApplet();
 			tryTabletOnInit();
 			boolean standardJS = app.getKernel().getLibraryJavaScript()
 					.equals(Kernel.defaultLibraryJavaScript);
@@ -78,7 +75,7 @@ public class ScriptManagerW extends ScriptManager {
 				if (param == null || "".equals(param)) {
 					ggbOnInitStatic();
 				} else {
-					ggbOnInit(param, exportedApi);
+					ggbOnInit(param, exporter);
 				}
 			}
 		} catch (CommandNotLoadedError e) {
@@ -95,7 +92,7 @@ public class ScriptManagerW extends ScriptManager {
 		if (((AppW) app).getAppletFrame() != null
 		        && ((AppW) app).getAppletFrame().getOnLoadCallback() != null) {
 			JsEval.callNativeJavaScript(
-					((AppW) app).getAppletFrame().getOnLoadCallback(), exportedApi);
+					((AppW) app).getAppletFrame().getOnLoadCallback(), exporter);
 		}
 	}
 
@@ -190,14 +187,7 @@ public class ScriptManagerW extends ScriptManager {
 		json[key] = value;
 	}-*/;
 
-	private JavaScriptObject initAppletFunctions(GgbAPIW ggbAPI,
-			String globalName) {
-		JavaScriptObject api = JavaScriptObject.createObject();
-		export(api, ggbAPI, globalName);
-		return api;
-	}
-
-	String getListenerID(Object listener) {
+	private String getListenerID(Object listener) {
 		for (Entry<String, Object> entry : listeners.entrySet()) {
 			if (entry.getValue() == listener) {
 				return entry.getKey();
@@ -208,7 +198,7 @@ public class ScriptManagerW extends ScriptManager {
 		return newID;
 	}
 
-	private String getId(Object listener) {
+	String getId(Object listener) {
 		if ("string".equals(Js.typeof(listener))) {
 			return Js.asString(listener);
 		} else {
@@ -216,7 +206,7 @@ public class ScriptManagerW extends ScriptManager {
 		}
 	}
 
-	private native void export(JavaScriptObject api, GgbAPIW ggbAPI, String globalName) /*-{
+	private native void export(ExportedApi api, GgbAPIW ggbAPI, String globalName) /*-{
 		api.remove = function() {
 			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::removeApplet()();
 			$doc[globalName] = $wnd[globalName] = api = null;
@@ -225,7 +215,7 @@ public class ScriptManagerW extends ScriptManager {
 		$doc[globalName] = $wnd[globalName] = api;
 	}-*/;
 
-	public JavaScriptObject getApi() {
-		return exportedApi;
+	public Object getApi() {
+		return exporter;
 	}
 }

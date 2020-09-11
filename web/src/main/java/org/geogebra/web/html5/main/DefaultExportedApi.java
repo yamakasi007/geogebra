@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.Element;
 
 import elemental2.core.Global;
 import elemental2.promise.Promise;
+import jsinterop.annotations.JsIgnore;
 import jsinterop.annotations.JsType;
 import jsinterop.base.Js;
 
@@ -12,13 +13,20 @@ import jsinterop.base.Js;
  * Maps GeoGebra functions to exported JS api
  */
 @JsType
-public class ApiExporter {
+public class DefaultExportedApi implements ExportedApi {
 
-	private final GgbAPIW ggbAPI;
-	private final ScriptManagerW scriptManager;
+	private GgbAPIW ggbAPI;
+	private ScriptManagerW scriptManager;
 
-	public ApiExporter(GgbAPIW ggbAPI, ScriptManagerW scriptManager) {
+	@JsIgnore
+	@Override
+	public void setGgbAPI(GgbAPIW ggbAPI) {
 		this.ggbAPI = ggbAPI;
+	}
+
+	@JsIgnore
+	@Override
+	public void setScriptManager(ScriptManagerW scriptManager) {
 		this.scriptManager = scriptManager;
 	}
 
@@ -31,7 +39,7 @@ public class ApiExporter {
 	}
 
 	private String getId(Object func) {
-		return scriptManager.getListenerID(func);
+		return scriptManager.getId(func);
 	}
 
 	public String getXML(String objName) {
