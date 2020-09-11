@@ -17,6 +17,8 @@ import org.geogebra.common.util.debug.Log;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 
+import jsinterop.base.Js;
+
 /**
  * Provides JavaScript scripting for objects and initializes the public API.
  */
@@ -24,7 +26,7 @@ public class ScriptManagerW extends ScriptManager {
 
 	@ExternalAccess
 	private JavaScriptObject exportedApi;
-	private HashMap<String, JavaScriptObject> listeners = new HashMap<>();
+	private HashMap<String, Object> listeners = new HashMap<>();
 	private ApiExporter exporter;
 
 	/**
@@ -191,16 +193,12 @@ public class ScriptManagerW extends ScriptManager {
 	private JavaScriptObject initAppletFunctions(GgbAPIW ggbAPI,
 			String globalName) {
 		JavaScriptObject api = JavaScriptObject.createObject();
-		exporter.addFunctions(api, ggbAPI);
-		exporter.addListenerFunctions(api, ggbAPI,
-				getListenerMappingFunction());
 		export(api, ggbAPI, globalName);
 		return api;
 	}
 
-	@ExternalAccess
-	private String getListenerID(JavaScriptObject listener) {
-		for (Entry<String, JavaScriptObject> entry : listeners.entrySet()) {
+	String getListenerID(Object listener) {
+		for (Entry<String, Object> entry : listeners.entrySet()) {
 			if (entry.getValue() == listener) {
 				return entry.getKey();
 			}
@@ -210,16 +208,13 @@ public class ScriptManagerW extends ScriptManager {
 		return newID;
 	}
 
-	private native JavaScriptObject getListenerMappingFunction() /*-{
-		var that = this;
-		return function(listener) {
-			if (typeof listener === 'string') {
-				return listener;
-			} else {
-				return that.@org.geogebra.web.html5.main.ScriptManagerW::getListenerID(Lcom/google/gwt/core/client/JavaScriptObject;)(listener);
-			}
+	private String getId(Object listener) {
+		if ("string".equals(Js.typeof(listener))) {
+			return Js.asString(listener);
+		} else {
+			return getListenerID(listener);
 		}
-	}-*/;
+	}
 
 	private native void export(JavaScriptObject api, GgbAPIW ggbAPI, String globalName) /*-{
 		api.remove = function() {

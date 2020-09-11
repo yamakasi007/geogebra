@@ -14,10 +14,12 @@ import jsinterop.base.Js;
 @JsType
 public class ApiExporter {
 
-	private GgbAPIW ggbAPI;
+	private final GgbAPIW ggbAPI;
+	private final ScriptManagerW scriptManager;
 
-	public ApiExporter(GgbAPIW ggbAPI) {
+	public ApiExporter(GgbAPIW ggbAPI, ScriptManagerW scriptManager) {
 		this.ggbAPI = ggbAPI;
+		this.scriptManager = scriptManager;
 	}
 
 	private static boolean isUndefined(Object o) {
@@ -26,6 +28,10 @@ public class ApiExporter {
 
 	private static double doubleOrDefault(Object o, double def) {
 		return Js.isTruthy(o) ? Js.coerceToDouble(o) : def;
+	}
+
+	private String getId(Object func) {
+		return scriptManager.getListenerID(func);
 	}
 
 	public String getXML(String objName) {
@@ -68,7 +74,7 @@ public class ApiExporter {
 
 	public void openFile(String filename, JavaScriptObject callback) {
 		ggbAPI.openFile(filename + "", callback);
-	};
+	}
 
 	public void login(String token, Object ui) {
 		ggbAPI.login(token  + "", Js.isTruthy(ui));
@@ -76,7 +82,7 @@ public class ApiExporter {
 
 	public void logout() {
 		ggbAPI.logout();
-	};
+	}
 
 	public void setXML(String xml) {
 		ggbAPI.setXML(xml + "");
@@ -102,13 +108,13 @@ public class ApiExporter {
 		return new Promise<>((resolve, reject) -> {
 			ggbAPI.asyncEvalCommand(cmdString + "", resolve, reject);
 		});
-	};
+	}
 
 	public Promise<String> asyncEvalCommandGetLabels(String cmdString) {
 		return new Promise<>((resolve, reject) -> {
 			ggbAPI.asyncEvalCommandGetLabels(cmdString + "", resolve, reject);
 		});
-	};
+	}
 
 	public String evalCommandCAS(String cmdString) {
 		return ggbAPI.evalCommandCAS(cmdString + "");
@@ -124,7 +130,7 @@ public class ApiExporter {
 		} else {
 			ggbAPI.setFixed(objName + "", Js.isTruthy(flag), Js.isTruthy(selection));
 		}
-	};
+	}
 
 	public void setOnTheFlyPointCreationActive(Object flag) {
 		ggbAPI.setOnTheFlyPointCreationActive(Js.isTruthy(flag));
@@ -136,15 +142,15 @@ public class ApiExporter {
 
 	public void setSaved() {
 		ggbAPI.setSaved();
-	};
+	}
 
 	public void initCAS() {
 		ggbAPI.initCAS();
-	};
+	}
 
 	public void uploadToGeoGebraTube() {
 		ggbAPI.uploadToGeoGebraTube();
-	};
+	}
 
 	public void setErrorDialogsActive(Object flag) {
 		ggbAPI.setErrorDialogsActive(Js.isTruthy(flag));
@@ -167,7 +173,7 @@ public class ApiExporter {
 			return ggbAPI.getVisible(objName + "", Js.coerceToInt(view));
 		}
 		return ggbAPI.getVisible(objName + "");
-	};
+	}
 
 	public void setLayer(String objName, int layer) {
 		ggbAPI.setLayer(objName + "", layer);
@@ -199,7 +205,7 @@ public class ApiExporter {
 
 	public int getLabelStyle(String objName) {
 		return ggbAPI.getLabelStyle(objName + "");
-	};
+	}
 
 	public void getLabelVisible(String objName) {
 		ggbAPI.getLabelVisible(objName + "");
@@ -242,11 +248,11 @@ public class ApiExporter {
 
 	public String getPenColor() {
 		return ggbAPI.getPenColor();
-	};
+	}
 
 	public int getPenSize() {
 		return ggbAPI.getPenSize();
-	};
+	}
 
 	public void setPenSize(int size) {
 		ggbAPI.setPenSize(size);
@@ -415,7 +421,7 @@ public class ApiExporter {
 		}
 
 		ggbAPI.setValue(objName + "", value);
-	};
+	}
 
 	public void setTextValue(String objName, String x) {
 		ggbAPI.setTextValue(objName + "", x + "");
@@ -584,27 +590,27 @@ public class ApiExporter {
 
 	public void enableLabelDrags(Object enable) {
 		ggbAPI.enableLabelDrags(Js.isTruthy(enable));
-	};
+	}
 
 	public void enableShiftDragZoom(Object enable) {
 		ggbAPI.enableShiftDragZoom(Js.isTruthy(enable));
-	};
+	}
 
 	public void showToolBar(Object show) {
 		ggbAPI.showToolBar(Js.isTruthy(show));
-	};
+	}
 
 	public void setCustomToolBar(String toolbarDef) {
 		ggbAPI.setCustomToolBar(toolbarDef + "");
-	};
+	}
 
 	public void showMenuBar(Object show) {
 		ggbAPI.showMenuBar(Js.isTruthy(show));
-	};
+	}
 
 	public void showAlgebraInput(Object show) {
 		ggbAPI.showAlgebraInput(Js.isTruthy(show));
-	};
+	}
 
 	public void showResetIcon(Object show) {
 		ggbAPI.showResetIcon(Js.isTruthy(show));
@@ -655,7 +661,7 @@ public class ApiExporter {
 			Object copyToClipboard, Object greyscale) {
 		return ggbAPI.getPNGBase64(exportScale, Js.isTruthy(transparent), dpi,
 				Js.isTruthy(copyToClipboard), Js.isTruthy(greyscale));
-	};
+	}
 
 	public void exportGIF(String sliderLabel, double scale, double timeBetweenFrames,
 			Object isLoop, String filename, Object rotate) {
@@ -836,78 +842,79 @@ public class ApiExporter {
 		ggbAPI.endDrawRecordingAndLogResults();
 	}
 
-	public void registerClientListener(JSFunctionName) {
+	public void registerClientListener(Object JSFunctionName) {
 		ggbAPI.registerClientListener(getId(JSFunctionName));
 	}
 
-	public void registerAddListener(JSFunctionName) {
+	public void registerAddListener(Object JSFunctionName) {
 		ggbAPI.registerAddListener(getId(JSFunctionName));
 	}
 
-	public void registerStoreUndoListener(JSFunctionName) {
+	public void registerStoreUndoListener(Object JSFunctionName) {
 		ggbAPI.registerStoreUndoListener(getId(JSFunctionName));
 	}
 
-	public void unregisterAddListener(JSFunctionName) {
+	public void unregisterAddListener(Object JSFunctionName) {
 		ggbAPI.unregisterAddListener(getId(JSFunctionName));
 	}
 
-	public void registerRemoveListener(JSFunctionName) {
+	public void registerRemoveListener(Object JSFunctionName) {
 		ggbAPI.registerRemoveListener(getId(JSFunctionName));
 	}
 
-	public void unregisterRemoveListener(JSFunctionName) {
+	public void unregisterRemoveListener(Object JSFunctionName) {
 		ggbAPI.unregisterRemoveListener(getId(JSFunctionName));
 	}
 
-	public void registerClearListener(JSFunctionName) {
+	public void registerClearListener(Object JSFunctionName) {
 		ggbAPI.registerClearListener(getId(JSFunctionName));
 	}
 
-	public void unregisterClearListener(JSFunctionName) {
+	public void unregisterClearListener(Object JSFunctionName) {
 		ggbAPI.unregisterClearListener(getId(JSFunctionName));
 	}
 
-	public void registerRenameListener(JSFunctionName) {
+	public void registerRenameListener(Object JSFunctionName) {
 		ggbAPI.registerRenameListener(getId(JSFunctionName));
 	}
 
-	public void unregisterRenameListener(JSFunctionName) {
+	public void unregisterRenameListener(Object JSFunctionName) {
 		ggbAPI.registerRenameListener(getId(JSFunctionName));
 	}
 
-	public void registerUpdateListener(JSFunctionName) {
+	public void registerUpdateListener(Object JSFunctionName) {
 		ggbAPI.registerUpdateListener(getId(JSFunctionName));
 	}
 
-	public void unregisterUpdateListener(JSFunctionName) {
+	public void unregisterUpdateListener(Object JSFunctionName) {
 		ggbAPI.unregisterUpdateListener(getId(JSFunctionName));
 	}
 
-	public void unregisterClientListener(JSFunctionName) {
+	public void unregisterClientListener(Object JSFunctionName) {
 		ggbAPI.unregisterClientListener(getId(JSFunctionName));
 	}
 
-	public void registerObjectUpdateListener(String objName, JSFunctionName) {
-		ggbAPI.registerObjectUpdateListener(Ljava/lang/String;Ljava/lang/String;)(objname + "", getId(JSFunctionName));
+	public void registerObjectUpdateListener(String objName, Object JSFunctionName) {
+		ggbAPI.registerObjectUpdateListener(objName + "", getId(JSFunctionName));
 	}
 
-	public void unregisterObjectUpdateListener(JSFunctionName) {
+	public void unregisterObjectUpdateListener(Object JSFunctionName) {
 		ggbAPI.unregisterObjectUpdateListener(getId(JSFunctionName));
-	};
-	public void registerObjectClickListener(String objName, JSFunctionName) {
-		ggbAPI.registerObjectClickListener(Ljava/lang/String;Ljava/lang/String;)(objname + "", getId(JSFunctionName));
+	}
+
+	public void registerObjectClickListener(String objName, Object JSFunctionName) {
+		ggbAPI.registerObjectClickListener(objName + "", getId(JSFunctionName));
 	}
 
 	public void unregisterObjectClickListener(String objName) {
-		ggbAPI.unregisterObjectClickListener(objname + "");
+		ggbAPI.unregisterObjectClickListener(objName + "");
 	}
 
-	public void registerClickListener(JSFunctionName) {
+	public void registerClickListener(Object JSFunctionName) {
 		ggbAPI.registerClickListener(getId(JSFunctionName));
 	}
 
-	public void unregisterClickListener(JSFunctionName) {
+	public void unregisterClickListener(Object JSFunctionName) {
 		ggbAPI.unregisterClickListener(getId(JSFunctionName));
 	}
 }

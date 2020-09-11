@@ -30,7 +30,7 @@ public class JsEval {
 		}
 	}-*/;
 
-	public static native void callNativeJavaScript(JavaScriptObject funcObject,
+	public static native void callNativeJavaScript(Object funcObject,
 			String... args) /*-{
 		if (typeof funcObject === "function") {
 			funcObject.apply(null, args);
@@ -43,7 +43,7 @@ public class JsEval {
 		}
 	}-*/;
 
-	public static native void callNativeJavaScript(JavaScriptObject funcObject,
+	public static native void callNativeJavaScript(Object funcObject,
 			JavaScriptObject param) /*-{
 		if (typeof funcObject === "function") {
 			funcObject(param);
