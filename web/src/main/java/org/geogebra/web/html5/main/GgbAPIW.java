@@ -45,6 +45,8 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
 
 import elemental2.core.Global;
+import elemental2.promise.Promise.PromiseExecutorCallbackFn.RejectCallbackFn;
+import elemental2.promise.Promise.PromiseExecutorCallbackFn.ResolveCallbackFn;
 
 /**
  * HTML5 version of API. The methods are exported in ScriptManagerW
@@ -1116,13 +1118,13 @@ public class GgbAPIW extends GgbAPI {
 				(AppW) app);
 	}
 
-	public void asyncEvalCommand(String command, JavaScriptObject onSuccess,
-			JavaScriptObject onFailure) {
+	public void asyncEvalCommand(String command, ResolveCallbackFn<String> onSuccess,
+			RejectCallbackFn onFailure) {
 		((AppW) app).getAsyncManager().asyncEvalCommand(command, onSuccess, onFailure);
 	}
 
-	public void asyncEvalCommandGetLabels(String command, JavaScriptObject onSuccess,
-			JavaScriptObject onFailure) {
+	public void asyncEvalCommandGetLabels(String command, ResolveCallbackFn<String> onSuccess,
+			RejectCallbackFn onFailure) {
 		((AppW) app).getAsyncManager().asyncEvalCommandGetLabels(command, onSuccess, onFailure);
 	}
 
