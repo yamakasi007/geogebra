@@ -6,12 +6,14 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 import elemental2.core.Global;
 import jsinterop.annotations.JsIgnore;
+import jsinterop.annotations.JsType;
 import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
 
 /**
  * API exporter for evaluator app
  */
+@JsType
 public class EvaluatorExportedApi implements ExportedApi {
 
 	private final EvaluatorActivity evaluatorActivity;

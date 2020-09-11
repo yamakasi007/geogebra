@@ -33,7 +33,7 @@ public class ScriptManagerW extends ScriptManager {
 	public ScriptManagerW(AppW app, ExportedApi exporter) {
 		super(app);
 		this.exporter = exporter;
-		exporter.setGgbAPI(app.ggbapi);
+		exporter.setGgbAPI(app.getGgbApi());
 		exporter.setScriptManager(this);
 		// this should contain alphanumeric characters only,
 		// but it is not checked otherwise
