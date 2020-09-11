@@ -8,7 +8,7 @@ import org.geogebra.common.kernel.arithmetic.FunctionVariable;
 import org.geogebra.common.kernel.arithmetic.MyDouble;
 import org.geogebra.common.kernel.arithmetic.MySpecialDouble;
 import org.geogebra.common.kernel.parser.FunctionParser;
-import org.geogebra.common.kernel.parser.ParseException;
+import org.geogebra.common.kernel.parser.function.ParserFunctions;
 import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.StringUtil;
 
