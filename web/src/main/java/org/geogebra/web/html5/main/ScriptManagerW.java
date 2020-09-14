@@ -198,7 +198,7 @@ public class ScriptManagerW extends ScriptManager {
 		return newID;
 	}
 
-	String getId(Object listener) {
+	public String getId(Object listener) {
 		if ("string".equals(Js.typeof(listener))) {
 			return Js.asString(listener);
 		} else {

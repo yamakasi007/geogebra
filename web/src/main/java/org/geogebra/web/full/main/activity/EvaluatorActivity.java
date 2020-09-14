@@ -5,7 +5,6 @@ import org.geogebra.common.plugin.evaluator.EvaluatorAPI;
 import org.geogebra.web.full.evaluator.EvaluatorEditor;
 import org.geogebra.web.html5.gui.GeoGebraFrameW;
 import org.geogebra.web.html5.main.AppW;
-import org.geogebra.web.html5.main.EvaluatorExportedApi;
 import org.geogebra.web.html5.main.ExportedApi;
 
 /**

@@ -1,6 +1,8 @@
-package org.geogebra.web.html5.main;
+package org.geogebra.web.full.main.activity;
 
-import org.geogebra.web.full.main.activity.EvaluatorActivity;
+import org.geogebra.web.html5.main.ExportedApi;
+import org.geogebra.web.html5.main.GgbAPIW;
+import org.geogebra.web.html5.main.ScriptManagerW;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
