@@ -198,6 +198,11 @@ public class ScriptManagerW extends ScriptManager {
 		return newID;
 	}
 
+	/**
+	 * Get the listener id as a string for global js function name or function object
+	 * @param listener function name in the global namespace or function object
+	 * @return listener id
+	 */
 	public String getId(Object listener) {
 		if ("string".equals(Js.typeof(listener))) {
 			return Js.asString(listener);

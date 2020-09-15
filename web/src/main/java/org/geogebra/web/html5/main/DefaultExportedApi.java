@@ -849,20 +849,20 @@ public class DefaultExportedApi implements ExportedApi {
 		ggbAPI.endDrawRecordingAndLogResults();
 	}
 
-	public void registerClientListener(Object JSFunctionName) {
-		ggbAPI.registerClientListener(getId(JSFunctionName));
-	}
-
 	public void registerAddListener(Object JSFunctionName) {
 		ggbAPI.registerAddListener(getId(JSFunctionName));
+	}
+
+	public void unregisterAddListener(Object JSFunctionName) {
+		ggbAPI.unregisterAddListener(getId(JSFunctionName));
 	}
 
 	public void registerStoreUndoListener(Object JSFunctionName) {
 		ggbAPI.registerStoreUndoListener(getId(JSFunctionName));
 	}
 
-	public void unregisterAddListener(Object JSFunctionName) {
-		ggbAPI.unregisterAddListener(getId(JSFunctionName));
+	public void unregisterStoreUndoListener(Object JSFunctionName) {
+		ggbAPI.unregisterStoreUndoListener(getId(JSFunctionName));
 	}
 
 	public void registerRemoveListener(Object JSFunctionName) {
@@ -886,7 +886,7 @@ public class DefaultExportedApi implements ExportedApi {
 	}
 
 	public void unregisterRenameListener(Object JSFunctionName) {
-		ggbAPI.registerRenameListener(getId(JSFunctionName));
+		ggbAPI.unregisterRenameListener(getId(JSFunctionName));
 	}
 
 	public void registerUpdateListener(Object JSFunctionName) {
@@ -895,6 +895,10 @@ public class DefaultExportedApi implements ExportedApi {
 
 	public void unregisterUpdateListener(Object JSFunctionName) {
 		ggbAPI.unregisterUpdateListener(getId(JSFunctionName));
+	}
+
+	public void registerClientListener(Object JSFunctionName) {
+		ggbAPI.registerClientListener(getId(JSFunctionName));
 	}
 
 	public void unregisterClientListener(Object JSFunctionName) {
