@@ -13,6 +13,7 @@ import jsinterop.base.Js;
  * Maps GeoGebra functions to exported JS api
  */
 @JsType
+@SuppressWarnings("javadoc")
 public class DefaultExportedApi implements ExportedApi {
 
 	private GgbAPIW ggbAPI;
@@ -35,7 +36,7 @@ public class DefaultExportedApi implements ExportedApi {
 	}
 
 	private static double doubleOrDefault(Object o, double def) {
-		return Js.isTruthy(o) ? Js.coerceToDouble(o) : def;
+		return Js.isFalsy(o) ? def : Js.coerceToDouble(o);
 	}
 
 	private String getId(Object func) {
@@ -164,7 +165,8 @@ public class DefaultExportedApi implements ExportedApi {
 		ggbAPI.setErrorDialogsActive(Js.isTruthy(flag));
 	}
 
-	public void reset() {//TODO: implement this in Desktop and Web
+	// TODO: implement this in Desktop and Web
+	public void reset() {
 		ggbAPI.reset();
 	}
 
@@ -223,11 +225,8 @@ public class DefaultExportedApi implements ExportedApi {
 		ggbAPI.setColor(objName + "", red, green, blue);
 	}
 
-	public void setCorner(String objName, double x, double y, int index) {
-		if (Js.isFalsy(index)) {
-			index = 1;
-		}
-		ggbAPI.setCorner(objName + "", x, y, index);
+	public void setCorner(String objName, double x, double y, Object index) {
+		ggbAPI.setCorner(objName + "", x, y, Js.isFalsy(index) ? 1 : Js.coerceToInt(index));
 	}
 
 	public void setLineStyle(String objName, int style) {
@@ -826,7 +825,7 @@ public class DefaultExportedApi implements ExportedApi {
 		return ggbAPI.getEmbeddedCalculators();
 	}
 
-	public Element getFrame(){
+	public Element getFrame() {
 		return ggbAPI.getFrame();
 	}
 
