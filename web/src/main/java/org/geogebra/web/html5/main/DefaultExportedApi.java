@@ -13,7 +13,7 @@ import jsinterop.base.Js;
  * Maps GeoGebra functions to exported JS api
  */
 @JsType
-@SuppressWarnings("javadoc")
+@SuppressWarnings("Javadoc")
 public class DefaultExportedApi implements ExportedApi {
 
 	private GgbAPIW ggbAPI;
@@ -330,7 +330,7 @@ public class DefaultExportedApi implements ExportedApi {
 	}
 
 	public boolean renameObject(String oldName, String newName, Object force) {
-		return ggbAPI.renameObject(oldName + "",newName + "", Js.isTruthy(force));
+		return ggbAPI.renameObject(oldName + "", newName + "", Js.isTruthy(force));
 	}
 
 	public boolean exists(String objName) {
@@ -492,7 +492,7 @@ public class DefaultExportedApi implements ExportedApi {
 	}
 
 	public void setAxisSteps(int arg1, String arg2, String arg3, String arg4) {
-		ggbAPI.setAxisSteps(arg1, arg2 + "",arg3 + "", arg4 + "");
+		ggbAPI.setAxisSteps(arg1, arg2 + "", arg3 + "", arg4 + "");
 	}
 
 	public String[] getAxisUnits(Object arg1) {
