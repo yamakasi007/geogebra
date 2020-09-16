@@ -3832,10 +3832,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case MOB_PROPERTY_SORT_BY:
 			return false;
 
-		/** MOB-1293 */
-		case SELECT_TOOL_NEW_BEHAVIOUR:
-			return prerelease || whiteboard;
-
 		// **********************************************************************
 		// MOBILE END
 		// *********************************************************
