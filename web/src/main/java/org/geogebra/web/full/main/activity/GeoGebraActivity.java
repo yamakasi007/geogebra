@@ -121,7 +121,7 @@ public interface GeoGebraActivity {
 	 */
 	boolean isWhiteboard();
 
-	ExportedApi getApiExporter();
+	ExportedApi getExportedApi();
 
 	/**
 	 * @return icon for menu

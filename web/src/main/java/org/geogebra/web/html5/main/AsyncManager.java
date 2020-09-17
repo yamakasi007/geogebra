@@ -150,7 +150,9 @@ public class AsyncManager {
 					onSuccess.onInvoke("");
 				}
 			} catch (Exception e) {
-				onFailure.onInvoke(e);
+				if (onFailure != null) {
+					onFailure.onInvoke(e);
+				}
 			}
 		};
 

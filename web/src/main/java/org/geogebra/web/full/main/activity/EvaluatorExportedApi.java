@@ -43,6 +43,11 @@ public class EvaluatorExportedApi implements ExportedApi {
 		this.scriptManager = scriptManager;
 	}
 
+	public void remove() {
+		ggbAPI.removeApplet();
+		scriptManager.export(null);
+	}
+
 	public Object getEditorState() {
 		JavaScriptObject jsObject = JavaScriptObject.createObject();
 		ScriptManagerW

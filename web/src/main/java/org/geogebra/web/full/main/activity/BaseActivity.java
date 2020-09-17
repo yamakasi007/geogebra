@@ -122,7 +122,7 @@ public class BaseActivity implements GeoGebraActivity {
 	}
 
 	@Override
-	public ExportedApi getApiExporter() {
+	public ExportedApi getExportedApi() {
 		return new DefaultExportedApi();
 	}
 

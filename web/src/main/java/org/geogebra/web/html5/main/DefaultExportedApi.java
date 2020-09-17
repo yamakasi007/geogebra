@@ -43,6 +43,11 @@ public class DefaultExportedApi implements ExportedApi {
 		return scriptManager.getId(func);
 	}
 
+	public void remove() {
+		ggbAPI.removeApplet();
+		scriptManager.export(null);
+	}
+
 	public String getXML(String objName) {
 		if (Js.isTruthy(objName)) {
 			return ggbAPI.getXML(objName + "");

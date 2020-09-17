@@ -16,6 +16,7 @@ import org.geogebra.common.util.debug.Log;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 
+import elemental2.dom.DomGlobal;
 import jsinterop.base.Js;
 
 /**
@@ -35,9 +36,8 @@ public class ScriptManagerW extends ScriptManager {
 		this.exporter = exporter;
 		exporter.setGgbAPI(app.getGgbApi());
 		exporter.setScriptManager(this);
-		// this should contain alphanumeric characters only,
-		// but it is not checked otherwise
-		export(exporter, app.getGgbApi(), app.getAppletId());
+
+		export(exporter);
 	}
 
 	public static native void runCallback(JavaScriptObject onLoadCallback) /*-{
@@ -211,14 +211,11 @@ public class ScriptManagerW extends ScriptManager {
 		}
 	}
 
-	private native void export(ExportedApi api, GgbAPIW ggbAPI, String globalName) /*-{
-		api.remove = function() {
-			ggbAPI.@org.geogebra.web.html5.main.GgbAPIW::removeApplet()();
-			$doc[globalName] = $wnd[globalName] = api = null;
-		};
-
-		$doc[globalName] = $wnd[globalName] = api;
-	}-*/;
+	public void export(ExportedApi toExport) {
+		String appletId = ((AppW) app).getAppletId();
+		Js.asPropertyMap(DomGlobal.window).set(appletId, toExport);
+		Js.asPropertyMap(DomGlobal.document).set(appletId, toExport);
+	}
 
 	public Object getApi() {
 		return exporter;

@@ -35,7 +35,7 @@ public class EvaluatorActivity extends BaseActivity {
 	}
 
 	@Override
-	public ExportedApi getApiExporter() {
+	public ExportedApi getExportedApi() {
 		// not started yet -> pass the whole activity to geteditor later
 		return new EvaluatorExportedApi(this);
 	}
