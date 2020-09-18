@@ -2045,7 +2045,7 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 
 	@Override
 	public ScriptManager newScriptManager() {
-		return new ScriptManagerW(this, getActivity().getApiExporter());
+		return new ScriptManagerW(this, getActivity().getExportedApi());
 	}
 
 	@Override
