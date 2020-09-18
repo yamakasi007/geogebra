@@ -399,11 +399,15 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	@Override
 	public void remove(DrawEmbed draw) {
 		EmbedElement frame = widgets.get(draw);
-		draw.getGeoEmbed().setBackground(true);
+		GeoEmbed geoEmbed = draw.getGeoEmbed();
+		geoEmbed.setBackground(true);
 		toggleBackground(frame, draw);
 		frame.setVisible(false);
 		widgets.remove(draw);
 		cache.put(draw.getEmbedID(), frame);
+		if (geoEmbed.isH5P()) {
+			h5pEmbeds.remove(geoEmbed.getEmbedID());
+		}
 	}
 
 	@Override
