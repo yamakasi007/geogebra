@@ -63,7 +63,6 @@ import org.geogebra.common.io.file.ZipFile;
 import org.geogebra.common.io.layout.Perspective;
 import org.geogebra.common.javax.swing.GImageIcon;
 import org.geogebra.common.kernel.AnimationManager;
-import org.geogebra.common.kernel.AppState;
 import org.geogebra.common.kernel.ConstructionDefaults;
 import org.geogebra.common.kernel.GeoGebraCasInterface;
 import org.geogebra.common.kernel.Kernel;
@@ -107,6 +106,7 @@ import org.geogebra.common.main.settings.updater.FontSettingsUpdater;
 import org.geogebra.common.main.settings.updater.LabelSettingsUpdater;
 import org.geogebra.common.main.settings.updater.SettingsUpdater;
 import org.geogebra.common.main.settings.updater.SettingsUpdaterBuilder;
+import org.geogebra.common.main.undo.UndoManager;
 import org.geogebra.common.media.VideoManager;
 import org.geogebra.common.move.ggtapi.operations.LogInOperation;
 import org.geogebra.common.plugin.EuclidianStyleConstants;
@@ -1032,16 +1032,19 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		}
 	}
 
+	public UndoManager getUndoManager() {
+		return kernel.getConstruction().getUndoManager();
+	}
+
 	public void setPropertiesOccured() {
-		getKernel().getConstruction().getUndoManager().setPropertiesOccured();
+		getUndoManager().setPropertiesOccured();
 	}
 
 	/**
 	 * Store undo point for properties change.
 	 */
 	public void storeUndoInfoForProperties() {
-		getKernel().getConstruction().getUndoManager()
-				.storeUndoInfoForProperties(isUndoActive());
+		getUndoManager().storeUndoInfoForProperties(isUndoActive());
 	}
 
 	public boolean letRename() {
@@ -4242,6 +4245,16 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	/**
+	 * When multiple slides are present give ID of the current one, otherwise
+	 * give default slide ID when slides supported or empty string if not.
+	 *
+	 * @return the string ID of current slide
+	 */
+	public String getSlideID() {
+		return "";
+	}
+
+	/**
 	 * possible positions for the inputBar (respective inputBox)
 	 */
 	public enum InputPosition {
@@ -4894,20 +4907,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	/**
-	 * @param action
-	 *            command to execute
-	 * @param state
-	 *            file content
-	 * @param args
-	 *            arguments
-	 *
-	 */
-	public void executeAction(EventType action, AppState state, String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
 	 * @param slideID
 	 *            slide name
 	 */
@@ -5189,6 +5188,28 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 	public void closeMenuHideKeyboard() {
 		// nothing here
+	}
+
+	@Override
+	public void setXML(String xml, boolean clearAll) {
+		if (xml == null) {
+			return;
+		}
+		if (clearAll) {
+			resetCurrentFile();
+		}
+
+		try {
+			// make sure objects are displayed in the correct View
+			setActiveView(App.VIEW_EUCLIDIAN);
+			getXMLio().processXMLString(xml, clearAll, false);
+		} catch (MyError err) {
+			err.printStackTrace();
+			showError(err);
+		} catch (Exception e) {
+			e.printStackTrace();
+			showError(Errors.LoadFileFailed);
+		}
 	}
 
 	public String getThreadId() {

@@ -1,7 +1,5 @@
 package org.geogebra.web.html5.main;
 
-import org.geogebra.common.kernel.AppState;
-import org.geogebra.common.plugin.EventType;
 import org.geogebra.web.html5.gui.RenameCard;
 
 /**
@@ -53,18 +51,6 @@ public interface PageListControllerInterface {
 	String getSlideID();
 
 	/**
-	 * Replay an action
-	 * 
-	 * @param action
-	 *            action type
-	 * @param state
-	 *            state to restore
-	 * @param args
-	 *            action parameters
-	 */
-	void executeAction(EventType action, AppState state, String[] args);
-
-	/**
 	 * Select a slide
 	 * 
 	 * @param slideID
@@ -108,6 +94,8 @@ public interface PageListControllerInterface {
 	 */
 	void updatePreviewImage();
 
+	void updatePreviewImage(String slideID);
+
 	/**
 	 * export all sliders as PDF
 	 * 
@@ -121,6 +109,9 @@ public interface PageListControllerInterface {
 	 * @param title the new title.
 	 */
 	void rename(RenameCard card, String title);
+
+
+	void clickPage(String slideID);
 
 	/**
 	 * @param idx
