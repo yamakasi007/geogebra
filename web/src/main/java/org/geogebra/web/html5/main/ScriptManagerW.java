@@ -212,9 +212,12 @@ public class ScriptManagerW extends ScriptManager {
 	}
 
 	public void export(ExportedApi toExport) {
-		String appletId = ((AppW) app).getAppletId();
-		Js.asPropertyMap(DomGlobal.window).set(appletId, toExport);
-		Js.asPropertyMap(DomGlobal.document).set(appletId, toExport);
+		// FIXME remove this check when uncheckedCast works in tests
+		if (DomGlobal.window != null) {
+			String appletId = ((AppW) app).getAppletId();
+			Js.asPropertyMap(DomGlobal.window).set(appletId, toExport);
+			Js.asPropertyMap(DomGlobal.document).set(appletId, toExport);
+		}
 	}
 
 	public Object getApi() {
