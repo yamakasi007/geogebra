@@ -36,7 +36,6 @@ import org.geogebra.common.util.debug.GeoGebraProfiler;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.ggbjdk.java.awt.DefaultBasicStroke;
 import org.geogebra.ggbjdk.java.awt.geom.Dimension;
-import org.geogebra.web.full.gui.layout.panels.EuclidianDockPanelWAbstract;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.awt.GFontW;
 import org.geogebra.web.html5.awt.GGraphics2DW;
@@ -86,7 +85,6 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import elemental2.dom.DomGlobal;
@@ -146,8 +144,13 @@ public class EuclidianViewW extends EuclidianView implements
 	// needed to make sure outline doesn't get dashed
 	private GBasicStroke outlineStroke = AwtFactory.getPrototype()
 			.newBasicStroke(3, GBasicStroke.CAP_BUTT, GBasicStroke.JOIN_BEVEL);
-	/** cache for bottom layers */
-	private boolean cacheGraphics;
+	/**
+	 * cache state
+	 * true: currently using cache
+	 * false: cache invalidated, not yet cleared
+	 * null: cache was invalidated and cleared
+	 */
+	private Boolean cacheGraphics;
 
 	/**
 	 * @param euclidianViewPanel
@@ -272,7 +275,7 @@ public class EuclidianViewW extends EuclidianView implements
 	 * the repaint should be done immediately
 	 */
 	public final void doRepaint2() {
-		if (cacheGraphics) {
+		if (cacheGraphics != null && cacheGraphics) {
 			penCanvas.clearRect(0, 0, getWidth(), getHeight());
 			getEuclidianController().getPen().repaintIfNeeded(penCanvas);
 			return;
@@ -282,6 +285,10 @@ public class EuclidianViewW extends EuclidianView implements
 		g2p.resetLayer();
 		updateBackgroundIfNecessary();
 		paint(g2p);
+		if (cacheGraphics != null) {
+			cacheGraphics = null;
+			penCanvas.clearAll();
+		}
 		// if we have pen tool in action
 		// repaint the preview line
 		lastRepaint = System.currentTimeMillis() - time;
@@ -671,13 +678,11 @@ public class EuclidianViewW extends EuclidianView implements
 		initView(true);
 		attachView();
 
-		Panel panel = evPanel.getEuclidianPanel();
-		if (panel instanceof EuclidianDockPanelWAbstract.EuclidianPanel) {
-			penCanvas = new GGraphics2DW(Canvas.createIfSupported());
+		if (getViewID() == App.VIEW_EUCLIDIAN || getViewID() == App.VIEW_EUCLIDIAN2) {
 			g2p.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+			penCanvas = new GGraphics2DW(Canvas.createIfSupported());
 			penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-			((EuclidianDockPanelWAbstract.EuclidianPanel) panel)
-					.getAbsolutePanel().getElement()
+			g2p.getElement().getParentElement()
 					.appendChild(penCanvas.getCanvas().getElement());
 		}
 
@@ -1483,7 +1488,6 @@ public class EuclidianViewW extends EuclidianView implements
 	public void invalidateCache() {
 		if (penCanvas != null) {
 			cacheGraphics = false;
-			Scheduler.get().scheduleDeferred(() -> penCanvas.clearAll());
 		}
 	}
 
