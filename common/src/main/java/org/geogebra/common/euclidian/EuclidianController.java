@@ -316,7 +316,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected GeoPointND firstSelectedPoint;
 	protected Hits handleAddSelectedArrayList = new Hits();
 	protected Coords tmpCoordsL3;
-	protected boolean penDragged;
 	protected boolean doubleClickStarted;
 	protected double twoTouchStartX;
 	protected double twoTouchStartY;
@@ -8329,8 +8328,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            whether to start capturing events (HTML5)
 	 */
 	public void wrapMouseDragged(AbstractEvent event, boolean startCapture) {
-		if (pen != null && !penDragged && freehandModePrepared) {
+		if (penMode(mode)) {
 			getPen().handleMouseDraggedForPenMode(event);
+			return;
 		}
 
 		if (shouldHideDynamicStyleBar(event)) {
@@ -8424,11 +8424,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 		if (pressedButton != null && !app.showView(App.VIEW_PROPERTIES)) {
 			pressedButton.setDraggedOrContext(true);
-		}
-		if (penMode(mode)) {
-			penDragged = true;
-			getPen().handleMouseDraggedForPenMode(event);
-			return;
 		}
 
 		DrawDropDownList dl = view.getOpenedComboBox();
@@ -9179,8 +9174,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		app.maySetCoordSystem();
 
 		scriptsHaveRun = false;
-
-		penDragged = false;
 
 		if (app.isUsingFullGui() && app.getGuiManager() != null) {
 			// determine parent panel to change focus
@@ -10169,15 +10162,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			pressedButton = null;
 		}
 
-		boolean isPenDragged = penMode(mode) && penDragged;
 		// remove deletion rectangle
 		if (view.getDeletionRectangle() != null) {
 			// ended deletion
 			view.setDeletionRectangle(null);
 			view.repaintView();
-			if (!isPenDragged) {
-				storeUndoInfo();
-			}
+			storeUndoInfo();
 		}
 
 		// reset
@@ -10189,9 +10179,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 		// make sure we start the timer also for single point
-		if (!isPenDragged && penMode(mode)) {
-			getPen().startTimer();
-		}
 		if (penMode(mode)) {
 			boolean geoCreated = getPen().handleMouseReleasedForPenMode(right, x, y,
 					(numOfTargets > 0));
