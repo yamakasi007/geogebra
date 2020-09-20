@@ -87,6 +87,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import elemental2.dom.DomGlobal;
@@ -685,11 +686,19 @@ public class EuclidianViewW extends EuclidianView implements
 			this.g2p = new GGraphics2DE();
 		}
 
-		penCanvas = new GGraphics2DW(Canvas.createIfSupported());
-
 		updateFonts();
 		initView(true);
 		attachView();
+
+		Panel panel = evPanel.getEuclidianPanel();
+		if (panel instanceof EuclidianDockPanelWAbstract.EuclidianPanel) {
+			penCanvas = new GGraphics2DW(Canvas.createIfSupported());
+			g2p.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+			penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+			((EuclidianDockPanelWAbstract.EuclidianPanel) panel)
+					.getAbsolutePanel().getElement()
+					.appendChild(penCanvas.getCanvas().getElement());
+		}
 
 		euclidiancontroller.setView(this);
 
@@ -1491,14 +1500,10 @@ public class EuclidianViewW extends EuclidianView implements
 
 	@Override
 	public void invalidateCache() {
-		if (cacheGraphics) {
-			getEuclidianController().getPen().clearPreviewPoints();
+		if (penCanvas != null) {
+			cacheGraphics = false;
+			Scheduler.get().scheduleDeferred(() -> penCanvas.clearAll());
 		}
-		cacheGraphics = false;
-		penCanvas.clearAll();
-		// fix for chromium bug with putImageData
-		// https://bugs.chromium.org/p/chromium/issues/detail?id=68495
-		forceResize(this);
 	}
 
 	/**
@@ -1512,9 +1517,5 @@ public class EuclidianViewW extends EuclidianView implements
 		penCanvas.setStroke(EuclidianStatic.getStroke(pen.getPenSize(),
 				GBasicStroke.CAP_ROUND, GBasicStroke.JOIN_ROUND));
 		penCanvas.setColor(pen.getPenColor());
-		penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-		g2p.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-		((EuclidianDockPanelWAbstract.EuclidianPanel) evPanel.getEuclidianPanel())
-				.getAbsolutePanel().getElement().appendChild(penCanvas.getCanvas().getElement());
 	}
 }

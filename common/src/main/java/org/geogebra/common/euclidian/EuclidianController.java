@@ -9135,6 +9135,13 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		// if we need label hit, it will be recomputed
 		view.setLabelHitNeedsRefresh();
 
+		widgetsToBackground();
+		view.hideSymbolicEditor();
+		if (penMode(mode)) {
+			getPen().handleMousePressedForPenMode(event);
+			return;
+		}
+
 		long last = event.getType() == PointerEventType.MOUSE
 				? this.lastMouseRelease : this.lastTouchRelease;
 		if (last + EuclidianConstants.DOUBLE_CLICK_DELAY > System
@@ -9165,9 +9172,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 
-		widgetsToBackground();
-		view.hideSymbolicEditor();
-
 		lastMousePressedTime = System.currentTimeMillis();
 
 		app.storeUndoInfoIfSetCoordSystemOccured();
@@ -9197,9 +9201,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		if (popupJustClosed) {
 			popupJustClosed = false;
-		} else if (penMode(mode)) {
-			getPen().handleMousePressedForPenMode(event);
-			return;
 		}
 		// check if side of bounding box was hit
 		wasBoundingBoxHit = view.getBoundingBox() != null
@@ -10182,6 +10183,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (penMode(mode)) {
 			boolean geoCreated = getPen().handleMouseReleasedForPenMode(right, x, y,
 					(numOfTargets > 0));
+			getPen().clearPreviewPoints();
+			view.invalidateCache();
 			if (geoCreated) {
 				storeUndoInfo();
 			}
