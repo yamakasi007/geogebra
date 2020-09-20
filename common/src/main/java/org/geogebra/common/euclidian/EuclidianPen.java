@@ -450,13 +450,9 @@ public class EuclidianPen implements GTimerListener {
 			return;
 		}
 
-		AlgoLocusStroke strokeAlgo = new AlgoLocusStroke(cons, newPts);
-		// set label
-		strokeAlgo.getOutput(0).setLabel(null);
-		strokeAlgo.getOutput(0).setTooltipMode(GeoElementND.TOOLTIP_OFF);
-		lastAlgo = strokeAlgo;
+		lastAlgo = new AlgoLocusStroke(cons, newPts);
 
-		GeoElement stroke = strokeAlgo.getOutput(0);
+		GeoElement stroke = lastAlgo.getOutput(0);
 
 		stroke.setLineThickness(penSize * PEN_SIZE_FACTOR);
 		stroke.setLineType(penLineStyle);
@@ -464,7 +460,9 @@ public class EuclidianPen implements GTimerListener {
 		stroke.setObjColor(penColor);
 		stroke.updateVisualStyle(GProperty.COMBINED);
 
-		stroke.updateRepaint();
+		// set label
+		stroke.setLabel(null);
+		stroke.setTooltipMode(GeoElementND.TOOLTIP_OFF);
 
 		// app.storeUndoInfo() will be called from wrapMouseReleasedND
 	}
