@@ -48,7 +48,6 @@ import org.geogebra.web.html5.export.ExportLoader;
 import org.geogebra.web.html5.gawt.GBufferedImageW;
 import org.geogebra.web.html5.gui.GuiManagerInterfaceW;
 import org.geogebra.web.html5.gui.util.CancelEventTimer;
-import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.ImgResourceHelper;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
 import org.geogebra.web.html5.main.AppW;
@@ -170,7 +169,7 @@ public class EuclidianViewW extends EuclidianView implements
 
 		initBaseComponents(euclidianViewPanel, euclidiancontroller, evNo,
 				settings);
-		initClickStartHandler();
+		initAriaDefaults();
 		attachFocusinHandler();
 	}
 
@@ -185,24 +184,6 @@ public class EuclidianViewW extends EuclidianView implements
         }
         element.addEventListener("focusin", handler);
     }-*/;
-
-	private void initClickStartHandler() {
-		AbsolutePanel panel = getAbsolutePanel();
-		if (panel == null) {
-			return;
-		}
-		ClickStartHandler.init(panel, new ClickStartHandler() {
-			@Override
-			public void onClickStart(final int x, final int y,
-					PointerEventType type) {
-				getEuclidianController().closePopups(x, y, type);
-				if (appW.isMenuShowing()) {
-					appW.toggleMenu();
-				}
-			}
-		});
-		initAriaDefaults();
-	}
 
 	/**
 	 * @param euclidiancontroller
@@ -228,7 +209,7 @@ public class EuclidianViewW extends EuclidianView implements
 		// at mouse events which call setActiveToolbarId #plotpanelevno
 		// initBaseComponents(EVPanel, euclidiancontroller, -1);
 		initBaseComponents(evPanel, euclidiancontroller, viewNo, settings);
-		initClickStartHandler();
+		initAriaDefaults();
 	}
 
 	private void initAriaDefaults() {
