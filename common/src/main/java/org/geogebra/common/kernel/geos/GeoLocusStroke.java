@@ -673,22 +673,6 @@ public class GeoLocusStroke extends GeoLocus
 				|| DoubleUtil.isEqual(segStart, segEnd);
 	}
 
-	// data has to have at least 2 defined points after each other
-	private static boolean canBeBezierCurve(List<MyPoint> data) {
-		boolean firstDefFound = false;
-		for (MyPoint datum : data) {
-			if (datum.isDefined()) {
-				if (firstDefFound) {
-					return true;
-				}
-				firstDefFound = true;
-			} else {
-				firstDefFound = false;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * Append the given points to the locus stroke
 	 *
@@ -709,16 +693,7 @@ public class GeoLocusStroke extends GeoLocus
 	private void doAppendPointArray(ArrayList<MyPoint> data) {
 		resetXMLPointBuilder();
 		setDefined(true);
-		// to use bezier curve we need at least 2 points
-		// stroke is: (A),(?),(A),(B) -> size 4
-		if (canBeBezierCurve(data)) {
-			addBezierCurve(data);
-		} else {
-			addNonBezierPoints(data);
-		}
-	}
 
-	private void addBezierCurve(ArrayList<MyPoint> data) {
 		int index = 0;
 		while (index <= data.size()) {
 			List<MyPoint> partOfStroke = getPartOfPenStroke(index, data);
@@ -765,16 +740,6 @@ public class GeoLocusStroke extends GeoLocus
 			} else {
 				addPointLineTo(endPoint);
 			}
-		}
-	}
-
-	private void addNonBezierPoints(ArrayList<MyPoint> data) {
-		if (data.size() > 0) {
-			addPointMoveTo(data.get(0));
-			for (int i = 1; i < data.size(); i++) {
-				addPointLineTo(data.get(i));
-			}
-			ensureTrailingNaN(getPoints());
 		}
 	}
 
