@@ -38,7 +38,6 @@ public class GeoLocusStroke extends GeoLocus
 		PointRotateable, Dilateable {
 
 	private static final double MIN_CURVE_ANGLE = Math.PI / 60; // 3degrees
-	private static final int MAX_SEGMENT_LENGTH = 50;
 
 	/** cache the part of XML that follows after expression label="stroke1" */
 	private StringBuilder xmlPoints;
@@ -465,43 +464,9 @@ public class GeoLocusStroke extends GeoLocus
 			}
 		}
 		clearPoints();
-		doAppendPointArray(outside);
+		appendPointArray(outside);
 		updateCascade();
 		return !outside.isEmpty();
-	}
-
-	/**
-	 * Check for bezier segments longer than MAX_SEGMENT_LENGTH and split them
-	 * Returns the stroke points only, no control points.
-	 */
-	private ArrayList<MyPoint> increaseDensity() {
-		ArrayList<MyPoint> densePoints = new ArrayList<>();
-		int parts = 5;
-		int i = 1;
-		double rwLength = app.getActiveEuclidianView().getInvXscale() * MAX_SEGMENT_LENGTH;
-		densePoints.add(getPoints().get(0));
-		while (i < getPoints().size()) {
-			MyPoint pt0 = getPoints().get(i - 1);
-			MyPoint pt1 = getPoints().get(i);
-			if (pt1.getSegmentType() == SegmentType.CONTROL) {
-				MyPoint pt2 = getPoints().get(i + 1);
-				MyPoint pt3 = getPoints().get(i + 2);
-				if (pt3.distance(pt0) > rwLength) {
-					double[] xCoeff = bezierCoeffs(pt0.x, pt1.x, pt2.x, pt3.x);
-					double[] yCoeff = bezierCoeffs(pt0.y, pt1.y, pt2.y, pt3.y);
-					for (int sub = 1; sub < parts; sub++) {
-						double t = sub / (double) parts;
-						MyPoint subPoint = new MyPoint(evalCubic(xCoeff, t), evalCubic(yCoeff, t));
-						densePoints.add(subPoint);
-					}
-				}
-				i += 2;
-			} else {
-				densePoints.add(pt1);
-				i++;
-			}
-		}
-		return densePoints;
 	}
 
 	private MyPoint getNextPoint(int i) {
@@ -680,17 +645,6 @@ public class GeoLocusStroke extends GeoLocus
 	 *            points
 	 */
 	public void appendPointArray(ArrayList<MyPoint> data) {
-		doAppendPointArray(data);
-		ArrayList<MyPoint> densePoints = increaseDensity();
-		if (densePoints.size() > data.size()) {
-			clearPoints();
-			doAppendPointArray(densePoints);
-		}
-
-		updateCascade();
-	}
-
-	private void doAppendPointArray(ArrayList<MyPoint> data) {
 		resetXMLPointBuilder();
 		setDefined(true);
 
