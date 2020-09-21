@@ -74,7 +74,7 @@ public class EuclidianPen implements GTimerListener {
 	private GColor penColor = GColor.BLACK;
 
 	private final PenPreviewLine penPreviewLine;
-	private final ArrayList<GPoint> previewPoints = new ArrayList<>();
+	protected final ArrayList<GPoint> previewPoints = new ArrayList<>();
 
 	/************************************************
 	 * Construct EuclidianPen
@@ -250,8 +250,6 @@ public class EuclidianPen implements GTimerListener {
 			timer.stop();
 
 			view.setCursor(EuclidianCursor.TRANSPARENT);
-			penPoints.clear();
-			previewPoints.clear();
 			view.cacheGraphics();
 			addPointPenMode(e);
 		}
@@ -406,6 +404,9 @@ public class EuclidianPen implements GTimerListener {
 		app.setDefaultCursor();
 
 		addPointsToPolyLine(penPoints);
+
+		penPoints.clear();
+		previewPoints.clear();
 		return true;
 	}
 
@@ -503,13 +504,13 @@ public class EuclidianPen implements GTimerListener {
 		return false;
 	}
 
+	/**
+	 * Paint on graphics if needed
+	 * @param g2 graphics
+	 */
 	public void repaintIfNeeded(GGraphics2D g2) {
 		if (!previewPoints.isEmpty()) {
 			penPreviewLine.drawPolyline(previewPoints, g2);
 		}
-	}
-
-	public void clearPreviewPoints() {
-		previewPoints.clear();
 	}
 }

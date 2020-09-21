@@ -170,6 +170,7 @@ public class EuclidianPenFreehand extends EuclidianPen {
 		GeoElement shape = checkExpectedShape();
 
 		penPoints.clear();
+		previewPoints.clear();
 
 		app.refreshViews(); // clear trace
 

@@ -10183,7 +10183,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (penMode(mode)) {
 			boolean geoCreated = getPen().handleMouseReleasedForPenMode(right, x, y,
 					(numOfTargets > 0));
-			getPen().clearPreviewPoints();
 			view.invalidateCache();
 			if (geoCreated) {
 				storeUndoInfo();

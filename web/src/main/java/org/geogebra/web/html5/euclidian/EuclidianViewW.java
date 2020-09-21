@@ -275,20 +275,22 @@ public class EuclidianViewW extends EuclidianView implements
 	 * the repaint should be done immediately
 	 */
 	public final void doRepaint2() {
+		long time = System.currentTimeMillis();
+
 		if (cacheGraphics != null && cacheGraphics) {
 			penCanvas.clearRect(0, 0, getWidth(), getHeight());
 			getEuclidianController().getPen().repaintIfNeeded(penCanvas);
-			return;
+		} else {
+			g2p.resetLayer();
+			updateBackgroundIfNecessary();
+			paint(g2p);
+
+			if (cacheGraphics != null) {
+				cacheGraphics = null;
+				penCanvas.clearAll();
+			}
 		}
 
-		long time = System.currentTimeMillis();
-		g2p.resetLayer();
-		updateBackgroundIfNecessary();
-		paint(g2p);
-		if (cacheGraphics != null) {
-			cacheGraphics = null;
-			penCanvas.clearAll();
-		}
 		// if we have pen tool in action
 		// repaint the preview line
 		lastRepaint = System.currentTimeMillis() - time;
