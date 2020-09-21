@@ -2,6 +2,7 @@ package org.geogebra.web.full.main.embed;
 
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.kernel.geos.GeoEmbed;
+import org.geogebra.common.main.App;
 import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.util.h5pviewer.H5P;
 import org.geogebra.web.html5.util.h5pviewer.H5PPaths;
@@ -18,6 +19,7 @@ public class H5PEmbedElement extends EmbedElement {
 	public static final int BOTTOM_BAR = 48;
 	private final int embedId;
 	public static final int SCALE = 3;
+	private final App app;
 	private double initialHeight;
 	private elemental2.dom.Element frame;
 	private double initialRatio;
@@ -33,7 +35,8 @@ public class H5PEmbedElement extends EmbedElement {
 		this.widget = widget;
 		this.geoEmbed = geoEmbed;
 		embedId = geoEmbed.getEmbedID();
-		euclidianController = geoEmbed.getApp().getActiveEuclidianView().getEuclidianController();
+		app = geoEmbed.getApp();
+		euclidianController = app.getActiveEuclidianView().getEuclidianController();
 		load();
 	}
 
@@ -55,6 +58,7 @@ public class H5PEmbedElement extends EmbedElement {
 		h5P.then(p -> {
 			update();
 			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
+			app.storeUndoInfo();
 			geoEmbed.updateRepaint();
 			frame = Js.cast(element.getOwnerDocument()
 					.getElementById("h5p-iframe-embed" + embedId));
