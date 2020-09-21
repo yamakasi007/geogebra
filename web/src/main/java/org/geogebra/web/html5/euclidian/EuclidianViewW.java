@@ -115,7 +115,7 @@ public class EuclidianViewW extends EuclidianView implements
 	private GGraphics2DWI g2p = null;
 	private GGraphics2D g2dtemp;
 	private GGraphics2DW g4copy = null;
-	private GGraphics2DW penCanvas;
+	private GGraphics2DWI penCanvas;
 
 	private GColor backgroundColor = GColor.WHITE;
 	private int waitForRepaint = TimerSystemW.SLEEPING_FLAG;
@@ -682,11 +682,16 @@ public class EuclidianViewW extends EuclidianView implements
 
 		if (getViewID() == App.VIEW_EUCLIDIAN || getViewID() == App.VIEW_EUCLIDIAN2) {
 			g2p.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-			penCanvas = new GGraphics2DW(Canvas.createIfSupported());
-			penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-			penCanvas.setDevicePixelRatio(appW.getPixelRatio());
-			g2p.getElement().getParentElement()
-					.appendChild(penCanvas.getCanvas().getElement());
+			Canvas pCanvas = Canvas.createIfSupported();
+			if (pCanvas != null) {
+				penCanvas = new GGraphics2DW(pCanvas);
+				penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+				penCanvas.setDevicePixelRatio(appW.getPixelRatio());
+				g2p.getElement().getParentElement()
+						.appendChild(penCanvas.getCanvas().getElement());
+			} else {
+				penCanvas = new GGraphics2DE();
+			}
 		}
 
 		euclidiancontroller.setView(this);
