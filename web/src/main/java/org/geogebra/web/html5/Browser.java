@@ -315,14 +315,16 @@ public class Browser {
 			return;
 		}
 
-		String transform = scaleX == scaleY
-				? "scale(" + scaleX + ")"
-				: "scale(" + scaleX + ", " + scaleY + ")";
+		String transform;
+		if (DoubleUtil.isEqual(scaleX, scaleY)) {
+			transform = DoubleUtil.isEqual(scaleX, 1)
+						? "none"
+						: "scale(" + scaleX + ")";
+		} else {
+			transform = "scale(" + scaleX + ", " + scaleY + ")";
+		}
 		parent.addClassName("ggbTransform");
 
-		if (DoubleUtil.isEqual(scaleX, 1)) {
-			transform = "none";
-		}
 		String pos = x + "% " + y + "%";
 
 		Style style = parent.getStyle();
