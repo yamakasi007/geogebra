@@ -11,6 +11,7 @@ import org.geogebra.common.gui.toolcategorization.AppType;
 import org.geogebra.common.io.layout.DockPanelData;
 import org.geogebra.common.kernel.ConstructionDefaults;
 import org.geogebra.common.kernel.Kernel;
+import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.arithmetic.SymbolicMode;
 import org.geogebra.common.kernel.arithmetic.filter.OperationArgumentFilter;
 import org.geogebra.common.kernel.commands.filter.CommandArgumentFilter;
@@ -318,4 +319,10 @@ public class AppConfigDefault extends AbstractAppConfig {
 	public boolean hasAnsButtonInAv() {
 		return false;
 	}
+
+	@Override
+	public StringTemplate getOutputStringTemplate() {
+		return StringTemplate.latexTemplate;
+	}
 }
+
