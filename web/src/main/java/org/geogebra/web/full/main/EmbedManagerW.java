@@ -99,17 +99,40 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 						.setContent(content.get(embedID));
 			}
 		} else if ("h5p".equals(appName)) {
-			addHP5Viewer(drawEmbed);
+			addHP5Embed(drawEmbed);
 		} else {
 			addCalcEmbed(drawEmbed);
 		}
 	}
 
-	private void addHP5Viewer(DrawEmbed drawEmbed) {
+	private void addHP5Embed(DrawEmbed drawEmbed) {
+		EmbedElement h5PEmbed = getH5PEmbed(drawEmbed);
+		widgets.put(drawEmbed, h5PEmbed);
+	}
+
+	private H5PEmbedElement getH5PEmbed(DrawEmbed drawEmbed) {
+		H5PEmbedElement element;
+		if (cache.containsKey(drawEmbed.getEmbedID())) {
+			element = (H5PEmbedElement) getFromCacheAndShow(drawEmbed.getEmbedID());
+		} else {
+			element = createH5PEmbed(drawEmbed);
+		}
+		return element;
+	}
+
+	private EmbedElement getFromCacheAndShow(int embedID) {
+		EmbedElement embed = cache.get(embedID);
+		embed.setVisible(true);
+		cache.remove(embedID);
+		return embed;
+	}
+
+	private H5PEmbedElement createH5PEmbed(DrawEmbed drawEmbed) {
 		int embedID = drawEmbed.getEmbedID();
 		FlowPanel container = createH5PContainer(embedID);
 		addWidgetToCache(drawEmbed, container);
 		h5pEmbeds.get(embedID).setContent(H5PPaths.SAMPLE_CONTENT);
+		return (H5PEmbedElement) h5pEmbeds.get(embedID);
 	}
 
 	@Override
