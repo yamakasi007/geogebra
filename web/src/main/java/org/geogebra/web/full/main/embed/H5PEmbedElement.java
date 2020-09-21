@@ -40,7 +40,6 @@ public class H5PEmbedElement extends EmbedElement {
 	@Override
 	public void setContent(String url) {
 		this.url = url;
-
 		if (H5PLoader.isLoaded()) {
 			render();
 		}
@@ -51,21 +50,24 @@ public class H5PEmbedElement extends EmbedElement {
 		if (element == null) {
 			return;
 		}
-
 		H5P h5P = new H5P(Js.cast(element), url,
 				getOptions(), getDisplayOptions());
 		h5P.then(p -> {
-			double w = widget.getOffsetWidth();
-			double h = widget.getOffsetHeight() ;
-			initialRatio = h / w;
-			initialHeight = SCALE * initialRatio * w + BOTTOM_BAR;
-			geoEmbed.setSize(SCALE * w, initialHeight);
+			update();
 			geoEmbed.initPosition(geoEmbed.getApp().getActiveEuclidianView());
 			geoEmbed.updateRepaint();
 			frame = Js.cast(element.getOwnerDocument()
 					.getElementById("h5p-iframe-embed" + embedId));
 			return null;
 		});
+	}
+
+	public void update() {
+		double w = widget.getOffsetWidth();
+		double h = widget.getOffsetHeight() ;
+		initialRatio = h / w;
+		initialHeight = SCALE * initialRatio * w + BOTTOM_BAR;
+		geoEmbed.setSize(SCALE * w, initialHeight);
 	}
 
 	private JsPropertyMap<Object> getOptions() {

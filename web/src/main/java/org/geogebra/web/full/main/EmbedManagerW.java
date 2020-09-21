@@ -315,10 +315,6 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 			int contentWidth = drawEmbed.getGeoEmbed().getContentWidth();
 			int contentHeight = drawEmbed.getGeoEmbed().getContentHeight();
 			embedElement.setSize(contentWidth, contentHeight);
-			if ("h5p".equals(drawEmbed.getGeoEmbed().getAppName())) {
-				h5pEmbeds.get(drawEmbed.getEmbedID())
-						.setSize(contentWidth, contentHeight);
-			}
 		}
 	}
 
