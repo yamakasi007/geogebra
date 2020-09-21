@@ -682,6 +682,7 @@ public class EuclidianViewW extends EuclidianView implements
 			g2p.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
 			penCanvas = new GGraphics2DW(Canvas.createIfSupported());
 			penCanvas.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+			penCanvas.setDevicePixelRatio(appW.getPixelRatio());
 			g2p.getElement().getParentElement()
 					.appendChild(penCanvas.getCanvas().getElement());
 		}

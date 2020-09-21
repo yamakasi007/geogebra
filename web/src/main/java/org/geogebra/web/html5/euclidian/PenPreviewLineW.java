@@ -24,20 +24,26 @@ public class PenPreviewLineW extends PenPreviewLine {
 		double prevy = penPoints.get(0).y;
 
 		g2w.moveTo(prevx, prevy);
-		for (int i = 1; i < penPoints.size() - 2; i++) {
-			double c = (penPoints.get(i).x + penPoints.get(i + 1).x) / 2.0;
-			double d = (penPoints.get(i).y + penPoints.get(i + 1).y) / 2.0;
 
-			g2w.quadraticCurveTo(penPoints.get(i).x, penPoints.get(i).y, c, d);
+		if (penPoints.size() == 1) {
+			g2w.lineTo(prevx, prevy);
+		} else {
+			for (int i = 1; i < penPoints.size() - 2; i++) {
+				double c = (penPoints.get(i).x + penPoints.get(i + 1).x) / 2.0;
+				double d = (penPoints.get(i).y + penPoints.get(i + 1).y) / 2.0;
+
+				g2w.quadraticCurveTo(penPoints.get(i).x, penPoints.get(i).y, c, d);
+			}
+
+			// For the last 2 points
+			g2w.quadraticCurveTo(
+					penPoints.get(penPoints.size() - 2).x,
+					penPoints.get(penPoints.size() - 2).y,
+					penPoints.get(penPoints.size() - 1).x,
+					penPoints.get(penPoints.size() - 1).y
+			);
 		}
 
-		// For the last 2 points
-		g2w.quadraticCurveTo(
-				penPoints.get(penPoints.size() - 2).x,
-				penPoints.get(penPoints.size() - 2).y,
-				penPoints.get(penPoints.size() - 1).x,
-				penPoints.get(penPoints.size() - 1).y
-		);
 		g2w.stroke();
 	}
 }
