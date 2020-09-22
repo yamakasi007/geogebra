@@ -159,9 +159,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private CalcEmbedElement getCalcEmbed(DrawEmbed drawEmbed) {
 		CalcEmbedElement element;
 		if (cache.containsKey(drawEmbed.getEmbedID())) {
-			element = (CalcEmbedElement) cache.get(drawEmbed.getEmbedID());
-			element.setVisible(true);
-			cache.remove(drawEmbed.getEmbedID());
+			element = (CalcEmbedElement) getFromCacheAndShow(drawEmbed.getEmbedID());
 		} else {
 			element = createCalcEmbed(drawEmbed);
 		}
