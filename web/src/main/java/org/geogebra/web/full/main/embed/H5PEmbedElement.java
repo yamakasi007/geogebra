@@ -66,7 +66,7 @@ public class H5PEmbedElement extends EmbedElement {
 		});
 	}
 
-	public void update() {
+	private void update() {
 		double w = widget.getOffsetWidth();
 		double h = widget.getOffsetHeight() ;
 		initialRatio = h / w;

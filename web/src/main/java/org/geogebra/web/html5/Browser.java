@@ -290,7 +290,7 @@ public class Browser {
 	 *            origin y-coord in %
 	 */
 	public static void scale(Element parent, double externalScale, int x, int y) {
-
+		scale(parent, externalScale, externalScale, x, y);
 	}
 
 	/**
