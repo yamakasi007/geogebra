@@ -8,12 +8,16 @@ import jsinterop.annotations.JsFunction;
 import jsinterop.annotations.JsPackage;
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
+import jsinterop.base.JsPropertyMap;
 
 /**
  * GeoGebra-specific global variables (related to deployggb)
  */
 @JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "window")
 public class GeoGebraGlobal {
+
+	public static JsPropertyMap<Object> __ggb__giac;
+
 	@JsProperty(name = "renderGGBElement")
 	public static native void setRenderGGBElement(RenderGgbElementFunction callback);
 
