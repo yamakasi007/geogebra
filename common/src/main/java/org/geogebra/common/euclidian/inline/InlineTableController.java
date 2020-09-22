@@ -85,4 +85,6 @@ public interface InlineTableController extends HasTextFormat {
 	void setHorizontalAlignment(HorizontalAlignment alignment);
 
 	void setHeading(GColor color, boolean isRow);
+
+	void saveContent();
 }
