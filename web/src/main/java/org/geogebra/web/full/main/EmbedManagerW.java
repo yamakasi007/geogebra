@@ -510,8 +510,17 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private void showAndSelect(final GeoEmbed ge) {
 		ge.setLabel(null);
 		app.storeUndoInfo();
+		showAndSelectLater(ge);
+	}
+
+	private void showAndSelectLater(GeoEmbed ge) {
 		app.invokeLater(() -> app.getActiveEuclidianView().getEuclidianController()
 				.selectAndShowSelectionUI(ge));
+	}
+
+	private void showAndSelectNoUndo(final GeoEmbed ge) {
+		ge.setLabel(null);
+		showAndSelectLater(ge);
 	}
 
 	@Override
@@ -579,7 +588,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 		GeoEmbed geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
 		geoEmbed.setEmbedId(embedId);
 		geoEmbed.setAppName("h5p");
-		showAndSelect(geoEmbed);
+		showAndSelectNoUndo(geoEmbed);
 	}
 
 	@Override
