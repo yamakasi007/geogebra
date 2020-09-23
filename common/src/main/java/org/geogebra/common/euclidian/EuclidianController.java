@@ -316,7 +316,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected GeoPointND firstSelectedPoint;
 	protected Hits handleAddSelectedArrayList = new Hits();
 	protected Coords tmpCoordsL3;
-	protected boolean penDragged;
 	protected boolean doubleClickStarted;
 	protected double twoTouchStartX;
 	protected double twoTouchStartY;
@@ -367,8 +366,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private ModeShape shapeMode;
 	private GPoint2D startPoint = new GPoint2D();
 	private boolean externalHandling;
-	private long lastMouseRelease;
-	private long lastTouchRelease;
+	private long lastPointerRelease;
 	private boolean animationButtonPressed = false;
 	private boolean textfieldHasFocus = false;
 	private MyButton pressedButton;
@@ -8328,8 +8326,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            whether to start capturing events (HTML5)
 	 */
 	public void wrapMouseDragged(AbstractEvent event, boolean startCapture) {
-		if (pen != null && !penDragged && freehandModePrepared) {
+		if (penMode(mode)) {
 			getPen().handleMouseDraggedForPenMode(event);
+			return;
 		}
 
 		if (shouldHideDynamicStyleBar(event)) {
@@ -8423,11 +8422,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 		if (pressedButton != null && !app.showView(App.VIEW_PROPERTIES)) {
 			pressedButton.setDraggedOrContext(true);
-		}
-		if (penMode(mode)) {
-			penDragged = true;
-			getPen().handleMouseDraggedForPenMode(event);
-			return;
 		}
 
 		DrawDropDownList dl = view.getOpenedComboBox();
@@ -9139,16 +9133,23 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		// if we need label hit, it will be recomputed
 		view.setLabelHitNeedsRefresh();
 
-		long last = event.getType() == PointerEventType.MOUSE
-				? this.lastMouseRelease : this.lastTouchRelease;
-		if (last + EuclidianConstants.DOUBLE_CLICK_DELAY > System
-				.currentTimeMillis() && lastMouseUpLoc != null
+		widgetsToBackground();
+		view.hideSymbolicEditor();
+
+		if (lastPointerRelease + EuclidianConstants.DOUBLE_CLICK_DELAY
+				> System.currentTimeMillis() && lastMouseUpLoc != null
 				&& MyMath.length(event.getX() - lastMouseUpLoc.x,
 						event.getY() - lastMouseUpLoc.y) <= 3) {
 			this.doubleClickStarted = true;
 		}
 
 		setMouseLocation(event);
+
+		if (penMode(mode)) {
+			getPen().handleMousePressedForPenMode(event);
+			return;
+		}
+
 		updateHits(event);
 
 		setMoveModeForFurnitures();
@@ -9169,17 +9170,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 
-		widgetsToBackground();
-		view.hideSymbolicEditor();
-
 		lastMousePressedTime = System.currentTimeMillis();
 
 		app.storeUndoInfoIfSetCoordSystemOccured();
 		app.maySetCoordSystem();
 
 		scriptsHaveRun = false;
-
-		penDragged = false;
 
 		if (app.isUsingFullGui() && app.getGuiManager() != null) {
 			// determine parent panel to change focus
@@ -9203,9 +9199,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		if (popupJustClosed) {
 			popupJustClosed = false;
-		} else if (penMode(mode)) {
-			getPen().handleMousePressedForPenMode(event);
-			return;
 		}
 		// check if side of bounding box was hit
 		wasBoundingBoxHit = view.getBoundingBox() != null
@@ -10136,11 +10129,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			wrapMouseclicked(control, 2, type);
 		}
 		this.doubleClickStarted = false;
-		if (type == PointerEventType.MOUSE) {
-			this.lastMouseRelease = System.currentTimeMillis();
-		} else {
-			this.lastTouchRelease = System.currentTimeMillis();
-		}
+		this.lastPointerRelease = System.currentTimeMillis();
+
 		int x = event.getX();
 		int y = event.getY();
 		this.setLastMouseUpLoc(new GPoint(x, y));
@@ -10159,15 +10149,12 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			pressedButton = null;
 		}
 
-		boolean isPenDragged = penMode(mode) && penDragged;
 		// remove deletion rectangle
 		if (view.getDeletionRectangle() != null) {
 			// ended deletion
 			view.setDeletionRectangle(null);
 			view.repaintView();
-			if (!isPenDragged) {
-				storeUndoInfo();
-			}
+			storeUndoInfo();
 		}
 
 		// reset
@@ -10179,12 +10166,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			return;
 		}
 		// make sure we start the timer also for single point
-		if (!isPenDragged && penMode(mode)) {
-			getPen().startTimer();
-		}
 		if (penMode(mode)) {
 			getPen().handleMouseReleasedForPenMode(right, x, y,
 					(numOfTargets > 0));
+			view.invalidateCache();
 			draggingOccured = false;
 			return;
 		}
