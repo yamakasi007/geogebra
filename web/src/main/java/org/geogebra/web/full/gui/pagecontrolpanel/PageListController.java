@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.main.App.ExportType;
-import org.geogebra.common.main.undo.ActionExecutor;
 import org.geogebra.common.main.undo.AppState;
 import org.geogebra.common.main.undo.UndoManager;
 import org.geogebra.common.move.events.BaseEvent;
@@ -27,7 +26,6 @@ import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.awt.GGraphics2DW;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
 import org.geogebra.web.html5.gui.util.BrowserStorage;
-import org.geogebra.web.html5.gui.util.CancelEventTimer;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.PageListControllerInterface;
@@ -39,10 +37,10 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.event.dom.client.TouchMoveEvent;
@@ -57,8 +55,8 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
  *
  */
 public class PageListController implements PageListControllerInterface,
-		MouseDownHandler, MouseMoveHandler, MouseUpHandler, TouchStartHandler, ActionExecutor,
-		TouchMoveHandler, TouchEndHandler, ScrollHandler, Cards, EventListener, EventRenderable {
+		MouseDownHandler, MouseMoveHandler, MouseUpHandler, TouchStartHandler, MouseOutHandler,
+		TouchMoveHandler, TouchEndHandler, Cards, EventListener, EventRenderable {
 	/**
 	 * application {@link AppW}
 	 */
@@ -293,8 +291,7 @@ public class PageListController implements PageListControllerInterface,
 	 * @return index of the added slide
 	 */
 	private PagePreviewCard addSlide(int index, GgbFile ggbFile) {
-		PagePreviewCard previewCard = new PagePreviewCard(
-				app, index, ggbFile);
+		PagePreviewCard previewCard = new PagePreviewCard(app, index, ggbFile);
 		slides.add(index, previewCard);
 		return previewCard;
 	}
@@ -561,7 +558,7 @@ public class PageListController implements PageListControllerInterface,
 		if (Browser.isMobile()) {
 			return;
 		}
-		dragCtrl.move(event.getClientX(), event.getClientY(), false);
+		dragCtrl.move(event.getClientY(), false);
 	}
 
 	@Override
@@ -569,7 +566,12 @@ public class PageListController implements PageListControllerInterface,
 		if (Browser.isMobile()) {
 			return;
 		}
-		dragCtrl.stop(event.getClientX(), event.getClientY());
+		dragCtrl.stop();
+	}
+
+	@Override
+	public void onMouseOut(MouseOutEvent event) {
+		dragCtrl.stop();
 	}
 
 	@Override
@@ -581,7 +583,7 @@ public class PageListController implements PageListControllerInterface,
 	@Override
 	public void onTouchMove(TouchMoveEvent event) {
 		Touch t = event.getTargetTouches().get(0);
-		if (dragCtrl.move(t.getClientX(), t.getClientY(), true)) {
+		if (dragCtrl.move(t.getClientY(), true)) {
 			event.preventDefault();
 			event.stopPropagation();
 			listener.getScrollPanel().setTouchScrollingDisabled(true);
@@ -591,11 +593,7 @@ public class PageListController implements PageListControllerInterface,
 	@Override
 	public void onTouchEnd(TouchEndEvent event) {
 		listener.getScrollPanel().setTouchScrollingDisabled(false);
-		Touch t = event.getTargetTouches().get(0);
-		if (t == null) {
-			t = event.getChangedTouches().get(0);
-		}
-		dragCtrl.stop(t.getClientX(), t.getClientY());
+		dragCtrl.stop();
 	}
 
 	// Cards Interface
@@ -778,13 +776,6 @@ public class PageListController implements PageListControllerInterface,
 	}
 
 	@Override
-	public void onScroll(ScrollEvent event) {
-		if (!CancelEventTimer.isDragging()) {
-			dragCtrl.cancelDrag();
-		}
-	}
-
-	@Override
 	public void renderEvent(BaseEvent event) {
 		if (event instanceof LogOutEvent) {
 			BrowserStorage.LOCAL.removeItem(BrowserStorage.COPY_SLIDE);
@@ -814,5 +805,13 @@ public class PageListController implements PageListControllerInterface,
 		undoManager.storeAction(EventType.RENAME_SLIDE, "" + card.getPageIndex(),
 				oldTitle, card.getCardTitle());
 
+	}
+
+	@Override
+	public void clearSpaces() {
+		for (PagePreviewCard card : getCards()) {
+			card.resetTop();
+		}
+		listener.updateContentPanelHeight();
 	}
 }
