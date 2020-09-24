@@ -79,7 +79,7 @@ public class ImageLoader {
 
 	private void onLoadAll() {
 		if (images.isEmpty()) {
-			app.getAsyncManager().scheduleCallback(afterImages);
+			afterImages.run();
 		} else {
 			// on images do nothing here: wait for callback when images loaded.
 			imageManager.triggerImageLoading(app, afterImages, images);
