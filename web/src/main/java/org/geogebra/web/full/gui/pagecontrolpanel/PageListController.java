@@ -379,7 +379,7 @@ public class PageListController implements PageListControllerInterface,
 				slides.add(createCardFromArchive(archive, pages, i));
 			}
 
-			app.loadFileWithoutErrorHandling(slides.get(0).getFile(), false);
+			app.loadGgbFile(slides.get(0).getFile(), false);
 			listener.update();
 			setCardSelected(0);
 		} catch (Exception e) {
