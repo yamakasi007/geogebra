@@ -87,4 +87,8 @@ public interface InlineTableController extends HasTextFormat {
 	void setHeading(GColor color, boolean isRow);
 
 	void saveContent();
+
+	boolean isSingleCellSelection();
+
+	boolean hasSelection();
 }

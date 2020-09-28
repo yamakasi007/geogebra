@@ -47,7 +47,7 @@ public class CarotaTable implements HasContent {
 	}
 
 	@JsProperty
-	private native CarotaSelection getSelection();
+	public native CarotaSelection getSelection();
 
 	@JsOverlay
 	private int selectionX() {
