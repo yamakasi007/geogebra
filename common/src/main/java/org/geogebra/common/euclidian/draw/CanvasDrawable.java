@@ -274,11 +274,16 @@ public abstract class CanvasDrawable extends Drawable {
 	}
 
 	protected boolean hitWidgetBounds(int x, int y) {
-		int left = xLabel;
-		int top = boxTop;
-		int right = left + labelSize.x + boxWidth;
-		int bottom = top + boxHeight;
-		return x > left && x < right && y > top && y < bottom;
+		if(labelSize != null) {
+			int left = xLabel;
+			int top = boxTop;
+			int right = left + labelSize.x + boxWidth;
+			int bottom = top + boxHeight;
+			return x > left && x < right && y > top && y < bottom;
+		} else {
+			return false;
+		}
+
 	}
 
 	/**
@@ -289,7 +294,7 @@ public abstract class CanvasDrawable extends Drawable {
 	 */
 	protected boolean hitLabelBounds(int x, int y) {
 		int top = getLabelTop();
-		return x > xLabel && x < xLabel + labelSize.x && y > top
+		return labelSize != null && x > xLabel && x < xLabel + labelSize.x && y > top
 				&& y < top + getLabelHeight();
 	}
 
