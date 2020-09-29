@@ -218,6 +218,11 @@ public class DialogManagerW extends DialogManager
 		return true;
 	}
 
+	public void showCalcChooser() {
+		CalculatorSwitcherDialog calcSwitcher = new CalculatorSwitcherDialog((AppW) app);
+		calcSwitcher.show();
+	}
+
 	@Override
 	public void closeAll() {
 		// do nothing
