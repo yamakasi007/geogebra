@@ -23,7 +23,6 @@ import org.geogebra.common.kernel.commands.selector.CommandFilterFactory;
 import org.geogebra.common.kernel.geos.GeoConic;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.properties.FillType;
-import org.geogebra.common.kernel.parser.function.ParserFunctions;
 import org.geogebra.common.kernel.parser.function.ParserFunctionsFactory;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppKeyboardType;
@@ -306,8 +305,8 @@ public class AppConfigGraphing extends AbstractAppConfig {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions() {
-		return ParserFunctionsFactory.createGraphingParserFunctions();
+	public ParserFunctionsFactory createParserFunctionsFactory() {
+		return ParserFunctionsFactory.createGraphingParserFunctionsFactory();
 	}
 
 	@Override
