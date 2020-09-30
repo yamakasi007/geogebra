@@ -218,6 +218,9 @@ public class DialogManagerW extends DialogManager
 		return true;
 	}
 
+	/**
+	 * show calculator chooser for suite
+	 */
 	public void showCalcChooser() {
 		CalculatorSwitcherDialog calcSwitcher = new CalculatorSwitcherDialog((AppW) app);
 		calcSwitcher.show();
