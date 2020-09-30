@@ -60,8 +60,8 @@ public class CalculatorSwitcherDialog extends GPopupPanel implements Persistable
 	}
 
 	private StandardButton buildCalcButton(SVGResource icon, String appNameKey) {
-		 StandardButton button =  new StandardButton(icon, app.getLocalization()
-				.getMenu(appNameKey), 72, app);
+		 StandardButton button =  new StandardButton(app, 72, icon,
+				 app.getLocalization().getMenu(appNameKey));
 		button.setStyleName("calcBtn");
 		button.addFastClickHandler(source -> {
 			selectedBtn.removeStyleName("selected");
