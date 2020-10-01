@@ -9134,7 +9134,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		setMouseLocation(event);
 
-		if (penMode(mode)) {
+		if (popupJustClosed) {
+			popupJustClosed = false;
+		} else if (penMode(mode)) {
 			getPen().handleMousePressedForPenMode(event);
 			return;
 		}
@@ -9186,9 +9188,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		Hits hits;
 
-		if (popupJustClosed) {
-			popupJustClosed = false;
-		}
 		// check if side of bounding box was hit
 		wasBoundingBoxHit = view.getBoundingBox() != null
 				&& view.getBoundingBox().hitSideOfBoundingBox(event.getX(),
@@ -12225,14 +12224,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		boundingBox.setFixed(fixed);
 		boundingBox.setColor(app.getPrimaryColor());
 		view.setBoundingBox(boundingBox);
-	}
-
-	/**
-	 * 
-	 * @return if a popup or a floating menu just closed.
-	 */
-	public boolean isPopupJustClosed() {
-		return popupJustClosed;
 	}
 
 	/**
