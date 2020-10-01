@@ -294,4 +294,3 @@ public interface AppConfig {
 	 */
 	StringTemplate getOutputStringTemplate();
 }
-

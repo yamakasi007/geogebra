@@ -31,9 +31,7 @@ import org.geogebra.common.properties.factory.PropertiesFactory;
 
 /**
  * App-specific behaviors of Geometry app
- * 
  * @author Zbynek
- *
  */
 public class AppConfigGeometry extends AbstractAppConfig {
 
@@ -50,8 +48,7 @@ public class AppConfigGeometry extends AbstractAppConfig {
 		if (dp.getViewId() == App.VIEW_ALGEBRA) {
 			dp.setLocation("3");
 			dp.setTabId(DockPanelData.TabIds.TOOLS);
-		}
-		else if (dp.getViewId() == App.VIEW_EUCLIDIAN) {
+		} else if (dp.getViewId() == App.VIEW_EUCLIDIAN) {
 			dp.makeVisible();
 			dp.setLocation("1");
 		}
@@ -124,12 +121,12 @@ public class AppConfigGeometry extends AbstractAppConfig {
 
 	@Override
 	public int[] getDecimalPlaces() {
-		return new int[] {0, 1, 2, 3, 4, 5, 10, 15};
+		return new int[]{0, 1, 2, 3, 4, 5, 10, 15};
 	}
 
 	@Override
 	public int[] getSignificantFigures() {
-		return new int[] {3, 5, 10, 15};
+		return new int[]{3, 5, 10, 15};
 	}
 
 	@Override
@@ -162,15 +159,15 @@ public class AppConfigGeometry extends AbstractAppConfig {
 		return AppType.GEOMETRY_CALC;
 	}
 
-    @Override
-    public boolean showGridOnFileNew() {
-        return false;
-    }
+	@Override
+	public boolean showGridOnFileNew() {
+		return false;
+	}
 
-    @Override
-    public boolean showAxesOnFileNew() {
-        return false;
-    }
+	@Override
+	public boolean showAxesOnFileNew() {
+		return false;
+	}
 
 	@Override
 	public boolean hasTableView() {

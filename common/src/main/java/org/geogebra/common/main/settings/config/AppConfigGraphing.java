@@ -54,8 +54,7 @@ public class AppConfigGraphing extends AbstractAppConfig {
 	public void adjust(DockPanelData dp) {
 		if (dp.getViewId() == App.VIEW_ALGEBRA) {
 			dp.setLocation("3");
-		}
-		else if (dp.getViewId() == App.VIEW_EUCLIDIAN) {
+		} else if (dp.getViewId() == App.VIEW_EUCLIDIAN) {
 			dp.makeVisible();
 			dp.setLocation("1");
 		}
@@ -128,12 +127,12 @@ public class AppConfigGraphing extends AbstractAppConfig {
 
 	@Override
 	public int[] getDecimalPlaces() {
-		return new int[] {0, 1, 2, 3, 4, 5, 10, 13, 15};
+		return new int[]{0, 1, 2, 3, 4, 5, 10, 13, 15};
 	}
 
 	@Override
 	public int[] getSignificantFigures() {
-		return new int[] {3, 5, 10, 15};
+		return new int[]{3, 5, 10, 15};
 	}
 
 	@Override
@@ -166,15 +165,15 @@ public class AppConfigGraphing extends AbstractAppConfig {
 		return AppType.GRAPHING_CALCULATOR;
 	}
 
-    @Override
-    public boolean showGridOnFileNew() {
-        return true;
-    }
+	@Override
+	public boolean showGridOnFileNew() {
+		return true;
+	}
 
-    @Override
-    public boolean showAxesOnFileNew() {
-        return true;
-    }
+	@Override
+	public boolean showAxesOnFileNew() {
+		return true;
+	}
 
 	@Override
 	public boolean hasTableView() {

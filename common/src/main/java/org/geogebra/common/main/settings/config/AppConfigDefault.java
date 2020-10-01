@@ -68,8 +68,7 @@ public class AppConfigDefault extends AbstractAppConfig {
 	}
 
 	/**
-	 * @param appName
-	 *            app name
+	 * @param appName app name
 	 * @return whether app name is one of the unbundled apps
 	 */
 	public static boolean isUnbundledOrNotes(String appName) {
@@ -120,12 +119,12 @@ public class AppConfigDefault extends AbstractAppConfig {
 
 	@Override
 	public int[] getDecimalPlaces() {
-		return new int[] {0, 1, 2, 3, 4, 5, 10, 15};
+		return new int[]{0, 1, 2, 3, 4, 5, 10, 15};
 	}
 
 	@Override
 	public int[] getSignificantFigures() {
-		return new int[] {3, 5, 10, 15};
+		return new int[]{3, 5, 10, 15};
 	}
 
 	@Override
@@ -158,15 +157,15 @@ public class AppConfigDefault extends AbstractAppConfig {
 		return AppType.CLASSIC;
 	}
 
-    @Override
-    public boolean showGridOnFileNew() {
-	    return true;
-    }
+	@Override
+	public boolean showGridOnFileNew() {
+		return true;
+	}
 
-    @Override
-    public boolean showAxesOnFileNew() {
-        return true;
-    }
+	@Override
+	public boolean showAxesOnFileNew() {
+		return true;
+	}
 
 	@Override
 	public boolean hasTableView() {
@@ -301,13 +300,13 @@ public class AppConfigDefault extends AbstractAppConfig {
 
 	@Override
 	public int getEnforcedLineEquationForm() {
-	    return -1;
-    }
+		return -1;
+	}
 
 	@Override
 	public int getEnforcedConicEquationForm() {
-        return -1;
-    }
+		return -1;
+	}
 
 	@Override
 	public boolean shouldHideEquations() {
