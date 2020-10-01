@@ -1520,5 +1520,4 @@ public class GgbAPIW extends GgbAPI {
 			pageController.updatePreviewImage();
 		}
 	}
-
 }
