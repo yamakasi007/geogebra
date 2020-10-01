@@ -183,7 +183,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	/**
 	 * bounding box
 	 */
-	protected BoundingBox<? extends GShape> boundingBox;
+	protected BoundingBox boundingBox;
 	private EuclidianBoundingBoxHandler hitHandler = EuclidianBoundingBoxHandler.UNDEFINED;
 
 	// shape tools
@@ -504,7 +504,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	private DrawBackground drawBg = null;
 	private final HitDetector hitDetector;
 	private boolean isResetIconSelected = false;
-	private BoundingBox<? extends GShape> focusedGroupGeoBoundingBox;
+	private BoundingBox focusedGroupGeoBoundingBox;
 
 	protected SymbolicEditor symbolicEditor = null;
 
@@ -2785,7 +2785,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @param boundingBox
 	 *            - bounding box for select
 	 */
-	public void setBoundingBox(BoundingBox<? extends GShape> boundingBox) {
+	public void setBoundingBox(BoundingBox boundingBox) {
 		this.boundingBox = boundingBox;
 	}
 
@@ -2801,7 +2801,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @param boundingBox
 	 *            bounding box for focused group element selection
 	 */
-	public void setFocusedGroupGeoBoundingBox(BoundingBox<? extends GShape> boundingBox) {
+	public void setFocusedGroupGeoBoundingBox(BoundingBox boundingBox) {
 		this.focusedGroupGeoBoundingBox = boundingBox;
 	}
 
@@ -4214,7 +4214,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	/**
 	 * @return boundingBox
 	 */
-	public BoundingBox<? extends GShape> getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		return boundingBox;
 	}
 
@@ -6428,7 +6428,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 	}
 
-	public BoundingBox<? extends GShape> getFocusedGroupGeoBoundingBox() {
+	public BoundingBox getFocusedGroupGeoBoundingBox() {
 		return this.focusedGroupGeoBoundingBox;
 	}
 

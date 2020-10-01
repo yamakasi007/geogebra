@@ -4,7 +4,7 @@ import org.geogebra.common.awt.GEllipse2DDouble;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.factories.AwtFactory;
 
-public class SegmentBoundingBox extends BoundingBox<GEllipse2DDouble> {
+public class SegmentBoundingBox extends BoundingBox {
 
 	@Override
 	public void draw(GGraphics2D g2) {
@@ -35,7 +35,8 @@ public class SegmentBoundingBox extends BoundingBox<GEllipse2DDouble> {
 	 *            screen y-coord
 	 */
 	public void setHandlerFromCenter(int i, double x, double y) {
-		handlers.get(i).setFrameFromCenter(x, y, x + HANDLER_RADIUS, y + HANDLER_RADIUS);
+		GEllipse2DDouble ellipse = (GEllipse2DDouble) handlers.get(i);
+		ellipse.setFrameFromCenter(x, y, x + HANDLER_RADIUS, y + HANDLER_RADIUS);
 	}
 
 	@Override

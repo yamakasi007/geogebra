@@ -5,7 +5,7 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GLine2D;
 import org.geogebra.common.factories.AwtFactory;
 
-public class MultiBoundingBox extends BoundingBox<GEllipse2DDouble> {
+public class MultiBoundingBox extends BoundingBox {
 
 	private final boolean hasRotationHandler;
 
@@ -81,7 +81,8 @@ public class MultiBoundingBox extends BoundingBox<GEllipse2DDouble> {
 	}
 
 	private void setHandlerFromCenter(int i, double x, double y) {
-		handlers.get(i).setFrameFromCenter(x, y, x + HANDLER_RADIUS,
+		GEllipse2DDouble ellipse = (GEllipse2DDouble) handlers.get(i);
+		ellipse.setFrameFromCenter(x, y, x + HANDLER_RADIUS,
 				y + HANDLER_RADIUS);
 	}
 

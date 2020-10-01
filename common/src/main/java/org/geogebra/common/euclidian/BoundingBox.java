@@ -19,12 +19,12 @@ import org.geogebra.common.main.GeoGebraColorConstants;
  * @author csilla
  *
  */
-public abstract class BoundingBox<T extends GShape> {
+public abstract class BoundingBox {
 
 	protected static final int ROTATION_HANDLER_DISTANCE = 25;
 
 	protected GRectangle2D rectangle;
-	protected final ArrayList<T> handlers;
+	protected final ArrayList<GShape> handlers;
 	protected GColor color;
 	private boolean fixed;
 
@@ -106,7 +106,7 @@ public abstract class BoundingBox<T extends GShape> {
 	/**
 	 * @return a single handler
 	 */
-	protected abstract T createHandler();
+	protected abstract GShape createHandler();
 
 	/**
 	 * method to draw the bounding box construction for selected geo
@@ -164,7 +164,7 @@ public abstract class BoundingBox<T extends GShape> {
 	 *            controller threshold
 	 * @return distance threshold to select a point
 	 */
-	public static final int getSelectionThreshold(int threshold) {
+	public static int getSelectionThreshold(int threshold) {
 		return threshold + 12;
 	}
 

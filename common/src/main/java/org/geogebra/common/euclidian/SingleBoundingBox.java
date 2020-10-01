@@ -7,7 +7,7 @@ import org.geogebra.common.awt.GGraphics2D;
 /**
  * Simple bounding box with no handlers.
  */
-public class SingleBoundingBox extends BoundingBox<GEllipse2DDouble> {
+public class SingleBoundingBox extends BoundingBox {
 
 	public SingleBoundingBox(GColor color) {
 		setColor(color);

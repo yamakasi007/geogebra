@@ -9615,7 +9615,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void updateBoundingBoxFromSelection(boolean crop) {
 		List<GeoElement> sel = selection.getSelectedGeos();
-		BoundingBox<? extends GShape> boundingBox = getSpecialBoundingBox();
+		BoundingBox boundingBox = getSpecialBoundingBox();
 		if (boundingBox != null) {
 			if (boundingBox instanceof MediaBoundingBox) {
 				((MediaBoundingBox) boundingBox).setCropMode(crop);
@@ -9627,7 +9627,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 	}
 
-	private BoundingBox<? extends GShape> getSpecialBoundingBox() {
+	private BoundingBox getSpecialBoundingBox() {
 		ArrayList<GeoElement> selectedGeos = selection.getSelectedGeos();
 		if (selectedGeos.size() == 1) {
 			DrawableND dr = view.getDrawableFor(selectedGeos.get(0));
@@ -10319,8 +10319,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		Drawable drawable = (Drawable) view
 				.getDrawableFor(geo);
 		if (drawable != null) {
-			BoundingBox<? extends GShape> bb = drawable
-					.getSelectionBoundingBox();
+			BoundingBox bb = drawable.getSelectionBoundingBox();
 			view.setHitHandler(EuclidianBoundingBoxHandler.UNDEFINED);
 			view.setFocusedGroupGeoBoundingBox(bb);
 			view.update(geo);
@@ -12183,7 +12182,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 	private void setBoundingBoxCursor() {
 		EuclidianBoundingBoxHandler nrHandler = view.getHitHandler();
-		BoundingBox<?> box = view.getBoundingBox();
+		BoundingBox box = view.getBoundingBox();
 		if (box != null) {
 			EuclidianCursor cursor = box.getCursor(nrHandler);
 			if (cursor != null) {

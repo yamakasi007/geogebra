@@ -55,7 +55,7 @@ public abstract class DrawWidget extends Drawable {
 	}
 
 	@Override
-	public BoundingBox<? extends GShape> getSelectionBoundingBox() {
+	public BoundingBox getSelectionBoundingBox() {
 		return getBoundingBox();
 	}
 

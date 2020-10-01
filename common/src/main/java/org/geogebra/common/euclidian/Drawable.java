@@ -190,7 +190,7 @@ public abstract class Drawable extends DrawableND {
 	/**
 	 * @return bounding box with handlers
 	 */
-	public BoundingBox<? extends GShape> getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		return null;
 	}
 
@@ -948,7 +948,7 @@ public abstract class Drawable extends DrawableND {
 		}
 	}
 
-	public BoundingBox<? extends GShape> getSelectionBoundingBox() {
+	public BoundingBox getSelectionBoundingBox() {
 		return new SingleBoundingBox(view.getApplication().getPrimaryColor());
 	}
 }

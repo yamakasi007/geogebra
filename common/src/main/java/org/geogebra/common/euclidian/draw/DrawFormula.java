@@ -107,7 +107,7 @@ public class DrawFormula extends Drawable implements DrawInline {
 	}
 
 	@Override
-	public BoundingBox<? extends GShape> getSelectionBoundingBox() {
+	public BoundingBox getSelectionBoundingBox() {
 		return getBoundingBox();
 	}
 

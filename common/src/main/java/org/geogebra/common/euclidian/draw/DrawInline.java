@@ -22,7 +22,7 @@ public interface DrawInline extends RemoveNeeded {
 	 */
 	void toBackground();
 
-	BoundingBox<? extends GShape> getBoundingBox();
+	BoundingBox getBoundingBox();
 
 	/**
 	 * @param x x mouse coordinate in pixels

@@ -9,7 +9,7 @@ import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.RectangleTransformable;
 
-public class MediaBoundingBox extends BoundingBox<GShape> {
+public class MediaBoundingBox extends BoundingBox {
 
 	protected RectangleTransformable geo;
 	protected GAffineTransform transform;
