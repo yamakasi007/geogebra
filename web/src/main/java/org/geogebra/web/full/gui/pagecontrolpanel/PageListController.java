@@ -293,6 +293,7 @@ public class PageListController implements PageListControllerInterface,
 	private PagePreviewCard addSlide(int index, GgbFile ggbFile) {
 		PagePreviewCard previewCard = new PagePreviewCard(app, index, ggbFile);
 		slides.add(index, previewCard);
+		resetCardPositions();
 		return previewCard;
 	}
 
@@ -369,7 +370,7 @@ public class PageListController implements PageListControllerInterface,
 		}
 		String structure = archive.remove(GgbFile.STRUCTURE_JSON);
 		slides.clear();
-		Log.debug(structure);
+
 		try {
 			JSONObject response = new JSONObject(new JSONTokener(structure));
 			JSONArray pages = response.getJSONArray("chapters").getJSONObject(0)
@@ -571,6 +572,7 @@ public class PageListController implements PageListControllerInterface,
 
 	@Override
 	public void onMouseOut(MouseOutEvent event) {
+		dragCtrl.cancelClick();
 		dragCtrl.stop();
 	}
 
@@ -808,7 +810,7 @@ public class PageListController implements PageListControllerInterface,
 	}
 
 	@Override
-	public void clearSpaces() {
+	public void resetCardPositions() {
 		for (PagePreviewCard card : getCards()) {
 			card.resetTop();
 		}

@@ -283,6 +283,7 @@ public class PageListPanel
 		PagePreviewCard dup = pageController.pasteSlideStoreUndo(src, json);
 		addPreviewCard(dup);
 		pageController.updatePreviewImage();
+		update();
 	}
 
 	/**
@@ -296,7 +297,7 @@ public class PageListPanel
 			card.setPageIndex(index++);
 			addPreviewCard(card);
 		}
-		pageController.clearSpaces();
+		pageController.resetCardPositions();
 	}
 
 	@Override
