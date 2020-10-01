@@ -52,7 +52,7 @@ public class CalculatorSwitcherDialog extends GPopupPanel implements Persistable
 				"Geometry");
 		contentPanel.add(btnGeometry);
 
-		StandardButton btnCAS = buildCalcButton(res.menu_icon_cas_transparent(),
+		StandardButton btnCAS = buildCalcButton(res.cas_white_bg(),
 				"CAS");
 		contentPanel.add(btnCAS);
 
