@@ -130,7 +130,7 @@ public interface SvgPerspectiveResources extends ClientBundle {
 	@Source("org/geogebra/common/icons/svg/web/menuIconsTransparent/menu_view_exam.svg")
 	SVGResource menu_icon_exam_transparent();
 
-	@Source("org/geogebra/common/icons/svg/web/menuIconsTransparent/cas.svg")
+	@Source("org/geogebra/common/icons/svg/web/menu_icons/cas.svg")
 	SVGResource cas_white_bg();
 
 	// StyleBar
