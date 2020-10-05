@@ -127,4 +127,7 @@ public class AppConfigSuite extends AppConfigGraphing {
 	public boolean isCoordinatesObjectSettingEnabled() {
 		return true;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

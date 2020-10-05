@@ -160,4 +160,7 @@ public class AppConfigScientific extends AppConfigGraphing {
 	public AppKeyboardType getKeyboardType() {
 		return AppKeyboardType.SCIENTIFIC;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

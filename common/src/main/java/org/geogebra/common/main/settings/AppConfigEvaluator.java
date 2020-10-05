@@ -62,4 +62,7 @@ public class AppConfigEvaluator extends AppConfigDefault {
 		return false;
 	}
 
+	@Override
+	public boolean hasLabelForDescription() { return true; };
+
 }

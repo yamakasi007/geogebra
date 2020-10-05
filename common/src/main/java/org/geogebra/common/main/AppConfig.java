@@ -280,5 +280,10 @@ public interface AppConfig {
 	 * @return true if trace is enabled in context menu
 	 */
 	boolean disableTraceCM();
+
+	/**
+	 * @return true if label should be shown for description AV style
+	 */
+	boolean hasLabelForDescription();
 }
 

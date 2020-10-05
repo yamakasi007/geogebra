@@ -48,4 +48,7 @@ public class AppConfigMixedReality extends AppConfigDefault {
 	public boolean shouldHideEquations() {
 		return false;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

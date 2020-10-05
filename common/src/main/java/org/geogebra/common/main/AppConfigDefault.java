@@ -314,4 +314,7 @@ public class AppConfigDefault implements AppConfig {
 	public boolean hasAnsButtonInAv() {
 		return false;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

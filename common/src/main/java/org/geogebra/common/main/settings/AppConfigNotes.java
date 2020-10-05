@@ -65,4 +65,7 @@ public class AppConfigNotes extends AppConfigDefault {
 	public boolean disableTraceCM() {
 		return true;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

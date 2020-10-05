@@ -320,4 +320,7 @@ public class AppConfigGeometry implements AppConfig {
 	public boolean hasAnsButtonInAv() {
 		return true;
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return true; };
 }

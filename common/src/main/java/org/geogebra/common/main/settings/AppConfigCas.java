@@ -158,4 +158,7 @@ public class AppConfigCas extends AppConfigGraphing {
 	public PropertiesFactory createPropertiesFactory() {
 		return new CasPropertiesFactory();
 	}
+
+	@Override
+	public boolean hasLabelForDescription() { return false; };
 }
