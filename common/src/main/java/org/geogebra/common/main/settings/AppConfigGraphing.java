@@ -324,5 +324,7 @@ public class AppConfigGraphing implements AppConfig {
 	}
 
 	@Override
-	public boolean hasLabelForDescription() { return true; };
+	public boolean hasLabelForDescription() {
+		return true;
+	}
 }

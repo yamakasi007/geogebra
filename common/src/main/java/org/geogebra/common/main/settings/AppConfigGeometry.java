@@ -322,5 +322,7 @@ public class AppConfigGeometry implements AppConfig {
 	}
 
 	@Override
-	public boolean hasLabelForDescription() { return true; };
+	public boolean hasLabelForDescription() {
+		return true;
+	}
 }

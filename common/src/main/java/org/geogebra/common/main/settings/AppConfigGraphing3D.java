@@ -205,5 +205,7 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 	}
 
 	@Override
-	public boolean hasLabelForDescription() { return true; };
+	public boolean hasLabelForDescription() {
+		return true;
+	}
 }

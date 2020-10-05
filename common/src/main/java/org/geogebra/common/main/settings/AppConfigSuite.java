@@ -129,5 +129,7 @@ public class AppConfigSuite extends AppConfigGraphing {
 	}
 
 	@Override
-	public boolean hasLabelForDescription() { return true; };
+	public boolean hasLabelForDescription() {
+		return true;
+	}
 }
