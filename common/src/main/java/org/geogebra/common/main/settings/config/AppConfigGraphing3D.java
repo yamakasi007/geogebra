@@ -1,4 +1,4 @@
-package org.geogebra.common.main.settings;
+package org.geogebra.common.main.settings.config;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,7 +16,6 @@ import org.geogebra.common.kernel.arithmetic.filter.OperationArgumentFilter;
 import org.geogebra.common.kernel.commands.filter.CommandArgumentFilter;
 import org.geogebra.common.kernel.commands.selector.CommandFilter;
 import org.geogebra.common.kernel.geos.properties.FillType;
-import org.geogebra.common.kernel.parser.function.ParserFunctions;
 import org.geogebra.common.kernel.parser.function.ParserFunctionsFactory;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.syntax.suggestionfilter.SyntaxFilter;
@@ -27,6 +26,14 @@ import org.geogebra.common.properties.factory.PropertiesFactory;
  * Config for 3D Graphing Calculator app
  */
 public class AppConfigGraphing3D extends AppConfigGraphing {
+
+	public AppConfigGraphing3D() {
+		super(GeoGebraConstants.G3D_APPCODE, null);
+	}
+
+	public AppConfigGraphing3D(String appCode) {
+		super(appCode, GeoGebraConstants.G3D_APPCODE);
+	}
 
 	@Override
 	public void adjust(DockPanelData dp) {
@@ -75,7 +82,7 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 
 	@Override
 	public int[] getDecimalPlaces() {
-		return new int[] {0, 1, 2, 3, 4, 5, 10, 15};
+		return new int[]{0, 1, 2, 3, 4, 5, 10, 15};
 	}
 
 	@Override
@@ -92,16 +99,16 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 	public String getForcedPerspective() {
 		return Perspective.GRAPHER_3D + "";
 	}
-	
+
 	@Override
 	public AppType getToolbarType() {
 		return AppType.GRAPHER_3D;
 	}
 
-    @Override
-    public boolean showGridOnFileNew() {
-        return false;
-    }
+	@Override
+	public boolean showGridOnFileNew() {
+		return false;
+	}
 
 	@Override
 	public String getDefaultSearchTag() {
@@ -132,11 +139,6 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 	@Override
 	public boolean hasPreviewPoints() {
 		return false;
-	}
-
-	@Override
-	public String getAppCode() {
-		return "3d";
 	}
 
 	@Override
@@ -180,8 +182,8 @@ public class AppConfigGraphing3D extends AppConfigGraphing {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions() {
-		return ParserFunctionsFactory.createParserFunctions();
+	public ParserFunctionsFactory createParserFunctionsFactory() {
+		return ParserFunctionsFactory.createParserFunctionsFactory();
 	}
 
 	@Override

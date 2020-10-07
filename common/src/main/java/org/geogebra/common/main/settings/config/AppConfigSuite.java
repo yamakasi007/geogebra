@@ -1,4 +1,4 @@
-package org.geogebra.common.main.settings;
+package org.geogebra.common.main.settings.config;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,7 +12,6 @@ import org.geogebra.common.kernel.arithmetic.filter.OperationArgumentFilter;
 import org.geogebra.common.kernel.commands.filter.CommandArgumentFilter;
 import org.geogebra.common.kernel.commands.selector.CommandFilter;
 import org.geogebra.common.kernel.geos.properties.FillType;
-import org.geogebra.common.kernel.parser.function.ParserFunctions;
 import org.geogebra.common.kernel.parser.function.ParserFunctionsFactory;
 import org.geogebra.common.main.AppKeyboardType;
 import org.geogebra.common.main.syntax.suggestionfilter.SyntaxFilter;
@@ -22,9 +21,12 @@ import org.geogebra.common.main.syntax.suggestionfilter.SyntaxFilter;
  */
 public class AppConfigSuite extends AppConfigGraphing {
 
-	@Override
-	public String getAppCode() {
-		return "suite";
+	public AppConfigSuite() {
+		super(GeoGebraConstants.SUITE_APPCODE, null);
+	}
+
+	public AppConfigSuite(String appCode) {
+		super(appCode, GeoGebraConstants.SUITE_APPCODE);
 	}
 
 	@Override
@@ -79,8 +81,8 @@ public class AppConfigSuite extends AppConfigGraphing {
 	}
 
 	@Override
-	public ParserFunctions createParserFunctions() {
-		return ParserFunctionsFactory.createParserFunctions();
+	public ParserFunctionsFactory createParserFunctionsFactory() {
+		return ParserFunctionsFactory.createParserFunctionsFactory();
 	}
 
 	@Override
