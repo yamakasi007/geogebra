@@ -319,4 +319,9 @@ public class AppConfigDefault implements AppConfig {
 	public boolean hasLabelForDescription() {
 		return true;
 	}
+
+	@Override
+	public boolean sendKeyboardEvents() {
+		return false;
+	}
 }

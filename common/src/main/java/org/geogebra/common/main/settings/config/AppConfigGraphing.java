@@ -327,4 +327,9 @@ public class AppConfigGraphing implements AppConfig {
 	public boolean hasLabelForDescription() {
 		return true;
 	}
+
+	@Override
+	public boolean sendKeyboardEvents() {
+		return false;
+	}
 }
