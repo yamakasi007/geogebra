@@ -36,7 +36,6 @@ import org.geogebra.common.kernel.GeoFactory;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.Macro;
 import org.geogebra.common.kernel.ModeSetter;
-import org.geogebra.common.kernel.UndoManager;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoElementGraphicsAdapter;
@@ -48,8 +47,6 @@ import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.FontManager;
 import org.geogebra.common.main.GeoElementSelectionListener;
 import org.geogebra.common.main.MaterialsManagerI;
-import org.geogebra.common.main.MyError;
-import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.SpreadsheetTableModel;
 import org.geogebra.common.main.SpreadsheetTableModelSimple;
 import org.geogebra.common.main.error.ErrorHandler;
@@ -58,6 +55,7 @@ import org.geogebra.common.main.settings.DefaultSettings;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.main.settings.SettingsBuilder;
 import org.geogebra.common.main.settings.config.AppConfigDefault;
+import org.geogebra.common.main.undo.UndoManager;
 import org.geogebra.common.move.events.BaseEventPool;
 import org.geogebra.common.move.ggtapi.models.Chapter;
 import org.geogebra.common.move.ggtapi.models.ClientInfo;
@@ -140,6 +138,7 @@ import org.geogebra.web.html5.util.UUIDW;
 import org.geogebra.web.html5.util.ViewW;
 import org.geogebra.web.html5.util.debug.LoggerW;
 import org.geogebra.web.html5.util.keyboard.KeyboardManagerInterface;
+import org.gwtproject.timer.client.Timer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -152,7 +151,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.HTML;
@@ -573,7 +571,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	public void callAppletJavaScript(String fun, String arg) {
 		Log.debug("calling function: " + fun + "(" + arg + ")");
-		JsEval.callNativeJavaScript(fun, arg);
+		JsEval.callNativeGlobalFunction(fun, arg);
 	}
 
 	@Override
@@ -956,25 +954,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	protected void initImageManager() {
 		imageManager = new ImageManagerW();
-	}
-
-	@Override
-	public final void setXML(String xml, boolean clearAll) {
-		if (clearAll) {
-			setCurrentFile(null);
-		}
-
-		try {
-			// make sure objects are displayed in the correct View
-			setActiveView(App.VIEW_EUCLIDIAN);
-			getXMLio().processXMLString(xml, clearAll, false);
-		} catch (MyError err) {
-			err.printStackTrace();
-			showError(err);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showError(Errors.LoadFileFailed);
-		}
 	}
 
 	@Override
@@ -3272,12 +3251,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		return hiddenTextArea;
 	}-*/;
 
-	@Override
-	public void copyTextToSystemClipboard(String text) {
-		Log.debug("copying to clipboard " + text);
-		CopyPasteW.writeToExternalClipboard(text);
-	}
-
 	/**
 	 * Toggle menu visibility
 	 */
@@ -3409,12 +3382,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	}
 
-	/**
-	 * When multiple slides are present give ID of the current one, otherwise
-	 * give default slide ID
-	 *
-	 * @return the string ID of current slide
-	 */
+	@Override
 	public String getSlideID() {
 		return getPageController() == null
 				? GgbFile.SLIDE_PREFIX + GgbFile.getCounter()

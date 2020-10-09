@@ -1163,12 +1163,6 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	}
 
 	@Test
-	public void testPlotSolveIsEuclidianVisible() {
-		GeoSymbolic symbolic = add("PlotSolve(x^2-2)");
-		assertThat(symbolic.isEuclidianVisible(), is(true));
-	}
-
-	@Test
 	public void testSymbolicDiffersForSolve() {
 		GeoSymbolic solveX_1 = add("Solve(2x=5)");
 		GeoSymbolic solveX_2 = add("Solve(2x=6)");
@@ -1198,6 +1192,12 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	}
 
 	@Test
+	public void testPlotSolveIsEuclidianVisible() {
+		GeoSymbolic symbolic = add("PlotSolve(x^2-2)");
+		assertThat(symbolic.isEuclidianVisible(), is(true));
+	}
+
+	@Test
 	public void testChangingSliderValue() {
 		add("Integral(x)");
 		lookup("c_1");
@@ -1220,6 +1220,23 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		assertThat(
 				derivative.toValueString(StringTemplate.defaultTemplate),
 				equalTo("1 / 200 ℯ^((-1) / 40 x)"));
+	}
+
+	@Test
+	public void testSolveNotReturnUndefined() {
+		add("eq1: (x^2)(e^x)= 5");
+		GeoSymbolic function = add("Solve(eq1, x)");
+		assertNotEquals(function.getValue().toString(StringTemplate.defaultTemplate), "{?}");
+		assertThat(function.getValue().toString(StringTemplate.defaultTemplate),
+				equalTo("{x = 1.2168714889}"));
+	}
+
+	@Test
+	public void testSolveChangedToNSolve() {
+		add("eq1: (x^2)(e^x)= 5");
+		GeoSymbolic function = add("Solve(eq1, x)");
+		assertThat(function.getDefinition(StringTemplate.defaultTemplate),
+				equalTo("NSolve(eq1,x)"));
 	}
 
 	@Test
@@ -1249,19 +1266,44 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	}
 
 	@Test
-	public void testSolveNotReturnUndefined() {
-		add("eq1: (x^2)(e^x)= 5");
-		GeoSymbolic function = add("Solve(eq1, x)");
-		assertNotEquals(function.getValue().toString(StringTemplate.defaultTemplate), "{?}");
-		assertThat(function.getValue().toString(StringTemplate.defaultTemplate),
-				equalTo("{x = 1.2168714889}"));
-	}
+	public void testQuartiles() {
+		add("l1 = {-2, 12, -23, 17, 15}");
+		add("l2 = {1,2,3,4}");
+		add("l3 = {1,4,2,7,5,3}");
+		add("l4 = {-6,4,6}");
+		add("l5 = {1,4,2,6,4}");
+		add("l6 = {2,4,4,7}");
 
-	@Test
-	public void testSolveChangedToNSolve() {
-		add("eq1: (x^2)(e^x)= 5");
-		GeoSymbolic function = add("Solve(eq1, x)");
-		assertThat(function.getDefinition(StringTemplate.defaultTemplate),
-				equalTo("NSolve(eq1,x)"));
+		t("Quartile1(l1)", "-12.5");
+		t("Quartile3(l1)", "16");
+		t("Quartile1(l2)", "1.5");
+		t("Quartile3(l2)", "3.5");
+		t("Quartile1(l3)", "2");
+		t("Quartile3(l3)", "5");
+		t("Quartile1(l4)", "-6");
+		t("Quartile3(l4)", "6");
+		t("Quartile1(l5)", "1.5");
+		t("Quartile3(l5)", "5");
+		t("Quartile1(l6)", "3");
+		t("Quartile3(l6)", "5.5");
+
+		t("Quartile1({6,4,6})", "4");
+		t("Quartile3({6,4,6})", "6");
+		t("Quartile1({1,2})", "1");
+		t("Quartile3({1,2})", "2");
+		t("Quartile1({1,1})", "1");
+		t("Quartile3({1,1})", "1");
+		t("Quartile1({6,-2,12,7,8,4,9})", "4");
+		t("Quartile3({6,-2,12,7,8,4,9})", "9");
+		t("Quartile1({1})", "?");
+		t("Quartile3({1})", "?");
+		t("Quartile1({})", "?");
+		t("Quartile3({})", "?");
+		t("Quartile1({1,2,5,4,7})", "1.5");
+		t("Quartile3({1,2,5,4,7})", "6");
+		t("Quartile1({2,2,3})", "2");
+		t("Quartile3({2,2,3})", "3");
+		t("Quartile1({2,3,3})", "2");
+		t("Quartile3({2,3,3})", "3");
 	}
 }

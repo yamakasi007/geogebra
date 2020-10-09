@@ -155,7 +155,6 @@ import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.DialogManager;
 import org.geogebra.common.main.HTML5Export;
-import org.geogebra.common.main.MyError;
 import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.ProverSettings;
 import org.geogebra.common.main.SingularWSSettings;
@@ -222,11 +221,11 @@ import org.geogebra.desktop.headless.GFileHandler;
 import org.geogebra.desktop.io.MyXMLioD;
 import org.geogebra.desktop.io.OFFReader;
 import org.geogebra.desktop.javax.swing.GImageIconD;
-import org.geogebra.desktop.kernel.UndoManagerD;
 import org.geogebra.desktop.kernel.geos.GeoElementGraphicsAdapterD;
 import org.geogebra.desktop.main.settings.DefaultSettingsD;
 import org.geogebra.desktop.main.settings.SettingsBuilderD;
 import org.geogebra.desktop.main.settings.updater.FontSettingsUpdaterD;
+import org.geogebra.desktop.main.undo.UndoManagerD;
 import org.geogebra.desktop.move.OpenFromGGTOperation;
 import org.geogebra.desktop.move.ggtapi.models.LoginOperationD;
 import org.geogebra.desktop.plugin.GgbAPID;
@@ -2180,22 +2179,14 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 	}
 
 	@Override
-	public void copyTextToSystemClipboard(String text) {
-		Toolkit.getDefaultToolkit().getSystemClipboard()
-				.setContents(new StringSelection(text), null);
-	}
-
-	@Override
 	public void copyBase64ToClipboard() {
-
 		// don't include preview bitmap
-		copyTextToSystemClipboard(getGgbApi().getBase64(false));
+		copyPaste.copyTextToSystemClipboard(getGgbApi().getBase64(false));
 	}
 
 	@Override
 	public void copyFullHTML5ExportToClipboard() {
-
-		copyTextToSystemClipboard(HTML5Export.getFullString(this));
+		copyPaste.copyTextToSystemClipboard(HTML5Export.getFullString(this));
 	}
 
 	public void copyGraphicsViewToClipboard(final EuclidianView copyView) {
@@ -3504,30 +3495,6 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 		}
 	}
 
-	@Override
-	public void setXML(String xml, boolean clearAll) {
-		if (xml == null) {
-			return;
-		}
-		if (clearAll) {
-			setCurrentFile(null);
-		}
-
-		try {
-
-			// make sure objects are displayed in the correct View
-			setActiveView(App.VIEW_EUCLIDIAN);
-
-			getXMLio().processXMLString(xml, clearAll, false);
-		} catch (MyError err) {
-			err.printStackTrace();
-			showError(err);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showError(Errors.LoadFileFailed);
-		}
-	}
-
 	public byte[] getMacroFileAsByteArray() {
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -4358,7 +4325,6 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 		if (getGuiManager() != null && getGuiManager().hasSpreadsheetView()) {
 			getGuiManager().getSpreadsheetView().repaintView();
 		}
-
 	}
 
 	@Override
@@ -5235,7 +5201,7 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 	public void handleImageExport(String base64image) {
 		if (base64image.startsWith("<svg") || base64image.startsWith("<?xml")
 				|| base64image.startsWith("%PDF")) {
-			copyTextToSystemClipboard(base64image);
+			copyPaste.copyTextToSystemClipboard(base64image);
 			return;
 		}
 
