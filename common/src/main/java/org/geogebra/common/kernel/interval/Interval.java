@@ -15,10 +15,21 @@ public class Interval {
 	private double low;
 	private double high;
 
+	/**
+	 * Creates a singleton interval [value, value]
+	 *
+	 * @param value for the singleton interval.
+	 */
 	public Interval(double value) {
 		this(value, value);
 	}
 
+	/**
+	 * Creates an interval with bounds [low, high]
+	 *
+	 * @param low lower bound of the interval
+	 * @param high higher bound of the interval
+	 */
 	public Interval(double low, double high) {
 		if (high < low) {
 			setEmpty();
@@ -28,6 +39,8 @@ public class Interval {
 		}
 	}
 
+	/** Empty interval is represented by [+∞, -∞]
+	 * as in the original lib. */
 	private void setEmpty() {
 		low = Double.POSITIVE_INFINITY;
 		high = Double.NEGATIVE_INFINITY;
@@ -37,6 +50,7 @@ public class Interval {
 	 * Interval addition
 	 *
 	 * @param other interval to add
+	 * @return this as result
 	 */
 	public Interval add(Interval other) {
 		low += other.low;
@@ -67,12 +81,24 @@ public class Interval {
 				']';
 	}
 
+	/**
+	 * Interval subtraction
+	 *
+	 * @param other to subtract from this interval
+	 * @return this as result.
+	 */
 	public Interval sub(Interval other) {
 		low -= other.high;
 		high -= other.low;
 		return this;
 	}
 
+	/**
+	 * Interval multiplication
+	 *
+	 * @param other to multiply this interval with.
+	 * @return this as result.
+	 */
 	public Interval multiply(Interval other) {
 		getBoundsFromList(Arrays.asList(low * other.low, low * other.high, high * other.low,
 				high * other.high));
@@ -87,7 +113,13 @@ public class Interval {
 		high = list.get(3) + 0.0;
 	}
 
-	public Interval div(Interval other) throws IntervalDivisionByZero {
+	/**
+	 * Interval division
+	 *
+	 * @param other to divide this interval with.
+	 * @return this as result.
+	 */
+	public Interval divide(Interval other) throws IntervalDivisionByZero {
 		if (other.hasZero()) {
 			throw new IntervalDivisionByZero();
 		}
@@ -96,6 +128,10 @@ public class Interval {
 		return this;
 	}
 
+	/**
+	 *
+	 * @return if interval has zero in it.
+	 */
 	public boolean hasZero() {
 		return low <= 0 && high >= 0;
 	}
@@ -108,22 +144,43 @@ public class Interval {
 		return low == Double.NEGATIVE_INFINITY && high == Double.POSITIVE_INFINITY;
 	}
 
+	/**
+	 *
+	 * @return if interval is in the form [n, n] where n is finite.
+	 */
 	public boolean isSingleton() {
 		return isFinite(low) && high == low;
 	}
 
+	/**
+	 *
+	 * @return if interval is empty.
+	 */
 	public boolean isEmpty() {
 		return low == Double.POSITIVE_INFINITY && high == Double.NEGATIVE_INFINITY;
 	}
 
+	/**
+	 *
+	 * @return lower bound.
+	 */
 	public double getLow() {
 		return low;
 	}
 
+	/**
+	 *
+	 * @return upper bound.
+	 */
 	public double getHigh() {
 		return high;
 	}
 
+	/**
+	 *
+	 * @param other interval to check.
+	 * @return if intervals are overlapping
+	 */
 	public boolean isOverlap(Interval other) {
 		if (isEmpty() || other.isEmpty()) {
 			return false;
