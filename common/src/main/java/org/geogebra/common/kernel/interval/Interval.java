@@ -20,8 +20,17 @@ public class Interval {
 	}
 
 	public Interval(double low, double high) {
-		this.low = low;
-		this.high = high;
+		if (high < low) {
+			setEmpty();
+		} else {
+			this.low = low;
+			this.high = high;
+		}
+	}
+
+	private void setEmpty() {
+		low = Double.POSITIVE_INFINITY;
+		high = Double.NEGATIVE_INFINITY;
 	}
 
 	/**
@@ -101,5 +110,25 @@ public class Interval {
 
 	public boolean isSingleton() {
 		return isFinite(low) && high == low;
+	}
+
+	public boolean isEmpty() {
+		return low == Double.POSITIVE_INFINITY && high == Double.NEGATIVE_INFINITY;
+	}
+
+	public double getLow() {
+		return low;
+	}
+
+	public double getHigh() {
+		return high;
+	}
+
+	public boolean isOverlap(Interval other) {
+		if (isEmpty() || other.isEmpty()) {
+			return false;
+		}
+		return (low <= other.low && other.low <= high)
+				|| (other.low <= low && low <= other.high);
 	}
 }

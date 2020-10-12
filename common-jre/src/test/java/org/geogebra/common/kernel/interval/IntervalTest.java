@@ -9,6 +9,18 @@ import org.junit.Test;
 public class IntervalTest {
 
 	@Test
+	public void testValidInterval() {
+		Interval interval = new Interval(1, 2);
+		assertTrue(interval.getLow() == 1 && interval.getHigh() == 2);
+	}
+
+	@Test
+	public void testInvalidIntervals() {
+		Interval interval = new Interval(2, 1);
+		assertTrue(interval.isEmpty());
+	}
+
+	@Test
 	public void testAdd() {
 		assertEquals(interval(1, 9),
 				interval(-3, 2)
@@ -120,5 +132,32 @@ public class IntervalTest {
 		assertFalse(new Interval(-2, -0.1).hasZero());
 		assertFalse(new Interval(Double.NEGATIVE_INFINITY, -2).hasZero());
 		assertFalse(new Interval(1, Double.POSITIVE_INFINITY).hasZero());
+	}
+
+	@Test
+	public void testEmpty() {
+		assertTrue(new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).isEmpty());
+	}
+
+	@Test
+	public void testEmptyConstant() {
+		assertTrue(IntervalConstants.EMPTY.isEmpty());
+	}
+
+	@Test
+	public void testOverlap() {
+		Interval a = new Interval(-1, 1);
+		Interval b = new Interval(-0.5, 0.5);
+		Interval c = new Interval(0.6, 1.5);
+		assertTrue(a.isOverlap(b));
+		assertTrue(a.isOverlap(c));
+		assertFalse(b.isOverlap(c));
+	}
+
+	@Test
+	public void testNotOverlapWithEmptyInterval() {
+		Interval a = new Interval(-1, 1);
+		assertFalse(a.isOverlap(IntervalConstants.EMPTY));
+		assertFalse(IntervalConstants.EMPTY.isOverlap(a));
 	}
 }
