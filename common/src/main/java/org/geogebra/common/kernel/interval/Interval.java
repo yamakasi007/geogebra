@@ -5,7 +5,6 @@ import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Class to implement interval arithmetic
@@ -68,17 +67,16 @@ public class Interval {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(low, high);
-	}
-
-	@Override
 	public String toString() {
-		return "Interval [" +
-				low +
-				", "
-				+ high +
-				']';
+		String result = "Interval [";
+		if (!isEmpty()) {
+			result += low;
+			if (!isSingleton()) {
+				result += ", " + high;}
+		}
+
+		result += "]";
+		return result;
 	}
 
 	/**
@@ -87,7 +85,7 @@ public class Interval {
 	 * @param other to subtract from this interval
 	 * @return this as result.
 	 */
-	public Interval sub(Interval other) {
+	public Interval subtract(Interval other) {
 		low -= other.high;
 		high -= other.low;
 		return this;

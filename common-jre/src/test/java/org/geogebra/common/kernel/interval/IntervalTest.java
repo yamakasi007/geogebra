@@ -35,7 +35,7 @@ public class IntervalTest {
 	public void testSub() {
 		assertEquals(interval(-5, 5),
 				interval(-1, 3)
-						.sub(interval(-2, 4)));
+						.subtract(interval(-2, 4)));
 	}
 
 	@Test
@@ -159,5 +159,25 @@ public class IntervalTest {
 		Interval a = new Interval(-1, 1);
 		assertFalse(a.isOverlap(IntervalConstants.EMPTY));
 		assertFalse(IntervalConstants.EMPTY.isOverlap(a));
+	}
+
+	@Test
+	public void testIntervalToString() {
+		assertEquals("Interval [-1.0, 1.0]", interval(-1, 1).toString());
+	}
+
+	@Test
+	public void testIntervalSingletonToString() {
+		assertEquals("Interval [-1.0]", new Interval(-1).toString());
+	}
+
+	@Test
+	public void testEmptyIntervalToString() {
+		assertEquals("Interval []", IntervalConstants.EMPTY.toString());
+	}
+
+	@Test
+	public void testWholeIntervalToString() {
+		assertEquals("Interval [-Infinity, Infinity]", IntervalConstants.WHOLE.toString());
 	}
 }
