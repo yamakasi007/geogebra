@@ -90,15 +90,15 @@ public class IntervalTest {
 
 	@Test(expected = IntervalDivisionByZero.class)
 	public void testDivisionByZero() throws IntervalDivisionByZero {
-		interval(-1/3.0, 1/4.0)
+		interval(-1 / 3.0, 1 / 4.0)
 				.divide(interval(-1.0, 1.0));
 	}
 
 	@Test
 	public void testDivision() throws IntervalDivisionByZero {
-		assertEquals(interval(-2/3.0, 1/2.0),
-				interval(-1/3.0, 1/4.0)
-						.divide(interval(1/2.0, 3/4.0)));
+		assertEquals(interval(-2 / 3.0, 1 / 2.0),
+				interval(-1 / 3.0, 1 / 4.0)
+						.divide(interval(1 / 2.0, 3 / 4.0)));
 
 	}
 
