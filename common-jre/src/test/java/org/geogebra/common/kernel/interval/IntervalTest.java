@@ -1,6 +1,8 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -84,5 +86,39 @@ public class IntervalTest {
 				interval(-1/3.0, 1/4.0)
 						.div(interval(1/2.0, 3/4.0)));
 
+	}
+
+	@Test
+	public void isWhole() {
+		Interval interval = new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+		assertTrue(interval.isWhole());
+	}
+
+	@Test
+	public void testSingleton() {
+		Interval interval = new Interval(2);
+		assertTrue(interval.isSingleton());
+	}
+
+	@Test
+	public void testWholeIsNotSingleton() {
+		assertFalse(IntervalConstants.WHOLE.isSingleton());
+	}
+
+	@Test
+	public void testHasZero() {
+		assertTrue(new Interval(-1, 1).hasZero());
+		assertTrue(new Interval(0, 1).hasZero());
+		assertTrue(new Interval(-1, 0).hasZero());
+		assertTrue(IntervalConstants.WHOLE.hasZero());
+		assertTrue(IntervalConstants.ZERO.hasZero());
+	}
+
+	@Test
+	public void testHasNotZero() {
+		assertFalse(new Interval(2, 6).hasZero());
+		assertFalse(new Interval(-2, -0.1).hasZero());
+		assertFalse(new Interval(Double.NEGATIVE_INFINITY, -2).hasZero());
+		assertFalse(new Interval(1, Double.POSITIVE_INFINITY).hasZero());
 	}
 }

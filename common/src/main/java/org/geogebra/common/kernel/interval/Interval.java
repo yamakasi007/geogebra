@@ -1,13 +1,23 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class to implement interval arithmetic
+ *
+ */
 public class Interval {
 	private double low;
 	private double high;
+
+	public Interval(double value) {
+		this(value, value);
+	}
 
 	public Interval(double low, double high) {
 		this.low = low;
@@ -77,7 +87,19 @@ public class Interval {
 		return this;
 	}
 
-	private boolean hasZero() {
+	public boolean hasZero() {
 		return low <= 0 && high >= 0;
+	}
+
+	/**
+	 *
+	 * @return if interval represents all the real numbers R.
+	 */
+	public boolean isWhole() {
+		return low == Double.NEGATIVE_INFINITY && high == Double.POSITIVE_INFINITY;
+	}
+
+	public boolean isSingleton() {
+		return isFinite(low) && high == low;
 	}
 }
