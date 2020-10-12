@@ -5,6 +5,9 @@ import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
+import org.geogebra.common.util.DoubleUtil;
 
 /**
  * Class to implement interval arithmetic
@@ -59,11 +62,17 @@ public class Interval {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) {
+			return true;
+		}
+
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
 		Interval interval = (Interval) o;
-		return Double.compare(interval.low, low) == 0 &&
-				Double.compare(interval.high, high) == 0;
+		return Double.compare(interval.low, low) == 0
+				&& Double.compare(interval.high, high) == 0;
 	}
 
 	@Override
@@ -72,7 +81,8 @@ public class Interval {
 		if (!isEmpty()) {
 			result += low;
 			if (!isSingleton()) {
-				result += ", " + high;}
+				result += ", " + high;
+			}
 		}
 
 		result += "]";
@@ -147,7 +157,12 @@ public class Interval {
 	 * @return if interval is in the form [n, n] where n is finite.
 	 */
 	public boolean isSingleton() {
-		return isFinite(low) && high == low;
+		return isFinite(low) && DoubleUtil.isEqual(high, low);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(low, high);
 	}
 
 	/**

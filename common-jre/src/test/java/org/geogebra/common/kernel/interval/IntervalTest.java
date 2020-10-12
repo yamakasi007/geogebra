@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Objects;
+
 import org.junit.Test;
 
 public class IntervalTest {
@@ -179,5 +181,11 @@ public class IntervalTest {
 	@Test
 	public void testWholeIntervalToString() {
 		assertEquals("Interval [-Infinity, Infinity]", IntervalConstants.WHOLE.toString());
+	}
+
+	@Test
+	public void testHashCode() {
+		assertEquals(Objects.hash(1d, 2d),
+				interval(1, 2).hashCode());
 	}
 }
