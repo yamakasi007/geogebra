@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.util.DoubleUtil;
 
 /**
@@ -24,6 +25,13 @@ public class Interval {
 	 */
 	public Interval(double value) {
 		this(value, value);
+	}
+
+	/**
+	 * Creates an empty interval.
+	 */
+	public Interval() {
+		setEmpty();
 	}
 
 	/**
@@ -200,5 +208,38 @@ public class Interval {
 		}
 		return (low <= other.low && other.low <= high)
 				|| (other.low <= low && low <= other.high);
+	}
+
+	/**
+	 * Computes x mod y (x - k * y)
+	 *
+	 * @param other argument.
+	 * @return this as result
+	 */
+	public Interval fmod(Interval other) {
+		if (isEmpty() || other.isEmpty()) {
+			return IntervalConstants.EMPTY;
+		}
+
+		double yb = low < 0 ? other.low : other.high;
+		double n = low / yb;
+		if (n < 0) {
+			n = Math.ceil(n);
+		} else {
+			n = Math.floor(n);
+		}
+		// x mod y = x - n * y
+		subtract(other.multiply(new Interval(n)));
+		return this;
+	}
+
+	/**
+	 *
+	 * @param other to compare
+	 * @return if the other interval is equal with a precision
+	 */
+	public boolean almostEqual(Interval other) {
+		return DoubleUtil.isEqual(low, other.low, Kernel.MAX_DOUBLE_PRECISION)
+			&& DoubleUtil.isEqual(high, other.high, Kernel.MAX_DOUBLE_PRECISION);
 	}
 }

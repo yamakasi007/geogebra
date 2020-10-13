@@ -29,7 +29,7 @@ public class IntervalTest {
 						.add(interval(4, 7)));
 	}
 
-	private Interval interval(double low, double high) {
+	static Interval interval(double low, double high) {
 		return new Interval(low, high);
 	}
 
