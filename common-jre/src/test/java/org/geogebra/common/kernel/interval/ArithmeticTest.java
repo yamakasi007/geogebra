@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -23,5 +24,44 @@ public class ArithmeticTest {
 
 		n = new Interval().fmod(IntervalConstants.EMPTY);
 		assertTrue(n.isEmpty());
+
+		n = interval(2, 2).fmod(interval(2, 2));
+		assertTrue(n.almostEqual(IntervalConstants.ZERO));
+	}
+
+	@Test
+	public void testMultiplicativeInverse() {
+		assertTrue(interval(1, 1).almostEqual(interval(1, 1).multiplicativeInverse()));
+		assertTrue(interval(1 / 6.0, 1 / 2.0).almostEqual(interval(2, 6).multiplicativeInverse()));
+		assertTrue(
+				interval(-1 / 2.0, -1 / 6.0).almostEqual(interval(-6, -2).multiplicativeInverse()));
+	}
+
+//	@Ignore
+	@Test
+	public void testMultiplicativeInverseResultInfinityAbs() {
+		Interval actual = interval(-6, 0).multiplicativeInverse();
+		assertEquals(actual.getLow(), Double.NEGATIVE_INFINITY, 0);
+		double d = 1.0 / 6.0;
+		double high = actual.getHigh() + d;
+		assertTrue(Math.abs(high) < 1E-7);
+	}
+
+	@Test
+	public void testMultiplicativeInverseResultAbsInfinity() {
+		Interval actual = interval(0, 2).multiplicativeInverse();
+		assertEquals(actual.getHigh(), Double.POSITIVE_INFINITY, 0);
+		double low = actual.getLow() - (1.0 / 2.0);
+		assertTrue(Math.abs(low) < 1E-7);
+	}
+
+	@Test
+	public void testMultiplicativeInverseResultWhole() {
+		assertEquals(IntervalConstants.WHOLE, interval(-6, 2).multiplicativeInverse());
+	}
+
+	@Test
+	public void testMultiplicativeInverseZero() {
+		assertTrue(IntervalConstants.ZERO.multiplicativeInverse().isEmpty());
 	}
 }

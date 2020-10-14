@@ -242,4 +242,47 @@ public class Interval {
 		return DoubleUtil.isEqual(low, other.low, Kernel.MAX_DOUBLE_PRECISION)
 			&& DoubleUtil.isEqual(high, other.high, Kernel.MAX_DOUBLE_PRECISION);
 	}
+
+	/**
+	 *  Computes "1 / x"
+	 * @return this as result.
+	 */
+	public Interval multiplicativeInverse() {
+		if (isEmpty()) {
+			return IntervalConstants.EMPTY;
+		}
+
+		if (hasZero()) {
+			if (low != 0) {
+				if (high != 0) {
+					// [negative, positive]
+					setWhole();
+				} else {
+					// [negative, zero]
+					double d = low;
+					low = Double.NEGATIVE_INFINITY;
+					high = RMath.divHi(1.0, d);
+				}
+			} else {
+				if (high != 0) {
+					// [zero, positive]
+					low = RMath.divLo(1, high);
+					high = Double.POSITIVE_INFINITY;
+				} else {
+					// [zero, zero]
+					setEmpty();
+				}
+			}
+		} else {
+			// [positive, positive]
+			return new Interval(RMath.divLo(1, high), RMath.divHi(1, low));
+		}
+		return this;
+	}
+
+	private void setWhole() {
+		low = IntervalConstants.WHOLE.low;
+		high = IntervalConstants.WHOLE.high;
+	}
+
 }
