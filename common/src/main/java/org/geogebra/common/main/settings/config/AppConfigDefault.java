@@ -324,6 +324,11 @@ public class AppConfigDefault extends AbstractAppConfig {
 	}
 
 	@Override
+	public boolean hasLabelForDescription() {
+		return true;
+	}
+
+	@Override
 	public boolean sendKeyboardEvents() {
 		return false;
 	}
