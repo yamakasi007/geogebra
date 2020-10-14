@@ -292,10 +292,15 @@ public class Interval {
 		if (power == 0) {
 			return powerOfZero();
 		} else if (power < 0) {
-			return multiplicativeInverse().pow(power);
+			set(multiplicativeInverse().pow(-power));
+			return this;
 		}
 
 		return powOfInteger(power);
+	}
+
+	private void set(Interval other) {
+		set(other.low, other.high);
 	}
 
 	private Interval powOfInteger(int power) {
@@ -355,5 +360,23 @@ public class Interval {
 			throw new PowerIsNotInteger();
 		}
 		return pow((int)other.low);
+	}
+
+	/**
+	 * [a, b] -> (a, b]
+	 * @return this as result
+	 */
+	public Interval halfOpenLeft() {
+		low = RMath.next(low);
+		return this;
+	}
+
+	/**
+	 * [a, b] -> [a, b)
+	 * @return this as result
+	 */
+	public Interval halfOpenRight() {
+		high = RMath.prev(high);
+		return this;
 	}
 }

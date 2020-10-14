@@ -114,4 +114,60 @@ public class ArithmeticTest {
 		assertTrue(interval(1, 25).almostEqual(interval(1,5).pow(2)));
 		assertTrue(interval(4, 25).almostEqual(interval(2,5).pow(2)));
 	}
+
+	@Test
+	public void testEmptyPowerOf() {
+		assertTrue(new Interval().pow(4).isEmpty());
+	}
+
+	@Test
+	public void testPowerOfIntervals() throws PowerIsNotInteger {
+		assertTrue(interval(4, 25).almostEqual(interval(2, 5).pow(interval(2, 2))));
+	}
+
+	@Test(expected = PowerIsNotInteger.class)
+	public void testPowerOfIntervalsBad() throws PowerIsNotInteger {
+		interval(4, 25).almostEqual(interval(2, 5).pow(new Interval(1.5)));
+	}
+
+	@Test
+	public void testPowerOfNotSingletonInterval() throws PowerIsNotInteger {
+		assertTrue(interval(2, 5).pow(interval(1, 5)).isEmpty());
+	}
+
+	@Test
+	public void testPowerOfNegatives() {
+		assertTrue(interval(1/4.0, 1/4.0).almostEqual(interval(2, 2).pow(-2)));
+		assertTrue(interval(1/9.0, 1/4.0).almostEqual(interval(2, 3).pow(-2)));
+		assertTrue(interval(1/9.0, 1/4.0).almostEqual(interval(-3, -2).pow(-2)));
+		assertTrue(interval(1/27.0, 1/8.0).almostEqual(interval(2, 3).pow(-3)));
+		assertTrue(interval(-1/8.0, -1/27.0).almostEqual(interval(-3, -2).pow(-3)));
+	}
+
+	@Test
+	public void testPositiveAndZeroPowerOfNegatives() {
+		assertTrue(interval(1/4.0, Double.POSITIVE_INFINITY).almostEqual(interval(0, 2).pow(-2)));
+		assertTrue(interval(1/8.0, Double.POSITIVE_INFINITY).almostEqual(interval(0, 2).pow(-3)));
+		assertTrue(interval(1/4.0, Double.POSITIVE_INFINITY).almostEqual(interval(-2, 0).pow(-2)));
+		assertTrue(interval(Double.NEGATIVE_INFINITY, -1/8.0).almostEqual(interval(-2, 0).pow(-3)));
+	}
+
+	@Test
+	public void testNegativeAndPositivePowerOfNegatives() {
+		assertTrue(interval(0, Double.POSITIVE_INFINITY).almostEqual(interval(-2, 3).pow(-2)));
+		assertTrue(IntervalConstants.WHOLE.almostEqual(interval(-2, 3).pow(-3)));
+	}
+
+	@Test
+	public void testSpecialPowerOfCases() {
+		Interval interval = interval(0, 1).pow(-2);
+		assertTrue(interval.getLow() < 1);
+		assertTrue(Math.abs(interval.getLow() -1) < 1E-7);
+
+		Interval halfOpen = interval(0, 1).halfOpenLeft().pow(-2);
+		assertTrue(halfOpen.getLow() < 1);
+		assertTrue(Math.abs(halfOpen.getLow() -1) < 1E-7);
+		assertEquals(Double.POSITIVE_INFINITY, halfOpen.getHigh(), 0);
+
+	}
 }
