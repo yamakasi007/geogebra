@@ -1,6 +1,8 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
+import static org.geogebra.common.kernel.interval.RMath.powHi;
+import static org.geogebra.common.kernel.interval.RMath.powLo;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -308,8 +310,8 @@ public class Interval {
 			// [negative, negative]
 			// assume that power is even so the operation will yield a positive interval
 			// if not then just switch the sign and order of the interval bounds
-      		double yl = RMath.powLo(-high, power);
-      		double yh = RMath.powHi(-low, power);
+      		double yl = powLo(-high, power);
+      		double yh = powHi(-low, power);
 			if ((power & 1) == 1) {
 				// odd power
 				set(-yh, -yl);
@@ -320,15 +322,15 @@ public class Interval {
 		} else if (low < 0) {
 			// [negative, positive]
 			if ((power & 1) == 1) {
-				set(-RMath.powLo(-low, power), RMath.powHi(high, power));
+				set(-powLo(-low, power), powHi(high, power));
 			} else {
 				// even power means that any negative number will be zero (min value = 0)
 				// and the max value will be the max of x.lo^power, x.hi^power
-				set(0, RMath.powHi(Math.max(-low, high), power));
+				set(0, powHi(Math.max(-low, high), power));
 			}
 		} else {
 			// [positive, positive]
-			set(RMath.powLo(low, power), RMath.powHi(high, power));
+			set(powLo(low, power), powHi(high, power));
 		}
 		return this;
 	}
@@ -378,5 +380,46 @@ public class Interval {
 	public Interval halfOpenRight() {
 		high = RMath.prev(high);
 		return this;
+	}
+
+	public Interval sqrt() {
+		return nthRoot(2);
+	}
+
+	public Interval nthRoot(Interval other) {
+		if (!other.isSingleton()) {
+			setEmpty();
+			return this;
+		}
+		return nthRoot(other.low);
+	}
+
+	public Interval nthRoot(double n) {
+		if (isEmpty() || n < 1) {
+			setEmpty();
+			return this;
+		}
+		double power = 1 / n;
+		if (high < 0) {
+			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
+				set(powHi(-low, (int) power), powLo(-high, (int)power));
+				return this;
+			}
+			setEmpty();
+			return this;
+		} else if (low < 0) {
+			double yp = powHi(high, power);
+			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
+				double yn = -powHi(-low, power);
+				set(yn, yp);
+				return this;
+			}
+			set(0, yp);
+			return this;
+		} else {
+			set(powLo(low, power), powHi(high, power));
+		}
+		return this;
+
 	}
 }

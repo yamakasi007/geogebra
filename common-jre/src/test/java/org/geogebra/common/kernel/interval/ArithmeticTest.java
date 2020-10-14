@@ -170,4 +170,16 @@ public class ArithmeticTest {
 		assertEquals(Double.POSITIVE_INFINITY, halfOpen.getHigh(), 0);
 
 	}
+
+	@Test
+	public void testSqrt() {
+		assertTrue(interval(2, 3).almostEqual(interval(4, 9).sqrt()));
+		assertTrue(interval(0, 3).almostEqual(interval(-4, 9).sqrt()));
+		assertTrue(interval(-9, -4).sqrt().isEmpty());
+	}
+
+	@Test
+	public void testNthRoot() {
+
+	}
 }

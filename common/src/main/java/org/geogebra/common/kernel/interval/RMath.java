@@ -23,20 +23,21 @@ public class RMath {
 		return next(x / y);
 	}
 
-	public static double powLo(double x, int power) {
+	public static double powLo(double x, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
 			return prev(Math.pow(x, power));
 		}
 
-		double y = (power & 1) == 1 ? x : 1;
-		power >>= 1;
-		while (power > 0) {
+		int n = (int)power;
+		double y = (n & 1) == 1 ? x : 1;
+		n >>= 1;
+		while (n > 0) {
 			x = mulLo(x, x);
-			if ((power & 1) == 1) {
+			if ((n & 1) == 1) {
 				y = mulLo(x, y);
 			}
-			power >>= 1;
+			n >>= 1;
 		}
 		return y;
 	}
@@ -49,20 +50,21 @@ public class RMath {
 		return next(x * y);
 	}
 
-	public static double powHi(double x, int power) {
+	public static double powHi(double x, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
 			return next(Math.pow(x, power));
 		}
 
-		double y = (power & 1) == 1 ? x : 1;
-		power >>= 1;
-		while (power > 0) {
+		int n = (int)power;
+		double y = (n & 1) == 1 ? x : 1;
+		n >>= 1;
+		while (n > 0) {
 			x = mulHi(x, x);
-			if ((power & 1) == 1) {
+			if ((n & 1) == 1) {
 				y = mulHi(x, y);
 			}
-			power >>= 1;
+			n >>= 1;
 		}
 		return y;
 
