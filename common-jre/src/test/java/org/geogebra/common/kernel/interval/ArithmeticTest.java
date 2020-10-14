@@ -64,4 +64,54 @@ public class ArithmeticTest {
 	public void testMultiplicativeInverseZero() {
 		assertTrue(IntervalConstants.ZERO.multiplicativeInverse().isEmpty());
 	}
+
+	@Test
+	public void testPowOne() {
+		Interval interval = interval(Math.exp(-1), Math.exp(1)).pow(1);
+		assertTrue(interval.almostEqual(interval(0.36787944117, 2.71828182846)));
+	}
+
+	@Test
+	public void testPowThree() {
+		Interval interval = interval(Math.exp(-1), Math.exp(1)).pow(3);
+		assertTrue(interval.almostEqual(interval(0.04978706836, 20.0855369232)));
+	}
+
+	@Test
+	public void testZeroPowerOfZero() {
+		assertTrue(IntervalConstants.ZERO.pow(0).isEmpty());
+	}
+
+	@Test
+	public void testPowerOfZero() {
+		assertTrue(interval(1, 1).almostEqual(interval(-321, 123).pow(0)));
+	}
+
+	@Test
+	public void testNegativePowerOfEven() {
+		assertTrue(interval(4, 4).almostEqual(interval(-2, -2).pow(2)));
+	}
+
+	@Test
+	public void testNegativePowerOfOdd() {
+		assertTrue(interval(-8, -8).almostEqual(interval(-2, -2).pow(3)));
+	}
+
+	@Test
+	public void testMixedPowerOfEven() {
+		assertTrue(interval(0, 4).almostEqual(interval(-2, 2).pow(2)));
+	}
+
+	@Test
+	public void testMixedPowerOfOdd() {
+		assertTrue(interval(-2, 2).almostEqual(interval(-2, 2).pow(1)));
+	}
+
+	@Test
+	public void testPositivePowerOfs() {
+		assertTrue(interval(1, 1).almostEqual(interval(1,1).pow(1)));
+		assertTrue(interval(1, 1).almostEqual(interval(1,1).pow(5)));
+		assertTrue(interval(1, 25).almostEqual(interval(1,5).pow(2)));
+		assertTrue(interval(4, 25).almostEqual(interval(2,5).pow(2)));
+	}
 }

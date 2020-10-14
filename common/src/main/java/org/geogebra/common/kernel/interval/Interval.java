@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.util.DoubleUtil;
 
 /**
@@ -239,8 +238,8 @@ public class Interval {
 	 * @return if the other interval is equal with a precision
 	 */
 	public boolean almostEqual(Interval other) {
-		return DoubleUtil.isEqual(low, other.low, Kernel.MAX_DOUBLE_PRECISION)
-			&& DoubleUtil.isEqual(high, other.high, Kernel.MAX_DOUBLE_PRECISION);
+		return DoubleUtil.isEqual(low, other.low, 1E-7)
+			&& DoubleUtil.isEqual(high, other.high, 1E-7);
 	}
 
 	/**
@@ -285,4 +284,76 @@ public class Interval {
 		high = IntervalConstants.WHOLE.high;
 	}
 
+	public Interval pow(int power) {
+		if (isEmpty()) {
+			return this;
+		}
+
+		if (power == 0) {
+			return powerOfZero();
+		} else if (power < 0) {
+			return multiplicativeInverse().pow(power);
+		}
+
+		return powOfInteger(power);
+	}
+
+	private Interval powOfInteger(int power) {
+		if (high < 0) {
+			// [negative, negative]
+			// assume that power is even so the operation will yield a positive interval
+			// if not then just switch the sign and order of the interval bounds
+      		double yl = RMath.powLo(-high, power);
+      		double yh = RMath.powHi(-low, power);
+			if ((power & 1) == 1) {
+				// odd power
+				set(-yh, -yl);
+			} else {
+				// even power
+				set(yl, yh);
+			}
+		} else if (low < 0) {
+			// [negative, positive]
+			if ((power & 1) == 1) {
+				set(-RMath.powLo(-low, power), RMath.powHi(high, power));
+			} else {
+				// even power means that any negative number will be zero (min value = 0)
+				// and the max value will be the max of x.lo^power, x.hi^power
+				set(0, RMath.powHi(Math.max(-low, high), power));
+			}
+		} else {
+			// [positive, positive]
+			set(RMath.powLo(low, power), RMath.powHi(high, power));
+		}
+		return this;
+	}
+
+	private void set(double low, double high) {
+		this.low = low;
+		this.high = high;
+	}
+
+	protected Interval powerOfZero() {
+		if (low == 0 && high == 0) {
+			// 0^0
+			setEmpty();
+			return this;
+		} else {
+			// x^0
+			set(1, 1);
+			return this;
+		}
+	}
+
+	public Interval pow(Interval other) throws PowerIsNotInteger {
+		if (!other.isSingleton()) {
+			setEmpty();
+			return this;
+		}
+
+		if (!DoubleUtil.isInteger(other.low)) {
+			throw new PowerIsNotInteger();
+		}
+		return pow((int)other.low);
+	}
 }
