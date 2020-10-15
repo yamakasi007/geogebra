@@ -1,18 +1,20 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.apache.commons.math3.util.FastMath.nextAfter;
+
 public class RMath {
 	public static double prev(double v) {
 		if (v == Double.POSITIVE_INFINITY) {
 			return v;
 		}
-		return Math.nextAfter(v, Double.NEGATIVE_INFINITY);
+		return nextAfter(v, Double.NEGATIVE_INFINITY);
 	}
 
 	public static double next(double v) {
 		if (v == Double.NEGATIVE_INFINITY) {
 			return v;
 		}
-		return Math.nextAfter(v, Double.POSITIVE_INFINITY);
+		return nextAfter(v, Double.POSITIVE_INFINITY);
 	}
 
 	public static double divLo(double x, double y) {

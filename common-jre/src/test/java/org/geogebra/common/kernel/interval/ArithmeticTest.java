@@ -180,6 +180,7 @@ public class ArithmeticTest {
 
 	@Test
 	public void testNthRoot() {
-
+		assertTrue(interval(-27, -8).nthRoot(-3).isEmpty());
+		assertTrue(interval(-27, -8).nthRoot(2).isEmpty());
 	}
 }

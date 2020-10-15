@@ -402,7 +402,7 @@ public class Interval {
 		double power = 1 / n;
 		if (high < 0) {
 			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
-				set(powHi(-low, (int) power), powLo(-high, (int)power));
+				set(powHi(-low, power), powLo(-high, power));
 				return this;
 			}
 			setEmpty();
