@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
+import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +35,12 @@ public class Interval {
 		setEmpty();
 	}
 
+	/** Empty interval is represented by [+∞, -∞]
+	 * as in the original lib. */
+	void setEmpty() {
+		set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+	}
+
 	/**
 	 * Creates an interval with bounds [low, high]
 	 *
@@ -44,16 +51,8 @@ public class Interval {
 		if (high < low) {
 			setEmpty();
 		} else {
-			this.low = low;
-			this.high = high;
+			set(low, high);
 		}
-	}
-
-	/** Empty interval is represented by [+∞, -∞]
-	 * as in the original lib. */
-	void setEmpty() {
-		low = Double.POSITIVE_INFINITY;
-		high = Double.NEGATIVE_INFINITY;
 	}
 
 	/**
@@ -217,8 +216,6 @@ public class Interval {
 	 * @return this as result
 	 */
 	public Interval fmod(Interval other) {
-
-		// x mod y = x - n * y
 		return intervalAlgebra.fmod(other);
 	}
 
@@ -270,8 +267,7 @@ public class Interval {
 	}
 
 	private void setWhole() {
-		low = IntervalConstants.WHOLE.low;
-		high = IntervalConstants.WHOLE.high;
+		set(WHOLE.low, WHOLE.high);
 	}
 
 	/**
@@ -280,7 +276,6 @@ public class Interval {
 	 * @return power of the interval
 	 */
 	public Interval pow(int power) {
-
 		return intervalAlgebra.pow(power);
 	}
 

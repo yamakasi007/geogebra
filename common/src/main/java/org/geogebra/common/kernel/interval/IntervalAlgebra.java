@@ -2,7 +2,14 @@ package org.geogebra.common.kernel.interval;
 
 import org.geogebra.common.util.DoubleUtil;
 
-public class IntervalAlgebra {
+/**
+ * Implements algebra functions in interval
+ *
+ *  fmod, pow, sqrt, nthRoot
+ *
+ * @author laszlo
+ */
+class IntervalAlgebra {
 	private final Interval interval;
 
 	public IntervalAlgebra(Interval interval) {
