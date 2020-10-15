@@ -247,12 +247,12 @@ public class Interval {
 					// [negative, zero]
 					double d = low;
 					low = Double.NEGATIVE_INFINITY;
-					high = RMath.divHi(1.0, d);
+					high = RMath.divHigh(1.0, d);
 				}
 			} else {
 				if (high != 0) {
 					// [zero, positive]
-					low = RMath.divLo(1, high);
+					low = RMath.divLow(1, high);
 					high = Double.POSITIVE_INFINITY;
 				} else {
 					// [zero, zero]
@@ -261,7 +261,7 @@ public class Interval {
 			}
 		} else {
 			// [positive, positive]
-			return new Interval(RMath.divLo(1, high), RMath.divHi(1, low));
+			return new Interval(RMath.divLow(1, high), RMath.divHigh(1, low));
 		}
 		return this;
 	}
@@ -279,11 +279,20 @@ public class Interval {
 		return intervalAlgebra.pow(power);
 	}
 
+	/**
+	 * Sets the closed interval bounds as the other interval
+	 * @param other interval to set bounds as the same.
+	 */
 	void set(Interval other) {
 		set(other.low, other.high);
 	}
 
-
+	/**
+	 * Sets the closed interval bounds.
+	 *
+	 * @param low lower bound.
+	 * @param high higher bound.
+	 */
 	void set(double low, double high) {
 		this.low = low;
 		this.high = high;

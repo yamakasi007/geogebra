@@ -9,14 +9,14 @@ public class RMathTest {
 
 	@Test
 	public void testMulLo() {
-		double n = RMath.mulLo(2, 3);
+		double n = RMath.mulLow(2, 3);
 		assertTrue(n < 6);
 		shouldEqualWithMaxPrecsion(n, 6);
 	}
 
 	@Test
 	public void testMulHi() {
-		double n = RMath.mulHi(2, 3);
+		double n = RMath.mulHigh(2, 3);
 		assertTrue(n > 6);
 		shouldEqualWithMaxPrecsion(n, 6);
 	}
@@ -27,7 +27,7 @@ public class RMathTest {
 
 	@Test
 	public void testDivLo() {
-		double n = RMath.divLo(2, 3);
+		double n = RMath.divLow(2, 3);
 		double d = 2.0 / 3.0;
 		assertTrue(n < d);
 		shouldEqualWithMaxPrecsion(n, d);
@@ -35,7 +35,7 @@ public class RMathTest {
 
 	@Test
 	public void testDivHi() {
-		double n = RMath.divHi(2, 3);
+		double n = RMath.divHigh(2, 3);
 		double d = 2.0 / 3.0;
 		assertTrue(n > d);
 		assertEquals(n, d, Kernel.MAX_PRECISION);

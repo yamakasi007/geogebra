@@ -1,5 +1,8 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.geogebra.common.kernel.interval.RMath.powHigh;
+import static org.geogebra.common.kernel.interval.RMath.powLow;
+
 import org.geogebra.common.util.DoubleUtil;
 
 /**
@@ -12,7 +15,7 @@ import org.geogebra.common.util.DoubleUtil;
 class IntervalAlgebra {
 	private final Interval interval;
 
-	public IntervalAlgebra(Interval interval) {
+	IntervalAlgebra(Interval interval) {
 		this.interval = interval;
 	}
 
@@ -60,10 +63,8 @@ class IntervalAlgebra {
 	private Interval powOfInteger(int power) {
 		if (interval.getHigh() < 0) {
 			// [negative, negative]
-			// assume that power is even so the operation will yield a positive interval
-			// if not then just switch the sign and order of the interval bounds
-			double yl = RMath.powLo(-interval.getHigh(), power);
-			double yh = RMath.powHi(-interval.getLow(), power);
+			double yl = powLow(-interval.getHigh(), power);
+			double yh = powHigh(-interval.getLow(), power);
 			if ((power & 1) == 1) {
 				// odd power
 				interval.set(-yh, -yl);
@@ -74,18 +75,18 @@ class IntervalAlgebra {
 		} else if (interval.getLow() < 0) {
 			// [negative, positive]
 			if ((power & 1) == 1) {
-				interval.set(-RMath.powLo(-interval.getLow(), power),
-						RMath.powHi(interval.getHigh(), power));
+				interval.set(-powLow(-interval.getLow(), power),
+						powHigh(interval.getHigh(), power));
 			} else {
 				// even power means that any negative number will be zero (min value = 0)
 				// and the max value will be the max of x.lo^power, x.hi^power
 				interval.set(0,
-						RMath.powHi(Math.max(-interval.getLow(), interval.getHigh()), power));
+						powHigh(Math.max(-interval.getLow(), interval.getHigh()), power));
 			}
 		} else {
 			// [positive, positive]
-			interval.set(RMath.powLo(interval.getLow(), power),
-					RMath.powHi(interval.getHigh(), power));
+			interval.set(powLow(interval.getLow(), power),
+					powHigh(interval.getHigh(), power));
 		}
 		return interval;
 	}
@@ -118,6 +119,7 @@ class IntervalAlgebra {
 		if (!DoubleUtil.isInteger(other.getLow())) {
 			throw new PowerIsNotInteger();
 		}
+
 		return pow((int) other.getLow());
 	}
 
@@ -155,26 +157,26 @@ class IntervalAlgebra {
 		double power = 1 / n;
 		if (interval.getHigh() < 0) {
 			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
-				interval.set(RMath.powHi(-interval.getLow(), power),
-						RMath.powLo(-interval.getHigh(), power));
+				double resultLow = powHigh(-interval.getLow(), power);
+				double resultHigh = powLow(-interval.getHigh(), power);
+				interval.set(-resultLow, -resultHigh);
 				return interval;
 			}
 			interval.setEmpty();
 			return interval;
 		} else if (interval.getLow() < 0) {
-			double yp = RMath.powHi(interval.getHigh(), power);
+			double yp = powHigh(interval.getHigh(), power);
 			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
-				double yn = -RMath.powHi(-interval.getLow(), power);
+				double yn = -powHigh(-interval.getLow(), power);
 				interval.set(yn, yp);
 				return interval;
 			}
 			interval.set(0, yp);
 			return interval;
 		} else {
-			interval.set(RMath.powLo(interval.getLow(), power),
-					RMath.powHi(interval.getHigh(), power));
+			interval.set(powLow(interval.getLow(), power),
+					powHigh(interval.getHigh(), power));
 		}
 		return interval;
-
 	}
 }

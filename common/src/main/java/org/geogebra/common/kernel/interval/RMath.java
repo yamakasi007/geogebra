@@ -2,7 +2,19 @@ package org.geogebra.common.kernel.interval;
 
 import static org.apache.commons.math3.util.FastMath.nextAfter;
 
+/**
+ * Utility class to determine the previous/next numbers
+ * for algebra functions.
+ *
+ * @author Laszlo
+ */
 public class RMath {
+
+	/**
+	 *
+	 * @param v reference number
+	 * @return previous number of v
+	 */
 	public static double prev(double v) {
 		if (v == Double.POSITIVE_INFINITY) {
 			return v;
@@ -10,6 +22,11 @@ public class RMath {
 		return nextAfter(v, Double.NEGATIVE_INFINITY);
 	}
 
+	/**
+	 *
+	 * @param v reference number
+	 * @return next number of v
+	 */
 	public static double next(double v) {
 		if (v == Double.NEGATIVE_INFINITY) {
 			return v;
@@ -17,15 +34,54 @@ public class RMath {
 		return nextAfter(v, Double.POSITIVE_INFINITY);
 	}
 
-	public static double divLo(double x, double y) {
+	/**
+	 *
+	 * @param x nominator
+	 * @param y denominator
+	 * @return the previous number of x/y
+	 */
+	public static double divLow(double x, double y) {
 		return prev(x / y);
 	}
 
-	public static double divHi(double x, double y) {
+	/**
+	 *
+	 * @param x nominator
+	 * @param y denominator
+	 * @return the next number of x/y
+	 */
+	public static double divHigh(double x, double y) {
 		return next(x / y);
 	}
 
-	public static double powLo(double x, double power) {
+	/**
+	 *
+	 * @param x argument
+	 * @param y argument
+	 * @return the previous number of x * y
+	 0*/
+	public static double mulLow(double x, double y) {
+		return prev(x * y);
+	}
+
+
+	/**
+	 *
+	 * @param x argument
+	 * @param y argument
+	 * @return the next number of x * y
+	 */
+	public static double mulHigh(double x, double y) {
+		return next(x * y);
+	}
+
+	/**
+	 *
+	 * @param x any double.
+	 * @param power to raise of.
+	 * @return the previous number of x^{power}
+	 */
+	public static double powLow(double x, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
 			return prev(Math.pow(x, power));
@@ -35,24 +91,22 @@ public class RMath {
 		double y = (n & 1) == 1 ? x : 1;
 		n >>= 1;
 		while (n > 0) {
-			x = mulLo(x, x);
+			x = mulLow(x, x);
 			if ((n & 1) == 1) {
-				y = mulLo(x, y);
+				y = mulLow(x, y);
 			}
 			n >>= 1;
 		}
 		return y;
 	}
 
-	public static double mulLo(double x, double y) {
-		return prev(x * y);
-	}
-
-	public static double mulHi(double x, double y) {
-		return next(x * y);
-	}
-
-	public static double powHi(double x, double power) {
+	/**
+	 *
+	 * @param x any double.
+	 * @param power to raise of.
+	 * @return the next number of x^{power}
+	 */
+	public static double powHigh(double x, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
 			return next(Math.pow(x, power));
@@ -62,13 +116,12 @@ public class RMath {
 		double y = (n & 1) == 1 ? x : 1;
 		n >>= 1;
 		while (n > 0) {
-			x = mulHi(x, x);
+			x = mulHigh(x, x);
 			if ((n & 1) == 1) {
-				y = mulHi(x, y);
+				y = mulHigh(x, y);
 			}
 			n >>= 1;
 		}
 		return y;
-
 	}
 }

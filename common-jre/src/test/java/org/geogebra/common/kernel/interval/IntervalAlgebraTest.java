@@ -182,5 +182,19 @@ public class IntervalAlgebraTest {
 	public void testNthRoot() {
 		assertTrue(interval(-27, -8).nthRoot(-3).isEmpty());
 		assertTrue(interval(-27, -8).nthRoot(2).isEmpty());
+		assertTrue(interval(-3, -2).almostEqual(interval(-27, -8).nthRoot(3)));
+		assertTrue(interval(-2, -2).almostEqual(interval(-8, -8).nthRoot(3)));
+		assertTrue(interval(0, 3).almostEqual(interval(-4, 9).nthRoot(2)));
+		assertTrue(interval(-3, 2).almostEqual(interval(-27, 8).nthRoot(3)));
+		assertTrue(interval(2, 3).almostEqual(interval(4, 9).nthRoot(2)));
+		assertTrue(interval(2, 3).almostEqual(interval(8, 27).nthRoot(3)));
+		assertTrue(interval(2, 2).almostEqual(interval(8, 8).nthRoot(3)));
+	}
+
+	@Test
+	public void testNthRootWithInterval() {
+		assertTrue(interval(-3, -2).almostEqual(interval(-27, -8).nthRoot(interval(3, 3))));
+		assertTrue(interval(-27, -8).nthRoot(interval(4, 3)).isEmpty());
+
 	}
 }
