@@ -286,6 +286,11 @@ public class Interval {
 		high = IntervalConstants.WHOLE.high;
 	}
 
+	/**
+	 *
+	 * @param power of the interval
+	 * @return power of the interval
+	 */
 	public Interval pow(int power) {
 		if (isEmpty()) {
 			return this;
@@ -340,7 +345,7 @@ public class Interval {
 		this.high = high;
 	}
 
-	protected Interval powerOfZero() {
+	private Interval powerOfZero() {
 		if (low == 0 && high == 0) {
 			// 0^0
 			setEmpty();
@@ -352,6 +357,14 @@ public class Interval {
 		}
 	}
 
+	/**
+	 * Power of an interval where power is also an interval
+	 * that must be a singleton, ie [n, n]
+	 *
+	 * @param other interval power.
+	 * @return this as result.
+	 * @throws PowerIsNotInteger if other is not a singleton interval.
+	 */
 	public Interval pow(Interval other) throws PowerIsNotInteger {
 		if (!other.isSingleton()) {
 			setEmpty();
@@ -382,10 +395,21 @@ public class Interval {
 		return this;
 	}
 
+	/**
+	 *
+	 * @return square root of the interval.
+	 */
 	public Interval sqrt() {
 		return nthRoot(2);
 	}
 
+	/**
+	 * Computes the nth root of the interval
+	 * if other (=n) is a singleton
+	 *
+	 * @param other interval
+	 * @return nth root of the interval.
+	 */
 	public Interval nthRoot(Interval other) {
 		if (!other.isSingleton()) {
 			setEmpty();
@@ -394,6 +418,12 @@ public class Interval {
 		return nthRoot(other.low);
 	}
 
+	/**
+	 * Computes x^(1/n)
+	 *
+	 * @param n the root
+	 * @return nth root of the interval.
+	 */
 	public Interval nthRoot(double n) {
 		if (isEmpty() || n < 1) {
 			setEmpty();
