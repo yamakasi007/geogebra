@@ -128,4 +128,16 @@ public class RMath {
 		}
 		return y;
 	}
+
+	public static double subHi(double m, double n) {
+		return next(m - n);
+	}
+
+	public static double cosLow(double x) {
+		return prev(Math.cos(x));
+	}
+
+	public static double cosHigh(double x) {
+		return next(Math.cos(x));
+	}
 }

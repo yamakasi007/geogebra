@@ -15,7 +15,8 @@ import org.geogebra.common.util.DoubleUtil;
  *
  */
 public class Interval {
-	private final IntervalAlgebra intervalAlgebra = new IntervalAlgebra(this);
+	private final IntervalAlgebra algebra = new IntervalAlgebra(this);
+	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
 	private double low;
 	private double high;
 
@@ -35,7 +36,16 @@ public class Interval {
 		setEmpty();
 	}
 
-	/** Empty interval is represented by [+∞, -∞]
+	/**
+	 * Copy constructor
+	 *
+	 * @param other to copy.
+	 */
+	public Interval(Interval other) {
+		this(other.low, other.high);
+	}
+
+	/** Empty interval is represented by [∞, -∞]
 	 * as in the original lib. */
 	void setEmpty() {
 		set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
@@ -216,7 +226,8 @@ public class Interval {
 	 * @return this as result
 	 */
 	public Interval fmod(Interval other) {
-		return intervalAlgebra.fmod(other);
+		algebra.fmod(other);
+		return this;
 	}
 
 	/**
@@ -276,7 +287,7 @@ public class Interval {
 	 * @return power of the interval
 	 */
 	public Interval pow(int power) {
-		return intervalAlgebra.pow(power);
+		return algebra.pow(power);
 	}
 
 	/**
@@ -307,7 +318,7 @@ public class Interval {
 	 * @throws PowerIsNotInteger if other is not a singleton interval.
 	 */
 	public Interval pow(Interval other) throws PowerIsNotInteger {
-		return intervalAlgebra.pow(other);
+		return algebra.pow(other);
 	}
 
 	/**
@@ -333,7 +344,7 @@ public class Interval {
 	 * @return square root of the interval.
 	 */
 	public Interval sqrt() {
-		return intervalAlgebra.sqrt();
+		return algebra.sqrt();
 	}
 
 	/**
@@ -344,7 +355,7 @@ public class Interval {
 	 * @return nth root of the interval.
 	 */
 	public Interval nthRoot(Interval other) {
-		return intervalAlgebra.nthRoot(other);
+		return algebra.nthRoot(other);
 	}
 
 	/**
@@ -354,6 +365,31 @@ public class Interval {
 	 * @return nth root of the interval.
 	 */
 	public Interval nthRoot(double n) {
-		return intervalAlgebra.nthRoot(n);
+		return algebra.nthRoot(n);
+	}
+
+	public Interval cos() {
+		return trigonometric.cos();
+	}
+
+	/**
+	 * Checks if the interval is
+	 * either [-∞, -∞] or [∞, ∞].
+	 *
+	 * @return true if infinite.
+	 */
+	public boolean isOnlyInfinity() {
+		return Double.isInfinite(low) && low == high;
+	}
+
+	public double getWidth() {
+		if (isEmpty()) {
+			return 0;
+		}
+		return RMath.subHi(high, low);
+	}
+
+	public void negative() {
+		set(-low, -high);
 	}
 }

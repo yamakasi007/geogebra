@@ -33,6 +33,10 @@ public class IntervalTest {
 		return new Interval(low, high);
 	}
 
+	static void shouldEqual(Interval interval1, Interval interval2) {
+		assertTrue(interval1.almostEqual(interval2));
+	}
+
 	@Test
 	public void testSub() {
 		assertEquals(interval(-5, 5),
