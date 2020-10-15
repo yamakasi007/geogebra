@@ -36,91 +36,95 @@ public class RMath {
 
 	/**
 	 *
-	 * @param x nominator
-	 * @param y denominator
-	 * @return the previous number of x/y
+	 * @param m nominator
+	 * @param n denominator
+	 * @return the previous number of m/n
 	 */
-	public static double divLow(double x, double y) {
-		return prev(x / y);
+	public static double divLow(double m, double n) {
+		return prev(m / n);
 	}
 
 	/**
 	 *
-	 * @param x nominator
-	 * @param y denominator
-	 * @return the next number of x/y
+	 * @param m nominator
+	 * @param n denominator
+	 * @return the next number of m/n
 	 */
-	public static double divHigh(double x, double y) {
-		return next(x / y);
+	public static double divHigh(double m, double n) {
+		return next(m / n);
 	}
 
 	/**
 	 *
-	 * @param x argument
-	 * @param y argument
-	 * @return the previous number of x * y
+	 * @param m argument
+	 * @param n argument
+	 * @return the previous number of m * n
 	 0*/
-	public static double mulLow(double x, double y) {
-		return prev(x * y);
+	public static double mulLow(double m, double n) {
+		return prev(m * n);
 	}
 
 
 	/**
 	 *
-	 * @param x argument
-	 * @param y argument
-	 * @return the next number of x * y
+	 * @param m argument
+	 * @param n argument
+	 * @return the next number of m * n
 	 */
-	public static double mulHigh(double x, double y) {
-		return next(x * y);
+	public static double mulHigh(double m, double n) {
+		return next(m * n);
 	}
 
 	/**
 	 *
-	 * @param x any double.
+	 * @param n any double.
 	 * @param power to raise of.
-	 * @return the previous number of x^{power}
+	 * @return the previous number of n^{power}
 	 */
-	public static double powLow(double x, double power) {
+	public static double powLow(double n, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
-			return prev(Math.pow(x, power));
+			return prev(Math.pow(n, power));
 		}
 
-		int n = (int)power;
-		double y = (n & 1) == 1 ? x : 1;
-		n >>= 1;
-		while (n > 0) {
-			x = mulLow(x, x);
-			if ((n & 1) == 1) {
-				y = mulLow(x, y);
+		int m = (int)power;
+		double y = (m & 1) == 1 ? n : 1;
+		m >>= 1;
+		while (m > 0) {
+			double x1 = mulLow(n, n);
+			if ((m & 1) == 1) {
+				y = mulLow(x1, y);
 			}
-			n >>= 1;
+			m >>= 1;
 		}
 		return y;
 	}
 
 	/**
 	 *
-	 * @param x any double.
+	 * @param n any double.
 	 * @param power to raise of.
-	 * @return the next number of x^{power}
+	 * @return the next number of n^{power}
 	 */
-	public static double powHigh(double x, double power) {
+	public static double powHigh(double n, double power) {
 		if (power % 1 != 0) {
 			// power has decimals
-			return next(Math.pow(x, power));
+			return next(Math.pow(n, power));
 		}
 
-		int n = (int)power;
-		double y = (n & 1) == 1 ? x : 1;
-		n >>= 1;
-		while (n > 0) {
-			x = mulHigh(x, x);
-			if ((n & 1) == 1) {
-				y = mulHigh(x, y);
+		return powHigh(n, (int)power);
+	}
+
+	private static double powHigh(double n, int power) {
+		double y = (power & 1) == 1 ? n : 1;
+		int p = power;
+		p >>= 1;
+		while (p > 0) {
+			double k = mulHigh(n, n);
+			if ((power & 1) == 1) {
+				y = mulHigh(k, y);
 			}
-			n >>= 1;
+			p >>= 1;
 		}
 		return y;
 	}
