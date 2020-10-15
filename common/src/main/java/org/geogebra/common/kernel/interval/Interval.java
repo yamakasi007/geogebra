@@ -1,8 +1,6 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
-import static org.geogebra.common.kernel.interval.RMath.powHi;
-import static org.geogebra.common.kernel.interval.RMath.powLo;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +14,7 @@ import org.geogebra.common.util.DoubleUtil;
  *
  */
 public class Interval {
+	private final IntervalAlgebra intervalAlgebra = new IntervalAlgebra(this);
 	private double low;
 	private double high;
 
@@ -52,7 +51,7 @@ public class Interval {
 
 	/** Empty interval is represented by [+∞, -∞]
 	 * as in the original lib. */
-	private void setEmpty() {
+	void setEmpty() {
 		low = Double.POSITIVE_INFINITY;
 		high = Double.NEGATIVE_INFINITY;
 	}
@@ -218,20 +217,9 @@ public class Interval {
 	 * @return this as result
 	 */
 	public Interval fmod(Interval other) {
-		if (isEmpty() || other.isEmpty()) {
-			return IntervalConstants.EMPTY;
-		}
 
-		double yb = low < 0 ? other.low : other.high;
-		double n = low / yb;
-		if (n < 0) {
-			n = Math.ceil(n);
-		} else {
-			n = Math.floor(n);
-		}
 		// x mod y = x - n * y
-		subtract(other.multiply(new Interval(n)));
-		return this;
+		return intervalAlgebra.fmod(other);
 	}
 
 	/**
@@ -292,69 +280,18 @@ public class Interval {
 	 * @return power of the interval
 	 */
 	public Interval pow(int power) {
-		if (isEmpty()) {
-			return this;
-		}
 
-		if (power == 0) {
-			return powerOfZero();
-		} else if (power < 0) {
-			set(multiplicativeInverse().pow(-power));
-			return this;
-		}
-
-		return powOfInteger(power);
+		return intervalAlgebra.pow(power);
 	}
 
-	private void set(Interval other) {
+	void set(Interval other) {
 		set(other.low, other.high);
 	}
 
-	private Interval powOfInteger(int power) {
-		if (high < 0) {
-			// [negative, negative]
-			// assume that power is even so the operation will yield a positive interval
-			// if not then just switch the sign and order of the interval bounds
-      		double yl = powLo(-high, power);
-      		double yh = powHi(-low, power);
-			if ((power & 1) == 1) {
-				// odd power
-				set(-yh, -yl);
-			} else {
-				// even power
-				set(yl, yh);
-			}
-		} else if (low < 0) {
-			// [negative, positive]
-			if ((power & 1) == 1) {
-				set(-powLo(-low, power), powHi(high, power));
-			} else {
-				// even power means that any negative number will be zero (min value = 0)
-				// and the max value will be the max of x.lo^power, x.hi^power
-				set(0, powHi(Math.max(-low, high), power));
-			}
-		} else {
-			// [positive, positive]
-			set(powLo(low, power), powHi(high, power));
-		}
-		return this;
-	}
 
-	private void set(double low, double high) {
+	void set(double low, double high) {
 		this.low = low;
 		this.high = high;
-	}
-
-	private Interval powerOfZero() {
-		if (low == 0 && high == 0) {
-			// 0^0
-			setEmpty();
-			return this;
-		} else {
-			// x^0
-			set(1, 1);
-			return this;
-		}
 	}
 
 	/**
@@ -366,15 +303,7 @@ public class Interval {
 	 * @throws PowerIsNotInteger if other is not a singleton interval.
 	 */
 	public Interval pow(Interval other) throws PowerIsNotInteger {
-		if (!other.isSingleton()) {
-			setEmpty();
-			return this;
-		}
-
-		if (!DoubleUtil.isInteger(other.low)) {
-			throw new PowerIsNotInteger();
-		}
-		return pow((int)other.low);
+		return intervalAlgebra.pow(other);
 	}
 
 	/**
@@ -400,7 +329,7 @@ public class Interval {
 	 * @return square root of the interval.
 	 */
 	public Interval sqrt() {
-		return nthRoot(2);
+		return intervalAlgebra.sqrt();
 	}
 
 	/**
@@ -411,11 +340,7 @@ public class Interval {
 	 * @return nth root of the interval.
 	 */
 	public Interval nthRoot(Interval other) {
-		if (!other.isSingleton()) {
-			setEmpty();
-			return this;
-		}
-		return nthRoot(other.low);
+		return intervalAlgebra.nthRoot(other);
 	}
 
 	/**
@@ -425,31 +350,6 @@ public class Interval {
 	 * @return nth root of the interval.
 	 */
 	public Interval nthRoot(double n) {
-		if (isEmpty() || n < 1) {
-			setEmpty();
-			return this;
-		}
-		double power = 1 / n;
-		if (high < 0) {
-			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
-				set(powHi(-low, power), powLo(-high, power));
-				return this;
-			}
-			setEmpty();
-			return this;
-		} else if (low < 0) {
-			double yp = powHi(high, power);
-			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
-				double yn = -powHi(-low, power);
-				set(yn, yp);
-				return this;
-			}
-			set(0, yp);
-			return this;
-		} else {
-			set(powLo(low, power), powHi(high, power));
-		}
-		return this;
-
+		return intervalAlgebra.nthRoot(n);
 	}
 }
