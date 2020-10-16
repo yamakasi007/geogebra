@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
+import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 
 import java.util.Arrays;
@@ -391,5 +392,17 @@ public class Interval {
 
 	public void negative() {
 		set(-low, -high);
+	}
+
+	public void handleNegative() {
+		if (low < 0) {
+			if (low == Double.NEGATIVE_INFINITY) {
+				set(0, Double.POSITIVE_INFINITY);
+			} else {
+      			double n = Math.ceil(-low / PI_TWICE_LOW);
+				set(low + PI_TWICE_LOW * n,
+					high + PI_TWICE_LOW * n);
+			}
+		}
 	}
 }

@@ -20,6 +20,8 @@ class IntervalTrigonometric {
 		}
 
 		Interval cache = new Interval(interval);
+		cache.handleNegative();
+
 		Interval pi = new Interval(PI);
 		Interval pi2 = new Interval(PI_TWICE);
 		cache.fmod(pi2);
@@ -29,8 +31,9 @@ class IntervalTrigonometric {
 		}
 
 		if (cache.getLow() >= PI_HIGH) {
-			cache.subtract(pi);
-			interval.negative();
+			cache.subtract(pi).cos();
+			cache.negative();
+			interval.set(cache);
 			return interval;
 		}
 
