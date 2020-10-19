@@ -1567,7 +1567,7 @@ public class GeoCasCell extends GeoElement
 					for (GeoNumeric geoNum : constList) {
 						geoNum.setSendValueToCas(false);
 						GeoDummyReplacer replacer = GeoDummyReplacer
-								.getReplacer(geoNum.getLabelSimple(), geoNum,
+								.getReplacer(((GeoDummyVariable) geoNum).getVarName(), geoNum,
 										false);
 						outputVE.traverse(replacer);
 					}
@@ -2347,7 +2347,7 @@ public class GeoCasCell extends GeoElement
 						}
 					}
 				}
-
+				arbconst.setSymbolic(hasSymbolicVariable());
 				// compute the result using CAS
 				result = kernel.getGeoGebraCAS().evaluateGeoGebraCAS(
 						expandedEvalVE, arbconst, StringTemplate.numericNoLocal,
@@ -3770,6 +3770,10 @@ public class GeoCasCell extends GeoElement
 					.getNextIndexedLabel(LabelType.pointLabels);
 		}
 		return getDefaultLabel();
+	}
+
+	private boolean hasSymbolicVariable() {
+		return "IntegralSymbolic".equals(expandedEvalVE.getTopLevelCommand().getName());
 	}
 
 }
