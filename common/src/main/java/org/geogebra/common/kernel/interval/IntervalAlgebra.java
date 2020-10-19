@@ -36,9 +36,11 @@ class IntervalAlgebra {
 		} else {
 			n = Math.floor(n);
 		}
+
+		Interval multiplicand = new Interval(other);
 		// x mod y = x - n * y
-		interval.subtract(other.multiply(new Interval(n)));
-		return interval;
+		this.interval.subtract(multiplicand.multiply(new Interval(n)));
+		return this.interval;
 	}
 
 	/**

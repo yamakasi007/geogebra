@@ -7,7 +7,7 @@ public class IntervalConstants {
 	public final static Interval EMPTY = new Interval(Double.POSITIVE_INFINITY,
 			Double.NEGATIVE_INFINITY);
 	public static final Interval ONE = new Interval(1);
-	public static final double PI_LOW = 3.141592653589793;
+	public static final double PI_LOW =  3.141592653589793;
 	public static final double PI_HIGH = 3.1415926535897936;
 	public static final double PI_HALF_LOW = PI_LOW / 2.0;
 	public static final double PI_HALF_HIGH = PI_HIGH / 2.0;

@@ -175,7 +175,7 @@ public class Interval {
 	 * @return if interval is in the form [n, n] where n is finite.
 	 */
 	public boolean isSingleton() {
-		return isFinite(low) && DoubleUtil.isEqual(high, low);
+		return isFinite(low) && DoubleUtil.isEqual(high, low, 0);
 	}
 
 	@Override
@@ -390,8 +390,11 @@ public class Interval {
 		return RMath.subHi(high, low);
 	}
 
+	/**
+	 * "Invert" the interval
+	 */
 	public void negative() {
-		set(-low, -high);
+		set(-high, -low);
 	}
 
 	public void handleNegative() {
@@ -404,5 +407,13 @@ public class Interval {
 					high + PI_TWICE_LOW * n);
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @return the bounds as array
+	 */
+	public double[] toArray() {
+		return new double[] {low, high};
 	}
 }
