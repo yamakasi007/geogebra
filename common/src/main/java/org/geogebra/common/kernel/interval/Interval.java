@@ -416,4 +416,12 @@ public class Interval {
 	public double[] toArray() {
 		return new double[] {low, high};
 	}
+
+	/**
+	 *
+	 * @return sine of the interval.
+	 */
+	public Interval sin() {
+		return trigonometric.sin();
+	}
 }

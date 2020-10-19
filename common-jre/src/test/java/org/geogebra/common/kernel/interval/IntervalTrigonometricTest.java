@@ -37,7 +37,6 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1, 0), interval(PI / 2, PI).cos());
 		shouldEqual(interval(-1, 1), interval(-PI / 2, PI).cos());
 		shouldEqual(interval(-1, 0), interval(PI / 2, PI).cos());
-
 	}
 
 	@Test
@@ -45,5 +44,28 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).cos());
 		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).cos().isEmpty());
 		assertTrue(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).cos().isEmpty());
+	}
+
+	@Test
+	public void testSin() {
+		shouldEqual(interval(0, 0), interval(0, 0).sin());
+		shouldEqual(interval(0, 1), interval(0, PI / 2).sin());
+		shouldEqual(interval(-1, 1), interval(0, 3 * PI / 2).sin());
+		shouldEqual(interval(-1, 0), interval(PI, 3 * PI / 2).sin());
+		shouldEqual(interval(0, 0), interval(-PI, -PI).sin());
+		shouldEqual(interval(1, 1), interval(PI / 2, PI / 2).sin());
+		shouldEqual(interval(-1, -1), interval(-PI / 2, -PI / 2).sin());
+		shouldEqual(interval(-1, 0), interval(-PI, 0).sin());
+		shouldEqual(interval(0, 1), interval(-2 * PI, -3 * PI / 2).sin());
+		double p = 2 * PI;
+		shouldEqual(interval(0, 1), interval(-5 * p - 2 * PI,
+				-5 * p - (3 * PI) / 2).sin());
+	}
+
+	@Test
+	public void testSinWithInfinity() {
+		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).sin());
+		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).sin().isEmpty());
+		assertTrue(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).sin().isEmpty());
 	}
 }

@@ -2,6 +2,7 @@ package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.interval.IntervalConstants.EMPTY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI;
+import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE;
@@ -55,6 +56,19 @@ class IntervalTrigonometric {
 			interval.set(-1, 1);
 		}
 
+		return interval;
+	}
+
+	/**
+	 *
+	 * @return sine of the interval
+	 */
+	public Interval sin() {
+		if (interval.isEmpty() || interval.isOnlyInfinity()) {
+			interval.setEmpty();
+		} else {
+			interval.subtract(PI_HALF).cos();
+		}
 		return interval;
 	}
 }
