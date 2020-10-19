@@ -440,4 +440,12 @@ public class Interval {
 	public Interval asin() {
 		return trigonometric.asin();
 	}
+
+	/**
+	 *
+	 * @return arc cosine of the interval
+	 */
+	public Interval acos() {
+		return trigonometric.acos();
+	}
 }

@@ -102,4 +102,13 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1.57079633, 1.57079633), interval(-10, 10).asin());
 		assertTrue(interval(-10, -10).asin().isEmpty());
 	}
+
+	@Test
+	public void testAcos() {
+		shouldEqual(interval(0, 0), interval(1, 1).acos());
+		shouldEqual(interval(0, PI / 2), interval(0, 1).acos());
+		shouldEqual(interval(0, PI), interval(-1, 1).acos());
+		shouldEqual(interval(0, PI), interval(-10, 10).acos());
+		assertTrue(interval(-10, -10).acos().isEmpty());
+	}
 }

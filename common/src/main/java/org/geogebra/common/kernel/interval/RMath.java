@@ -156,4 +156,12 @@ public class RMath {
 	public static double asinHigh(double x) {
 		return prev(Math.asin(x));
 	}
+
+	public static double acosLow(double x) {
+		return prev(Math.acos(x));
+	}
+
+	public static double acosHigh(double x) {
+		return next(Math.acos(x));
+	}
 }

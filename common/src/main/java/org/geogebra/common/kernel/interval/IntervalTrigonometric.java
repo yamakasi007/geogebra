@@ -117,4 +117,19 @@ class IntervalTrigonometric {
 
 		return interval;
 	}
+
+	/**
+	 *
+	 * @return arc cosine of the interval
+	 */
+	public Interval acos() {
+		if (interval.isEmpty() || interval.getHigh() < -1 || interval.getLow() > 1) {
+			interval.setEmpty();
+		} else {
+			double low = interval.getHigh() >= 1 ? 0 : RMath.acosLow(interval.getHigh());
+			double high = interval.getLow() <= -1 ? PI_HIGH : RMath.acosHigh(interval.getLow());
+			interval.set(low, high);
+		}
+		return interval;
+	}
 }
