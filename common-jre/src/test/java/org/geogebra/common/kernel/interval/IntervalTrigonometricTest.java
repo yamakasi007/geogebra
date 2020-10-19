@@ -132,4 +132,11 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(3.76219569108, 3.76219569108), interval(2, 2).cosh());
 
 	}
+
+	@Test
+	public void testTanh() {
+		shouldEqual(interval(0, 0), interval(0, 0).tanh());
+		shouldEqual(interval(-0.99932929973, 0.99932929973), interval(-4, 4).tanh());
+		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).tanh());
+	}
 }

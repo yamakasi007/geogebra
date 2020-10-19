@@ -157,6 +157,10 @@ class IntervalTrigonometric {
 		return interval;
 	}
 
+	/**
+	 *
+	 * @return hyperbolic cosine of the interval
+	 */
 	public Interval cosh() {
 		if (!interval.isEmpty()) {
 			double low = interval.getLow();
@@ -170,6 +174,18 @@ class IntervalTrigonometric {
 			}
 		}
 
+		return interval;
+	}
+
+
+	/**
+	 *
+	 * @return hyperbolic tangent of the interval
+	 */
+	public Interval tanh() {
+		if (!interval.isEmpty()) {
+			interval.set(RMath.tanhLow(interval.getLow()), RMath.tanhHigh(interval.getHigh()));
+		}
 		return interval;
 	}
 }

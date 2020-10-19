@@ -472,4 +472,12 @@ public class Interval {
 	public Interval cosh() {
 		return trigonometric.cosh();
 	}
+
+	/**
+	 *
+	 * @return hyperbolic tangent of the interval
+	 */
+	public Interval tanh() {
+		return trigonometric.tanh();
+	}
 }
