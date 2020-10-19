@@ -121,7 +121,7 @@ public class RMath {
 		p >>= 1;
 		while (p > 0) {
 			double k = mulHigh(n, n);
-			if ((power & 1) == 1) {
+			if ((p & 1) == 1) {
 				y = mulHigh(k, y);
 			}
 			p >>= 1;

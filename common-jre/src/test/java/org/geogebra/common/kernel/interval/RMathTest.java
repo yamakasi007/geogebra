@@ -40,4 +40,14 @@ public class RMathTest {
 		assertTrue(n > d);
 		assertEquals(n, d, Kernel.MAX_PRECISION);
 	}
+
+	@Test
+	public void testPowLow() {
+		shouldEqualWithMaxPrecsion(4 - Kernel.MAX_PRECISION, RMath.powLow(-2,2));
+	}
+
+	@Test
+	public void testPowHigh() {
+		shouldEqualWithMaxPrecsion(4 + Kernel.MAX_PRECISION, RMath.powHigh(-2,2));
+	}
 }

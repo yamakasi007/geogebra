@@ -175,7 +175,7 @@ public class Interval {
 	 * @return if interval is in the form [n, n] where n is finite.
 	 */
 	public boolean isSingleton() {
-		return isFinite(low) && DoubleUtil.isEqual(high, low, 0);
+		return isFinite(low) && DoubleUtil.isEqual(high, low, 1E-7);
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class Interval {
 	 * @return if interval is empty.
 	 */
 	public boolean isEmpty() {
-		return low == Double.POSITIVE_INFINITY && high == Double.NEGATIVE_INFINITY;
+		return low > high;
 	}
 
 	/**

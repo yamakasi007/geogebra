@@ -1,11 +1,11 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.geogebra.common.kernel.interval.IntervalConstants.EMPTY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
-import static org.geogebra.common.kernel.interval.IntervalConstants.ZERO;
 
 class IntervalTrigonometric {
 	private Interval interval;
@@ -16,7 +16,7 @@ class IntervalTrigonometric {
 
 	Interval cos() {
 		if (interval.isEmpty() || interval.isOnlyInfinity()) {
-			return ZERO;
+			return EMPTY;
 		}
 
 		Interval cache = new Interval(interval);
