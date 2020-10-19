@@ -196,4 +196,11 @@ public class RMath {
 		return next(Math.tanh(x));
 	}
 
+	public static double expLow(double x) {
+		return prev(Math.exp(x));
+	}
+
+	public static double expHigh(double x) {
+		return next(Math.exp(x));
+	}
 }

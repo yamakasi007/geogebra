@@ -15,9 +15,10 @@ import org.geogebra.common.util.DoubleUtil;
  * Class to implement interval arithmetic
  *
  */
-public class Interval {
+public class Interval implements IntervalMiscOperands {
 	private final IntervalAlgebra algebra = new IntervalAlgebra(this);
 	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
+	private final IntervalMiscOperandsImpl misc = new IntervalMiscOperandsImpl(this);
 	private double low;
 	private double high;
 
@@ -479,5 +480,10 @@ public class Interval {
 	 */
 	public Interval tanh() {
 		return trigonometric.tanh();
+	}
+
+	@Override
+	public Interval exp() {
+		return misc.exp();
 	}
 }
