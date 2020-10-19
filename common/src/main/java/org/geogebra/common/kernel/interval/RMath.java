@@ -164,4 +164,12 @@ public class RMath {
 	public static double acosHigh(double x) {
 		return next(Math.acos(x));
 	}
+
+	public static double atanLow(double x) {
+		return prev(Math.atan(x));
+	}
+
+	public static double atanHigh(double x) {
+		return next(Math.atan(x));
+	}
 }

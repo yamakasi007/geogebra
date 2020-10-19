@@ -448,4 +448,12 @@ public class Interval {
 	public Interval acos() {
 		return trigonometric.acos();
 	}
+
+	/**
+	 *
+	 * @return arc tangent of the interval
+	 */
+	public Interval atan() {
+		return trigonometric.atan();
+	}
 }

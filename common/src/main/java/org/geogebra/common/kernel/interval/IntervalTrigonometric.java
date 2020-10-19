@@ -132,4 +132,16 @@ class IntervalTrigonometric {
 		}
 		return interval;
 	}
+
+
+	/**
+	 *
+	 * @return arc tangent of the interval
+	 */
+	public Interval atan() {
+		if (!interval.isEmpty()) {
+			interval.set(RMath.atanLow(interval.getLow()), RMath.atanHigh(interval.getHigh()));
+		}
+		return interval;
+	}
 }

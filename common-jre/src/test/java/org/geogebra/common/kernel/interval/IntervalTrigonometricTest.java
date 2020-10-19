@@ -111,4 +111,10 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(0, PI), interval(-10, 10).acos());
 		assertTrue(interval(-10, -10).acos().isEmpty());
 	}
+
+	@Test
+	public void testAtan() {
+		shouldEqual(interval(0, 0), interval(0, 0).atan());
+		shouldEqual(interval(-0.785398163, 0.785398163), interval(-1, 1).atan());
+	}
 }
