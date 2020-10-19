@@ -148,4 +148,12 @@ public class RMath {
 	public static double tanHigh(double x) {
 		return next(Math.tan(x));
 	}
+
+	public static double asinLow(double x) {
+		return prev(Math.asin(x));
+	}
+
+	public static double asinHigh(double x) {
+		return prev(Math.asin(x));
+	}
 }

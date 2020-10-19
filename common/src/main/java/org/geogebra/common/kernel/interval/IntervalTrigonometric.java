@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.interval;
 import static org.geogebra.common.kernel.interval.IntervalConstants.EMPTY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF;
+import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_LOW;
@@ -97,6 +98,23 @@ class IntervalTrigonometric {
 		} else {
 			interval.set(RMath.tanLow(cache.getLow()), RMath.tanHigh(cache.getHigh()));
 		}
+		return interval;
+	}
+
+
+	/**
+	 *
+	 * @return arc sine of the interval
+	 */
+	public Interval asin() {
+		if (interval.isEmpty() || interval.getHigh() < -1 || interval.getLow() > 1) {
+			interval.setEmpty();
+		} else {
+			double low = interval.getLow() <= -1 ? -PI_HALF_HIGH : RMath.asinLow(interval.getLow());
+			double high = interval.getHigh() >= 1 ? PI_HALF_HIGH : RMath.asinHigh(interval.getHigh());
+			interval.set(low, high);
+		}
+
 		return interval;
 	}
 }

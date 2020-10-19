@@ -94,4 +94,12 @@ public class IntervalTrigonometricTest {
 		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).tan().isWhole());
 		assertTrue(interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).tan().isEmpty());
 	}
+
+	@Test
+	public void testAsin() {
+		shouldEqual(interval(0, 0), interval(0, 0).asin());
+		shouldEqual(interval(-1.57079633, 1.57079633), interval(-1, 1).asin());
+		shouldEqual(interval(-1.57079633, 1.57079633), interval(-10, 10).asin());
+		assertTrue(interval(-10, -10).asin().isEmpty());
+	}
 }

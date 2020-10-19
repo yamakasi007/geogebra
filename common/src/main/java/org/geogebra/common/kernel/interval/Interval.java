@@ -432,4 +432,12 @@ public class Interval {
 	public Interval tan() {
 		return trigonometric.tan();
 	}
+
+	/**
+	 *
+	 * @return arc sine of the interval
+	 */
+	public Interval asin() {
+		return trigonometric.asin();
+	}
 }
