@@ -1204,7 +1204,9 @@ public enum Commands implements CommandsConstants,
 
 	CASLoaded(TABLE_GEOGEBRA),
 
-	ShowSteps(TABLE_ALGEBRA);
+	ShowSteps(TABLE_ALGEBRA),
+
+	TableToChart(TABLE_ENGLISH);
 
 	private static final Commands[] RENAMED = {
 			Commands.Binomial, Commands.BinomialCoefficient, Commands.Mean,

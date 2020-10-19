@@ -530,6 +530,7 @@ public abstract class CommandDispatcher {
 			case Surface:
 			case Sort:
 			case BarChart:
+			case TableToChart:
 			case Product:
 			case Join:
 			case LCM:

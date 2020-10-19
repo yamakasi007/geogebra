@@ -412,7 +412,7 @@ public class InlineTableControllerW implements InlineTableController {
 		if (!content.equals(table.getContent())) {
 			table.setContent(content);
 			view.getApplication().storeUndoInfo();
-			table.notifyUpdate();
+			table.updateCascade();
 		}
 	}
 

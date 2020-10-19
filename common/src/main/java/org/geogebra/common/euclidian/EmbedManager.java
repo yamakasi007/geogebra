@@ -151,4 +151,6 @@ public interface EmbedManager {
 	 * @param content embed content as JSON
 	 */
 	void setContent(int embedID, String content);
+
+	void sendCommand(GeoEmbed chart, String cmd);
 }

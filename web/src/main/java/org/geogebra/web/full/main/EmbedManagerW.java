@@ -99,16 +99,16 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 
 	@Override
 	public void setLayer(DrawWidget embed, int layer) {
-		Element element;
+		Element element = null;
 		if (embed instanceof DrawVideo) {
 			if (!app.getVideoManager().hasPlayer((DrawVideo) embed)) {
 				return;
 			}
 			element = app.getVideoManager().getElement((DrawVideo) embed);
-		} else {
+		} else if (widgets.get(embed) != null) {
 			element = widgets.get(embed).getGreatParent().getElement();
 		}
-		if (element.hasClassName("background")) {
+		if (element != null && element.hasClassName("background")) {
 			element.getStyle().setZIndex(layer);
 		}
 	}
@@ -557,4 +557,14 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 		return !app.isMebis()
 				|| app.getLoginOperation().isTeacherLoggedIn();
 	}
+
+	@Override
+	public void sendCommand(GeoEmbed chart, String cmd) {
+		DrawableND drawChart = app.getActiveEuclidianView().getDrawableFor(chart);
+		EmbedElement el = widgets.get(drawChart);
+		if (el instanceof CalcEmbedElement) {
+			((CalcEmbedElement) el).sendCommand(cmd);
+		}
+	}
+
 }

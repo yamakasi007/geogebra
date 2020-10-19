@@ -257,4 +257,9 @@ public class GeoEmbed extends GeoWidget {
 	public void setRealHeight(double height) {
 		this.realHeight = height;
 	}
+
+	@Override
+	public boolean isMoveable() {
+		return true;
+	}
 }
