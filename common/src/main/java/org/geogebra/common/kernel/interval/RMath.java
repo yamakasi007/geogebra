@@ -129,7 +129,7 @@ public class RMath {
 		return y;
 	}
 
-	public static double subHi(double m, double n) {
+	public static double subHigh(double m, double n) {
 		return next(m - n);
 	}
 
@@ -139,5 +139,13 @@ public class RMath {
 
 	public static double cosHigh(double x) {
 		return next(Math.cos(x));
+	}
+
+	public static double tanLow(double x) {
+		return prev(Math.tan(x));
+	}
+
+	public static double tanHigh(double x) {
+		return next(Math.tan(x));
 	}
 }

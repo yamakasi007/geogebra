@@ -188,7 +188,7 @@ public class Interval {
 	 * @return if interval is empty.
 	 */
 	public boolean isEmpty() {
-		return low > high;
+		return  low > high;
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class Interval {
 		return this;
 	}
 
-	private void setWhole() {
+	void setWhole() {
 		set(WHOLE.low, WHOLE.high);
 	}
 
@@ -387,7 +387,7 @@ public class Interval {
 		if (isEmpty()) {
 			return 0;
 		}
-		return RMath.subHi(high, low);
+		return RMath.subHigh(high, low);
 	}
 
 	/**
@@ -423,5 +423,13 @@ public class Interval {
 	 */
 	public Interval sin() {
 		return trigonometric.sin();
+	}
+
+	/**
+	 *
+	 * @return tangent of the interval.
+	 */
+	public Interval tan() {
+		return trigonometric.tan();
 	}
 }

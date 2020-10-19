@@ -68,4 +68,30 @@ public class IntervalTrigonometricTest {
 		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).sin().isEmpty());
 		assertTrue(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).sin().isEmpty());
 	}
+
+	@Test
+	public void testTan() {
+		shouldEqual(interval(0, 0), interval(0, 0).tan());
+		shouldEqual(interval(0, 0), interval(PI, PI).tan());
+		shouldEqual(interval(0, 0), interval(-PI, -PI).tan());
+		shouldEqual(interval(-1, 1), interval(-PI / 4, PI / 4).tan());
+		shouldEqual(interval(-1, 1), interval(-9 * PI / 4, -7 * PI / 4).tan());
+		shouldEqual(interval(-1, 1), interval(7 * PI / 4, 9 * PI / 4).tan());
+		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+				interval(PI / 2, PI / 2).tan());
+		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+				interval(5 * PI / 2, 5 * PI / 2).tan());
+		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+				interval(-5 * PI / 2, -5 * PI / 2).tan());
+		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+				interval(0, PI / 2).tan());
+		shouldEqual(interval(0.16767801556, 0.18877817478),
+				interval(-2.975460122699386, -2.955010224948875).tan());
+	}
+
+	@Test
+	public void testTanWithInfinity() {
+		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).tan().isWhole());
+		assertTrue(interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).tan().isEmpty());
+	}
 }

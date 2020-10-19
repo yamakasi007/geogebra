@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.interval;
 import static org.geogebra.common.kernel.interval.IntervalConstants.EMPTY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF;
+import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HALF_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE;
@@ -68,6 +69,33 @@ class IntervalTrigonometric {
 			interval.setEmpty();
 		} else {
 			interval.subtract(PI_HALF).cos();
+		}
+		return interval;
+	}
+
+	/**
+	 *
+	 * @return tangent of the interval.
+	 */
+	public Interval tan() {
+		if (interval.isEmpty() || interval.isOnlyInfinity()) {
+			interval.setEmpty();
+			return interval;
+		}
+
+		Interval cache = new Interval(interval);
+		cache.handleNegative();
+		Interval pi = PI;
+		cache.fmod(pi);
+
+		if (cache.getLow() >= PI_HALF_LOW) {
+			cache.subtract(pi);
+		}
+
+		if (cache.getLow() <= -PI_HALF_LOW || cache.getHigh() >= PI_HALF_LOW) {
+			interval.setWhole();
+		} else {
+			interval.set(RMath.tanLow(cache.getLow()), RMath.tanHigh(cache.getHigh()));
 		}
 		return interval;
 	}
