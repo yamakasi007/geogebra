@@ -117,4 +117,19 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(0, 0), interval(0, 0).atan());
 		shouldEqual(interval(-0.785398163, 0.785398163), interval(-1, 1).atan());
 	}
+
+	@Test
+	public void testSinh() {
+		shouldEqual(interval(0, 0), interval(0, 0).sinh());
+		shouldEqual(interval(-3.62686040785, 3.62686040785), interval(-2, 2).sinh());
+	}
+
+	@Test
+	public void testCosh() {
+		shouldEqual(interval(1, 1), interval(0, 0).cosh());
+		shouldEqual(interval(1, 3.76219569108), interval(-2, 2).cosh());
+		shouldEqual(interval(3.76219569108, 3.76219569108), interval(-2, -2).cosh());
+		shouldEqual(interval(3.76219569108, 3.76219569108), interval(2, 2).cosh());
+
+	}
 }

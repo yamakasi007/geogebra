@@ -172,4 +172,28 @@ public class RMath {
 	public static double atanHigh(double x) {
 		return next(Math.atan(x));
 	}
+
+	public static double sinhLow(double x) {
+		return prev(Math.sinh(x));
+	}
+
+	public static double sinhHigh(double x) {
+		return next(Math.sinh(x));
+	}
+
+	public static double coshLow(double x) {
+		return prev(Math.cosh(x));
+	}
+
+	public static double coshHigh(double x) {
+		return next(Math.cosh(x));
+	}
+	public static double tanhLow(double x) {
+		return prev(Math.tanh(x));
+	}
+
+	public static double tanhHigh(double x) {
+		return next(Math.tanh(x));
+	}
+
 }

@@ -144,4 +144,32 @@ class IntervalTrigonometric {
 		}
 		return interval;
 	}
+
+
+	/**
+	 *
+	 * @return hyperbolic sine of the interval
+	 */
+	public Interval sinh() {
+		if (!interval.isEmpty()) {
+  			interval.set(RMath.sinhLow(interval.getLow()), RMath.sinhHigh(interval.getHigh()));
+		}
+		return interval;
+	}
+
+	public Interval cosh() {
+		if (!interval.isEmpty()) {
+			double low = interval.getLow();
+			double high = interval.getHigh();
+			if (high < 0) {
+				interval.set(RMath.coshLow(high), RMath.coshHigh(low));
+			} else if (low >= 0) {
+				interval.set(RMath.coshLow(low), RMath.coshHigh(high));
+			} else {
+				interval.set(1, RMath.coshHigh(-low > high ? low: high));
+			}
+		}
+
+		return interval;
+	}
 }

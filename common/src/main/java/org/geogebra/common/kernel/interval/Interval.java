@@ -456,4 +456,20 @@ public class Interval {
 	public Interval atan() {
 		return trigonometric.atan();
 	}
+
+	/**
+	 *
+	 * @return hyperbolic sine of the interval
+	 */
+	public Interval sinh() {
+		return trigonometric.sinh();
+	}
+
+	/**
+	 *
+	 * @return hyperbolic cosine of the interval
+	 */
+	public Interval cosh() {
+		return trigonometric.cosh();
+	}
 }
