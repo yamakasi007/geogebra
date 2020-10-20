@@ -7,4 +7,16 @@ public interface IntervalMiscOperands {
 	 * @return e^x
 	 */
 	Interval exp();
+
+	/**
+	 *
+	 * @return the natural logarithm of the interval.
+	 */
+	Interval log();
+
+	/**
+	 *
+	 * @return base 10 logarithm of the interval
+	 */
+	Interval log10();
 }

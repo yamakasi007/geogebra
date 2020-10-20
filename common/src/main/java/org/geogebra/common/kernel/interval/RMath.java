@@ -203,4 +203,12 @@ public class RMath {
 	public static double expHigh(double x) {
 		return next(Math.exp(x));
 	}
+
+	public static double logLow(double x) {
+		return prev(Math.log(x));
+	}
+
+	public static double logHigh(double x) {
+		return next(Math.log(x));
+	}
 }
