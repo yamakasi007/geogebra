@@ -1566,9 +1566,8 @@ public class GeoCasCell extends GeoElement
 				if (!constList.isEmpty()) {
 					for (GeoNumeric geoNum : constList) {
 						geoNum.setSendValueToCas(false);
-						String label = geoNum instanceof GeoDummyVariable ? ((GeoDummyVariable) geoNum).getVarName() : geoNum.getLabelSimple();
 						GeoDummyReplacer replacer = GeoDummyReplacer
-								.getReplacer(label, geoNum,
+								.getReplacer(geoNum.getLabelSimple(), geoNum,
 										false);
 						outputVE.traverse(replacer);
 					}
