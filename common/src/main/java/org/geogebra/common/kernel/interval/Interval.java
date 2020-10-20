@@ -15,8 +15,9 @@ import org.geogebra.common.util.DoubleUtil;
  * Class to implement interval arithmetic
  *
  */
-public class Interval implements IntervalMiscOperands {
+public class Interval implements IntervalMiscOperands, IntervalDivision {
 	private final IntervalAlgebra algebra = new IntervalAlgebra(this);
+	private final IntervalDivisionImpl division = new IntervalDivisionImpl(this);
 	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
 	private final IntervalMiscOperandsImpl misc = new IntervalMiscOperandsImpl(this);
 	private double low;
@@ -140,19 +141,9 @@ public class Interval implements IntervalMiscOperands {
 		high = list.get(3) + 0.0;
 	}
 
-	/**
-	 * Interval division
-	 *
-	 * @param other to divide this interval with.
-	 * @return this as result.
-	 */
-	public Interval divide(Interval other) throws IntervalDivisionByZero {
-		if (other.hasZero()) {
-			throw new IntervalDivisionByZero();
-		}
-		getBoundsFromList(Arrays.asList(low / other.low, low / other.high, high / other.low,
-				high / other.high));
-		return this;
+	@Override
+	public Interval divide(Interval other) {
+		return division.divide(other);
 	}
 
 	/**

@@ -30,11 +30,7 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 	@Override
 	public Interval log10() {
 		if (!interval.isEmpty()) {
-			try {
-				interval.log().divide(LOG_EXP_2);
-			} catch (IntervalDivisionByZero intervalDivisionByZero) {
-				intervalDivisionByZero.printStackTrace();
-			}
+			interval.log().divide(LOG_EXP_2);
 		}
 
 		return interval;
