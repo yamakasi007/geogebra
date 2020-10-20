@@ -2347,7 +2347,7 @@ public class GeoCasCell extends GeoElement
 						}
 					}
 				}
-				arbconst.setSymbolic(hasSymbolicVariable());
+				arbconst.setSymbolic(hasSymbolicConstant());
 				// compute the result using CAS
 				result = kernel.getGeoGebraCAS().evaluateGeoGebraCAS(
 						expandedEvalVE, arbconst, StringTemplate.numericNoLocal,
@@ -3772,8 +3772,13 @@ public class GeoCasCell extends GeoElement
 		return getDefaultLabel();
 	}
 
-	private boolean hasSymbolicVariable() {
-		return "IntegralSymbolic".equals(expandedEvalVE.getTopLevelCommand().getName());
+	private boolean hasSymbolicConstant() {
+		Command cmd = expandedEvalVE.getTopLevelCommand();
+		boolean ret = false;
+		if (cmd != null) {
+			ret = "IntegralSymbolic".equals(cmd.getName());
+		}
+		return ret;
 	}
 
 }
