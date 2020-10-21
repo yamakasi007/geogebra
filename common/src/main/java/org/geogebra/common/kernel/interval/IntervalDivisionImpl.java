@@ -6,7 +6,7 @@ import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.ZERO;
 
 public class IntervalDivisionImpl implements IntervalDivision {
-	private Interval interval;
+	private final Interval interval;
 
 	public IntervalDivisionImpl(Interval interval) {
 		this.interval = interval;
@@ -46,7 +46,7 @@ public class IntervalDivisionImpl implements IntervalDivision {
   		double yh = other.getHigh();
 		if (xh < 0) {
 			if (yh < 0) {
-				interval.set(RMath.divLow(xh, xl), RMath.divHigh(xl, yh));
+				interval.set(RMath.divLow(xh, yl), RMath.divHigh(xl, yh));
 			} else {
 				interval.set(RMath.divLow(xl, yl), RMath.divHigh(xh, yh));
 			}
