@@ -72,14 +72,6 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 		resetChanges();
 	}
 
-	private void setErrorStyle(boolean hasError) {
-		if (hasError) {
-			editor.addStyleName("errorStyle");
-		} else {
-			editor.removeStyleName("errorStyle");
-		}
-	}
-
 	@Override
 	public void repaintBox(GGraphics2D g2) {
 		// only in desktop
@@ -94,7 +86,7 @@ public class SymbolicEditorW extends SymbolicEditor implements HasMathKeyboardLi
 	protected void resetChanges() {
 		getDrawInputBox().setEditing(true);
 
-		setErrorStyle(!StringUtil.empty(
+		editor.setErrorStyle(!StringUtil.empty(
 				getGeoInputBox().getTempUserDisplayInput()));
 		decorator.update(bounds, getGeoInputBox());
 		editor.setVisible(true);
