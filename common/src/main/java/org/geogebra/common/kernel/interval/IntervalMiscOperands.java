@@ -25,4 +25,16 @@ public interface IntervalMiscOperands {
 	 * @return base 2 logarithm of the interval
 	 */
 	Interval log2();
+
+	/**
+	 * From interval-arithmetic.js:
+	 *
+	 * Computes an interval that has all the values of this and other, note that it may be
+	 * possible that values that don't belong to either this or other are included in the
+	 * interval that represents the hull
+	 *
+	 * @param other to compute the hull with
+	 * @return this as result.
+	 */
+	Interval hull(Interval other);
 }

@@ -15,9 +15,9 @@ import org.geogebra.common.util.DoubleUtil;
  * Class to implement interval arithmetic
  *
  */
-public class Interval implements IntervalMiscOperands, IntervalDivision {
+public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	private final IntervalAlgebra algebra = new IntervalAlgebra(this);
-	private final IntervalDivisionImpl division = new IntervalDivisionImpl(this);
+	private final IntervalArithmeticImpl arithmetic = new IntervalArithmeticImpl(this);
 	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
 	private final IntervalMiscOperandsImpl misc = new IntervalMiscOperandsImpl(this);
 	private double low;
@@ -121,29 +121,14 @@ public class Interval implements IntervalMiscOperands, IntervalDivision {
 		return this;
 	}
 
-	/**
-	 * Interval multiplication
-	 *
-	 * @param other to multiply this interval with.
-	 * @return this as result.
-	 */
+	@Override
 	public Interval multiply(Interval other) {
-		getBoundsFromList(Arrays.asList(low * other.low, low * other.high, high * other.low,
-				high * other.high));
-		return this;
-	}
-
-	protected void getBoundsFromList(List<Double> list) {
-		Collections.sort(list);
-
-		// to avoid -0.0, see testMultiplication5
-		low = list.get(0) + 0.0;
-		high = list.get(3) + 0.0;
+		return arithmetic.multiply(other);
 	}
 
 	@Override
 	public Interval divide(Interval other) {
-		return division.divide(other);
+		return arithmetic.divide(other);
 	}
 
 	/**
@@ -239,7 +224,7 @@ public class Interval implements IntervalMiscOperands, IntervalDivision {
 	 */
 	public Interval multiplicativeInverse() {
 		if (isEmpty()) {
-			return IntervalConstants.EMPTY;
+			return IntervalConstants.empty();
 		}
 
 		if (hasZero()) {
@@ -493,5 +478,14 @@ public class Interval implements IntervalMiscOperands, IntervalDivision {
 	@Override
 	public Interval log2() {
 		return misc.log2();
+	}
+
+	@Override
+	public Interval hull(Interval other) {
+		return misc.hull(other);
+	}
+
+	public void setZero() {
+		set(IntervalConstants.zero());
 	}
 }

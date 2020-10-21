@@ -45,4 +45,20 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 
 		return interval;
 	}
+
+	@Override
+	public Interval hull(Interval other) {
+		if (interval.isEmpty() && other.isEmpty()) {
+			interval.setEmpty();
+ 		} else if (interval.isEmpty()) {
+			interval.set(other);
+		} else if (other.isEmpty()) {
+			// nothing
+		} else {
+			interval.set(Math.min(interval.getLow(), other.getLow()),
+					Math.max(interval.getHigh(), other.getHigh()));
+		}
+
+		return interval;
+	}
 }

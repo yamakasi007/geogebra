@@ -22,7 +22,7 @@ public class IntervalAlgebraTest {
 		n = interval(-10, -10).fmod(interval(3, 3));
 		assertTrue(n.almostEqual(interval(-1, -1)));
 
-		n = new Interval().fmod(IntervalConstants.EMPTY);
+		n = new Interval().fmod(IntervalConstants.empty());
 		assertTrue(n.isEmpty());
 
 		n = interval(2, 2).fmod(interval(2, 2));

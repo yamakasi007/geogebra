@@ -1,7 +1,9 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
 import static org.geogebra.common.kernel.interval.IntervalTest.shouldEqual;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -31,5 +33,16 @@ public class IntervalMiscTest {
 		shouldEqual(interval(0, 0), interval(1, 1).log2());
 		shouldEqual(interval(0, 1), interval(1, 2).log2());
 		shouldEqual(interval(0, 3), interval(1, 8).log2());
+	}
+
+	@Test
+	public void testHull() {
+		shouldEqual(interval(-1, 7),
+				interval(-1, 1).hull(interval(5, 7)));
+		shouldEqual(interval(-1, 1),
+				interval(-1, 1).hull(new Interval(empty())));
+		shouldEqual(interval(-1 ,1),
+				new Interval(empty()).hull(interval(-1, 1)));
+		assertTrue(empty().hull(empty()).isEmpty());
 	}
 }

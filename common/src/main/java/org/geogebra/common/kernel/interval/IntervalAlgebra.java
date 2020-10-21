@@ -26,7 +26,8 @@ class IntervalAlgebra {
 	 */
 	Interval fmod(Interval other) {
 		if (interval.isEmpty() || other.isEmpty()) {
-			return IntervalConstants.EMPTY;
+			interval.setEmpty();
+			return interval;
 		}
 
 		double yb = interval.getLow() < 0 ? other.getLow() : other.getHigh();

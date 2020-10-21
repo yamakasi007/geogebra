@@ -85,7 +85,7 @@ public class IntervalTest {
 
 	@Test
 	public void testEmptyConstant() {
-		assertTrue(IntervalConstants.EMPTY.isEmpty());
+		assertTrue(IntervalConstants.empty().isEmpty());
 	}
 
 	@Test
@@ -101,8 +101,8 @@ public class IntervalTest {
 	@Test
 	public void testNotOverlapWithEmptyInterval() {
 		Interval a = new Interval(-1, 1);
-		assertFalse(a.isOverlap(IntervalConstants.EMPTY));
-		assertFalse(IntervalConstants.EMPTY.isOverlap(a));
+		assertFalse(a.isOverlap(IntervalConstants.empty()));
+		assertFalse(IntervalConstants.empty().isOverlap(a));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class IntervalTest {
 
 	@Test
 	public void testEmptyIntervalToString() {
-		assertEquals("Interval []", IntervalConstants.EMPTY.toString());
+		assertEquals("Interval []", IntervalConstants.empty().toString());
 	}
 
 	@Test
