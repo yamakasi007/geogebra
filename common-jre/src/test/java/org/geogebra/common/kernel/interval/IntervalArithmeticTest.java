@@ -90,11 +90,11 @@ public class IntervalArithmeticTest {
 
 	@Test
 	public void testMultiplicationNegativeWithNegative() {
-		shouldEqual(interval(6, 2),
+		shouldEqual(interval(2, 6),
 				interval(-2, -1).multiply(interval(-3, -2)));
-//
-//		shouldEqual(interval(4, POSITIVE_INFINITY),
-//				interval(NEGATIVE_INFINITY, -1).multiply(interval(-6, -4)));
+
+		shouldEqual(interval(4, POSITIVE_INFINITY),
+				interval(NEGATIVE_INFINITY, -1).multiply(interval(-6, -4)));
 
 		shouldEqual(interval(POSITIVE_INFINITY, POSITIVE_INFINITY),
 				interval(NEGATIVE_INFINITY, -1)
