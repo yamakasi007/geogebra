@@ -37,4 +37,12 @@ public interface IntervalMiscOperands {
 	 * @return this as result.
 	 */
 	Interval hull(Interval other);
+
+	/**
+	 * Computes an interval that has all the values that belong to both x and y
+	 *
+	 * @param interval to intersect with
+	 * @return this as result
+	 */
+	Interval intersection(Interval interval);
 }

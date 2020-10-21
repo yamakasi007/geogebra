@@ -45,4 +45,12 @@ public class IntervalMiscTest {
 				new Interval(empty()).hull(interval(-1, 1)));
 		assertTrue(empty().hull(empty()).isEmpty());
 	}
+
+	@Test
+	public void testIntersection() {
+		assertTrue(interval(-1, 1).intersection(interval(5, 7)).isEmpty());
+		assertTrue(interval(-1, 1).intersection(empty()).isEmpty());
+		shouldEqual(interval(0, 1),
+				interval(-1, 1).intersection(interval(0, 7)));
+	}
 }

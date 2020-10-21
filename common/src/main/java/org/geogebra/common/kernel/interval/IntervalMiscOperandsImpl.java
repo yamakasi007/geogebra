@@ -61,4 +61,20 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 
 		return interval;
 	}
+
+	@Override
+	public Interval intersection(Interval other) {
+		if (interval.isEmpty() || other.isEmpty()) {
+			interval.setEmpty();
+		} else {
+			double low = Math.max(interval.getLow(), other.getLow());
+			double high = Math.min(interval.getHigh(), other.getHigh());
+			if (low <= high) {
+				interval.set(low, high);
+			} else {
+				interval.setEmpty();
+			}
+		}
+		return interval;
+	}
 }

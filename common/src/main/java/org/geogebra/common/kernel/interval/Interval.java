@@ -492,4 +492,9 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean isZero() {
 		return low == 0 && high == 0;
 	}
+
+	@Override
+	public Interval intersection(Interval interval) {
+		return misc.intersection(interval);
+	}
 }
