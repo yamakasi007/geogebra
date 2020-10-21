@@ -25,4 +25,11 @@ public class IntervalMiscTest {
 		shouldEqual(interval(0, 1), interval(1, 10).log10());
 		shouldEqual(interval(0, 2), interval(1, 100).log10());
 	}
+
+	@Test
+	public void testLog2() {
+		shouldEqual(interval(0, 0), interval(1, 1).log2());
+		shouldEqual(interval(0, 1), interval(1, 2).log2());
+		shouldEqual(interval(0, 3), interval(1, 8).log2());
+	}
 }

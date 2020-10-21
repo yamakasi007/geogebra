@@ -19,4 +19,10 @@ public interface IntervalMiscOperands {
 	 * @return base 10 logarithm of the interval
 	 */
 	Interval log10();
+
+	/**
+	 *
+	 * @return base 2 logarithm of the interval
+	 */
+	Interval log2();
 }

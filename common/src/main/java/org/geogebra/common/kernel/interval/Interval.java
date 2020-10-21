@@ -489,4 +489,9 @@ public class Interval implements IntervalMiscOperands, IntervalDivision {
 	public Interval log10() {
 		return misc.log10();
 	}
+
+	@Override
+	public Interval log2() {
+		return misc.log2();
+	}
 }
