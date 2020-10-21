@@ -66,8 +66,8 @@ public class IntervalTest {
 		assertTrue(new Interval(-1, 1).hasZero());
 		assertTrue(new Interval(0, 1).hasZero());
 		assertTrue(new Interval(-1, 0).hasZero());
-		assertTrue(IntervalConstants.WHOLE.hasZero());
-		assertTrue(IntervalConstants.ZERO.hasZero());
+		assertTrue(IntervalConstants.whole().hasZero());
+		assertTrue(IntervalConstants.zero().hasZero());
 	}
 
 	@Test

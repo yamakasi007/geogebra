@@ -5,6 +5,7 @@ import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_HIGH;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.ZERO;
+import static org.geogebra.common.kernel.interval.IntervalConstants.zero;
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
 import static org.geogebra.common.kernel.interval.IntervalTest.shouldEqual;
 import static org.junit.Assert.assertArrayEquals;
@@ -30,8 +31,8 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1, 0), interval(PI, (3 * PI) / 2).cos());
 		shouldEqual(interval(-1, -1), interval(-PI, -PI).cos());
 		shouldEqual(interval(-1, 1), interval(-PI, PI).cos());
-		shouldEqual(ZERO, interval(PI / 2, PI / 2).cos());
-		shouldEqual(ZERO, interval(-PI / 2, -PI / 2).cos());
+		shouldEqual(zero(), interval(PI / 2, PI / 2).cos());
+		shouldEqual(zero(), interval(-PI / 2, -PI / 2).cos());
 		shouldEqual(interval(-1, 1), interval(-2 * PI, PI).cos());
 		shouldEqual(interval(-1, 1), interval(-3 * PI / 2, PI).cos());
 		shouldEqual(interval(-1, 0), interval(PI / 2, PI).cos());

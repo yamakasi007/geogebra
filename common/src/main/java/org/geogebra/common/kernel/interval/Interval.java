@@ -488,4 +488,8 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public void setZero() {
 		set(IntervalConstants.zero());
 	}
+
+	public boolean isZero() {
+		return low == 0 && high == 0;
+	}
 }

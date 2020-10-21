@@ -3,7 +3,6 @@ package org.geogebra.common.kernel.interval;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
-import static org.geogebra.common.kernel.interval.IntervalConstants.ZERO;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 import static org.geogebra.common.kernel.interval.RMath.mulHigh;
 import static org.geogebra.common.kernel.interval.RMath.mulLow;
@@ -70,7 +69,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 	}
 
 	private Interval positive(double x) {
-		if (interval.equals(ZERO)) {
+		if (interval.isZero()) {
 			return interval;
 		}
 
@@ -87,7 +86,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 	}
 
 	private Interval negative(double x) {
-		if (interval.equals(ZERO)) {
+		if (interval.isZero()) {
 			return interval;
 		}
 
@@ -104,7 +103,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 	}
 
 	private Interval zero() {
-		if (interval.equals(ZERO)) {
+		if (interval.isZero()) {
 			return interval;
 		}
 		interval.setWhole();

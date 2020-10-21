@@ -4,6 +4,7 @@ import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.ZERO;
+import static org.geogebra.common.kernel.interval.IntervalConstants.zero;
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
 import static org.geogebra.common.kernel.interval.IntervalTest.shouldEqual;
 
@@ -40,9 +41,9 @@ public class IntervalDivisionTest {
 
 	@Test
 	public void testDivisionZeroWithZero() {
-		shouldEqual(interval(0, 0), ZERO.divide(interval(-1, 1)));
-		shouldEqual(interval(0, 0), ZERO.divide(interval(-1, 0)));
-		shouldEqual(interval(0, 0), ZERO.divide(interval(0, 1)));
+		shouldEqual(interval(0, 0), zero().divide(interval(-1, 1)));
+		shouldEqual(interval(0, 0), zero().divide(interval(-1, 0)));
+		shouldEqual(interval(0, 0), zero().divide(interval(0, 1)));
 	}
 
 	@Test
