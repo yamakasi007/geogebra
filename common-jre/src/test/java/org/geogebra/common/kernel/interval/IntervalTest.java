@@ -45,68 +45,6 @@ public class IntervalTest {
 	}
 
 	@Test
-	public void testMultiplication1() {
-		assertEquals(interval(-5, 10),
-				interval(-1, 2)
-						.multiply(interval(3, 5)));
-	}
-
-	@Test
-	public void testMultiplication2() {
-		assertEquals(interval(-8, -3),
-				interval(-4, -3)
-						.multiply(interval(1, 2)));
-
-	}
-
-	@Test
-	public void testMultiplication3() {
-		assertEquals(interval(-15, 10),
-				interval(-5, 1)
-						.multiply(interval(-2, 3)));
-
-	}
-
-	@Test
-	public void testMultiplication4() {
-		assertEquals(interval(-12, 6),
-				interval(-1, 2)
-						.multiply(interval(-6, -4)));
-
-	}
-
-	@Test
-	public void testMultiplication5() {
-		assertEquals(interval(0, 7),
-				interval(-7, -5)
-						.multiply(interval(-1, 0)));
-
-	}
-
-	@Test
-	public void testMultiplyThreeIntervals() {
-		assertEquals(interval(-30, 60),
-				interval(-3, 1)
-						.multiply(interval(-2, 4))
-						.multiply(interval(-5, -1)));
-
-	}
-
-	@Test(expected = IntervalDivisionByZero.class)
-	public void testDivisionByZero() throws IntervalDivisionByZero {
-		interval(-1 / 3.0, 1 / 4.0)
-				.divide(interval(-1.0, 1.0));
-	}
-
-	@Test
-	public void testDivision() throws IntervalDivisionByZero {
-		assertEquals(interval(-2 / 3.0, 1 / 2.0),
-				interval(-1 / 3.0, 1 / 4.0)
-						.divide(interval(1 / 2.0, 3 / 4.0)));
-
-	}
-
-	@Test
 	public void isWhole() {
 		Interval interval = new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 		assertTrue(interval.isWhole());
@@ -165,6 +103,14 @@ public class IntervalTest {
 		Interval a = new Interval(-1, 1);
 		assertFalse(a.isOverlap(IntervalConstants.EMPTY));
 		assertFalse(IntervalConstants.EMPTY.isOverlap(a));
+	}
+
+	@Test
+	public void testNegative() {
+		shouldEqual(interval(-3, -2), interval(2, 3).negative());
+		shouldEqual(interval(-2, 1), interval(-1, 2).negative());
+		shouldEqual(interval(2, 3), interval(-3, -2).negative());
+		assertTrue(IntervalConstants.WHOLE.negative().isWhole());
 	}
 
 	@Test

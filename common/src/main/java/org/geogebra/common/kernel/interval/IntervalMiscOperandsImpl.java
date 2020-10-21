@@ -1,7 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
-	public static final Interval LOG_EXP_2 = new Interval(2, 2).log();
+	public static final Interval LOG_EXP_10 = new Interval(10, 10).log();
 	private Interval interval;
 
 	public IntervalMiscOperandsImpl(Interval interval) {
@@ -30,7 +30,7 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 	@Override
 	public Interval log10() {
 		if (!interval.isEmpty()) {
-			interval.log().divide(LOG_EXP_2);
+			interval.log().divide(LOG_EXP_10);
 		}
 
 		return interval;

@@ -384,9 +384,11 @@ public class Interval implements IntervalMiscOperands, IntervalDivision {
 
 	/**
 	 * "Invert" the interval
+	 * @return this as result.
 	 */
-	public void negative() {
+	public Interval negative() {
 		set(-high, -low);
+		return this;
 	}
 
 	public void handleNegative() {
