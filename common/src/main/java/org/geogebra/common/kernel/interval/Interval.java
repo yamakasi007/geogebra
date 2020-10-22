@@ -528,4 +528,9 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public Interval difference(Interval other) throws IntervalsDifferenceException {
 		return misc.difference(other);
 	}
+
+	@Override
+	public Interval abs() {
+		return misc.abs();
+	}
 }

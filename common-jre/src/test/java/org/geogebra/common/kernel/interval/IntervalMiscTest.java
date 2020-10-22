@@ -115,4 +115,11 @@ public class IntervalMiscTest {
 	public void testDifferenceException() throws IntervalsDifferenceException {
 		interval(1, 4).difference(interval(2, 3));
 	}
+
+	@Test
+	public void testAbs() {
+		shouldEqual(interval(0, 1), interval(-1, 1).abs());
+		shouldEqual(interval(2, 3), interval(-3, -2).abs());
+		shouldEqual(interval(2, 3), interval(2, 3).abs());
+	}
 }

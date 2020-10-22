@@ -115,4 +115,19 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 		}
 		return interval;
 	}
+
+	@Override
+	public Interval abs() {
+		if (interval.isEmpty() || interval.getLow() >= 0) {
+			return interval;
+		}
+
+		if (interval.getHigh() <= 0) {
+			interval.negative();
+		} else {
+			interval.set(0, Math.max(-interval.getLow(), interval.getHigh()));
+		}
+
+		return interval;
+	}
 }

@@ -61,4 +61,11 @@ public interface IntervalMiscOperands {
 	 * @return this as result.
 	 */
 	Interval difference(Interval other) throws IntervalsDifferenceException;
+
+	/**
+	 * Absolute value of the interval.
+	 *
+	 * @return this as result.
+	 */
+	Interval abs();
 }
