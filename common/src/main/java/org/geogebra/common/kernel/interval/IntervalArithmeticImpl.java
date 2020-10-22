@@ -24,13 +24,13 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		if (other.hasZero()) {
 			if (other.getLow() != 0) {
 				if (other.getHigh() != 0) {
-					return zero();
+					return divisionByZero();
 				} else {
-					return negative(other.getLow());
+					return divisionByNegative(other.getLow());
 				}
 			} else {
 				if (other.getHigh() != 0) {
-					return positive(other.getHigh());
+					return divisionByPositive(other.getHigh());
 				} else {
 					interval.setEmpty();
 				}
@@ -68,7 +68,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		return interval;
 	}
 
-	private Interval positive(double x) {
+	private Interval divisionByPositive(double x) {
 		if (interval.isZero()) {
 			return interval;
 		}
@@ -85,7 +85,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		return interval;
 	}
 
-	private Interval negative(double x) {
+	private Interval divisionByNegative(double x) {
 		if (interval.isZero()) {
 			return interval;
 		}
@@ -102,7 +102,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		return interval;
 	}
 
-	private Interval zero() {
+	private Interval divisionByZero() {
 		if (interval.isZero()) {
 			return interval;
 		}
