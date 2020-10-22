@@ -1,7 +1,6 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
-import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 
