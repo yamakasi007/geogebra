@@ -77,4 +77,14 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 		}
 		return interval;
 	}
+
+	@Override
+	public Interval union(Interval other) throws IntervalsNotOverlapException {
+		if (!interval.isOverlap(other)) {
+			throw new IntervalsNotOverlapException();
+		}
+		interval.set(Math.min(interval.getLow(), other.getLow()),
+				Math.max(interval.getHigh(), other.getHigh()));
+		return interval;
+	}
 }

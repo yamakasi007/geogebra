@@ -53,4 +53,15 @@ public class IntervalMiscTest {
 		shouldEqual(interval(0, 1),
 				interval(-1, 1).intersection(interval(0, 7)));
 	}
+
+	@Test
+	public void testUnion() throws IntervalsNotOverlapException {
+		shouldEqual(interval(1, 4),
+				interval(1, 3).union(interval(2, 4)));
+	}
+
+	@Test(expected = IntervalsNotOverlapException.class)
+	public void testUnionWithException() throws IntervalsNotOverlapException {
+		interval(1, 2).union(interval(3, 4));
+	}
 }

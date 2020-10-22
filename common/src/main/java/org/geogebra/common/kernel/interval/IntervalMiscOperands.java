@@ -45,4 +45,11 @@ public interface IntervalMiscOperands {
 	 * @return this as result
 	 */
 	Interval intersection(Interval interval);
+
+	/**
+	 * Union of intervals
+	 * @param other to union with.
+	 * @return this as result.
+	 */
+	Interval union(Interval other) throws IntervalsNotOverlapException;
 }

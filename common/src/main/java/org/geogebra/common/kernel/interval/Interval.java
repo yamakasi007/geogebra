@@ -497,4 +497,9 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public Interval intersection(Interval interval) {
 		return misc.intersection(interval);
 	}
+
+	@Override
+	public Interval union(Interval other) throws IntervalsNotOverlapException {
+		return misc.union(other);
+	}
 }
