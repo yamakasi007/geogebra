@@ -22,7 +22,7 @@ class IntervalTrigonometric {
 		}
 
 		Interval cache = new Interval(interval);
-		cache.handleNegative();
+		handleNegative(cache);
 
 		Interval pi = new Interval(PI);
 		Interval pi2 = new Interval(PI_TWICE);
@@ -60,6 +60,20 @@ class IntervalTrigonometric {
 		return interval;
 	}
 
+	private static void handleNegative(Interval interval) {
+		double low = interval.getLow();
+		double high = interval.getHigh();
+		if (low < 0) {
+			if (low == Double.NEGATIVE_INFINITY) {
+				interval.set(0, Double.POSITIVE_INFINITY);
+			} else {
+				double n = Math.ceil(-low / PI_TWICE_LOW);
+				interval.set(low + PI_TWICE_LOW * n,
+						high + PI_TWICE_LOW * n);
+			}
+		}
+	}
+
 	/**
 	 *
 	 * @return sine of the interval
@@ -84,7 +98,7 @@ class IntervalTrigonometric {
 		}
 
 		Interval cache = new Interval(interval);
-		cache.handleNegative();
+		handleNegative(cache);
 		Interval pi = PI;
 		cache.fmod(pi);
 
@@ -100,7 +114,6 @@ class IntervalTrigonometric {
 		return interval;
 	}
 
-
 	/**
 	 *
 	 * @return arc sine of the interval
@@ -109,8 +122,10 @@ class IntervalTrigonometric {
 		if (interval.isEmpty() || interval.getHigh() < -1 || interval.getLow() > 1) {
 			interval.setEmpty();
 		} else {
-			double low = interval.getLow() <= -1 ? -PI_HALF_HIGH : RMath.asinLow(interval.getLow());
-			double high = interval.getHigh() >= 1 ? PI_HALF_HIGH : RMath.asinHigh(interval.getHigh());
+			double low = interval.getLow() <= -1 ? -PI_HALF_HIGH
+					: RMath.asinLow(interval.getLow());
+			double high = interval.getHigh() >= 1 ? PI_HALF_HIGH
+					: RMath.asinHigh(interval.getHigh());
 			interval.set(low, high);
 		}
 
@@ -132,7 +147,6 @@ class IntervalTrigonometric {
 		return interval;
 	}
 
-
 	/**
 	 *
 	 * @return arc tangent of the interval
@@ -143,7 +157,6 @@ class IntervalTrigonometric {
 		}
 		return interval;
 	}
-
 
 	/**
 	 *
@@ -169,13 +182,12 @@ class IntervalTrigonometric {
 			} else if (low >= 0) {
 				interval.set(RMath.coshLow(low), RMath.coshHigh(high));
 			} else {
-				interval.set(1, RMath.coshHigh(-low > high ? low: high));
+				interval.set(1, RMath.coshHigh(-low > high ? low : high));
 			}
 		}
 
 		return interval;
 	}
-
 
 	/**
 	 *

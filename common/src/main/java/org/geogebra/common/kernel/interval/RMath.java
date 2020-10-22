@@ -64,7 +64,6 @@ public class RMath {
 		return prev(m * n);
 	}
 
-
 	/**
 	 *
 	 * @param m argument
@@ -87,7 +86,7 @@ public class RMath {
 			return prev(Math.pow(n, power));
 		}
 
-		int m = (int)power;
+		int m = (int) power;
 		double y = (m & 1) == 1 ? n : 1;
 		m >>= 1;
 		while (m > 0) {
@@ -112,7 +111,7 @@ public class RMath {
 			return next(Math.pow(n, power));
 		}
 
-		return powHigh(n, (int)power);
+		return powHigh(n, (int) power);
 	}
 
 	private static double powHigh(double n, int power) {
@@ -188,6 +187,7 @@ public class RMath {
 	public static double coshHigh(double x) {
 		return next(Math.cosh(x));
 	}
+
 	public static double tanhLow(double x) {
 		return prev(Math.tanh(x));
 	}

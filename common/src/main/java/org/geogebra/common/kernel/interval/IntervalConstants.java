@@ -1,8 +1,11 @@
 package org.geogebra.common.kernel.interval;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
+
 public class IntervalConstants {
-	public final static Interval WHOLE = new Interval(Double.NEGATIVE_INFINITY,
-			Double.POSITIVE_INFINITY);
+	public final static Interval WHOLE = new Interval(NEGATIVE_INFINITY,
+			POSITIVE_INFINITY);
 	public static final Interval ZERO = new Interval(0);
 	public static final Interval ONE = new Interval(1);
 	public static final double PI_LOW =  3.141592653589793;
@@ -14,11 +17,28 @@ public class IntervalConstants {
 	public static final Interval PI = new Interval(PI_LOW, PI_HIGH);
 	public static final Interval PI_HALF = new Interval(PI_HALF_LOW, PI_HALF_HIGH);
 	public static final Interval PI_TWICE = new Interval(PI_TWICE_LOW, PI_TWICE_HIGH);
-	public static Interval empty() {return new Interval(Double.POSITIVE_INFINITY,
-			Double.NEGATIVE_INFINITY);}
-	public static Interval zero() {return new Interval(0);}
 
+	/**
+	 *
+	 * @return a newly created empty interval.
+	 */
+	public static Interval empty() {
+		return new Interval(POSITIVE_INFINITY, NEGATIVE_INFINITY);
+	}
+
+	/**
+	 *
+	 * @return a newly created zero interval.
+	 */
+	public static Interval zero() {
+		return new Interval(0);
+	}
+
+	/**
+	 *
+	 * @return a newly created whole interval.
+	 */
 	public static Interval whole() {
-		return new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+		return new Interval(NEGATIVE_INFINITY, POSITIVE_INFINITY);
 	}
 }

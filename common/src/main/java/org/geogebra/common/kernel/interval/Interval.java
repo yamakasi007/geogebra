@@ -64,6 +64,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return new Interval(Math.max(interval.low, other.low),
 				Math.max(interval.high, other.high));
 	}
+
 	/**
 	 *
 	 * @param interval interval.
@@ -419,6 +420,10 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return Double.isInfinite(low) && low == high;
 	}
 
+	/**
+	 *
+	 * @return width of the interval.
+	 */
 	public double getWidth() {
 		if (isEmpty()) {
 			return 0;
@@ -433,18 +438,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public Interval negative() {
 		set(-high, -low);
 		return this;
-	}
-
-	public void handleNegative() {
-		if (low < 0) {
-			if (low == Double.NEGATIVE_INFINITY) {
-				set(0, Double.POSITIVE_INFINITY);
-			} else {
-      			double n = Math.ceil(-low / PI_TWICE_LOW);
-				set(low + PI_TWICE_LOW * n,
-					high + PI_TWICE_LOW * n);
-			}
-		}
 	}
 
 	/**
