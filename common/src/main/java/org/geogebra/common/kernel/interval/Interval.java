@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.interval;
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
+import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 
 import java.util.Objects;
 
@@ -43,6 +44,43 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 */
 	public Interval(Interval other) {
 		this(other.low, other.high);
+	}
+
+	/**
+	 *
+	 * @param interval interval.
+	 * @param other interval.
+	 * @return the max of interval and other.
+	 */
+	public static Interval max(Interval interval, Interval other) {
+		if (interval.isEmpty() && other.isEmpty()) {
+			return empty();
+		} else if (interval.isEmpty()) {
+			return other;
+		} else if (other.isEmpty()) {
+			return interval;
+		}
+
+		return new Interval(Math.max(interval.low, other.low),
+				Math.max(interval.high, other.high));
+	}
+	/**
+	 *
+	 * @param interval interval.
+	 * @param other interval.
+	 * @return the min of interval and other.
+	 */
+	public static Interval min(Interval interval, Interval other) {
+		if (interval.isEmpty() && other.isEmpty()) {
+			return empty();
+		} else if (interval.isEmpty()) {
+			return other;
+		} else if (other.isEmpty()) {
+			return interval;
+		}
+
+		return new Interval(Math.min(interval.low, other.low),
+				Math.min(interval.high, other.high));
 	}
 
 	/** Empty interval is represented by [∞, -∞]

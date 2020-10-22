@@ -122,4 +122,20 @@ public class IntervalMiscTest {
 		shouldEqual(interval(2, 3), interval(-3, -2).abs());
 		shouldEqual(interval(2, 3), interval(2, 3).abs());
 	}
+
+	@Test
+	public void testMax() {
+		shouldEqual(interval(5, 7), Interval.max(interval(-1, 1),
+				interval(5, 7)));
+		shouldEqual(interval(-1, 1),
+				Interval.max(empty(), interval(-1, 1)));
+		shouldEqual(interval(-1, 1),
+				Interval.max(interval(-1, 1), empty()));
+	}
+
+	@Test
+	public void testMin() {
+		shouldEqual(interval(-1, 1),
+				Interval.min(interval(-1, 1), interval(5, 7)));
+	}
 }
