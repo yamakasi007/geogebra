@@ -303,7 +303,7 @@ public class DrawInputBox extends CanvasDrawable {
 	}
 
 	public boolean hasError() {
-		return !StringUtil.empty(geoInputBox.getTempUserDisplayInput());
+		return getGeoInputBox().hasError();
 	}
 
 	/**
