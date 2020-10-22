@@ -1,9 +1,12 @@
 package org.geogebra.common.kernel.interval;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
+
 public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 	private static final Interval LOG_EXP_2 = new Interval(2, 2).log();
 	private static final Interval LOG_EXP_10 = new Interval(10, 10).log();
-	private Interval interval;
+	private final Interval interval;
 
 	public IntervalMiscOperandsImpl(Interval interval) {
 		this.interval = interval;
@@ -22,7 +25,7 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 	public Interval log() {
 		if (!interval.isEmpty()) {
 			double low = interval.getLow();
-			interval.set(low <= 0 ? Double.NEGATIVE_INFINITY : RMath.logLow(low),
+			interval.set(low <= 0 ? NEGATIVE_INFINITY : RMath.logLow(low),
 					RMath.logHigh(interval.getHigh()));
 		}
 		return interval;
@@ -52,9 +55,7 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 			interval.setEmpty();
  		} else if (interval.isEmpty()) {
 			interval.set(other);
-		} else if (other.isEmpty()) {
-			// nothing
-		} else {
+		} else if (!other.isEmpty()) {
 			interval.set(Math.min(interval.getLow(), other.getLow()),
 					Math.max(interval.getHigh(), other.getHigh()));
 		}
@@ -85,6 +86,33 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 		}
 		interval.set(Math.min(interval.getLow(), other.getLow()),
 				Math.max(interval.getHigh(), other.getHigh()));
+		return interval;
+	}
+
+	@Override
+	public Interval difference(Interval other) throws IntervalsDifferenceException {
+		if (interval.isEmpty() || other.isWhole()) {
+			interval.setEmpty();
+			return interval;
+		}
+
+		if (interval.isOverlap(other)) {
+			if (interval.getLow() < other.getLow() && other.getHigh() < interval.getHigh()) {
+				throw new IntervalsDifferenceException();
+			}
+
+			if ((other.getLow() <= interval.getLow() && other.getHigh() == POSITIVE_INFINITY)
+				|| (other.getHigh() >= interval.getHigh() && other.getLow() == NEGATIVE_INFINITY)) {
+				interval.setEmpty();
+				return interval;
+			}
+
+			if (other.getLow() <= interval.getLow()) {
+				interval.halfOpenLeft(other.getHigh(), interval.getHigh());
+			} else {
+				interval.halfOpenRight(interval.getLow(), other.getLow());
+			}
+		}
 		return interval;
 	}
 }

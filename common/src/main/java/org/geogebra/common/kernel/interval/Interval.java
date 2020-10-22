@@ -4,9 +4,6 @@ import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_LOW;
 import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import org.geogebra.common.util.DoubleUtil;
@@ -309,11 +306,35 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	/**
+	 * [a, b] -> (a, b]
+	 *
+	 * @param a low limit
+	 * @param b high limit
+	 * @return this as result
+	 */
+	public Interval halfOpenLeft(double a, double b) {
+		set(RMath.next(a), b);
+		return this;
+	}
+
+	/**
 	 * [a, b] -> [a, b)
 	 * @return this as result
 	 */
 	public Interval halfOpenRight() {
 		high = RMath.prev(high);
+		return this;
+	}
+
+	/**
+	 * [a, b] -> [a, b)
+	 *
+	 * @param a low limit
+	 * @param b high limit
+	 * @return this as result
+	 */
+	public Interval halfOpenRight(double a, double b) {
+		 set(a, RMath.prev(b));
 		return this;
 	}
 
@@ -501,5 +522,10 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	@Override
 	public Interval union(Interval other) throws IntervalsNotOverlapException {
 		return misc.union(other);
+	}
+
+	@Override
+	public Interval difference(Interval other) throws IntervalsDifferenceException {
+		return misc.difference(other);
 	}
 }

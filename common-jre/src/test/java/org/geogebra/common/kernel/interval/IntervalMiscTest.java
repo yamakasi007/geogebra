@@ -1,6 +1,10 @@
 package org.geogebra.common.kernel.interval;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
+import static org.apache.commons.math3.util.FastMath.nextAfter;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
+import static org.geogebra.common.kernel.interval.IntervalConstants.whole;
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
 import static org.geogebra.common.kernel.interval.IntervalTest.shouldEqual;
 import static org.junit.Assert.assertTrue;
@@ -63,5 +67,52 @@ public class IntervalMiscTest {
 	@Test(expected = IntervalsNotOverlapException.class)
 	public void testUnionWithException() throws IntervalsNotOverlapException {
 		interval(1, 2).union(interval(3, 4));
+	}
+
+	@Test
+	public void testDifference() throws IntervalsDifferenceException {
+		shouldEqual(interval(3, 4),
+				interval(3, 5).difference(interval(4, 6)));
+
+		shouldEqual(interval(5, 6),
+				interval(4, 6).difference(interval(3, 5)));
+
+		shouldEqual(interval(4, 6),
+				interval(4, 6).difference(interval(8, 9)));
+
+		Interval diff = interval(0, 3).difference(interval(0, 1));
+		assertTrue(diff.getLow() > 1 && diff.getHigh() == 3);
+
+		diff = interval(0, 3).difference(interval(1, 3));
+		assertTrue(diff.getLow() == 0 && diff.getHigh() < 1);
+
+		assertTrue(interval(0, 3).difference(interval(0, 3))
+				.isEmpty());
+
+		shouldEqual(interval(0, 1),
+				interval(0, 1).difference(empty()));
+
+		assertTrue(interval(0, 1).difference(whole()).isEmpty());
+
+		assertTrue(interval(0, POSITIVE_INFINITY)
+			.difference(interval(0, POSITIVE_INFINITY)).isEmpty());
+		assertTrue(interval(NEGATIVE_INFINITY, 0)
+			.difference(interval(NEGATIVE_INFINITY, 0)).isEmpty());
+		assertTrue(interval(NEGATIVE_INFINITY, 0)
+			.difference(whole()).isEmpty());
+		assertTrue(whole().difference(whole()).isEmpty());
+
+		diff = interval(3, nextAfter(5, NEGATIVE_INFINITY))
+				.difference(interval(4, 6));
+		assertTrue(diff.getLow() == 3 && diff.getHigh() < 4);
+
+		shouldEqual(interval(5, 6),
+				interval(4, 6)
+						.difference(interval(3, nextAfter(5, NEGATIVE_INFINITY))));
+	}
+
+	@Test(expected = IntervalsDifferenceException.class)
+	public void testDifferenceException() throws IntervalsDifferenceException {
+		interval(1, 4).difference(interval(2, 3));
 	}
 }

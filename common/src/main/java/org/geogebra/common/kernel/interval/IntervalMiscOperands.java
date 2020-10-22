@@ -52,4 +52,13 @@ public interface IntervalMiscOperands {
 	 * @return this as result.
 	 */
 	Interval union(Interval other) throws IntervalsNotOverlapException;
+
+	/**
+	 * Computes the difference between two intervals,
+	 * i.e. an interval with all the values of this interval that are
+	 * not in "other".
+	 * @param other to difference with.
+	 * @return this as result.
+	 */
+	Interval difference(Interval other) throws IntervalsDifferenceException;
 }
