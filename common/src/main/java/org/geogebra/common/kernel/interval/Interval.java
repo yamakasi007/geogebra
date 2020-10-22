@@ -260,7 +260,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 */
 	public Interval multiplicativeInverse() {
 		if (isEmpty()) {
-			return IntervalConstants.empty();
+			return empty();
 		}
 
 		if (hasZero()) {
@@ -417,7 +417,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return true if infinite.
 	 */
 	public boolean isOnlyInfinity() {
-		return Double.isInfinite(low) && low == high;
+		return Double.isInfinite(low) && DoubleUtil.isEqual(high, low);
 	}
 
 	/**

@@ -3,12 +3,15 @@ package org.geogebra.common.kernel.interval;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+@SuppressFBWarnings
 public class IntervalConstants {
 	public final static Interval WHOLE = new Interval(NEGATIVE_INFINITY,
 			POSITIVE_INFINITY);
 	public static final Interval ZERO = new Interval(0);
 	public static final Interval ONE = new Interval(1);
-	public static final double PI_LOW =  3.141592653589793;
+	public static final double PI_LOW = 3.141592653589793;
 	public static final double PI_HIGH = 3.1415926535897936;
 	public static final double PI_HALF_LOW = PI_LOW / 2.0;
 	public static final double PI_HALF_HIGH = PI_HIGH / 2.0;

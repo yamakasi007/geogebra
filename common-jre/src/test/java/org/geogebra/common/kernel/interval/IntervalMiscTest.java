@@ -45,7 +45,7 @@ public class IntervalMiscTest {
 				interval(-1, 1).hull(interval(5, 7)));
 		shouldEqual(interval(-1, 1),
 				interval(-1, 1).hull(new Interval(empty())));
-		shouldEqual(interval(-1 ,1),
+		shouldEqual(interval(-1 , 1),
 				new Interval(empty()).hull(interval(-1, 1)));
 		assertTrue(empty().hull(empty()).isEmpty());
 	}

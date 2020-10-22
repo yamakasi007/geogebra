@@ -50,7 +50,6 @@ public class IntervalArithmeticTest {
 						.multiply(interval(POSITIVE_INFINITY, POSITIVE_INFINITY)));
 	}
 
-
 	@Test
 	public void testMultiplicationPositiveWithNegative() {
 		shouldEqual(interval(-6, -2),
@@ -59,7 +58,6 @@ public class IntervalArithmeticTest {
 		shouldEqual(interval(NEGATIVE_INFINITY, -2),
 				interval(1, POSITIVE_INFINITY).multiply(interval(-3, -2)));
 	}
-
 
 	@Test
 	public void testMultiplicationPositiveWithMixed() {

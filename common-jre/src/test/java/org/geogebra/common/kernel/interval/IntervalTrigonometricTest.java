@@ -1,5 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Math.PI;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.PI_TWICE_HIGH;
@@ -42,9 +44,10 @@ public class IntervalTrigonometricTest {
 
 	@Test
 	public void testCosWithInfinity() {
-		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).cos());
-		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).cos().isEmpty());
-		assertTrue(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).cos().isEmpty());
+		shouldEqual(interval(-1, 1),
+				interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).cos());
+		assertTrue(interval(NEGATIVE_INFINITY, NEGATIVE_INFINITY).cos().isEmpty());
+		assertTrue(interval(POSITIVE_INFINITY, POSITIVE_INFINITY).cos().isEmpty());
 	}
 
 	@Test
@@ -65,9 +68,9 @@ public class IntervalTrigonometricTest {
 
 	@Test
 	public void testSinWithInfinity() {
-		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).sin());
-		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).sin().isEmpty());
-		assertTrue(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).sin().isEmpty());
+		shouldEqual(interval(-1, 1), interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).sin());
+		assertTrue(interval(NEGATIVE_INFINITY, NEGATIVE_INFINITY).sin().isEmpty());
+		assertTrue(interval(POSITIVE_INFINITY, POSITIVE_INFINITY).sin().isEmpty());
 	}
 
 	@Test
@@ -78,13 +81,13 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1, 1), interval(-PI / 4, PI / 4).tan());
 		shouldEqual(interval(-1, 1), interval(-9 * PI / 4, -7 * PI / 4).tan());
 		shouldEqual(interval(-1, 1), interval(7 * PI / 4, 9 * PI / 4).tan());
-		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+		shouldEqual(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY),
 				interval(PI / 2, PI / 2).tan());
-		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+		shouldEqual(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY),
 				interval(5 * PI / 2, 5 * PI / 2).tan());
-		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+		shouldEqual(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY),
 				interval(-5 * PI / 2, -5 * PI / 2).tan());
-		shouldEqual(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+		shouldEqual(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY),
 				interval(0, PI / 2).tan());
 		shouldEqual(interval(0.16767801556, 0.18877817478),
 				interval(-2.975460122699386, -2.955010224948875).tan());
@@ -92,8 +95,8 @@ public class IntervalTrigonometricTest {
 
 	@Test
 	public void testTanWithInfinity() {
-		assertTrue(interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).tan().isWhole());
-		assertTrue(interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).tan().isEmpty());
+		assertTrue(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).tan().isWhole());
+		assertTrue(interval(POSITIVE_INFINITY, NEGATIVE_INFINITY).tan().isEmpty());
 	}
 
 	@Test
@@ -137,7 +140,8 @@ public class IntervalTrigonometricTest {
 	@Test
 	public void testTanh() {
 		shouldEqual(interval(0, 0), interval(0, 0).tanh());
-		shouldEqual(interval(-0.99932929973, 0.99932929973), interval(-4, 4).tanh());
-		shouldEqual(interval(-1, 1), interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).tanh());
+		shouldEqual(interval(-0.99932929973, 0.99932929973),
+				interval(-4, 4).tanh());
+		shouldEqual(interval(-1, 1), interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).tanh());
 	}
 }
