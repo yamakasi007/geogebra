@@ -55,6 +55,7 @@ import org.geogebra.common.util.debug.Log;
  */
 public class DrawParametricCurve extends Drawable {
 
+	private final DrawIntervalCurve intervalCurve;
 	private CurveEvaluable curve;
 	private GeneralPathClippedForCurvePlotter gp;
 	private boolean isVisible;
@@ -83,6 +84,7 @@ public class DrawParametricCurve extends Drawable {
 			return false;
 		}
 	};
+	private boolean intervalPlot;
 
 	/**
 	 * Creates graphical representation of the curve
@@ -96,11 +98,25 @@ public class DrawParametricCurve extends Drawable {
 		this.view = view;
 		this.curve = curve;
 		geo = curve.toGeoElement();
+		intervalPlot = true;
+		intervalCurve = new DrawIntervalCurve(view, curve);
 		update();
 	}
 
 	@Override
 	final public void update() {
+		if (intervalPlot) {
+			updateIntervalPlot();
+		} else {
+			updateParametric();
+		}
+	}
+
+	private void updateIntervalPlot() {
+		intervalCurve.update();
+	}
+
+	final public void updateParametric() {
 		isVisible = geo.isEuclidianVisible();
 		if (!isVisible) {
 			return;
@@ -352,6 +368,20 @@ public class DrawParametricCurve extends Drawable {
 
 	@Override
 	final public void draw(GGraphics2D g2) {
+		if (intervalPlot) {
+			drawIntervalPlot(g2);
+		} else {
+			drawParametric(g2);
+		}
+	}
+
+	private void drawIntervalPlot(GGraphics2D g2) {
+		g2.setPaint(getObjectColor());
+		g2.setStroke(objStroke);
+		intervalCurve.draw(g2);
+	}
+
+	private void drawParametric(GGraphics2D g2) {
 		if (isVisible) {
 			if (dataExpression != null) {
 				g2.setPaint(getObjectColor());

@@ -317,7 +317,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @param low lower bound.
 	 * @param high higher bound.
 	 */
-	void set(double low, double high) {
+	public void set(double low, double high) {
 		this.low = low;
 		this.high = high;
 	}
