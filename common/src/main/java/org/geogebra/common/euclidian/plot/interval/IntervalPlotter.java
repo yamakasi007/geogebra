@@ -9,12 +9,12 @@ import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
 
 public class IntervalPlotter {
-	public static final int NUMBER_OF_SAMPLES = 1000;
+	public static final int NUMBER_OF_SAMPLES = 1500;
 	private final EuclidianView view;
 	private final Interval xRange;
 	private final Interval yRange;
 	private final boolean closed;
-	private double minWidthHeight=1.0;
+	private double minWidthHeight=2.0;
 	private final IntervalFunctionEvaluator evaluator;
 	private IntervalTupleList points;
 
@@ -44,10 +44,13 @@ public class IntervalPlotter {
 		Interval range = new Interval(yRange);
 		double minY = range.getLow();
 		double maxY = range.getHigh();
+		int ox = view.toScreenCoordX(view.getXZero());
+		int oy = view.toScreenCoordY(view.getYZero());
 		for (IntervalTuple point: points) {
 			if (point != null) {
 				Interval x = point.x();
 				Interval y = point.y();
+//				Log.debug("sin x: " + x + " y: " + y);
 				double yLow = y.getLow();
 				double yHigh = y.getHigh();
 				if (closed) {
@@ -57,14 +60,15 @@ public class IntervalPlotter {
 				double moveX = view.toScreenCoordX(x.getLow());
 				double gLow = !Double.isInfinite(yHigh) ? yScale(yHigh) : Double.NEGATIVE_INFINITY;
 				double gHigh = !Double.isInfinite(yLow) ? yScale(yLow) : Double.POSITIVE_INFINITY;
-				Interval viewPortY = clampRange(minY, maxY, gLow, gHigh);
-				double vLow =  view.toScreenCoordY(viewPortY.getLow());
-				double vHigh = view.toScreenCoordY(viewPortY.getHigh());
-				int height = (int)Math.max(vHigh - vLow, minWidthHeight);
-				g2.fillRect((int) moveX, (int) vHigh, height,height);
+//				Log.debug("RW rect: (" + x.getLow() + ", " + gLow + ", " + x.getLow() + minWidthHeight
+//				 + ", " + gHigh + ")");
+				Interval viewPortY = clampRange(minY, maxY, gHigh, gLow);
+				double vLow =  view.toScreenCoordY(gLow);
+				double vHigh = view.toScreenCoordY(gHigh);
+				int height = (int)Math.max(vLow - vHigh, minWidthHeight);
+				g2.fillRect((int) moveX, (int) vLow, height,height);
 			}
 		}
-		view.repaint();
 	}
 
 	private double yScale(double y) {
