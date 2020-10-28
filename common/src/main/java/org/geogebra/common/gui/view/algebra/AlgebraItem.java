@@ -551,7 +551,7 @@ public class AlgebraItem {
 			} else if (Algos.isUsedFor(Algos.Expression, geo1)) {
 				return geo1.getAssignmentLHS(StringTemplate.latexTemplate)
 						+ geo1.getLabelDelimiter() + geo1.getDefinition(
-								StringTemplate.latexTemplateHideLHS);
+						StringTemplate.latexTemplate);
 			} else {
 				return null;
 			}
