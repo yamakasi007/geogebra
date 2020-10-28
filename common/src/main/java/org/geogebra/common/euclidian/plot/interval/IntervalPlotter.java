@@ -31,14 +31,14 @@ public class IntervalPlotter {
 		Log.debug("NumberOfSamples: " + numberOfSamples);
 		evaluator = new IntervalFunctionEvaluator(function, xRange, numberOfSamples);
 		evaluator.update(xRange);
-		update();
-	}
-
-	public void update() {
 		updateRanges();
 //		evaluator.update(xRange);
 		points = evaluator.result();
 		minWidthHeight = Math.max(points.getDeltaX(), 1);
+		update();
+	}
+
+	public void update() {
 		updatePath();
 	}
 
