@@ -1,49 +1,38 @@
 package org.geogebra.common.euclidian.plot.interval;
 
-import java.util.List;
-
+import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionEvaluator;
 import org.geogebra.common.kernel.interval.IntervalTuple;
+import org.geogebra.common.kernel.interval.IntervalTupleList;
 
 public class IntervalPlotter {
-	public static final int NUMBER_OF_SAMPLES = 500;
-	private final GeneralPathClipped gp;
+	public static final int NUMBER_OF_SAMPLES = 1000;
 	private final EuclidianView view;
 	private final Interval xRange;
 	private final Interval yRange;
 	private final boolean closed;
 	private double minWidthHeight=1.0;
 	private final IntervalFunctionEvaluator evaluator;
-	private List<IntervalTuple> points;
+	private IntervalTupleList points;
 
-	public IntervalPlotter(EuclidianView view, GeoFunction function, GeneralPathClipped gp) {
+	public IntervalPlotter(EuclidianView view, GeoFunction function) {
 		this.view = view;
-		this.gp = gp;
 		xRange = new Interval();
 		yRange = new Interval();
 		closed = false;
 		updateRanges();
 		evaluator = new IntervalFunctionEvaluator(function, xRange, NUMBER_OF_SAMPLES);
+		evaluator.update(xRange);
 		update();
 	}
 
 	public void update() {
 		updateRanges();
 		points = evaluator.result();
-		updateExamplePath();
-	}
-
-	private void updateExamplePath() {
-		gp.reset();
-		gp.moveTo(0, 0);
-		gp.lineTo(-2, 2);
-		gp.lineTo(2, -2);
-		gp.lineTo(-2, -2);
-		gp.closePath();
+		minWidthHeight = Math.max(points.getDeltaX(), 1);
 	}
 
 	private void updateRanges() {
@@ -51,9 +40,7 @@ public class IntervalPlotter {
 		yRange.set(view.getYmin(), view.getYmax());
 	}
 
-	private void updatePath() {
-		gp.reset();
-		gp.moveTo(0,0);
+	public void draw(GGraphics2D g2) {
 		Interval range = new Interval(yRange);
 		double minY = range.getLow();
 		double maxY = range.getHigh();
@@ -67,16 +54,17 @@ public class IntervalPlotter {
 					yLow = Math.min(yLow, 0);
 					yHigh = Math.max(yHigh, 0);
 				}
-				double moveX = xScale(xRange.getLow());
+				double moveX = view.toScreenCoordX(x.getLow());
 				double gLow = !Double.isInfinite(yHigh) ? yScale(yHigh) : Double.NEGATIVE_INFINITY;
-				double gHigh = !Double.isInfinite(yLow) ? yScale(yHigh) : Double.POSITIVE_INFINITY;
+				double gHigh = !Double.isInfinite(yLow) ? yScale(yLow) : Double.POSITIVE_INFINITY;
 				Interval viewPortY = clampRange(minY, maxY, gLow, gHigh);
-				double vLow = viewPortY.getLow();
-				double vHigh = viewPortY.getHigh();
-				gp.lineTo(vHigh - vLow, minWidthHeight);
+				double vLow =  view.toScreenCoordY(viewPortY.getLow());
+				double vHigh = view.toScreenCoordY(viewPortY.getHigh());
+				int height = (int)Math.max(vHigh - vLow, minWidthHeight);
+				g2.fillRect((int) moveX, (int) vHigh, height,height);
 			}
 		}
-		gp.closePath();
+		view.repaint();
 	}
 
 	private double yScale(double y) {

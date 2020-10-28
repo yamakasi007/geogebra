@@ -4,21 +4,18 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.euclidian.plot.interval.IntervalPlotter;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.kernelND.CurveEvaluable;
 
 public class DrawIntervalCurve extends Drawable {
-	private final GeneralPathClipped gp;
 	private CurveEvaluable curve;
 	private final IntervalPlotter plotter;
 
 	public DrawIntervalCurve(EuclidianView view, CurveEvaluable curve) {
 		this.curve = curve;
-		gp = new GeneralPathClipped(view);
-		gp.firstPoint();
-		plotter = new IntervalPlotter(view, null, gp);
+		plotter = new IntervalPlotter(view, (GeoFunction) curve.toGeoElement());
 	}
 
 	@Override
@@ -28,7 +25,7 @@ public class DrawIntervalCurve extends Drawable {
 
 	@Override
 	public void draw(GGraphics2D g2) {
-		g2.draw(gp);
+		plotter.draw(g2);
 	}
 
 	@Override

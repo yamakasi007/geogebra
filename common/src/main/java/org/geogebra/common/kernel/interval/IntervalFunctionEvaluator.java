@@ -1,6 +1,5 @@
 package org.geogebra.common.kernel.interval;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoFunction;
@@ -8,23 +7,24 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 public class IntervalFunctionEvaluator {
 
 	private final GeoFunction function;
-	private int numberOfSamples;
-	private final Interval range;
+	private final int numberOfSamples;
+	private Interval range;
+	private final LinearSpace space;
 
 	public IntervalFunctionEvaluator(GeoFunction function, Interval range, int numberOfSamples) {
-		this.range = range;
 		this.function = function;
 		this.numberOfSamples = numberOfSamples;
+		space = new LinearSpace();
+		update(range);
 	}
 
-	public List<IntervalTuple> result() {
+	public IntervalTupleList result() {
 		return interval1d();
 	}
 
-	private List<IntervalTuple> interval1d() {
-		LinearSpace space = new LinearSpace(range, numberOfSamples);
+	private IntervalTupleList interval1d() {
 		List<Double> xCoords = space.values();
-		List<IntervalTuple> samples = new ArrayList<>();
+		IntervalTupleList samples = new IntervalTupleList();
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
 			Interval y = evaluate(x);
@@ -37,11 +37,41 @@ public class IntervalFunctionEvaluator {
 				samples.add(null);
 			}
 		}
+		detectAsimptote(samples);
+		samples.setDeltaX(space.getScale());
 		return samples;
 
 	}
 
+	private void detectAsimptote(IntervalTupleList samples) {
+		double yMin = range.getLow();
+		double yMax = range.getHigh();
+		for (int i = 1; i < samples.size() - 1; i++) {
+			if (samples.get(i) != null) {
+				IntervalTuple prev = samples.get(i - 1);
+      			IntervalTuple next = samples.get(i + 1);
+				if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
+					if (prev.y().getLow() > next.y().getHigh()) {
+						prev.y().set(Math.max(yMax, prev.y().getHigh()),
+								Math.min(yMin, next.y().getLow()));
+					}
+
+					if (prev.y().getHigh() < next.y().getLow()) {
+						prev.y().set(Math.min(yMin, prev.y().getLow()),
+								Math.max(yMax, next.y().getHigh()));
+					}
+				}
+			}
+		}
+	}
+
 	private Interval evaluate(Interval x) {
-		return x.sin();
+		return new Interval(x).sin();
+	}
+
+	public void update(Interval range) {
+		this.range = range;
+		space.update(range, numberOfSamples);
+
 	}
 }

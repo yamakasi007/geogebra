@@ -5,9 +5,15 @@ import java.util.List;
 
 public class LinearSpace {
 	public List<Double> values;
-	public LinearSpace(Interval interval, int count) {
+	private double scale;
+
+	public LinearSpace() {
 		values = new ArrayList<>();
+	}
+
+	public void update(Interval interval, int count) {
 		fill(interval.getLow(), interval.getHigh(), interval.getWidth() / count);
+		scale = values.size() > 2 ? values.get(1) - values.get(0) :0;
 	}
 
 	private void fill(double start, double end, double step) {
@@ -20,5 +26,9 @@ public class LinearSpace {
 
 	public List<Double> values() {
 		return values;
+	}
+
+	public double getScale() {
+		return scale;
 	}
 }
