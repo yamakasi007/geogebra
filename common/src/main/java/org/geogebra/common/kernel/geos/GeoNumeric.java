@@ -1959,7 +1959,6 @@ public class GeoNumeric extends GeoElement
 		return getDouble();
 	}
 
-
 	private void addAuralSliderValue(ScreenReaderBuilder sb) {
 		if (!addAuralCaption(sb)) {
 			sb.append(getLabelSimple());
