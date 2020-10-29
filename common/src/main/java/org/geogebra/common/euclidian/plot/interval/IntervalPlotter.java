@@ -49,6 +49,7 @@ public class IntervalPlotter {
 
 	public void updatePath() {
 		gp.reset();
+		double lastY = Double.POSITIVE_INFINITY;
 		for (IntervalTuple point: points) {
 			if (point != null) {
 				Interval x = point.x();
@@ -59,15 +60,24 @@ public class IntervalPlotter {
 					yLow = Math.min(yLow, 0);
 					yHigh = Math.max(yHigh, 0);
 				}
-				double moveX = view.toScreenCoordX(x.getLow());
-				double gLow = !Double.isInfinite(yHigh) ? yHigh : Double.NEGATIVE_INFINITY;
-				double gHigh = !Double.isInfinite(yLow) ? yLow : Double.POSITIVE_INFINITY;
-				double vLow =  view.toScreenCoordY(gLow);
-				double vHigh = view.toScreenCoordY(gHigh);
-				int mx = (int) moveX;
-				gp.moveTo(mx, (int) vHigh);
-				gp.lineTo(mx, (int) (vLow));
+				lastY = plot(view.toScreenIntervalX(x), y, lastY);
 			}
 		}
 	}
+
+	private double plot(Interval x, Interval y, double lastY) {
+		double gLow = !Double.isInfinite(y.getHigh()) ? y.getHigh() : Double.NEGATIVE_INFINITY;
+		double gHigh = !Double.isInfinite(y.getLow()) ? y.getLow() : Double.POSITIVE_INFINITY;
+		double vLow =  view.toScreenCoordY(gLow);
+		double vHigh = view.toScreenCoordY(gHigh);
+		if (lastY > vLow) {
+			gp.moveTo(x.getLow(), vHigh);
+			gp.lineTo(x.getHigh(), vLow);
+		} else {
+			gp.moveTo(x.getHigh(), vHigh);
+			gp.lineTo(x.getLow(), vLow);
+		}
+
+		return vLow;
+ 	}
 }
