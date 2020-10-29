@@ -302,7 +302,6 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 		}
 		return activity.getConfig();
 	}
-
 	/**
 	 * @return current activity (graphing, geometry, 3D, ...)
 	 */

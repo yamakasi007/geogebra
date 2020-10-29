@@ -307,7 +307,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * Sets the closed interval bounds as the other interval
 	 * @param other interval to set bounds as the same.
 	 */
-	void set(Interval other) {
+	public void set(Interval other) {
 		set(other.low, other.high);
 	}
 
@@ -562,5 +562,9 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	@Override
 	public Interval abs() {
 		return misc.abs();
+	}
+
+	public boolean contains(Interval interval) {
+		return interval.low > low && interval.high < high;
 	}
 }

@@ -37,7 +37,7 @@ public class IntervalFunctionEvaluator {
 				samples.add(null);
 			}
 		}
-		detectAsimptote(samples);
+//		detectAsimptote(samples);
 		samples.setDeltaX(space.getScale());
 		return samples;
 
@@ -66,7 +66,9 @@ public class IntervalFunctionEvaluator {
 	}
 
 	private Interval evaluate(Interval x) {
-		return new Interval(x).sin();
+		Interval interval = new Interval(x);
+//		return new Interval(x).sin();
+		return interval.pow(2).pow(2).sin();
 	}
 
 	public void update(Interval range) {
