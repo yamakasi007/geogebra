@@ -27,7 +27,7 @@ public class IntervalPlotter {
 		yRange = new Interval();
 		closed = false;
 		updateRanges();
-		int numberOfSamples = view.getViewWidth();
+		int numberOfSamples = 2 * view.getViewWidth();
 		Log.debug("NumberOfSamples: " + numberOfSamples);
 		evaluator = new IntervalFunctionEvaluator(function, xRange, numberOfSamples);
 		evaluator.update(xRange);
@@ -51,14 +51,19 @@ public class IntervalPlotter {
 		if (points.isEmpty()) {
 			return;
 		}
-		gp.reset();
+
 		moveToFirstPoint();
 		Interval lastY = new Interval(0);
 		for (IntervalTuple point: points) {
 			if (point != null) {
 				Interval x = view.toScreenIntervalX(point.x());
 				Interval y = view.toScreenIntervalY(point.y());
-				plot(x, y, y.isGreaterThan(lastY));
+				if (y.isGreaterThan(lastY)) {
+					plotHigh(x, y);
+				} else {
+					plotLow(x, y);
+				}
+
 				lastY.set(y);
 			}
 		}
@@ -68,19 +73,19 @@ public class IntervalPlotter {
 		IntervalTuple point = points.get(0);
 		int px = view.toScreenCoordX(point.x().getLow());
 		int py = view.toScreenCoordX(point.y().getLow());
+		gp.reset();
 		gp.moveTo(px, py);
 		gp.firstPoint();
-
 	}
 
-	private void plot(Interval x, Interval y, boolean greater) {
-
-		if (greater) {
-			gp.lineTo(x.getLow(), y.getLow());
-			gp.lineTo(x.getHigh(), y.getHigh());
-		} else {
-			gp.lineTo(x.getLow(), y.getHigh());
-			gp.lineTo(x.getHigh(), y.getLow());
-		}
+	private void plotHigh(Interval x, Interval y) {
+		gp.lineTo(x.getLow(), y.getLow());
+		gp.lineTo(x.getHigh(), y.getHigh());
 	}
+
+	private void plotLow(Interval x, Interval y) {
+		gp.lineTo(x.getLow(), y.getHigh());
+		gp.lineTo(x.getHigh(), y.getLow());
+	}
+
 }
