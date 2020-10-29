@@ -36,4 +36,8 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void setDeltaX(double deltaX) {
 		this.deltaX = deltaX;
 	}
+
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
 }

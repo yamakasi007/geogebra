@@ -48,36 +48,39 @@ public class IntervalPlotter {
 	}
 
 	public void updatePath() {
+		if (points.isEmpty()) {
+			return;
+		}
 		gp.reset();
-		double lastY = Double.POSITIVE_INFINITY;
+		moveToFirstPoint();
+		Interval lastY = new Interval(0);
 		for (IntervalTuple point: points) {
 			if (point != null) {
-				Interval x = point.x();
-				Interval y = point.y();
-				double yLow = y.getLow();
-				double yHigh = y.getHigh();
-				if (closed) {
-					yLow = Math.min(yLow, 0);
-					yHigh = Math.max(yHigh, 0);
-				}
-				lastY = plot(view.toScreenIntervalX(x), y, lastY);
+				Interval x = view.toScreenIntervalX(point.x());
+				Interval y = view.toScreenIntervalY(point.y());
+				plot(x, y, y.isGreaterThan(lastY));
+				lastY.set(y);
 			}
 		}
 	}
 
-	private double plot(Interval x, Interval y, double lastY) {
-		double gLow = !Double.isInfinite(y.getHigh()) ? y.getHigh() : Double.NEGATIVE_INFINITY;
-		double gHigh = !Double.isInfinite(y.getLow()) ? y.getLow() : Double.POSITIVE_INFINITY;
-		double vLow =  view.toScreenCoordY(gLow);
-		double vHigh = view.toScreenCoordY(gHigh);
-		if (lastY > vLow) {
-			gp.moveTo(x.getLow(), vHigh);
-			gp.lineTo(x.getHigh(), vLow);
-		} else {
-			gp.moveTo(x.getHigh(), vHigh);
-			gp.lineTo(x.getLow(), vLow);
-		}
+	private void moveToFirstPoint() {
+		IntervalTuple point = points.get(0);
+		int px = view.toScreenCoordX(point.x().getLow());
+		int py = view.toScreenCoordX(point.y().getLow());
+		gp.moveTo(px, py);
+		gp.firstPoint();
 
-		return vLow;
- 	}
+	}
+
+	private void plot(Interval x, Interval y, boolean greater) {
+
+		if (greater) {
+			gp.lineTo(x.getLow(), y.getLow());
+			gp.lineTo(x.getHigh(), y.getHigh());
+		} else {
+			gp.lineTo(x.getLow(), y.getHigh());
+			gp.lineTo(x.getHigh(), y.getLow());
+		}
+	}
 }

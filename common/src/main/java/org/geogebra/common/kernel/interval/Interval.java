@@ -17,6 +17,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	private final IntervalArithmeticImpl arithmetic = new IntervalArithmeticImpl(this);
 	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
 	private final IntervalMiscOperandsImpl misc = new IntervalMiscOperandsImpl(this);
+
 	private double low;
 	private double high;
 
@@ -566,5 +567,12 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 
 	public boolean contains(Interval interval) {
 		return interval.low > low && interval.high < high;
+	}
+
+	public boolean isGreaterThan(Interval interval) {
+		if (isEmpty() || interval.isEmpty()) {
+			return false;
+		}
+		return high > interval.high;
 	}
 }

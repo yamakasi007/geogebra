@@ -67,7 +67,7 @@ public class IntervalFunctionEvaluator {
 
 	private Interval evaluate(Interval x) {
 		Interval interval = new Interval(x);
-//		return new Interval(x).sin();
+//		return new Interval(x).pow(2).sin();
 		return interval.pow(2).pow(2).sin();
 	}
 
