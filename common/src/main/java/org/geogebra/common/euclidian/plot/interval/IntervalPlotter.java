@@ -14,27 +14,22 @@ public class IntervalPlotter {
 	private final EuclidianView view;
 	private final Interval xRange;
 	private final Interval yRange;
-	private final boolean closed;
-	private double minWidthHeight=1.0;
 	private final IntervalFunctionEvaluator evaluator;
 	private IntervalTupleList points;
 	private final GeneralPathClipped gp;
-
 	public IntervalPlotter(EuclidianView view, GeoFunction function, GeneralPathClipped gp) {
 		this.view = view;
 		this.gp = gp;
 		xRange = new Interval();
 		yRange = new Interval();
-		closed = false;
 		updateRanges();
-		int numberOfSamples = 2 * view.getViewWidth();
+		int numberOfSamples = (int) view.toScreenCoordXd(xRange.getWidth());
 		Log.debug("NumberOfSamples: " + numberOfSamples);
 		evaluator = new IntervalFunctionEvaluator(function, xRange, numberOfSamples);
 		evaluator.update(xRange);
 		updateRanges();
 //		evaluator.update(xRange);
 		points = evaluator.result();
-		minWidthHeight = Math.max(points.getDeltaX(), 1);
 		update();
 	}
 
@@ -51,9 +46,8 @@ public class IntervalPlotter {
 		if (points.isEmpty()) {
 			return;
 		}
-
-		moveToFirstPoint();
-		Interval lastY = new Interval(0);
+		gp.reset();
+		Interval lastY = new Interval();
 		for (IntervalTuple point: points) {
 			if (point != null) {
 				Interval x = view.toScreenIntervalX(point.x());
@@ -69,15 +63,6 @@ public class IntervalPlotter {
 		}
 	}
 
-	private void moveToFirstPoint() {
-		IntervalTuple point = points.get(0);
-		int px = view.toScreenCoordX(point.x().getLow());
-		int py = view.toScreenCoordX(point.y().getLow());
-		gp.reset();
-		gp.moveTo(px, py);
-		gp.firstPoint();
-	}
-
 	private void plotHigh(Interval x, Interval y) {
 		gp.lineTo(x.getLow(), y.getLow());
 		gp.lineTo(x.getHigh(), y.getHigh());
@@ -87,5 +72,4 @@ public class IntervalPlotter {
 		gp.lineTo(x.getLow(), y.getHigh());
 		gp.lineTo(x.getHigh(), y.getLow());
 	}
-
 }

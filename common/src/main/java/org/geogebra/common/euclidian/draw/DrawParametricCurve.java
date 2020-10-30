@@ -99,7 +99,8 @@ public class DrawParametricCurve extends Drawable {
 		this.curve = curve;
 		geo = curve.toGeoElement();
 		intervalPlot = true;
-		intervalCurve = new DrawIntervalCurve(view, curve);
+		createGeneralPath();
+		intervalCurve = new DrawIntervalCurve(view, curve, gp);
 		update();
 	}
 
@@ -134,7 +135,7 @@ public class DrawParametricCurve extends Drawable {
 			return;
 		}
 		if (gp == null) {
-			gp = new GeneralPathClippedForCurvePlotter(view);
+			createGeneralPath();
 		}
 		gp.reset();
 
@@ -246,6 +247,10 @@ public class DrawParametricCurve extends Drawable {
 				// view.updateBackground();
 			}
 		}
+	}
+
+	private void createGeneralPath() {
+		gp = new GeneralPathClippedForCurvePlotter(view);
 	}
 
 	private void updatePointwise() {

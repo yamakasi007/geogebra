@@ -4,20 +4,21 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GRectangle;
 import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.plot.GeneralPathClippedForCurvePlotter;
+import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.euclidian.plot.interval.IntervalPlotter;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.kernelND.CurveEvaluable;
 
 public class DrawIntervalCurve extends Drawable {
-	private final GeneralPathClippedForCurvePlotter gp;
+	private final GeneralPathClipped gp;
 	private CurveEvaluable curve;
 	private final IntervalPlotter plotter;
 
-	public DrawIntervalCurve(EuclidianView view, CurveEvaluable curve) {
+	public DrawIntervalCurve(EuclidianView view, CurveEvaluable curve,
+			GeneralPathClipped gp) {
 		this.curve = curve;
-		this.gp = new GeneralPathClippedForCurvePlotter(view);
+		this.gp = gp;
 		plotter = new IntervalPlotter(view, (GeoFunction) curve.toGeoElement(), gp);
 	}
 
