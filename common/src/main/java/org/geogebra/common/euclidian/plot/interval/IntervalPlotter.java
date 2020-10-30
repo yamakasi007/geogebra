@@ -12,22 +12,19 @@ import org.geogebra.common.util.debug.Log;
 public class IntervalPlotter {
 	public static final int NUMBER_OF_SAMPLES = 1500;
 	private final EuclidianView view;
-	private final Interval xRange;
-	private final Interval yRange;
 	private final IntervalFunctionEvaluator evaluator;
 	private IntervalTupleList points;
+	private IntervalTuple range;
 	private final GeneralPathClipped gp;
 	public IntervalPlotter(EuclidianView view, GeoFunction function, GeneralPathClipped gp) {
 		this.view = view;
 		this.gp = gp;
-		xRange = new Interval();
-		yRange = new Interval();
+		range = new IntervalTuple();
 		updateRanges();
-		int numberOfSamples = (int) view.toScreenCoordXd(xRange.getWidth());
+		int numberOfSamples = (int) view.toScreenCoordXd(range.x().getWidth());
 		Log.debug("NumberOfSamples: " + numberOfSamples);
-		evaluator = new IntervalFunctionEvaluator(function, xRange, numberOfSamples);
-		evaluator.update(xRange);
-		updateRanges();
+		evaluator = new IntervalFunctionEvaluator(function, range, numberOfSamples);
+		evaluator.update(range);
 //		evaluator.update(xRange);
 		points = evaluator.result();
 		update();
@@ -38,8 +35,8 @@ public class IntervalPlotter {
 	}
 
 	private void updateRanges() {
-		xRange.set(view.getXmin(), view.getXmax());
-		yRange.set(view.getYmin(), view.getYmax());
+		range.x().set(view.getXmin(), view.getXmax());
+		range.y().set(view.getYmin(), view.getYmax());
 	}
 
 	public void updatePath() {
@@ -47,29 +44,39 @@ public class IntervalPlotter {
 			return;
 		}
 		gp.reset();
+
 		Interval lastY = new Interval();
 		for (IntervalTuple point: points) {
 			if (point != null) {
-				Interval x = view.toScreenIntervalX(point.x());
-				Interval y = view.toScreenIntervalY(point.y());
-				if (y.isGreaterThan(lastY)) {
-					plotHigh(x, y);
-				} else {
-					plotLow(x, y);
-				}
-
-				lastY.set(y);
+				plotInterval(lastY, point);
 			}
 		}
 	}
 
+	private void plotInterval(Interval lastY, IntervalTuple point) {
+		Interval x = view.toScreenIntervalX(point.x());
+		Interval y = view.toScreenIntervalY(point.y());
+		if (y.isGreaterThan(lastY)) {
+			plotHigh(x, y);
+		} else {
+			plotLow(x, y);
+		}
+
+		lastY.set(y);
+	}
+
 	private void plotHigh(Interval x, Interval y) {
-		gp.lineTo(x.getLow(), y.getLow());
-		gp.lineTo(x.getHigh(), y.getHigh());
+		lineTo(x.getLow(), y.getLow());
+		lineTo(x.getHigh(), y.getHigh());
 	}
 
 	private void plotLow(Interval x, Interval y) {
-		gp.lineTo(x.getLow(), y.getHigh());
-		gp.lineTo(x.getHigh(), y.getLow());
+		lineTo(x.getLow(), y.getHigh());
+		lineTo(x.getHigh(), y.getLow());
+	}
+
+	private void lineTo(double low, double high) {
+		gp.lineTo(low, high);
+//		Log.debug("[PATH] L " + (int)low + ", " + (int)high);
 	}
 }

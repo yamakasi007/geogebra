@@ -8,11 +8,13 @@ public class IntervalFunctionEvaluator {
 
 	private final GeoFunction function;
 	private final int numberOfSamples;
-	private Interval range;
+	private IntervalTuple range;
 	private final LinearSpace space;
 
-	public IntervalFunctionEvaluator(GeoFunction function, Interval range, int numberOfSamples) {
+	public IntervalFunctionEvaluator(GeoFunction function, IntervalTuple range,
+			int numberOfSamples) {
 		this.function = function;
+		this.range = range;
 		this.numberOfSamples = numberOfSamples;
 		space = new LinearSpace();
 		update(range);
@@ -44,8 +46,8 @@ public class IntervalFunctionEvaluator {
 	}
 
 	private void detectAsimptote(IntervalTupleList samples) {
-		double yMin = range.getLow();
-		double yMax = range.getHigh();
+		double yMin = range.y().getLow();
+		double yMax = range.y().getHigh();
 		for (int i = 1; i < samples.size() - 1; i++) {
 			if (samples.get(i) != null) {
 				IntervalTuple prev = samples.get(i - 1);
@@ -67,13 +69,13 @@ public class IntervalFunctionEvaluator {
 
 	private Interval evaluate(Interval x) {
 		Interval interval = new Interval(x);
-//		return new Interval(x).pow(2).sin();
-		return interval.sin();
+		return new Interval(x).pow(2).pow(2).sin();
+//		return interval.pow(2);
 	}
 
-	public void update(Interval range) {
+	public void update(IntervalTuple range) {
 		this.range = range;
-		space.update(range, numberOfSamples);
+		space.update(range.x(), numberOfSamples);
 
 	}
 }

@@ -12,6 +12,7 @@ public class LinearSpace {
 	}
 
 	public void update(Interval interval, int count) {
+		values.clear();
 		fill(interval.getLow(), interval.getHigh(), interval.getWidth() / count);
 		scale = values.size() > 2 ? values.get(1) - values.get(0) :0;
 	}
