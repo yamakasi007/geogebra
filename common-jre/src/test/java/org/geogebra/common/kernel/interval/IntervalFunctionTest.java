@@ -23,6 +23,16 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("2 * sin(x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		shouldEqual(interval(1, PI),
-			 function.evaluate(interval(1, PI / 2)));
+				function.evaluate(interval(1, PI / 2)));
+	}
+
+
+	@Test
+	public void evaluateSin2x() throws Exception {
+		GeoFunction geo = add("sin(2x)");
+		geo.value(2);
+		IntervalFunction function = new IntervalFunction(geo);
+		shouldEqual(interval(1, PI),
+				function.evaluate(interval(1, PI / 2)));
 	}
 }

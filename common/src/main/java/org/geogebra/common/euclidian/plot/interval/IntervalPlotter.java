@@ -21,7 +21,7 @@ public class IntervalPlotter {
 		this.gp = gp;
 		range = new IntervalTuple();
 		updateRanges();
-		int numberOfSamples = (int) view.toScreenCoordXd(range.x().getWidth());
+		int numberOfSamples = 2*view.getWidth();
 		Log.debug("NumberOfSamples: " + numberOfSamples);
 		evaluator = new IntervalFunctionSampler(function, range, numberOfSamples);
 		evaluator.update(range);

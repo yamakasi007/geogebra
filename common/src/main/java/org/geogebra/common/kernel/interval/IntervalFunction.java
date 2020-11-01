@@ -12,30 +12,41 @@ public class IntervalFunction {
 	}
 
 	public Interval evaluate(Interval x) throws Exception {
-		return evaluate(new Interval(x),
+		return evaluateInterval(new Interval(x),
 				function.getFunctionExpression());
 	}
 
-	private Interval evaluate(Interval x, ExpressionNode node) throws Exception {
+	public Interval evaluateInterval(Interval x, ExpressionNode node) throws Exception {
 		Operation operation = node.getOperation();
-		if (operation == Operation.NO_OPERATION) {
+		if (node.isLeaf()) {
 			if (node.isConstant()) {
 				return new Interval(node.evaluateDouble());
 			}
-			return x;
-		}
-		if (Operation.isSimpleFunction(operation)) {
 			return x.evaluate(operation);
-		} else {
-			return evaluate(x, node.getLeftTree(), operation, node.getRightTree());
 		}
-	}
-
-	private Interval evaluate(Interval x, ExpressionNode left,
-			Operation operation, ExpressionNode right)
-			throws Exception {
-		Interval leftInterval = evaluate(new Interval(x), left);
-		Interval rightInterval = evaluate(new Interval(x), right);
-		return leftInterval.evaluate(operation, rightInterval);
+		ExpressionNode leftTree = node.getLeftTree();
+		ExpressionNode rightTree = node.getRightTree();
+		Interval left = evaluateInterval(x, leftTree);
+		Interval right = evaluateInterval(x, rightTree);
+		switch (operation) {
+		case PLUS:
+			return left.add(right);
+		case MINUS:
+			return left.subtract(right);
+		case MULTIPLY:
+			return left.multiply(right);
+		case DIVIDE:
+			return left.divide(right);
+		case POWER:
+			return x.pow(rightTree.evaluateDouble());
+		case SIN:
+			return left.sin();
+		case COS:
+			return left.cos();
+		case SQRT:
+			return left.sqrt();
+		default:
+			return IntervalConstants.empty();
+		}
 	}
 }
