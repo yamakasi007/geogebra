@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoFunction;
 
-public class IntervalFunctionEvaluator {
+public class IntervalFunctionSampler {
 
-	private final GeoFunction function;
+	private final IntervalFunction function;
 	private final int numberOfSamples;
 	private IntervalTuple range;
 	private final LinearSpace space;
 
-	public IntervalFunctionEvaluator(GeoFunction function, IntervalTuple range,
+	public IntervalFunctionSampler(GeoFunction geo, IntervalTuple range,
 			int numberOfSamples) {
-		this.function = function;
+		this.function = new IntervalFunction(geo);
 		this.range = range;
 		this.numberOfSamples = numberOfSamples;
 		space = new LinearSpace();
@@ -21,15 +21,20 @@ public class IntervalFunctionEvaluator {
 	}
 
 	public IntervalTupleList result() {
-		return interval1d();
+		try {
+			return interval1d();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new IntervalTupleList();
 	}
 
-	private IntervalTupleList interval1d() {
+	private IntervalTupleList interval1d() throws Exception {
 		List<Double> xCoords = space.values();
 		IntervalTupleList samples = new IntervalTupleList();
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
-			Interval y = evaluate(x);
+			Interval y = function.evaluate(x);
 
 			if (!y.isEmpty() && !y.isWhole()) {
 				samples.add(new IntervalTuple(x, y));
@@ -65,12 +70,6 @@ public class IntervalFunctionEvaluator {
 				}
 			}
 		}
-	}
-
-	private Interval evaluate(Interval x) {
-		Interval interval = new Interval(x);
-		return new Interval(x).pow(2).pow(2).sin();
-//		return interval.pow(2);
 	}
 
 	public void update(IntervalTuple range) {

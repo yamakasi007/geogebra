@@ -6,6 +6,7 @@ import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 
 import java.util.Objects;
 
+import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.util.DoubleUtil;
 
 /**
@@ -17,7 +18,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	private final IntervalArithmeticImpl arithmetic = new IntervalArithmeticImpl(this);
 	private final IntervalTrigonometric trigonometric = new IntervalTrigonometric(this);
 	private final IntervalMiscOperandsImpl misc = new IntervalMiscOperandsImpl(this);
-
+	private final IntervalEvaluate evaluate = new IntervalEvaluate(this);
 	private double low;
 	private double high;
 
@@ -300,7 +301,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @param power of the interval
 	 * @return power of the interval
 	 */
-	public Interval pow(int power) {
+	public Interval pow(double power) {
 		return algebra.pow(power);
 	}
 
@@ -575,4 +576,14 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		}
 		return high > interval.high;
 	}
+
+	public Interval evaluate(Operation operation,
+			Interval other) throws Exception {
+		return evaluate.evaluate(operation, other);
+	}
+
+	public Interval evaluate(Operation operation) throws Exception {
+		return evaluate.evaluate(operation);
+	}
+
 }

@@ -4,7 +4,7 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.interval.Interval;
-import org.geogebra.common.kernel.interval.IntervalFunctionEvaluator;
+import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
 import org.geogebra.common.util.debug.Log;
@@ -12,7 +12,7 @@ import org.geogebra.common.util.debug.Log;
 public class IntervalPlotter {
 	public static final int NUMBER_OF_SAMPLES = 1500;
 	private final EuclidianView view;
-	private final IntervalFunctionEvaluator evaluator;
+	private final IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;
 	private IntervalTuple range;
 	private final GeneralPathClipped gp;
@@ -23,7 +23,7 @@ public class IntervalPlotter {
 		updateRanges();
 		int numberOfSamples = (int) view.toScreenCoordXd(range.x().getWidth());
 		Log.debug("NumberOfSamples: " + numberOfSamples);
-		evaluator = new IntervalFunctionEvaluator(function, range, numberOfSamples);
+		evaluator = new IntervalFunctionSampler(function, range, numberOfSamples);
 		evaluator.update(range);
 //		evaluator.update(xRange);
 		points = evaluator.result();
