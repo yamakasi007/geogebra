@@ -1672,6 +1672,13 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 	}
 
+	public boolean isZoomerRunning() {
+		if (zoomer == null) {
+			return false;
+		}
+		return zoomer.isRunning();
+	}
+
 	private void setCoordTransformIfNeeded() {
 		if (coordTransform != null) {
 			coordTransform.setTransform(xscale, 0.0d, 0.0d, -yscale, xZero,

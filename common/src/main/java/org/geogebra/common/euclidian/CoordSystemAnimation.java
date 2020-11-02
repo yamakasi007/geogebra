@@ -54,6 +54,7 @@ public abstract class CoordSystemAnimation {
 	private boolean setStandard = false;
 	private double standardX;
 	private double standardY;
+	private boolean running = false;
 
 	/**
 	 * Creates new zoomer
@@ -245,6 +246,7 @@ public abstract class CoordSystemAnimation {
 		if (storeUndo) {
 			view.getApplication().storeUndoInfo();
 		}
+		running = false;
 		view.getEuclidianController().notifyCoordSystemListeners();
 	}
 
@@ -270,6 +272,7 @@ public abstract class CoordSystemAnimation {
 		if (!hasTimer()) {
 			return;
 		}
+		running = true;
 		switch (mode) {
 		case AXES_X:
 		case AXES_Y:
@@ -313,5 +316,9 @@ public abstract class CoordSystemAnimation {
 	 */
 	public boolean isStandardZoom() {
 		return DoubleUtil.checkInteger(newScale) == EuclidianView.SCALE_STANDARD;
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 }

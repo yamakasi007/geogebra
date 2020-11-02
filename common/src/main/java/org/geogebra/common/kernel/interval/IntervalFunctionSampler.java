@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.interval;
 import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoFunction;
+import org.geogebra.common.util.debug.Log;
 
 public class IntervalFunctionSampler {
 
@@ -79,6 +80,10 @@ public class IntervalFunctionSampler {
 	}
 
 	public void resample(IntervalTuple range, int numberOfSamples) {
-		// todo
+		if (this.range.x().getWidth() == range.x().getWidth())  {
+			Log.debug("[SAMPLER] NO resampling");
+		} else {
+			Log.debug("[SAMPLER] Resampling");
+		}
 	}
 }
