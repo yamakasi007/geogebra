@@ -11,6 +11,7 @@ public class IntervalFunctionSampler {
 	private final int numberOfSamples;
 	private IntervalTuple range;
 	private final LinearSpace space;
+	private IntervalTupleList oldSamples = new IntervalTupleList();
 
 	public IntervalFunctionSampler(GeoFunction geo, IntervalTuple range,
 			int numberOfSamples) {
@@ -47,6 +48,7 @@ public class IntervalFunctionSampler {
 		}
 //		detectAsimptote(samples);
 		samples.setDeltaX(space.getScale());
+		oldSamples = samples;
 		return samples;
 
 	}

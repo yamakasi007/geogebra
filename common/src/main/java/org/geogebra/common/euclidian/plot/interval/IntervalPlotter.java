@@ -11,7 +11,6 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
 import org.geogebra.common.util.debug.Log;
 
 public class IntervalPlotter implements CoordSystemListener {
-	public static final int NUMBER_OF_SAMPLES = 1500;
 	private final EuclidianView view;
 	private final IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;

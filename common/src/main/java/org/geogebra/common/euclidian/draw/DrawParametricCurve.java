@@ -382,6 +382,12 @@ public class DrawParametricCurve extends Drawable {
 	}
 
 	private void drawIntervalPlot(GGraphics2D g2) {
+		if (isHighlighted()) {
+			g2.setPaint(geo.getSelColor());
+			g2.setStroke(selStroke);
+			intervalCurve.draw(g2);
+		}
+
 		g2.setPaint(getObjectColor());
 		g2.setStroke(objStroke);
 		intervalCurve.draw(g2);
