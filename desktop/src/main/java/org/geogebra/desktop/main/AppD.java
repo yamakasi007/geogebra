@@ -440,7 +440,7 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 				Log.setCallerShown(args.getBooleanValue("logShowCaller", true));
 			}
 			if (args.containsArg("logShowTime")) {
-				Log.setTimeShown(args.getBooleanValue("logShowTime", true));
+				LoggerD.setTimeShown(args.getBooleanValue("logShowTime", true));
 			}
 			if (args.containsArg("logShowLevel")) {
 				Log.setLevelShown(args.getBooleanValue("logShowLevel", true));
@@ -4025,7 +4025,7 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 					if (msg == null) {
 						return;
 					}
-					Log.printStacktrace("" + msg);
+					Log.trace("" + msg);
 
 					// make sure splash screen not showing (will be in front)
 					GeoGebra.hideSplash();
@@ -4191,7 +4191,7 @@ public class AppD extends App implements KeyEventDispatcher, AppDI {
 		logFile.append(".txt");
 
 		Log.debug("Logging is redirected to " + logFile.toString());
-		Log.setTimeShown(false); // do not print the time twice
+		LoggerD.setTimeShown(false); // do not print the time twice
 
 		// log file max size 10K, 1 file, append-on-open
 		Handler fileHandler;
