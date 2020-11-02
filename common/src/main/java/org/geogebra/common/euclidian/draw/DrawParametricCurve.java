@@ -106,6 +106,11 @@ public class DrawParametricCurve extends Drawable {
 
 	@Override
 	final public void update() {
+		isVisible = geo.isEuclidianVisible();
+		if (!isVisible) {
+			return;
+		}
+
 		if (intervalPlot) {
 			updateStrokes(geo);
 			updateIntervalPlot();
@@ -119,10 +124,6 @@ public class DrawParametricCurve extends Drawable {
 	}
 
 	final public void updateParametric() {
-		isVisible = geo.isEuclidianVisible();
-		if (!isVisible) {
-			return;
-		}
 		dataExpression = null;
 		if (geo.getLineType() == EuclidianStyleConstants.LINE_TYPE_POINTWISE
 				&& (curve instanceof GeoFunction)) {
@@ -382,6 +383,10 @@ public class DrawParametricCurve extends Drawable {
 	}
 
 	private void drawIntervalPlot(GGraphics2D g2) {
+		if (!isVisible) {
+			return;
+		}
+
 		if (isHighlighted()) {
 			g2.setPaint(geo.getSelColor());
 			g2.setStroke(selStroke);
