@@ -3,6 +3,8 @@ package org.geogebra.common.main.undo;
 import org.geogebra.common.gui.view.ActionView;
 import org.geogebra.common.kernel.Kernel;
 
+import com.google.j2objc.annotations.Weak;
+
 /**
  * Adds the undo-redo functionality to two ActionView objects.
  * To achieve this the class adds executable actions to the ActionView objects.
@@ -14,6 +16,7 @@ import org.geogebra.common.kernel.Kernel;
  */
 public class UndoRedoButtonsController implements UndoInfoStoredListener {
 
+	@Weak
 	private Kernel kernel;
 	private ActionView undoWidget;
 	private ActionView redoWidget;

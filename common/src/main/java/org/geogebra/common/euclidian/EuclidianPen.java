@@ -25,6 +25,9 @@ import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.GTimer;
 import org.geogebra.common.util.GTimerListener;
 
+import com.google.j2objc.annotations.Weak;
+import com.google.j2objc.annotations.WeakOuter;
+
 /**
  * Handles pen and freehand tool
  *
@@ -34,6 +37,7 @@ public class EuclidianPen implements GTimerListener {
 	/**
 	 * app
 	 */
+	@Weak
 	protected App app;
 	/**
 	 * view
@@ -41,6 +45,7 @@ public class EuclidianPen implements GTimerListener {
 	protected EuclidianView view;
 
 	/** Polyline that conects stylebar to pen settings */
+	@WeakOuter
 	public final GeoPolyLine defaultPenLine;
 
 	private AlgoLocusStroke lastAlgo = null;
@@ -92,7 +97,7 @@ public class EuclidianPen implements GTimerListener {
 		this.penPreviewLine = view.newPenPreview();
 		timer = app.newTimer(this, 1500);
 
-		defaultPenLine = new GeoPolyLine(app.getKernel().getConstruction()) {
+		@WeakOuter GeoPolyLine line = new GeoPolyLine(app.getKernel().getConstruction()) {
 			@Override
 			public void setObjColor(GColor color) {
 				super.setObjColor(color);
@@ -117,6 +122,7 @@ public class EuclidianPen implements GTimerListener {
 				setPenOpacity(lineOpacity);
 			}
 		};
+		defaultPenLine = line;
 		setDefaults();
 		defaultPenLine.setLineThickness(penSize);
 		defaultPenLine.setLineOpacity(lineOpacity);
