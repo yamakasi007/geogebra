@@ -31,6 +31,8 @@ public class IntervalPlotter {
 	}
 
 	public void update() {
+		int numberOfSamples = 2*view.getWidth();
+		evaluator.resample(range, numberOfSamples);
 		updatePath();
 	}
 

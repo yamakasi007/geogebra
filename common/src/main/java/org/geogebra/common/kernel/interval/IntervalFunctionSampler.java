@@ -77,4 +77,8 @@ public class IntervalFunctionSampler {
 		space.update(range.x(), numberOfSamples);
 
 	}
+
+	public void resample(IntervalTuple range, int numberOfSamples) {
+		// todo
+	}
 }

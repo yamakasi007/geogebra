@@ -107,6 +107,7 @@ public class DrawParametricCurve extends Drawable {
 	@Override
 	final public void update() {
 		if (intervalPlot) {
+			updateStrokes(geo);
 			updateIntervalPlot();
 		} else {
 			updateParametric();
