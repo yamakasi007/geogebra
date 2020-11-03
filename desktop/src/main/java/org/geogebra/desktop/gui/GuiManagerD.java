@@ -123,7 +123,6 @@ import org.geogebra.desktop.gui.view.algebra.AlgebraControllerD;
 import org.geogebra.desktop.gui.view.algebra.AlgebraViewD;
 import org.geogebra.desktop.gui.view.consprotocol.ConstructionProtocolNavigationD;
 import org.geogebra.desktop.gui.view.consprotocol.ConstructionProtocolViewD;
-import org.geogebra.desktop.gui.view.consprotocol.ConstructionProtocolViewD.ConstructionTableDataD;
 import org.geogebra.desktop.gui.view.data.DataAnalysisViewD;
 import org.geogebra.desktop.gui.view.probcalculator.ProbabilityCalculatorViewD;
 import org.geogebra.desktop.gui.view.properties.PropertiesViewD;
@@ -661,8 +660,7 @@ public class GuiManagerD extends GuiManager implements GuiManagerInterfaceD {
 	@Override
 	public void detachConstructionProtocolView() {
 		if (constructionProtocolView != null) {
-			((ConstructionTableDataD) (constructionProtocolView.getData()))
-					.detachView();
+			constructionProtocolView.getData().detachView();
 		}
 	}
 

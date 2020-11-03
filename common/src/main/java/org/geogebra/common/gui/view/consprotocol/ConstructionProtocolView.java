@@ -41,15 +41,23 @@ import com.google.j2objc.annotations.Weak;
 public class ConstructionProtocolView implements ConstructionStepper {
 
 	@Weak
-	public App app;
+	public final App app;
 	@Weak
-	public Kernel kernel;
-	public ConstructionTableData data;
+	public final Kernel kernel;
+	protected ConstructionTableData data;
 	protected boolean isViewAttached;
 	public ArrayList<ConstructionProtocolNavigation> navigationBars = new ArrayList<>();
 
 	protected boolean useColors;
 	protected boolean addIcons;
+
+	/**
+	 * @param app application
+	 */
+	public ConstructionProtocolView(App app) {
+		this.app = app;
+		kernel = app.getKernel();
+	}
 
 	protected static String getAlgebra(GeoElement geo) {
 		// messes up subscripts in ggb5, why?
@@ -148,7 +156,7 @@ public class ConstructionProtocolView implements ConstructionStepper {
 		String caption;
 		boolean includesIndex;
 		boolean consProtocolVisible;
-		private boolean wrapHTML;
+		private final boolean wrapHTML;
 
 		/**
 		 * @param geo
@@ -284,11 +292,11 @@ public class ConstructionProtocolView implements ConstructionStepper {
 			consProtocolVisible = ConstructionProtocolView.getBreakpoint(geo);
 
 			// does this line include an index?
-			includesIndex = (name.indexOf("<sub>") >= 0)
-					|| (algebra.indexOf("<sub>") >= 0)
-					|| (description.indexOf("<sub>") >= 0)
-					|| (definition.indexOf("<sub>") >= 0)
-					|| (caption.indexOf("<sub>") >= 0);
+			includesIndex = name.contains("<sub>")
+					|| algebra.contains("<sub>")
+					|| description.contains("<sub>")
+					|| definition.contains("<sub>")
+					|| caption.contains("<sub>");
 		}
 
 		protected int getConstructionIndex(int row) {
@@ -304,10 +312,10 @@ public class ConstructionProtocolView implements ConstructionStepper {
 	public class ColumnData {
 		String title;
 		boolean isVisible; // column is shown in table
-		private int prefWidth;
-		private int minWidth;
-		private int alignment;
-		private boolean initShow; // should be shown from the beginning
+		private final int prefWidth;
+		private final int minWidth;
+		private final int alignment;
+		private final boolean initShow; // should be shown from the beginning
 
 		/**
 		 * @param title
@@ -513,7 +521,7 @@ public class ConstructionProtocolView implements ConstructionStepper {
 		protected HashMap<GeoElement, RowData> geoMap;
 		protected int columnsCount = columns.length;
 		private boolean notifyUpdateCalled;
-		private SetLabels gui;
+		private final SetLabels gui;
 
 		/**
 		 * @param gui
@@ -1069,7 +1077,7 @@ public class ConstructionProtocolView implements ConstructionStepper {
 		// include image file
 		if (imgBase64 != null) {
 			sb.append("<p>\n");
-			sb.append("<img height='32' width ='32' src=\"");
+			sb.append("<img src=\"");
 			sb.append(StringUtil.pngMarker);
 			sb.append(imgBase64);
 			sb.append("\" alt=\"");
@@ -1351,7 +1359,7 @@ public class ConstructionProtocolView implements ConstructionStepper {
 				}
 
 				if (row == 0) {
-					sb.append("<td style='width:" + widthPercent + "%'>");
+					sb.append("<td style='width:").append(widthPercent).append("%'>");
 				} else {
 					sb.append("<td>");
 				}
@@ -1394,7 +1402,7 @@ public class ConstructionProtocolView implements ConstructionStepper {
 
 		BREAKPOINT("Breakpoint");
 
-		private String translationKey;
+		private final String translationKey;
 
 		Columns(String key) {
 			this.translationKey = key;
@@ -1421,7 +1429,10 @@ public class ConstructionProtocolView implements ConstructionStepper {
 			return Columns.NAME;
 
 		}
+	}
 
+	public void setData(ConstructionTableData data) {
+		this.data = data;
 	}
 
 }

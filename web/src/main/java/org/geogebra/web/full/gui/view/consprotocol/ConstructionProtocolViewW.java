@@ -92,26 +92,14 @@ public class ConstructionProtocolViewW extends ConstructionProtocolView
 	 *            {@link AppW}
 	 */
 	public ConstructionProtocolViewW(final AppW app) {
+		super(app);
 		cpPanel = new FlowPanel();
-		this.app = app;
-		kernel = app.getKernel();
-		data = new ConstructionTableDataW(this);
+		setData(new ConstructionTableDataW(this));
 
 		app.getGuiManager().registerConstructionProtocolView(this);
 
 		table = new CellTable<>();
 		table.addStyleName("cpTable");
-
-		// first attempt with flextable
-		// table = new FlexTable();
-		// for (int k = 0; k < data.columns.length; k++) {
-		// if ((data.columns[k].getTitle() == "number") ||
-		// (data.columns[k].getTitle() == "name") ||
-		// (data.columns[k].getTitle() == "definition"))
-		// table.setText(0, k, data.columns[k].getTitle());
-		// }
-		//
-		//
 
 		scrollPane = new ScrollPanel(table);
 
