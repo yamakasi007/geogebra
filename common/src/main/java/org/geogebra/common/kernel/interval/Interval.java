@@ -547,8 +547,8 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	@Override
-	public Interval intersection(Interval interval) {
-		return misc.intersection(interval);
+	public Interval intersect(Interval interval) {
+		return misc.intersect(interval);
 	}
 
 	@Override
