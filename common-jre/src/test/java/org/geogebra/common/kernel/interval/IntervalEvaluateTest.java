@@ -61,7 +61,7 @@ public class IntervalEvaluateTest extends BaseUnitTest {
 
 	@Test
 	public void testAddAndSinSeparate() {
-		Interval result = interval(0, PI/2).add(interval(PI, PI));
+		Interval result = interval(0, PI / 2).add(interval(PI, PI));
 		shouldEqual(interval(PI, 3 * PI / 2), result);
 		shouldEqual(interval(-1, 0), result.sin());
 	}
@@ -75,14 +75,13 @@ public class IntervalEvaluateTest extends BaseUnitTest {
 
 	@Test
 	public void testAddAndSinEvaluate() throws Exception {
-		shouldEqual(interval(PI, 3 * PI /2),
-				interval(PI, PI).evaluate(Operation.PLUS, interval(0,PI/2)));
+		shouldEqual(interval(PI, 3 * PI / 2),
+				interval(PI, PI).evaluate(Operation.PLUS, interval(0, PI / 2)));
 
 		shouldEqual(interval(1, 3),
-				interval(PI, PI).evaluate(Operation.PLUS, interval(0,PI/2))
+				interval(PI, PI).evaluate(Operation.PLUS, interval(0, PI / 2))
 					.evaluate(Operation.SIN)
 					.evaluate(Operation.PLUS, interval(2, 3)));
 
 	}
-
 }

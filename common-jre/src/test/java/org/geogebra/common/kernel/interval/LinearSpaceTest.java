@@ -12,7 +12,7 @@ public class LinearSpaceTest {
 	public void testHundredStep10() {
 		LinearSpace space = new LinearSpace();
 		space.update(interval(0, 100), 10);
-			assertEquals(Arrays.asList(0, 10, 20, 30, 40, 50, 60
-			,70, 80, 90, 100), space.values());
+			assertEquals(Arrays.asList(0, 10, 20, 30, 40, 50, 60,
+				70, 80, 90, 100), space.values());
 		}
 }

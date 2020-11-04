@@ -14,7 +14,6 @@ public class IntervalFunctionSampler {
 
 	private final IntervalFunction function;
 	private final int numberOfSamples;
-	private IntervalTuple range;
 	private final LinearSpace space;
 
 	/**
@@ -26,7 +25,6 @@ public class IntervalFunctionSampler {
 	public IntervalFunctionSampler(GeoFunction geo, IntervalTuple range,
 			int numberOfSamples) {
 		this.function = new IntervalFunction(geo);
-		this.range = range;
 		this.numberOfSamples = numberOfSamples;
 		space = new LinearSpace();
 		update(range);
@@ -71,7 +69,6 @@ public class IntervalFunctionSampler {
 	 * @param range the new (x, y) range
 	 */
 	public void update(IntervalTuple range) {
-		this.range = range;
 		space.update(range.x(), numberOfSamples);
 	}
 }

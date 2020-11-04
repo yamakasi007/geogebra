@@ -17,7 +17,6 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		shouldEqual(interval(0, 1), function.evaluate(interval(0, PI / 2)));
 	}
 
-
 	@Test
 	public void evaluate2Sin() throws Exception {
 		GeoFunction geo = add("2 * sin(x)");
@@ -25,7 +24,6 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		shouldEqual(interval(1, PI),
 				function.evaluate(interval(1, PI / 2)));
 	}
-
 
 	@Test
 	public void evaluateSin2x() throws Exception {
