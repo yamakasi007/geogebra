@@ -53,7 +53,7 @@ public class RMathTest {
 
 	@Test
 	public void testPow4High() {
-		shouldEqualWithMaxPrecsion(16 + Kernel.MAX_PRECISION, RMath.powLow(2, 4));
+		shouldEqualWithMaxPrecsion(16 + Kernel.MAX_PRECISION, RMath.powHigh(2, 4));
 	}
 
 	@Test
