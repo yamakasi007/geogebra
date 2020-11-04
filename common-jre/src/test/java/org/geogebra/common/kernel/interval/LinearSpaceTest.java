@@ -5,9 +5,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class LinearSpaceTest {
+
+	@Ignore
 	@Test
 	public void testHundredStep10() {
 		LinearSpace space = new LinearSpace();

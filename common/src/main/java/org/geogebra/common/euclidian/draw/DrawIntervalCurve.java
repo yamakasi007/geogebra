@@ -8,31 +8,35 @@ import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.euclidian.plot.interval.IntervalPlotter;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.geogebra.common.kernel.kernelND.CurveEvaluable;
 
 /**
  * Draw curve using interval arithmetic.
  */
 public class DrawIntervalCurve extends Drawable {
 	private final GeneralPathClipped gp;
-	private final IntervalPlotter plotter;
-	private final GeoFunction function;
+	private IntervalPlotter plotter;
+	private GeoFunction function;
 
 	/**
-	 *
-	 * @param view EuclidianView to draw on.
-	 * @param curve to draw.
+	 *  @param view EuclidianView to draw on.
+	 * @param geo to draw.
 	 * @param gp GeneralPath to draw on.
 	 */
-	public DrawIntervalCurve(EuclidianView view, CurveEvaluable curve,
+	public DrawIntervalCurve(EuclidianView view, GeoElement geo,
 			GeneralPathClipped gp) {
 		this.gp = gp;
-		function = (GeoFunction) curve.toGeoElement();
+		function = geo.isGeoFunction() ? (GeoFunction) geo
+				: null;
 		plotter = new IntervalPlotter(view, function, gp);
+
 	}
 
 	@Override
 	public void update() {
+		if (function == null) {
+			return;
+		}
+
 		plotter.update();
 	}
 

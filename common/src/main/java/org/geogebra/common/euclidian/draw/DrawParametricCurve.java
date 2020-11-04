@@ -98,9 +98,11 @@ public class DrawParametricCurve extends Drawable {
 		this.view = view;
 		this.curve = curve;
 		geo = curve.toGeoElement();
-		intervalPlot = true;
+		intervalPlot = geo != null;
 		createGeneralPath();
-		intervalCurve = new DrawIntervalCurve(view, curve, gp);
+		intervalCurve = intervalPlot
+				? new DrawIntervalCurve(view, geo, gp)
+				: null;
 		update();
 	}
 
