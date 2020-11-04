@@ -123,7 +123,7 @@ public class DrawParametricCurve extends Drawable {
 		intervalCurve.update();
 	}
 
-	final public void updateParametric() {
+	private void updateParametric() {
 		dataExpression = null;
 		if (geo.getLineType() == EuclidianStyleConstants.LINE_TYPE_POINTWISE
 				&& (curve instanceof GeoFunction)) {

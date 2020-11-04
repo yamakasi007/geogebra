@@ -570,11 +570,16 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return interval.low > low && interval.high < high;
 	}
 
-	public boolean isGreaterThan(Interval interval) {
-		if (isEmpty() || interval.isEmpty()) {
+	/**
+	 *
+	 * @param other to compare with.
+	 * @return if this interval is greater than the other.
+	 */
+	public boolean isGreaterThan(Interval other) {
+		if (isEmpty() || other.isEmpty()) {
 			return false;
 		}
-		return high > interval.high;
+		return high > other.high;
 	}
 
 	public Interval evaluate(Operation operation,

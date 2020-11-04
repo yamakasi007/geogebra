@@ -60,7 +60,7 @@ class IntervalAlgebra {
 			return interval;
 		}
 
-		return powOfInteger((int)power);
+		return powOfInteger((int) power);
 	}
 
 	private Interval powOfInteger(int power) {

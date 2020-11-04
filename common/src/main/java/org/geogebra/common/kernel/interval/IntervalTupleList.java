@@ -1,25 +1,37 @@
 package org.geogebra.common.kernel.interval;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * List to hold IntervalTuples
+ *
+ * @author laszlo
+ */
 public class IntervalTupleList implements Iterable<IntervalTuple> {
-	private List<IntervalTuple> list;
-	private Map<Interval, IntervalTuple> map = new HashMap<>();
-	private double deltaX;
+	private final List<IntervalTuple> list;
 
+	/**
+	 * Constructor.
+	 */
 	public IntervalTupleList() {
 		this.list = new ArrayList<>();
 	}
 
+	/**
+	 *
+	 * @param tuple to add
+	 */
 	public void add(IntervalTuple tuple) {
 		list.add(tuple);
-		map.put(tuple.x(), tuple);
 	}
 
+	/**
+	 *
+	 * @param index of tuple to get.
+	 * @return the tuple on the given index.
+	 */
 	public IntervalTuple get(int index) {
 		return list.get(index);
 	}
@@ -29,16 +41,12 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		return list.iterator();
 	}
 
+	/**
+	 *
+	 * @return the size of the list
+	 */
 	public int size() {
 		return list.size();
-	}
-
-	public double getDeltaX() {
-		return deltaX;
-	}
-
-	public void setDeltaX(double deltaX) {
-		this.deltaX = deltaX;
 	}
 
 	public boolean isEmpty() {

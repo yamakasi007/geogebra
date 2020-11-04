@@ -3,16 +3,26 @@ package org.geogebra.common.kernel.interval;
 import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.geogebra.common.util.debug.Log;
 
+/**
+ * Class to provide samples of the given function as a
+ * list of (x, y) pairs, where both x and y are intervals.
+ *
+ * @author Laszlo
+ */
 public class IntervalFunctionSampler {
 
 	private final IntervalFunction function;
 	private final int numberOfSamples;
 	private IntervalTuple range;
 	private final LinearSpace space;
-	private IntervalTupleList oldSamples = new IntervalTupleList();
 
+	/**
+	 *
+	 * @param geo function to get sampled
+	 * @param range (x, y) range.
+	 * @param numberOfSamples the sample rate.
+	 */
 	public IntervalFunctionSampler(GeoFunction geo, IntervalTuple range,
 			int numberOfSamples) {
 		this.function = new IntervalFunction(geo);
@@ -22,6 +32,11 @@ public class IntervalFunctionSampler {
 		update(range);
 	}
 
+	/**
+	 * Gets the samples with the predefined range and sample rate
+	 *
+	 * @return the sample list
+	 */
 	public IntervalTupleList result() {
 		try {
 			return interval1d();
@@ -46,46 +61,17 @@ public class IntervalFunctionSampler {
 				samples.add(null);
 			}
 		}
-//		detectAsimptote(samples);
-		samples.setDeltaX(space.getScale());
-		oldSamples = samples;
+
 		return samples;
-
 	}
 
-	private void detectAsimptote(IntervalTupleList samples) {
-		double yMin = range.y().getLow();
-		double yMax = range.y().getHigh();
-		for (int i = 1; i < samples.size() - 1; i++) {
-			if (samples.get(i) != null) {
-				IntervalTuple prev = samples.get(i - 1);
-      			IntervalTuple next = samples.get(i + 1);
-				if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
-					if (prev.y().getLow() > next.y().getHigh()) {
-						prev.y().set(Math.max(yMax, prev.y().getHigh()),
-								Math.min(yMin, next.y().getLow()));
-					}
-
-					if (prev.y().getHigh() < next.y().getLow()) {
-						prev.y().set(Math.min(yMin, prev.y().getLow()),
-								Math.max(yMax, next.y().getHigh()));
-					}
-				}
-			}
-		}
-	}
-
+	/**
+	 * Updates the range on which sampler has to run.
+	 *
+	 * @param range the new (x, y) range
+	 */
 	public void update(IntervalTuple range) {
 		this.range = range;
 		space.update(range.x(), numberOfSamples);
-
-	}
-
-	public void resample(IntervalTuple range, int numberOfSamples) {
-		if (this.range.x().getWidth() == range.x().getWidth())  {
-			Log.debug("[SAMPLER] NO resampling");
-		} else {
-			Log.debug("[SAMPLER] Resampling");
-		}
 	}
 }

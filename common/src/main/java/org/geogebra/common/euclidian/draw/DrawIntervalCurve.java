@@ -10,16 +10,25 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.kernelND.CurveEvaluable;
 
+/**
+ * Draw curve using interval arithmetic.
+ */
 public class DrawIntervalCurve extends Drawable {
 	private final GeneralPathClipped gp;
-	private CurveEvaluable curve;
 	private final IntervalPlotter plotter;
+	private final GeoFunction function;
 
+	/**
+	 *
+	 * @param view EuclidianView to draw on.
+	 * @param curve to draw.
+	 * @param gp GeneralPath to draw on.
+	 */
 	public DrawIntervalCurve(EuclidianView view, CurveEvaluable curve,
 			GeneralPathClipped gp) {
-		this.curve = curve;
 		this.gp = gp;
-		plotter = new IntervalPlotter(view, (GeoFunction) curve.toGeoElement(), gp);
+		function = (GeoFunction) curve.toGeoElement();
+		plotter = new IntervalPlotter(view, function, gp);
 	}
 
 	@Override
@@ -44,6 +53,6 @@ public class DrawIntervalCurve extends Drawable {
 
 	@Override
 	public GeoElement getGeoElement() {
-		return null;
+		return function;
 	}
 }

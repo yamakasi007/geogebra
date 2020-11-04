@@ -2,14 +2,29 @@ package org.geogebra.common.kernel.interval;
 
 import org.geogebra.common.plugin.Operation;
 
-public class IntervalEvaluate {
+/**
+ * Evaluates expression using interval arithmetic
+ */
+class IntervalEvaluate {
 	private final Interval interval;
 
-	public IntervalEvaluate(Interval interval) {
+	/**
+	 *
+	 * @param interval to evaluate on.
+	 */
+	IntervalEvaluate(Interval interval) {
 		this.interval = interval;
 	}
 
-	public Interval evaluate(Operation operation, Interval other)
+	/**
+	 * Executes the operation on two intervals
+	 *
+	 * @param operation to execute.
+	 * @param other interval as parameter
+	 * @return result interval of the operation
+	 * @throws Exception division by zero
+	 */
+	Interval evaluate(Operation operation, Interval other)
 			throws Exception {
 		switch (operation) {
 		case PLUS:
@@ -25,7 +40,6 @@ public class IntervalEvaluate {
 		case NROOT:
 			return interval.nthRoot(other);
 		case INTEGRAL:
-			break;
 		case INVERSE_NORMAL:
 			break;
 		case DIFF:
@@ -34,8 +48,13 @@ public class IntervalEvaluate {
 		return interval;
 	}
 
-	public Interval evaluate(Operation operation)
-			throws Exception {
+	/**
+	 * Executes unary operation on the interval.
+	 *
+	 * @param operation to execute
+	 * @return the result interval
+	 */
+	Interval evaluate(Operation operation) {
 		switch (operation) {
 		case COS:
 			return interval.cos();
@@ -65,16 +84,13 @@ public class IntervalEvaluate {
 			return interval.sinh();
 		case TANH:
 			return interval.tanh();
-		case ACOSH:
-			return interval.acos();
 		case LOG10:
 			return interval.log10();
 		case LOG2:
 			return interval.log2();
+		case ACOSH:
 		case INTEGRAL:
-			break;
 		case INVERSE_NORMAL:
-			break;
 		}
 		return interval;
 	}
