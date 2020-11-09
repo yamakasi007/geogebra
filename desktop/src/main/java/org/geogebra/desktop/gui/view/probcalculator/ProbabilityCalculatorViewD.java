@@ -438,7 +438,7 @@ public class ProbabilityCalculatorViewD extends ProbabilityCalculatorView
 					selectedDist = getReverseDistributionMap()
 							.get(comboDistribution.getSelectedItem());
 					parameters = ProbabilityManager
-							.getDefaultParameters(selectedDist);
+							.getDefaultParameters(selectedDist, cons);
 					this.setProbabilityCalculator(selectedDist, parameters,
 							isCumulative);
 				}
@@ -491,6 +491,8 @@ public class ProbabilityCalculatorViewD extends ProbabilityCalculatorView
 			NumberValue nv;
 			nv = kernel.getAlgebraProcessor().evaluateToNumeric(inputText,
 					false);
+			GeoNumeric numericValue =
+					nv instanceof GeoNumeric ? (GeoNumeric) nv : new GeoNumeric(cons, Double.NaN);
 			double value = nv.getDouble();
 
 			if (source == fldLow) {
@@ -529,12 +531,10 @@ public class ProbabilityCalculatorViewD extends ProbabilityCalculatorView
 				// handle parameter entry
 				for (int i = 0; i < parameters.length; ++i) {
 					if (source == fldParameterArray[i]) {
-
-					if (isValidParameter(value, i)) {
-					parameters[i] = value;
-					updateAll();
-					}
-
+						if (isValidParameterChange(value, i)) {
+							parameters[i] = numericValue;
+							updateAll();
+						}
 					}
 				}
 			}
@@ -603,7 +603,7 @@ public class ProbabilityCalculatorViewD extends ProbabilityCalculatorView
 						.setText(getParameterLabels()[selectedDist.ordinal()][i]);
 				// set field
 				fldParameterArray[i].removeActionListener(this);
-				fldParameterArray[i].setText("" + format(parameters[i]));
+				fldParameterArray[i].setText("" + format(parameters[i].getDouble()));
 				fldParameterArray[i].setCaretPosition(0);
 				fldParameterArray[i].addActionListener(this);
 			}
