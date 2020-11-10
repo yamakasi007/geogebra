@@ -36,6 +36,7 @@ import org.geogebra.web.full.main.embed.CalcEmbedElement;
 import org.geogebra.web.full.main.embed.EmbedElement;
 import org.geogebra.web.full.main.embed.GraspableEmbedElement;
 import org.geogebra.web.full.main.embed.H5PEmbedElement;
+import org.geogebra.web.html5.euclidian.EuclidianViewWInterface;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.MyImageW;
 import org.geogebra.web.html5.main.ScriptManagerW;
@@ -54,6 +55,7 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 import elemental2.core.Global;
+import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
 
 /**
@@ -175,6 +177,8 @@ public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecu
 		fr.runAsyncAfterSplash();
 
 		CalcEmbedElement element = new CalcEmbedElement(fr, this, drawEmbed.getEmbedID());
+		addDragHandler(Js.uncheckedCast(fr.getElement()));
+
 		element.setJsEnabled(isJsEnabled());
 		if (currentBase64 != null) {
 			fr.getApp().registerOpenFileListener(
@@ -188,6 +192,18 @@ public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecu
 			}
 		}
 		return element;
+	}
+
+	private void addDragHandler(elemental2.dom.Element element) {
+		element.addEventListener("dragstart", (event) -> {
+			((EuclidianViewWInterface) app.getActiveEuclidianView())
+					.getCanvasElement().getStyle().setProperty("pointerEvents", "none");
+		});
+
+		element.addEventListener("dragend", (event) -> {
+			((EuclidianViewWInterface) app.getActiveEuclidianView())
+					.getCanvasElement().getStyle().setProperty("pointerEvents", "initial");
+		});
 	}
 
 	private boolean hasWidgetWithId(int embedId) {
@@ -573,12 +589,13 @@ public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecu
 	 *
 	 * @return the APIs of the embedded calculators.
 	 */
-	JsPropertyMap<Object> getEmbeddedCalculators() {
+	JsPropertyMap<Object> getEmbeddedCalculators(boolean includeGraspableMath) {
 		JsPropertyMap<Object> jso = JsPropertyMap.of();
 
 		for (Entry<DrawWidget, EmbedElement> entry : widgets.entrySet()) {
 			Object api = entry.getValue().getApi();
-			if (api != null) {
+			if (api != null && (includeGraspableMath
+					|| entry.getValue() instanceof CalcEmbedElement)) {
 				jso.set(entry.getKey().getGeoElement().getLabelSimple(), api);
 			}
 		}
