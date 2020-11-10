@@ -424,7 +424,6 @@ public class ProbabilityCalculatorViewW extends ProbabilityCalculatorView
 		setXAxisPoints();
 	}
 
-
 	private void updateProbabilityType() {
 		if (isIniting) {
 			return;
