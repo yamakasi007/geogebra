@@ -16,6 +16,7 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
  */
 public class IntervalPlotter {
 	private EuclidianView view;
+	private final GeoFunction function;
 	private IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;
 	private IntervalTuple range;
@@ -25,20 +26,17 @@ public class IntervalPlotter {
 	/**
 	 * Creates a disabled plotter
 	 */
-	public IntervalPlotter() {
-		// TODO: change constructors to support dynamic switch.
+	public IntervalPlotter(EuclidianView view, GeoFunction function, GeneralPathClipped gp) {
+		this.view = view;
+		this.function = function;
+		this.gp = gp;
 		this.enabled = false;
 	}
 
 	/**
-	 *
-	 * @param view to draw on.
-	 * @param function to draw.
-	 * @param gp GeneralPath is used to draw to.
+	 * Enables plotter
 	 */
-	public IntervalPlotter(EuclidianView view, GeoFunction function, GeneralPathClipped gp) {
-		this.view = view;
-		this.gp = gp;
+	public void enable() {
 		range = new IntervalTuple();
 		updateRanges();
 		int numberOfSamples = view.getWidth();
@@ -126,13 +124,5 @@ public class IntervalPlotter {
 	 */
 	public boolean isEnabled() {
 		return enabled;
-	}
-
-	/**
-	 *
-	 * @param enabled to set;
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
 	}
 }

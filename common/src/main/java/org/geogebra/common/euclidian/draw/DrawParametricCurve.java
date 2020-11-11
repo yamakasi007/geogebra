@@ -56,7 +56,7 @@ import org.geogebra.common.util.debug.Log;
  */
 public class DrawParametricCurve extends Drawable {
 
-	private final IntervalPlotter intervalPlotter;
+	private IntervalPlotter intervalPlotter;
 	private CurveEvaluable curve;
 	private GeneralPathClippedForCurvePlotter gp;
 	private boolean isVisible;
@@ -99,16 +99,15 @@ public class DrawParametricCurve extends Drawable {
 		this.curve = curve;
 		geo = curve.toGeoElement();
 		createGeneralPath();
-		intervalPlotter = newIntervalPlotter();
+		ceateIntervalPlotter();
 		update();
 	}
 
-	private IntervalPlotter newIntervalPlotter() {
-		if (geo == null || !geo.isGeoFunction()) {
-			return new IntervalPlotter();
+	private void ceateIntervalPlotter() {
+		intervalPlotter = new IntervalPlotter(view, (GeoFunction) geo, gp);
+		if (geo != null && geo.isGeoFunction()) {
+			intervalPlotter.enable();
 		}
-
-		return new IntervalPlotter(view, (GeoFunction) geo, gp);
 	}
 
 	@Override
