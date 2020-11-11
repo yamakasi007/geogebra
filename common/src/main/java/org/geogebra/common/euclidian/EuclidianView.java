@@ -6479,14 +6479,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return interval of screen x coordinates.
 	 */
 	public Interval toScreenIntervalX(Interval interval) {
-		double low = interval.getLow();
-		double high = interval.getHigh();
-		return new Interval(toScreenCoordXd(!Double.isInfinite(low)
-				? low
-				: Double.POSITIVE_INFINITY),
-				toScreenCoordXd(!Double.isInfinite(high)
-						? high
-						: Double.NEGATIVE_INFINITY));
+		return new Interval(toScreenCoordXd(interval.getLow()),
+				toScreenCoordXd(interval.getHigh()));
 	}
 
 	/**

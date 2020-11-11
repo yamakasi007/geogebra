@@ -1,5 +1,6 @@
 package org.geogebra.common.euclidian.plot.interval;
 
+import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
@@ -14,11 +15,20 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
  * @author laszlo
  */
 public class IntervalPlotter {
-	private final EuclidianView view;
-	private final IntervalFunctionSampler evaluator;
+	private EuclidianView view;
+	private IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;
-	private final IntervalTuple range;
-	private final GeneralPathClipped gp;
+	private IntervalTuple range;
+	private GeneralPathClipped gp;
+	private boolean enabled;
+
+	/**
+	 * Creates a disabled plotter
+	 */
+	public IntervalPlotter() {
+		// TODO: change constructors to support dynamic switch.
+		this.enabled = false;
+	}
 
 	/**
 	 *
@@ -35,6 +45,7 @@ public class IntervalPlotter {
 		evaluator = new IntervalFunctionSampler(function, range, numberOfSamples);
 		updateEvaluator();
 		update();
+		enabled = true;
 	}
 
 	/**
@@ -98,5 +109,30 @@ public class IntervalPlotter {
 		evaluator.update(range);
 		points = evaluator.result();
 		updatePath();
+	}
+
+	/**
+	 * Draws result to Graphics
+	 *
+	 * @param g2 {@link GGraphics2D}
+	 */
+	public void draw(GGraphics2D g2) {
+		g2.draw(gp);
+	}
+
+	/**
+	 *
+	 * @return if plotter is enabled.
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 *
+	 * @param enabled to set;
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

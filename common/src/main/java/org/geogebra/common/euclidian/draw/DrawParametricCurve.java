@@ -25,6 +25,7 @@ import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.plot.CurvePlotter;
 import org.geogebra.common.euclidian.plot.GeneralPathClippedForCurvePlotter;
+import org.geogebra.common.euclidian.plot.interval.IntervalPlotter;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.VarString;
@@ -55,7 +56,7 @@ import org.geogebra.common.util.debug.Log;
  */
 public class DrawParametricCurve extends Drawable {
 
-	private final DrawIntervalCurve intervalCurve;
+	private final IntervalPlotter intervalPlotter;
 	private CurveEvaluable curve;
 	private GeneralPathClippedForCurvePlotter gp;
 	private boolean isVisible;
@@ -84,7 +85,6 @@ public class DrawParametricCurve extends Drawable {
 			return false;
 		}
 	};
-	private boolean intervalPlot;
 
 	/**
 	 * Creates graphical representation of the curve
@@ -98,12 +98,17 @@ public class DrawParametricCurve extends Drawable {
 		this.view = view;
 		this.curve = curve;
 		geo = curve.toGeoElement();
-		intervalPlot = geo != null;
 		createGeneralPath();
-		intervalCurve = intervalPlot
-				? new DrawIntervalCurve(view, geo, gp)
-				: null;
+		intervalPlotter = newIntervalPlotter();
 		update();
+	}
+
+	private IntervalPlotter newIntervalPlotter() {
+		if (geo == null || !geo.isGeoFunction()) {
+			return new IntervalPlotter();
+		}
+
+		return new IntervalPlotter(view, (GeoFunction) geo, gp);
 	}
 
 	@Override
@@ -113,7 +118,7 @@ public class DrawParametricCurve extends Drawable {
 			return;
 		}
 
-		if (intervalPlot) {
+		if (intervalPlotter.isEnabled()) {
 			updateStrokes(geo);
 			updateIntervalPlot();
 		} else {
@@ -122,7 +127,7 @@ public class DrawParametricCurve extends Drawable {
 	}
 
 	private void updateIntervalPlot() {
-		intervalCurve.update();
+		intervalPlotter.update();
 	}
 
 	private void updateParametric() {
@@ -377,7 +382,7 @@ public class DrawParametricCurve extends Drawable {
 
 	@Override
 	final public void draw(GGraphics2D g2) {
-		if (intervalPlot) {
+		if (intervalPlotter.isEnabled()) {
 			drawIntervalPlot(g2);
 		} else {
 			drawParametric(g2);
@@ -392,12 +397,12 @@ public class DrawParametricCurve extends Drawable {
 		if (isHighlighted()) {
 			g2.setPaint(geo.getSelColor());
 			g2.setStroke(selStroke);
-			intervalCurve.draw(g2);
+			intervalPlotter.draw(g2);
 		}
 
 		g2.setPaint(getObjectColor());
 		g2.setStroke(objStroke);
-		intervalCurve.draw(g2);
+		intervalPlotter.draw(g2);
 	}
 
 	private void drawParametric(GGraphics2D g2) {
