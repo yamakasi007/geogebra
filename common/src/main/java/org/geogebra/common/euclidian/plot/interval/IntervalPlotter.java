@@ -15,13 +15,14 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
  * @author laszlo
  */
 public class IntervalPlotter {
-	private EuclidianView view;
+	private final EuclidianView view;
 	private final GeoFunction function;
 	private IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;
 	private IntervalTuple range;
-	private GeneralPathClipped gp;
+	private final GeneralPathClipped gp;
 	private boolean enabled;
+	private boolean moveTo;
 
 	/**
 	 * Creates a disabled plotter
@@ -70,6 +71,8 @@ public class IntervalPlotter {
 			if (point != null) {
 				plotInterval(lastY, point);
 			}
+
+			moveTo = point == null;
 		}
 	}
 
@@ -86,12 +89,21 @@ public class IntervalPlotter {
 	}
 
 	private void plotHigh(Interval x, Interval y) {
-		lineTo(x.getLow(), y.getLow());
+		if (moveTo) {
+			gp.moveTo(x.getLow(), y.getLow());
+		} else {
+			lineTo(x.getLow(), y.getLow());
+		}
+
 		lineTo(x.getHigh(), y.getHigh());
 	}
 
 	private void plotLow(Interval x, Interval y) {
-		lineTo(x.getLow(), y.getHigh());
+		if (moveTo) {
+			gp.moveTo(x.getLow(), y.getHigh());
+		} else {
+			lineTo(x.getLow(), y.getHigh());
+		}
 		lineTo(x.getHigh(), y.getLow());
 	}
 
