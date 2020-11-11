@@ -99,14 +99,14 @@ public class DrawParametricCurve extends Drawable {
 		this.curve = curve;
 		geo = curve.toGeoElement();
 		createGeneralPath();
-		ceateIntervalPlotter();
+		createIntervalPlotter();
 		update();
 	}
 
-	private void ceateIntervalPlotter() {
-		intervalPlotter = new IntervalPlotter(view, (GeoFunction) geo, gp);
-		if (geo != null && geo.isGeoFunction()) {
-			intervalPlotter.enable();
+	private void createIntervalPlotter() {
+		intervalPlotter = new IntervalPlotter(view, gp);
+		if (this.geo != null && this.geo.isGeoFunction()) {
+			intervalPlotter.enableFor((GeoFunction) geo);
 		}
 	}
 
