@@ -445,7 +445,6 @@ public class ProbabilityCalculatorViewW extends ProbabilityCalculatorView
 
 		}
 		this.getPlotDimensions();
-
 		if (probMode == PROB_INTERVAL) {
 			lowPoint.setEuclidianVisible(showProbGeos);
 			highPoint.setEuclidianVisible(showProbGeos);
