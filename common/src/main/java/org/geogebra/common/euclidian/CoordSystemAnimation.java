@@ -216,6 +216,7 @@ public abstract class CoordSystemAnimation {
 	private synchronized void stopAnimation() {
 		stopTimer();
 		// setDrawMode(DRAW_MODE_BACKGROUND_IMAGE);
+		EuclidianController controller = view.getEuclidianController();
 		switch (mode) {
 		case AXES_X:
 			view.setCoordSystem(view.getXZero(), view.getYZero(), newScale,
@@ -229,6 +230,7 @@ public abstract class CoordSystemAnimation {
 			factor = newScale / oldScale;
 			view.setCoordSystem(px + (dx * factor), py + (dy * factor),
 					newScale, newScale * view.getScaleRatio());
+			controller.notifyZoomerStopped();
 			break;
 		case ZOOM_RW:
 			view.setRealWorldCoordSystem(x0, x1, y0, y1);
@@ -246,7 +248,7 @@ public abstract class CoordSystemAnimation {
 			view.getApplication().storeUndoInfo();
 		}
 
-		view.getEuclidianController().notifyCoordSystemListeners();
+		controller.notifyCoordSystemListeners();
 	}
 
 	/**

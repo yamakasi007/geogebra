@@ -1,6 +1,7 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.awt.GGraphics2D;
+import org.geogebra.common.euclidian.CoordSystemAnimationListener;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
@@ -14,7 +15,7 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
  *
  * @author laszlo
  */
-public class IntervalPlotter {
+public class IntervalPlotter implements CoordSystemAnimationListener {
 	private final EuclidianView view;
 	private IntervalFunctionSampler evaluator;
 	private IntervalTupleList points;
@@ -30,6 +31,7 @@ public class IntervalPlotter {
 		this.view = view;
 		this.gp = gp;
 		this.enabled = false;
+		view.getEuclidianController().addZoomerAnimationListener(this);
 	}
 
 	/**
@@ -134,5 +136,10 @@ public class IntervalPlotter {
 	 */
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	@Override
+	public void onZoomStop() {
+		updateEvaluator();
 	}
 }

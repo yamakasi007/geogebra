@@ -398,6 +398,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected double newScale;
 	private boolean objectMenuActive;
 	private List<CoordSystemListener> zoomerListeners = new LinkedList<>();
+	private List<CoordSystemAnimationListener> zoomerAnimationListeners = new LinkedList<>();
 	private MyModeChangedListener modeChangeListener = null;
 
 	private SelectionToolPressResult lastSelectionPressResult = SelectionToolPressResult.DEFAULT;
@@ -12116,11 +12117,31 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public void removeZoomerListener(CoordSystemListener coordSystemListener) {
 		zoomerListeners.remove(coordSystemListener);
 	}
+/**
+	 * @param listener
+	 *            coord system animation listener
+	 */
+	public void addZoomerAnimationListener(CoordSystemAnimationListener listener) {
+		zoomerAnimationListeners.add(listener);
+	}
+
+	/**
+	 * @param listener
+	 *            coord system listener
+	 */
+	public void removeZoomerAnimationListener(CoordSystemAnimationListener listener) {
+		zoomerAnimationListeners.remove(listener);
+	}
 
 	public void onCoordSystemChanged() {
 		notifyCoordSystemListeners();
 	}
 
+	public void notifyZoomerStopped() {
+		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
+			listener.onZoomStop();
+		}
+	}
 	public MyModeChangedListener getModeChangeListener() {
 		return modeChangeListener;
 	}
