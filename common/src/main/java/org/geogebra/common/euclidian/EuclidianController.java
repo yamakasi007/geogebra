@@ -12137,11 +12137,27 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		notifyCoordSystemListeners();
 	}
 
+	/**
+	 * Notify listeners that zoom stopped animating.
+	 */
 	public void notifyZoomerStopped() {
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
 			listener.onZoomStop();
 		}
 	}
+
+	/**
+	 * Notify listeners that coordinate system has moved.
+	 *
+	 * @param dx x difference of the move
+	 * @param dy y difference of the move
+	 */
+	public void notifyCoordSystemMoved(double dx, double dy) {
+		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
+			listener.onCoordSystemMoved(dx, dy);
+		}
+	}
+
 	public MyModeChangedListener getModeChangeListener() {
 		return modeChangeListener;
 	}

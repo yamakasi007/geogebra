@@ -9,6 +9,7 @@ import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
+import org.geogebra.common.util.debug.Log;
 
 /**
  * Function plotter based on interval arithmetic
@@ -141,5 +142,10 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	@Override
 	public void onZoomStop() {
 		updateEvaluator();
+	}
+
+	@Override
+	public void onCoordSystemMoved(double dx, double dy) {
+		Log.debug("EV had moved by " + dx + "," + dy);
 	}
 }
