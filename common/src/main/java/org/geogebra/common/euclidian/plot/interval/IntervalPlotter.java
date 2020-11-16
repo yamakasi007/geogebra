@@ -9,7 +9,7 @@ import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
-import org.geogebra.common.util.debug.Log;
+import org.geogebra.common.kernel.interval.LinearSpace;
 
 /**
  * Function plotter based on interval arithmetic
@@ -146,6 +146,21 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 
 	@Override
 	public void onCoordSystemMoved(double dx, double dy) {
-		Log.debug("EV had moved by " + dx + "," + dy);
+		double rwDx = dx / view.getXscale();
+		LinearSpace space = new LinearSpace();
+		int diffWidth = (int) Math.round(dx);
+		if (rwDx > 0) {
+			double xmin = view.getXmin();
+			Interval interval = new Interval(xmin, xmin + rwDx);
+			space.update(interval, diffWidth);
+		} else {
+			double xmax = view.getXmax();
+			Interval interval = new Interval(xmax + rwDx, xmax);
+			space.update(interval, -diffWidth);
+		}
+
+		IntervalTupleList result = evaluator.result(space);
+		points = result;
+		updatePath();
 	}
 }

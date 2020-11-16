@@ -37,14 +37,28 @@ public class IntervalFunctionSampler {
 	 */
 	public IntervalTupleList result() {
 		try {
-			return interval1d();
+			return interval1d(space);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new IntervalTupleList();
 	}
 
-	private IntervalTupleList interval1d() throws Exception {
+	/**
+	 * Gets the samples with the predefined range and sample rate
+	 *
+	 * @return the sample list
+	 */
+	public IntervalTupleList result(LinearSpace space) {
+		try {
+			return interval1d(space);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new IntervalTupleList();
+	}
+
+	private IntervalTupleList interval1d(LinearSpace space) throws Exception {
 		List<Double> xCoords = space.values();
 		IntervalTupleList samples = new IntervalTupleList();
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
