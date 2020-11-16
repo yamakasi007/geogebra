@@ -8,6 +8,7 @@ import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
+import org.geogebra.common.util.debug.Log;
 
 /**
  * Function plotter based on interval arithmetic
@@ -43,6 +44,7 @@ public class IntervalPlotter {
 		updateEvaluator();
 		update();
 		enabled = true;
+		Log.debug("[IntervalPlotter] ENABLED");
 	}
 
 	/**
@@ -134,5 +136,10 @@ public class IntervalPlotter {
 	 */
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public void disable() {
+		enabled = false;
+		Log.debug("[IntervalPlotter] DISABLED");
 	}
 }

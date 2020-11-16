@@ -114,4 +114,11 @@ import org.geogebra.common.util.debug.Log;
 				return IntervalConstants.empty();
 			}
 		}
+
+		public static boolean hasDependencyProblem(GeoFunction function) {
+			ExpressionNode expression = function.getFunctionExpression();
+			ExpressionNode leftTree = expression.getLeftTree();
+			return leftTree != null && leftTree.containsFreeFunctionVariable("x")
+					&& expression.getRightTree().containsFreeFunctionVariable("x");
+		}
 }
