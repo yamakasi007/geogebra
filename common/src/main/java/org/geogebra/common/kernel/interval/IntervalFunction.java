@@ -115,10 +115,22 @@ import org.geogebra.common.util.debug.Log;
 			}
 		}
 
-		public static boolean hasDependencyProblem(GeoFunction function) {
+	/**
+	 *
+	 * @param function to examine.
+	 * @return if x variable occurs more, than once in expression tree of the function.
+	 */
+	public static boolean hasMoreX(GeoFunction function) {
 			ExpressionNode expression = function.getFunctionExpression();
-			ExpressionNode leftTree = expression.getLeftTree();
-			return leftTree != null && leftTree.containsFreeFunctionVariable("x")
-					&& expression.getRightTree().containsFreeFunctionVariable("x");
+			if (expression == null) {
+				return false;
+			};
+
+			return containsX(expression.getLeftTree())
+					&& containsX(expression.getRightTree());
 		}
+
+	private static boolean containsX(ExpressionNode node) {
+		return node != null && node.containsFreeFunctionVariable("x");
+	}
 }
