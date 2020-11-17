@@ -124,7 +124,7 @@ import org.geogebra.common.util.debug.Log;
 			ExpressionNode expression = function.getFunctionExpression();
 			if (expression == null) {
 				return false;
-			};
+			}
 
 			return containsX(expression.getLeftTree())
 					&& containsX(expression.getRightTree());
