@@ -97,6 +97,7 @@ class Header extends FlowPanel implements KeyDownHandler {
 		ClickStartHandler.initDefaults(this, true, true);
 		setTabIndexes();
 		lastOrientation = app.isPortrait();
+		setStyleName("header");
 	}
 
 	private boolean maybeAddUndoRedoPanel() {

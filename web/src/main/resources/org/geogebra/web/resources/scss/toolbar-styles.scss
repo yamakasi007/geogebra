@@ -117,18 +117,6 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 
 			.rightSide {
 				float: right;
-
-				.contextMenu {
-					img {
-						opacity: 0.85;
-					}
-				}
-
-				.contextMenu:hover {
-					img {
-						opacity: 1;
-					}
-				}
 			}
 
 			.close {
@@ -137,8 +125,8 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 		}
 
 		.header-open-portrait,
+		.header-close-portrait,
 		.header-open-landscape {
-			@extend .header;
 
 			height: 56px;
 			width: 100%;
@@ -153,27 +141,17 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 			}
 		}
 
-		.header-open-portrait.examOk,
-		.header-open-landscape.examOk,
-		.header-close-portrait.examOk,
-		.header-close-landscape.examOk {
+		.header.examOk {
 			background-color: $teal-default;
 		}
 
-		.header-open-portrait.examCheat,
-		.header-open-landscape.examCheat,
-		.header-close-portrait.examCheat,
-		.header-close-landscape.examCheat {
+		.header.examCheat {
 			background-color: $exam-red;
 		}
 
 		.header-open-portrait {
 			.close {
 				margin-left: 10px;
-			}
-
-			.contextMenu {
-				margin-right: 10px;
 			}
 		}
 
@@ -182,16 +160,9 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 				float: left;
 				margin-right: 6px;
 			}
-
-			.contextMenu {
-				float: right;
-				margin-right: 10px;
-				margin-left: 0px;
-			}
 		}
 
 		.header-close-landscape {
-			@extend .header;
 
 			width: 56px;
 			min-width: 56px;
@@ -225,17 +196,12 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 				bottom: 4px;
 			}
 
-			.contextMenu {
-				display: none;
-			}
-
 			.selected {
 				border-bottom: none;
 			}
 		}
 
 		.header-close-portrait	{
-			@extend .header-open-landscape;
 			position: absolute;
 			bottom: 0;
 			height: 52px;
@@ -248,10 +214,6 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 
 			.close {
 				margin-left: 10px;
-			}
-
-			.contextMenu {
-				display: none;
 			}
 		}
 
