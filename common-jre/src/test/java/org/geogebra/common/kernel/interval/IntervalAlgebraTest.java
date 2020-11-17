@@ -169,11 +169,11 @@ public class IntervalAlgebraTest {
 				interval(-2, 0).pow(-3)));
 	}
 
-//	@Test
-//	public void testNegativeAndPositivePowerOfNegatives() {
-//		assertTrue(IntervalConstants.whole().almostEqual(
-//				interval(-2, 3).pow(-3)));
-//	}
+	@Test
+	public void testNegativeAndPositivePowerOfNegatives() {
+		assertTrue(IntervalConstants.whole().almostEqual(
+				interval(-2, 3).pow(-3)));
+	}
 
 	@Test
 	public void testSpecialPowerOfCases() {

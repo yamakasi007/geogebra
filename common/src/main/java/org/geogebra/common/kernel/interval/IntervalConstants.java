@@ -43,7 +43,6 @@ public class IntervalConstants {
 		return new Interval(NEGATIVE_INFINITY, POSITIVE_INFINITY);
 	}
 
-
 	/**
 	 *
 	 * @return a newly created PI interval.
