@@ -8,8 +8,6 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
-import org.geogebra.common.kernel.interval.IntervalTupleList;
-import org.geogebra.common.kernel.interval.LinearSpace;
 
 /**
  * Function plotter based on interval arithmetic
@@ -18,12 +16,10 @@ import org.geogebra.common.kernel.interval.LinearSpace;
  */
 public class IntervalPlotter implements CoordSystemAnimationListener {
 	private final EuclidianView view;
-	private IntervalFunctionSampler evaluator;
-	private IntervalTupleList points;
-	private IntervalTuple range;
 	private final GeneralPathClipped gp;
 	private boolean enabled;
 	private boolean moveTo;
+	private IntervalPlotModel model;
 
 	/**
 	 * Creates a disabled plotter
@@ -39,13 +35,18 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	 * Enables plotter
 	 */
 	public void enableFor(GeoFunction function) {
-		range = new IntervalTuple();
-		updateRanges();
-		int numberOfSamples = view.getWidth();
-		evaluator = new IntervalFunctionSampler(function, range, numberOfSamples);
-		updateEvaluator();
-		update();
+		createModel(function);
+		model.updateAll();
+		updatePath();
 		enabled = true;
+	}
+
+	private void createModel(GeoFunction function) {
+		IntervalTuple range = new IntervalTuple();
+		int numberOfSamples = view.getWidth();
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, numberOfSamples);
+		model = new IntervalPlotModel(range, sampler, view);
 	}
 
 	/**
@@ -55,20 +56,15 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 		updatePath();
 	}
 
-	private void updateRanges() {
-		range.x().set(view.getXmin(), view.getXmax());
-		range.y().set(view.getYmin(), view.getYmax());
-	}
-
 	private void updatePath() {
-		if (points.isEmpty()) {
+		if (model.isEmpty()) {
 			return;
 		}
 
 		gp.reset();
 
 		Interval lastY = new Interval();
-		for (IntervalTuple point: points) {
+		for (IntervalTuple point: model.getPoints()) {
 			if (point != null) {
 				plotInterval(lastY, point);
 			}
@@ -116,9 +112,7 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	 * Updates and recomputes all.
 	 */
 	public void updateEvaluator() {
-		updateRanges();
-		evaluator.update(range);
-		points = evaluator.result();
+		model.updateAll();
 		updatePath();
 	}
 
@@ -146,21 +140,6 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 
 	@Override
 	public void onCoordSystemMoved(double dx, double dy) {
-		double rwDx = dx / view.getXscale();
-		LinearSpace space = new LinearSpace();
-		int diffWidth = (int) Math.round(dx);
-		if (rwDx > 0) {
-			double xmin = view.getXmin();
-			Interval interval = new Interval(xmin, xmin + rwDx);
-			space.update(interval, diffWidth);
-		} else {
-			double xmax = view.getXmax();
-			Interval interval = new Interval(xmax + rwDx, xmax);
-			space.update(interval, -diffWidth);
-		}
 
-		IntervalTupleList result = evaluator.result(space);
-		points = result;
-		updatePath();
 	}
 }
