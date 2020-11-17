@@ -1,17 +1,16 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.euclidian.EuclidianView;
-import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 
 public class IntervalPath {
-	private final GeneralPathClipped gp;
+	private final IntervalPathPlotter gp;
 	private final EuclidianView view;
 	private final IntervalPlotModel model;
 	private boolean moveTo;
 
-	public IntervalPath(GeneralPathClipped gp, EuclidianView view, IntervalPlotModel model) {
+	public IntervalPath(IntervalPathPlotter gp, EuclidianView view, IntervalPlotModel model) {
 		this.gp = gp;
 		this.view = view;
 		this.model = model;

@@ -14,7 +14,7 @@ import org.geogebra.common.kernel.interval.IntervalTuple;
  */
 public class IntervalPlotter {
 	private final EuclidianView view;
-	private final GeneralPathClipped gp;
+	private final IntervalPathPlotter gp;
 	private boolean enabled;
 	private IntervalPlotModel model;
 	private IntervalPlotController controller;
@@ -24,7 +24,7 @@ public class IntervalPlotter {
 	 */
 	public IntervalPlotter(EuclidianView view, GeneralPathClipped gp) {
 		this.view = view;
-		this.gp = gp;
+		this.gp = new IntervalPathPlotterImpl(gp);
 		this.enabled = false;
 	}
 
@@ -65,7 +65,7 @@ public class IntervalPlotter {
 	 * @param g2 {@link GGraphics2D}
 	 */
 	public void draw(GGraphics2D g2) {
-		g2.draw(gp);
+		gp.draw(g2);
 	}
 
 	/**
