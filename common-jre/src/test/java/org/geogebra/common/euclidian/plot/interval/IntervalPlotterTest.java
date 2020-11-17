@@ -42,6 +42,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		return new IntervalFunctionSampler(function, range, NUMBER_OF_SAMPLES);
 	}
 
+
 	private IntervalPlotModel createModel(IntervalTuple range, IntervalFunctionSampler sampler) {
 		return new IntervalPlotModel(range, sampler, view);
 	}
