@@ -7,20 +7,16 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 
 	private final IntervalPlotModel model;
 	private final EuclidianView view;
-	private final IntervalPath path;
 
-	public IntervalPlotController(IntervalPlotModel model, EuclidianView view, IntervalPath path) {
-
+	public IntervalPlotController(IntervalPlotModel model, EuclidianView view) {
 		this.model = model;
 		this.view = view;
-		this.path = path;
 		view.getEuclidianController().addZoomerAnimationListener(this);
 	}
 
 	@Override
 	public void onZoomStop() {
 		model.updateAll();
-		path.update();
 	}
 
 	@Override

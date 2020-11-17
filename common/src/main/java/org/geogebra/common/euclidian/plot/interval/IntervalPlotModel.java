@@ -6,21 +6,28 @@ import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
 
 public class IntervalPlotModel {
-	private IntervalTuple range;
-	private IntervalFunctionSampler sampler;
+	private final IntervalTuple range;
+	private final IntervalFunctionSampler sampler;
 	private IntervalTupleList points;
+	private IntervalPath path;
 	private final EuclidianView view;
 
 	public IntervalPlotModel(IntervalTuple range,
-			IntervalFunctionSampler sampler, EuclidianView view) {
+			IntervalFunctionSampler sampler,
+			EuclidianView view) {
 		this.range = range;
 		this.sampler = sampler;
 		this.view = view;
 	}
 
+	public void setPath(IntervalPath path) {
+		this.path = path;
+	}
+
 	public void updateAll() {
 		updateRanges();
 		updateSampler();
+		updatePath();
 	}
 
 	private void updateRanges() {
@@ -39,5 +46,9 @@ public class IntervalPlotModel {
 
 	public IntervalTupleList getPoints() {
 		return points;
+	}
+
+	public void updatePath() {
+		path.update();
 	}
 }

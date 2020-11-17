@@ -17,7 +17,6 @@ public class IntervalPlotter {
 	private final GeneralPathClipped gp;
 	private boolean enabled;
 	private IntervalPlotModel model;
-	private IntervalPath path;
 	private IntervalPlotController controller;
 
 	/**
@@ -35,18 +34,12 @@ public class IntervalPlotter {
 	public void enableFor(GeoFunction function) {
 		enabled = true;
 		createModel(function);
-		createPath();
 		createController();
 		model.updateAll();
-		path.update();
 	}
 
 	private void createController() {
-		controller = new IntervalPlotController(model, view, path);
-	}
-
-	private void createPath() {
-		path = new IntervalPath(gp, view, model);
+		controller = new IntervalPlotController(model, view);
 	}
 
 	private void createModel(GeoFunction function) {
@@ -55,21 +48,15 @@ public class IntervalPlotter {
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, numberOfSamples);
 		model = new IntervalPlotModel(range, sampler, view);
+		IntervalPath path = new IntervalPath(gp, view, model);
+		model.setPath(path);
 	}
 
 	/**
 	 * Update path to draw.
 	 */
 	public void update() {
-		path.update();
-	}
-
-	/**
-	 * Updates and recomputes all.
-	 */
-	public void updateEvaluator() {
-		model.updateAll();
-		path.update();
+		model.updatePath();
 	}
 
 	/**
