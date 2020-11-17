@@ -1,11 +1,9 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.awt.GGraphics2D;
-import org.geogebra.common.euclidian.CoordSystemAnimationListener;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 
@@ -14,12 +12,13 @@ import org.geogebra.common.kernel.interval.IntervalTuple;
  *
  * @author laszlo
  */
-public class IntervalPlotter implements CoordSystemAnimationListener {
+public class IntervalPlotter {
 	private final EuclidianView view;
 	private final GeneralPathClipped gp;
 	private boolean enabled;
-	private boolean moveTo;
 	private IntervalPlotModel model;
+	private IntervalPath path;
+	private IntervalPlotController controller;
 
 	/**
 	 * Creates a disabled plotter
@@ -28,17 +27,26 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 		this.view = view;
 		this.gp = gp;
 		this.enabled = false;
-		view.getEuclidianController().addZoomerAnimationListener(this);
 	}
 
 	/**
 	 * Enables plotter
 	 */
 	public void enableFor(GeoFunction function) {
-		createModel(function);
-		model.updateAll();
-		updatePath();
 		enabled = true;
+		createModel(function);
+		createPath();
+		createController();
+		model.updateAll();
+		path.update();
+	}
+
+	private void createController() {
+		controller = new IntervalPlotController(model, view, path);
+	}
+
+	private void createPath() {
+		path = new IntervalPath(gp, view, model);
 	}
 
 	private void createModel(GeoFunction function) {
@@ -53,59 +61,7 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	 * Update path to draw.
 	 */
 	public void update() {
-		updatePath();
-	}
-
-	private void updatePath() {
-		if (model.isEmpty()) {
-			return;
-		}
-
-		gp.reset();
-
-		Interval lastY = new Interval();
-		for (IntervalTuple point: model.getPoints()) {
-			if (point != null) {
-				plotInterval(lastY, point);
-			}
-
-			moveTo = point == null;
-		}
-	}
-
-	private void plotInterval(Interval lastY, IntervalTuple point) {
-		Interval x = view.toScreenIntervalX(point.x());
-		Interval y = view.toScreenIntervalY(point.y());
-		if (y.isGreaterThan(lastY)) {
-			plotHigh(x, y);
-		} else {
-			plotLow(x, y);
-		}
-
-		lastY.set(y);
-	}
-
-	private void plotHigh(Interval x, Interval y) {
-		if (moveTo) {
-			gp.moveTo(x.getLow(), y.getLow());
-		} else {
-			lineTo(x.getLow(), y.getLow());
-		}
-
-		lineTo(x.getHigh(), y.getHigh());
-	}
-
-	private void plotLow(Interval x, Interval y) {
-		if (moveTo) {
-			gp.moveTo(x.getLow(), y.getHigh());
-		} else {
-			lineTo(x.getLow(), y.getHigh());
-		}
-		lineTo(x.getHigh(), y.getLow());
-	}
-
-	private void lineTo(double low, double high) {
-		gp.lineTo(low, high);
+		path.update();
 	}
 
 	/**
@@ -113,7 +69,7 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	 */
 	public void updateEvaluator() {
 		model.updateAll();
-		updatePath();
+		path.update();
 	}
 
 	/**
@@ -131,15 +87,5 @@ public class IntervalPlotter implements CoordSystemAnimationListener {
 	 */
 	public boolean isEnabled() {
 		return enabled;
-	}
-
-	@Override
-	public void onZoomStop() {
-		updateEvaluator();
-	}
-
-	@Override
-	public void onCoordSystemMoved(double dx, double dy) {
-
 	}
 }
