@@ -123,13 +123,11 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 			return true;
 		}
 
-		if (o == null || getClass() != o.getClass()) {
-			return false;
+		if (o instanceof Interval) {
+			return almostEqual((Interval)o);
 		}
+		return false;
 
-		Interval interval = (Interval) o;
-		return Double.compare(interval.low, low) == 0
-				&& Double.compare(interval.high, high) == 0;
 	}
 
 	@Override

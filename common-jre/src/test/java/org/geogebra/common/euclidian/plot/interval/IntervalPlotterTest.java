@@ -6,7 +6,6 @@ import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.jre.headless.AppCommon;
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.junit.Before;
@@ -28,8 +27,9 @@ public class IntervalPlotterTest extends BaseUnitTest {
 
 	@Test
 	public void testEqualsSin() {
-		IntervalTuple range = createRange(-4.0, 4.0, -3.0, 3.0);
-		IntervalPlotModel model = createModel(range, createSampler("sin(x)", range));
+		IntervalTuple range = PlotterUtils.createRange(-4.0, 4.0, -3.0, 3.0);
+		IntervalPlotModel model = PlotterUtils.createModel(range, createSampler("sin(x)",
+				range), view);
 		IntervalPath path = new IntervalPath(gp, view, model);
 		model.setPath(path);
 		model.updateAll();
@@ -40,16 +40,5 @@ public class IntervalPlotterTest extends BaseUnitTest {
 			IntervalTuple range) {
 		GeoFunction function = add(functionString);
 		return new IntervalFunctionSampler(function, range, NUMBER_OF_SAMPLES);
-	}
-
-
-	private IntervalPlotModel createModel(IntervalTuple range, IntervalFunctionSampler sampler) {
-		return new IntervalPlotModel(range, sampler, view);
-	}
-
-	private IntervalTuple createRange(double lowX, double highX, double lowY, double highY) {
-		Interval x = new Interval(lowX, highX);
-		Interval y = new Interval(lowY, highY);
-		return new IntervalTuple(x, y);
 	}
 }

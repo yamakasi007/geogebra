@@ -52,4 +52,13 @@ public class IntervalTuple {
 	public Interval y() {
 		return y;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IntervalTuple) {
+			IntervalTuple other = (IntervalTuple) obj;
+			return x.equals(other.x) && y.equals(other.y);
+		}
+		return super.equals(obj);
+	}
 }

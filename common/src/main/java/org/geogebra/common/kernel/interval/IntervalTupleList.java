@@ -52,4 +52,17 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
+
+	public void append(IntervalTupleList list) {
+		this.list.addAll(list.list);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IntervalTupleList) {
+			IntervalTupleList other = (IntervalTupleList) obj;
+			return list.equals(other.list);
+		}
+		return super.equals(obj);
+	}
 }
