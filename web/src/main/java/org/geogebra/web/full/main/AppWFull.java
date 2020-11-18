@@ -1851,6 +1851,7 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 			this.setSpHeight(newHeight);
 			if (oldSplitLayoutPanel != null) {
 				oldSplitLayoutPanel.setHeight(getSpHeight() + "px");
+				getGuiManager().getLayout().getDockManager().resizeProbabilityCalculator();
 				getGuiManager().updateUnbundledToolbar();
 			}
 		}
