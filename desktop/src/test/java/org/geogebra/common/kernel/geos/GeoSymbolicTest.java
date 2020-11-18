@@ -1306,4 +1306,11 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		t("Quartile1({2,3,3})", "2");
 		t("Quartile3({2,3,3})", "3");
 	}
+
+	@Test
+	public void testNestedFunction() {
+		add("f(x)=1+7*e^(-0.2x)");
+		GeoSymbolic nestedFunction = add("r(s)=s*(f(s)-1)");
+		assertThat(nestedFunction.getTwinGeo(), instanceOf(GeoFunction.class));
+	}
 }
