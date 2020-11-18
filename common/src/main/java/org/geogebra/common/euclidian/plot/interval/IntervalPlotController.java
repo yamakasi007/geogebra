@@ -23,4 +23,8 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 	public void onCoordSystemMoved(double dx, double dy) {
 
 	}
+
+	public void moveByWorldCoordinatesX(double dx) {
+
+	}
 }

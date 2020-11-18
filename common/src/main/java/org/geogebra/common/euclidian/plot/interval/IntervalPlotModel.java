@@ -35,7 +35,7 @@ public class IntervalPlotModel {
 		range.y().set(view.getYmin(), view.getYmax());
 	}
 
-	private void updateSampler() {
+	void updateSampler() {
 		sampler.update(range);
 		points = sampler.result();
 	}
@@ -51,4 +51,5 @@ public class IntervalPlotModel {
 	public void updatePath() {
 		path.update();
 	}
+
 }

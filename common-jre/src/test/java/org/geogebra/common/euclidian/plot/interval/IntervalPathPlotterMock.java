@@ -34,5 +34,13 @@ public class IntervalPathPlotterMock implements IntervalPathPlotter {
 	public String getLog() {
 		return StringUtil.join(",", log);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IntervalPathPlotterMock) {
+			return getLog().equals(((IntervalPathPlotterMock) obj).getLog());
+		}
+		return super.equals(obj);
+	}
 }
 

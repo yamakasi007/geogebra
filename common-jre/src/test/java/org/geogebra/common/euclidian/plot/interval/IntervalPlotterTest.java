@@ -1,5 +1,7 @@
 package org.geogebra.common.euclidian.plot.interval;
 
+import static org.geogebra.common.euclidian.plot.interval.PlotterUtils.createModel;
+import static org.geogebra.common.euclidian.plot.interval.PlotterUtils.createRange;
 import static org.junit.Assert.assertEquals;
 
 import org.geogebra.common.BaseUnitTest;
@@ -16,24 +18,34 @@ public class IntervalPlotterTest extends BaseUnitTest {
 	private IntervalPlotController controller;
 	private AppCommon app;
 	private EuclidianView view;
-	private IntervalPathPlotterMock gp;
 
 	@Before
 	public void setUp() {
 		app = getApp();
 		view = getApp().getActiveEuclidianView();
-		gp = new IntervalPathPlotterMock();
 	}
 
 	@Test
-	public void testEqualsSin() {
-		IntervalTuple range = PlotterUtils.createRange(-4.0, 4.0, -3.0, 3.0);
-		IntervalPlotModel model = PlotterUtils.createModel(range, createSampler("sin(x)",
+	public void testMoveSinBy() {
+		IntervalPathPlotterMock plotter = new IntervalPathPlotterMock();
+		IntervalPathPlotterMock plotterExpected = new IntervalPathPlotterMock();
+		IntervalPlotModel model = newSinModel(-5.0, 5.0, plotter);
+		IntervalPlotModel expectedModel = newSinModel(-4.5, 5.5, plotterExpected);
+		IntervalPlotController controller = new IntervalPlotController(model, view);
+		controller.moveByWorldCoordinatesX(0.5);
+		assertEquals(plotter.getLog(), plotterExpected.getLog());
+	}
+
+	private IntervalPlotModel newSinModel(double low, double high, IntervalPathPlotterMock gp) {
+		IntervalTuple range = createRange(low, high, -3.0, 3.0);
+		IntervalPlotModel model = createModel(range, createSampler("sin(x)",
 				range), view);
 		IntervalPath path = new IntervalPath(gp, view, model);
 		model.setPath(path);
-		model.updateAll();
-		assertEquals("", gp.getLog());
+		model.updateSampler();
+		model.updatePath();
+		return model;
+
 	}
 
 	private IntervalFunctionSampler createSampler(String functionString,
