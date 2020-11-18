@@ -12,7 +12,6 @@ import org.geogebra.web.html5.gui.util.AriaHelper;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -193,12 +192,10 @@ public class ToolsTab extends ToolbarPanel.ToolbarTab {
 		if (w < 0) {
 			return;
 		}
-		setWidth(2 * w + "px");
-		getElement().getStyle().setLeft(w, Unit.PX);
+		setWidth(w + "px");
 
 		sp.setWidth(w + "px");
-		double height = (app.isPortrait() ? toolbarPanel.getOffsetHeight() : app.getHeight())
-				- ToolbarPanel.CLOSED_HEIGHT_PORTRAIT;
+		double height = toolbarPanel.getTabHeight();
 		if (height >= 0) {
 			sp.setHeight(height + "px");
 		}

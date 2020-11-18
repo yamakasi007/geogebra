@@ -44,40 +44,27 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * 
  * @author Laszlo Gal
- *
  */
 public class ToolbarPanel extends FlowPanel
 		implements MyModeChangedListener, SideBarAccessibilityAdapter {
 	/** vertical offset for shadow */
 	public static final int VSHADOW_OFFSET = 4;
-
-	private static final int MIN_ROWS_WITHOUT_KEYBOARD = 5;
-
-	private static final int MIN_ROWS_WITH_KEYBOARD = 3;
-
-	private static final int HDRAGGER_WIDTH = 8;
-
-	private static final int OPEN_ANIM_TIME = 200;
-
 	/** Closed width of header in landscape mode */
 	public static final int CLOSED_WIDTH_LANDSCAPE = 56;
-
 	/** Min width of open header in landscape mode */
 	public static final int OPEN_MIN_WIDTH_LANDSCAPE = 160;
-
 	/** Closed height of header in portrait mode */
 	public static final int CLOSED_HEIGHT_PORTRAIT = 56;
-
-	/** Application */
-	private AppW app;
-
-	private EventDispatcher eventDispatcher;
-
+	private static final int MIN_ROWS_WITHOUT_KEYBOARD = 5;
+	private static final int MIN_ROWS_WITH_KEYBOARD = 3;
+	private static final int HDRAGGER_WIDTH = 8;
+	private static final int OPEN_ANIM_TIME = 200;
 	/** Header of the panel with buttons and tabs */
 	Header header;
-
+	/** Application */
+	private AppW app;
+	private EventDispatcher eventDispatcher;
 	private FlowPanel main;
 	private int tabCount = 0;
 	private StandardButton moveBtn;
@@ -90,6 +77,20 @@ public class ToolbarPanel extends FlowPanel
 	private ScheduledCommand deferredOnRes = this::resize;
 
 	/**
+	 * @param app .
+	 */
+	public ToolbarPanel(AppW app) {
+		this.app = app;
+		eventDispatcher = app.getEventDispatcher();
+		app.getActiveEuclidianView().getEuclidianController()
+				.setModeChangeListener(this);
+		initGUI();
+		initClickStartHandler();
+		((AccessibilityManagerW) app.getAccessibilityManager())
+				.setMenuContainer(this);
+	}
+
+	/**
 	 * Selects MODE_MOVE as mode and changes visual settings accordingly of
 	 * this.
 	 */
@@ -99,9 +100,7 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Changes visual settings of selected mode.
-	 * 
-	 * @param mode
-	 *            the mode will be selected
+	 * @param mode the mode will be selected
 	 */
 	public void setMode(int mode) {
 		tabTools.setMode(mode);
@@ -120,79 +119,6 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void updateUndoRedoPosition() {
 		header.updateUndoRedoPosition();
-	}
-
-	/**
-	 * Base class for Toolbar Tabs-
-	 * 
-	 * @author Laszlo
-	 *
-	 */
-	public abstract static class ToolbarTab extends ScrollPanel {
-		/** Constructor */
-		public ToolbarTab() {
-			setSize("100%", "100%");
-			setAlwaysShowScrollBars(false);
-		}
-
-		/**
-		 * Opens the tab.
-		 */
-		public abstract void open();
-
-		/**
-		 * Closes the tab.
-		 */
-		public abstract void close();
-
-		@Override
-		public void onResize() {
-			setHeight("100%");
-		}
-
-		/**
-		 * Set tab the active one.
-		 * 
-		 * @param active
-		 *            to set.
-		 */
-		public void setActive(boolean active) {
-			Dom.toggleClass(this, "tab", "tab-hidden", active);
-			if (active) {
-				onActive();
-			}
-		}
-
-		/**
-		 * Sets if tab should fade during animation or not.
-		 * 
-		 * @param fade
-		 *            to set.
-		 */
-		public void setFade(boolean fade) {
-			setStyleName("tabFade", fade);
-		}
-
-		/**
-		 * Called when tab is activated.
-		 */
-		protected abstract void onActive();
-	}
-
-	/**
-	 * 
-	 * @param app
-	 *            .
-	 */
-	public ToolbarPanel(AppW app) {
-		this.app = app;
-		eventDispatcher = app.getEventDispatcher();
-		app.getActiveEuclidianView().getEuclidianController()
-				.setModeChangeListener(this);
-		initGUI();
-		initClickStartHandler();
-		((AccessibilityManagerW) app.getAccessibilityManager())
-				.setMenuContainer(this);
 	}
 
 	/**
@@ -217,15 +143,19 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
 	 * @return width of one tab.
 	 */
 	public int getTabWidth() {
-		int w = header.getOffsetWidth();
+		int w = this.getOffsetWidth() - (app.isPortrait() ? 0 : CLOSED_WIDTH_LANDSCAPE);
 		if (isAnimating() && !app.isPortrait()) {
 			w -= HDRAGGER_WIDTH;
 		}
 		return Math.max(w, 0);
+	}
+
+	public int getTabHeight() {
+		return getOffsetHeight()
+				- (app.isPortrait() ? ToolbarPanel.CLOSED_HEIGHT_PORTRAIT : 0);
 	}
 
 	private void initClickStartHandler() {
@@ -276,7 +206,6 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
 	 * @return the height of open toolbar in portrait mode.
 	 */
 	int getOpenHeightInPortrait() {
@@ -569,12 +498,9 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param ttLeft
-	 *            - tooltip left
-	 * @param width
-	 *            - width
-	 * @param isSmall
-	 *            - is small tooltip
+	 * @param ttLeft - tooltip left
+	 * @param width - width
+	 * @param isSmall - is small tooltip
 	 * @return true if was moved
 	 */
 	public boolean moveMoveFloatingButtonUpWithTooltip(int ttLeft, int width,
@@ -600,10 +526,8 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param isSmall
-	 *            - is small tooltip
-	 * @param wasMoved
-	 *            - true if was moved
+	 * @param isSmall - is small tooltip
+	 * @param wasMoved - true if was moved
 	 */
 	public void moveMoveFloatingButtonDownWithTooltip(boolean isSmall,
 			boolean wasMoved) {
@@ -628,7 +552,6 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Just for convince.
-	 * 
 	 * @return if toolbar is closed or not.
 	 */
 	public boolean isClosed() {
@@ -643,15 +566,13 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param expanded
-	 *            whether menu is open
+	 * @param expanded whether menu is open
 	 */
 	public void markMenuAsExpanded(boolean expanded) {
 		header.markMenuAsExpanded(expanded);
 	}
 
 	/**
-	 * 
 	 * @return the last width when toolbar was open.
 	 */
 	Integer getLastOpenWidth() {
@@ -659,9 +580,7 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
-	 * @param value
-	 *            to set.
+	 * @param value to set.
 	 */
 	void setLastOpenWidth(Integer value) {
 		this.lastOpenWidth = value;
@@ -669,9 +588,7 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Opens algebra tab.
-	 * 
-	 * @param fade
-	 *            decides if tab should fade during animation.
+	 * @param fade decides if tab should fade during animation.
 	 */
 	public void openAlgebra(boolean fade) {
 		if (this.getSelectedTabId() == TabIds.TABLE) {
@@ -700,9 +617,7 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Opens tools tab.
-	 * 
-	 * @param fade
-	 *            decides if tab should fade during animation.
+	 * @param fade decides if tab should fade during animation.
 	 */
 	public void openTools(boolean fade) {
 		if (!app.showToolBar()) {
@@ -723,12 +638,8 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Opens tools tab.
-	 * 
-	 * @param geo
-	 *            to ensure to be visible.
-	 * 
-	 * @param fade
-	 *            decides if tab should fade during animation.
+	 * @param geo to ensure to be visible.
+	 * @param fade decides if tab should fade during animation.
 	 */
 	public void openTableView(@Nullable GeoEvaluatable geo, boolean fade) {
 		if (!app.showToolBar() || !app.getConfig().hasTableView()) {
@@ -775,9 +686,11 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	protected void onOpen() {
 		resizeTabs();
-		main.getElement().getStyle().setProperty("height", "calc(100% - 56px)");
+		main.getElement().getStyle().setProperty("height", "100%");
 		main.getElement().getStyle().setProperty("width",
 				(tabCount * 100) + "%");
+		main.getElement().getStyle().setProperty("left",
+				app.isPortrait() ? "0" : "56px");
 	}
 
 	/**
@@ -819,7 +732,6 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
 	 * @return true if AV is selected and ready to use.
 	 */
 	public boolean isAlgebraViewActive() {
@@ -836,7 +748,6 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
 	 * @return the selected tab id.
 	 */
 	public TabIds getSelectedTabId() {
@@ -844,16 +755,13 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
-	 * @param tabId
-	 *            to set.
+	 * @param tabId to set.
 	 */
 	public void setSelectedTabId(TabIds tabId) {
 		this.getToolbarDockPanel().doSetTabId(tabId);
 	}
 
 	/**
-	 * 
 	 * @return The height that AV should have minimally in portrait mode.
 	 */
 	public double getMinVHeight() {
@@ -880,7 +788,6 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * @return keyboard listener of AV.
-	 * 
 	 */
 	public MathKeyboardListener getKeyboardListener() {
 		if (tabAlgebra == null
@@ -891,8 +798,7 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param ml
-	 *            to update.
+	 * @param ml to update.
 	 * @return the updated listener.
 	 */
 	public MathKeyboardListener updateKeyboardListener(
@@ -902,7 +808,6 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
 	 * @return if toolbar is animating or not.
 	 */
 	public boolean isAnimating() {
@@ -924,8 +829,7 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @param style
-	 *            style to change color of header (teal -> ok, red -> cheating)
+	 * @param style style to change color of header (teal -> ok, red -> cheating)
 	 */
 	public void setHeaderStyle(String style) {
 		resetHeaderStyle();
@@ -934,7 +838,7 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void initInfoBtnAction() {
 		header.initInfoBtnAction();
@@ -1001,9 +905,7 @@ public class ToolbarPanel extends FlowPanel
 
 	/**
 	 * Sets if current tab should animate or not.
-	 * 
-	 * @param fade
-	 *            to set.
+	 * @param fade to set.
 	 */
 	public void setFadeTabs(boolean fade) {
 		tabAlgebra.setFade(fade);
@@ -1046,14 +948,14 @@ public class ToolbarPanel extends FlowPanel
 	@Nullable
 	public ToolbarTab getTab(int tabIdentifier) {
 		switch (tabIdentifier) {
-			case App.VIEW_ALGEBRA:
-				return getAlgebraTab();
-			case App.VIEW_TOOLS:
-				return getToolsTab();
-			case App.VIEW_TABLE:
-				return getTableTab();
-			case App.VIEW_SIDE_PANEL:
-				return getTabContainer();
+		case App.VIEW_ALGEBRA:
+			return getAlgebraTab();
+		case App.VIEW_TOOLS:
+			return getToolsTab();
+		case App.VIEW_TABLE:
+			return getTableTab();
+		case App.VIEW_SIDE_PANEL:
+			return getTabContainer();
 		}
 		return null;
 	}
@@ -1083,6 +985,68 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	private void updatePanelVisibility(boolean isVisible) {
-		app.getGuiManager().setShowView(isVisible, App.VIEW_ALGEBRA);
+		app.getGuiManager().setShowView(isVisible, getActiveView());
+	}
+
+	private int getActiveView() {
+		switch (getSelectedTabId()) {
+		case TABLE:
+			return App.VIEW_TABLE;
+		case TOOLS:
+			return App.VIEW_TOOLS;
+		default:
+			return App.VIEW_ALGEBRA;
+		}
+	}
+
+	/**
+	 * Base class for Toolbar Tabs-
+	 * @author Laszlo
+	 */
+	public abstract static class ToolbarTab extends ScrollPanel {
+		/** Constructor */
+		public ToolbarTab() {
+			setSize("100%", "100%");
+			setAlwaysShowScrollBars(false);
+		}
+
+		/**
+		 * Opens the tab.
+		 */
+		public abstract void open();
+
+		/**
+		 * Closes the tab.
+		 */
+		public abstract void close();
+
+		@Override
+		public void onResize() {
+			setHeight("100%");
+		}
+
+		/**
+		 * Set tab the active one.
+		 * @param active to set.
+		 */
+		public void setActive(boolean active) {
+			Dom.toggleClass(this, "tab", "tab-hidden", active);
+			if (active) {
+				onActive();
+			}
+		}
+
+		/**
+		 * Sets if tab should fade during animation or not.
+		 * @param fade to set.
+		 */
+		public void setFade(boolean fade) {
+			setStyleName("tabFade", fade);
+		}
+
+		/**
+		 * Called when tab is activated.
+		 */
+		protected abstract void onActive();
 	}
 }

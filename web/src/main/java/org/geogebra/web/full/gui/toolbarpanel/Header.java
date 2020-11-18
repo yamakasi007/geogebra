@@ -6,6 +6,7 @@ import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.io.layout.DockPanelData.TabIds;
 import org.geogebra.common.io.layout.PerspectiveDecoder;
 import org.geogebra.common.util.AsyncOperation;
+import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.exam.ExamLogAndExitDialog;
 import org.geogebra.web.full.gui.menubar.FileMenuW;
@@ -47,13 +48,9 @@ class Header extends FlowPanel implements KeyDownHandler {
 	private MyToggleButton btnAlgebra;
 	private MyToggleButton btnTools;
 	private MyToggleButton btnTableView;
-	private MyToggleButton btnClose;
-	private Image imgClose;
-	private Image imgOpen;
 	private Image imgMenu;
 	private FlowPanel contents;
 	private FlowPanel center;
-	private FlowPanel rightSide;
 	/**
 	 * panel containing undo and redo
 	 */
@@ -90,7 +87,7 @@ class Header extends FlowPanel implements KeyDownHandler {
 		if (app.getAppletParameters().getDataParamShowMenuBar(false)) {
 			createMenuButton();
 		}
-		createRightSide();
+		imgMenu = new Image();
 		createCenter();
 		maybeAddUndoRedoPanel();
 		setLabels();
@@ -208,6 +205,9 @@ class Header extends FlowPanel implements KeyDownHandler {
 	protected void onAlgebraPressed() {
 		if (!isOpen()) {
 			toolbarPanel.setFadeTabs(false);
+		} else if (toolbarPanel.getSelectedTabId() == TabIds.ALGEBRA) {
+			onClosePressed();
+			return;
 		}
 		toolbarPanel.openAlgebra(isOpen());
 		app.setKeyboardNeeded(true);
@@ -221,6 +221,9 @@ class Header extends FlowPanel implements KeyDownHandler {
 	protected void onToolsPressed() {
 		if (!isOpen()) {
 			toolbarPanel.setFadeTabs(false);
+		} else if (toolbarPanel.getSelectedTabId() == TabIds.TOOLS) {
+			onClosePressed();
+			return;
 		}
 		app.setKeyboardNeeded(false);
 		toolbarPanel.getFrame().keyBoardNeeded(false, null);
@@ -234,6 +237,9 @@ class Header extends FlowPanel implements KeyDownHandler {
 	protected void onTableViewPressed() {
 		if (!isOpen()) {
 			toolbarPanel.setFadeTabs(false);
+		} else if (toolbarPanel.getSelectedTabId() == TabIds.TABLE) {
+			onClosePressed();
+			return;
 		}
 		app.setKeyboardNeeded(false);
 		toolbarPanel.getFrame().keyBoardNeeded(false, null);
@@ -320,7 +326,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 			setTitle(btnTableView, "Table");
 		}
 		setTitle(btnAlgebra, app.getConfig().getAVTitle());
-		setTitle(btnClose, isOpen() ? "Close" : "Open");
 		setTitle(btnUndo, "Undo");
 		setTitle(btnRedo, "Redo");
 
@@ -386,50 +391,13 @@ class Header extends FlowPanel implements KeyDownHandler {
 		toolbarPanel.setSelectedTabId(tabId);
 	}
 
-	private void createRightSide() {
-		imgClose = new Image();
-		imgOpen = new Image();
-		imgMenu = new Image();
-		updateButtonImages();
-		btnClose = new MyToggleButton(app);
-		btnClose.addStyleName("flatButton");
-		btnClose.addStyleName("close");
-
-		ClickStartHandler.init(btnClose, new ClickStartHandler(true, true) {
-
-			@Override
-			public void onClickStart(int x, int y, PointerEventType type) {
-				onClosePressed();
-			}
-		});
-
-		btnClose.addKeyDownHandler(this);
-
-		rightSide = new FlowPanel();
-		rightSide.add(btnClose);
-		rightSide.addStyleName("rightSide");
-		contents.add(rightSide);
-	}
-
 	private void updateButtonImages() {
 		if (app.isPortrait()) {
-			setResource(imgOpen,
-					MaterialDesignResources.INSTANCE
-							.toolbar_open_portrait_white());
-			setResource(imgClose,
-					MaterialDesignResources.INSTANCE
-							.toolbar_close_portrait_white());
 			if (!needsHeader()) {
 				setResource(imgMenu,
 						MaterialDesignResources.INSTANCE.toolbar_menu_black());
 			}
 		} else {
-			setResource(imgOpen,
-					MaterialDesignResources.INSTANCE
-							.toolbar_open_landscape_white());
-			setResource(imgClose,
-					MaterialDesignResources.INSTANCE
-							.toolbar_close_landscape_white());
 			if (!needsHeader()) {
 				setResource(imgMenu,
 					MaterialDesignResources.INSTANCE.toolbar_menu_white());
@@ -439,9 +407,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 			setResource(imgMenu,
 					MaterialDesignResources.INSTANCE.toolbar_menu_black());
 		}
-
-		imgOpen.setAltText(app.getLocalization().getMenu("Open"));
-		imgClose.setAltText(app.getLocalization().getMenu("Close"));
 	}
 
 	private static void setResource(Image img, SVGResource svg) {
@@ -556,7 +521,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		if (center != null) {
 			center.removeStyleName("hidden");
 		}
-		rightSide.removeStyleName("hidden");
 	}
 
 	/**
@@ -566,7 +530,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		if (center != null) {
 			center.addStyleName("hidden");
 		}
-		rightSide.addStyleName("hidden");
 	}
 
 	/**
@@ -666,8 +629,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		if (isOpen()) {
 			removeCloseStyles();
 			addStyleName("header-open-" + orientation);
-			btnClose.getUpFace().setImage(imgClose);
-			btnClose.setTitle(app.getLocalization().getMenu("Close"));
 			if (!app.isPortrait()) {
 				clearHeight();
 				clearWidth();
@@ -675,8 +636,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		} else {
 			removeOpenStyles();
 			addStyleName("header-close-" + orientation);
-			btnClose.getUpFace().setImage(imgOpen);
-			btnClose.setTitle(app.getLocalization().getMenu("Open"));
 		}
 
 		updateMenuButtonStyle();
@@ -716,7 +675,7 @@ class Header extends FlowPanel implements KeyDownHandler {
 			h = OPEN_HEIGHT;
 		} else {
 			h = getOffsetHeight() - getMenuButtonHeight()
-					- btnClose.getOffsetHeight() - 2 * PADDING;
+					- 2 * PADDING;
 		}
 
 		if (h > 0 && center != null) {
@@ -822,8 +781,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		if (focusableMenuButton != null) {
 			focusableMenuButton.attachTo(app);
 		}
-		tabIndex(btnClose, AccessibilityGroup.ALGEBRA_CLOSE);
-
 		tabIndex(btnUndo, AccessibilityGroup.UNDO);
 		tabIndex(btnRedo, AccessibilityGroup.REDO);
 		setAltTexts();
@@ -849,8 +806,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 			onAlgebraPressed();
 		} else if (source == btnTools) {
 			onToolsPressed();
-		} else if (source == btnClose) {
-			onClosePressed();
 		} else if (source == btnUndo) {
 			onUndoPressed();
 		} else if (source == btnRedo) {
