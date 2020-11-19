@@ -32,7 +32,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel model = newSinModel(-5.0, 5.0, plotter);
 		IntervalPlotModel expectedModel = newSinModel(-4.5, 5.5, plotterExpected);
 		IntervalPlotController controller = new IntervalPlotController(model, view);
-		controller.moveByWorldCoordinatesX(0.5);
+		controller.moveXByPixel(15);
 		assertEquals(plotter.getLog(), plotterExpected.getLog());
 	}
 

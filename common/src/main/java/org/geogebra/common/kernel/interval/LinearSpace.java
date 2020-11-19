@@ -11,6 +11,9 @@ import java.util.List;
 public class LinearSpace {
 	public List<Double> values;
 	private double scale;
+	private Interval interval;
+	private int count;
+	private double step;
 
 	public LinearSpace() {
 		values = new ArrayList<>();
@@ -22,8 +25,11 @@ public class LinearSpace {
 	 * @param count of the interval to divide.
 	 */
 	public void update(Interval interval, int count) {
+		this.interval = interval;
+		this.count = count;
 		values.clear();
-		fill(interval.getLow(), interval.getHigh(), interval.getWidth() / count);
+		step = interval.getWidth() / count;
+		fill(interval.getLow(), interval.getHigh(), step);
 		scale = values.size() > 2 ? values.get(1) - values.get(0) : 0;
 	}
 
@@ -49,5 +55,40 @@ public class LinearSpace {
 	 */
 	public double getScale() {
 		return scale;
+	}
+
+	public LinearSpace shiftBy(double delta) {
+		double high = this.interval.getHigh();
+		Interval intervalAdded = new Interval(high, high + delta);
+		double t = intervalAdded.getLow();
+		count = 0;
+		LinearSpace result = new LinearSpace();
+		while (t < intervalAdded.getHigh()) {
+			t += step;
+			result.values.add(t);
+			count++;
+		}
+		return result;
+	}
+
+	private void update() {
+		update(interval, count);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof LinearSpace) {
+			LinearSpace other = ((LinearSpace) obj);
+			return values.equals(other.values);
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return values.toString();
+	}
+
+	public void shiftLeft(double v) {
 	}
 }

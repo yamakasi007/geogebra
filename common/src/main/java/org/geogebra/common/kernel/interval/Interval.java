@@ -589,4 +589,30 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return evaluate.evaluate(operation);
 	}
 
+	/**
+	 * Shift the interval (both low and high) by a given value.
+	 * @param deltaX to shift by.
+	 * @return the result inteval;
+	 */
+	public Interval shiftBy(double deltaX) {
+		set(low + deltaX, high + deltaX);
+		return this;
+	}
+
+	/**
+	 *
+	 * @return shorten string form to compare and debug
+	 */
+	public String toShortString() {
+		String result = "[";
+		if (!isEmpty()) {
+			result += low;
+			if (!isSingleton()) {
+				result += ", " + high;
+			}
+		}
+
+		result += "]";
+		return result;
+	}
 }

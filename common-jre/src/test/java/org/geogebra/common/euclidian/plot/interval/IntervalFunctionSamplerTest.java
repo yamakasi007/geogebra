@@ -28,4 +28,24 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		assertEquals(expected, sum);
 	}
 
+	@Test
+	public void testShiftBy() {
+		IntervalTuple rangeActual = createRange(-1, 1, -2, 2);
+		IntervalTuple rangeExpected = createRange(0, 2, -2, 2);
+		GeoFunction sinx = add("sinx");
+		IntervalFunctionSampler sampler = newSampler(sinx, rangeActual, 10);
+		IntervalTupleList points = sampler.result();
+		IntervalTupleList newPoints = sampler.append(1);
+
+		if (newPoints != null) {
+			points.append(newPoints);
+		}
+
+		IntervalFunctionSampler samplerExpected = newSampler(sinx,
+				rangeExpected,
+				10);
+
+		IntervalTupleList expected = samplerExpected.result();
+		assertEquals(expected, points);
+	}
 }

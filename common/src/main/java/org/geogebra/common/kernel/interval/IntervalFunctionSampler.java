@@ -37,7 +37,7 @@ public class IntervalFunctionSampler {
 	 */
 	public IntervalTupleList result() {
 		try {
-			return interval1d(space);
+			return evaluateOnSpace(space);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,14 +51,14 @@ public class IntervalFunctionSampler {
 	 */
 	public IntervalTupleList result(LinearSpace space) {
 		try {
-			return interval1d(space);
+			return evaluateOnSpace(space);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new IntervalTupleList();
 	}
 
-	private IntervalTupleList interval1d(LinearSpace space) throws Exception {
+	private IntervalTupleList evaluateOnSpace(LinearSpace space) throws Exception {
 		List<Double> xCoords = space.values();
 		IntervalTupleList samples = new IntervalTupleList();
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
@@ -84,5 +84,15 @@ public class IntervalFunctionSampler {
 	 */
 	public void update(IntervalTuple range) {
 		space.update(range.x(), numberOfSamples);
+	}
+
+	public IntervalTupleList append(double deltaX) {
+		LinearSpace newDomain = space.shiftBy(deltaX);
+		try {
+			return evaluateOnSpace(newDomain);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

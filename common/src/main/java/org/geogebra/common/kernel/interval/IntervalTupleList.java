@@ -10,7 +10,7 @@ import java.util.List;
  * @author laszlo
  */
 public class IntervalTupleList implements Iterable<IntervalTuple> {
-	private final List<IntervalTuple> list;
+	private List<IntervalTuple> list;
 
 	/**
 	 * Constructor.
@@ -53,8 +53,10 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		return list.isEmpty();
 	}
 
-	public void append(IntervalTupleList list) {
-		this.list.addAll(list.list);
+	public void append(IntervalTupleList tuples) {
+		List<IntervalTuple> tupleList = tuples.list;
+		this.list.addAll(tupleList);
+		this.list = list.subList(tupleList.size() - 1, list.size() - 1);
 	}
 
 	@Override
@@ -64,5 +66,18 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 			return list.equals(other.list);
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(IntervalTuple point: list) {
+			sb.append("( x: ");
+			sb.append(point.x().toShortString());
+//			sb.append(" y:");
+//			sb.append(point.y().toShortString());
+			sb.append(")");
+		}
+		return sb.toString();
 	}
 }

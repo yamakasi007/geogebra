@@ -52,4 +52,11 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
+	public void moveXBy(double deltaX) {
+		if (deltaX < 0) {
+			IntervalTupleList tuples = sampler.append(-deltaX);
+			points.append(tuples);
+			updateRanges();
+		}
+	}
 }

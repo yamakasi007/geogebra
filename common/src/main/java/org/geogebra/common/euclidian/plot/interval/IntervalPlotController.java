@@ -21,10 +21,11 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 
 	@Override
 	public void onCoordSystemMoved(double dx, double dy) {
-
+		moveXByPixel(dx);
 	}
 
-	public void moveByWorldCoordinatesX(double dx) {
+	public void moveXByPixel(double deltaX) {
+		model.moveXBy(deltaX / view.getXscale());
 
 	}
 }
