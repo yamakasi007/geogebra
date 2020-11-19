@@ -9,7 +9,7 @@ import com.google.gwt.dom.client.Style.Overflow;
 /**
  * Callback for tool panel opening/closing in portrait mode
  */
-public class PortraitAnimationCallback extends HeaderAnimationCallback {
+public class PortraitAnimationCallback extends NavRailAnimationCallback {
 
 	private AppW app;
 
@@ -19,18 +19,18 @@ public class PortraitAnimationCallback extends HeaderAnimationCallback {
 	 * @param app
 	 *            application
 	 */
-	public PortraitAnimationCallback(Header header, AppW app) {
-		super(header, 0, 0);
+	public PortraitAnimationCallback(NavigationRail header, AppW app) {
+		super(header);
 		this.app = app;
 	}
 
 	@Override
 	protected void onStart() {
 		app.getFrameElement().getStyle().setOverflow(Overflow.HIDDEN);
-		if (header.isOpen()) {
-			header.removeStyleName("header-close-portrait");
-			header.addStyleName("header-open-portrait");
-			header.toolbarPanel.onOpen();
+		if (navRail.isOpen()) {
+			navRail.removeStyleName("header-close-portrait");
+			navRail.addStyleName("header-open-portrait");
+			navRail.toolbarPanel.onOpen();
 		}
 		// header.hideCenter();
 	}
@@ -38,24 +38,19 @@ public class PortraitAnimationCallback extends HeaderAnimationCallback {
 	@Override
 	protected void onEnd() {
 		app.getFrameElement().getStyle().setOverflow(Overflow.VISIBLE);
-		if (!header.isOpen()) {
-			header.removeStyleName("header-open-portrait");
-			header.addStyleName("header-close-portrait");
+		if (!navRail.isOpen()) {
+			navRail.removeStyleName("header-open-portrait");
+			navRail.addStyleName("header-close-portrait");
 		}
 
-		EuclidianView ev = header.app.getActiveEuclidianView();
+		EuclidianView ev = navRail.app.getActiveEuclidianView();
 		if (ev.getViewID() == App.VIEW_EUCLIDIAN3D) {
 			return;
 		}
-		int d = header.isOpen() ? -1 : 1;
+		int d = navRail.isOpen() ? -1 : 1;
 
 		ev.translateCoordSystemForAnimation(
-				d * header.toolbarPanel.getOpenHeightInPortrait() / 2);
-	}
-
-	@Override
-	public void tick(double progress) {
-		// nothing to do.
+				d * navRail.toolbarPanel.getOpenHeightInPortrait() / 2);
 	}
 
 }

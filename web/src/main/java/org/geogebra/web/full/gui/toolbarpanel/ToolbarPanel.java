@@ -43,6 +43,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import elemental2.dom.Element;
+import jsinterop.base.Js;
+
 /**
  * @author Laszlo Gal
  */
@@ -51,7 +54,8 @@ public class ToolbarPanel extends FlowPanel
 	/** vertical offset for shadow */
 	public static final int VSHADOW_OFFSET = 4;
 	/** Closed width of header in landscape mode */
-	public static final int CLOSED_WIDTH_LANDSCAPE = 56;
+	public static final int CLOSED_WIDTH_LANDSCAPE = 72;
+	public static final int CLOSED_WIDTH_LANDSCAPE_COMPACT = 56;
 	/** Min width of open header in landscape mode */
 	public static final int OPEN_MIN_WIDTH_LANDSCAPE = 160;
 	/** Closed height of header in portrait mode */
@@ -61,23 +65,22 @@ public class ToolbarPanel extends FlowPanel
 	private static final int HDRAGGER_WIDTH = 8;
 	private static final int OPEN_ANIM_TIME = 200;
 	/** Header of the panel with buttons and tabs */
-	Header header;
+	NavigationRail header;
 	/** Application */
-	private AppW app;
+	private final AppW app;
 	private EventDispatcher eventDispatcher;
 	private FlowPanel main;
-	private int tabCount = 0;
 	private StandardButton moveBtn;
 	private Integer lastOpenWidth;
 	private AlgebraTab tabAlgebra;
 	private TableTab tabTable;
 	private ToolsTab tabTools;
-	private TabContainer tabContainer;
+	private ShowableTab tabContainer;
 	private boolean isOpen;
-	private ScheduledCommand deferredOnRes = this::resize;
+	private final ScheduledCommand deferredOnRes = this::resize;
 
 	/**
-	 * @param app .
+	 * @param app application
 	 */
 	public ToolbarPanel(AppW app) {
 		this.app = app;
@@ -139,20 +142,22 @@ public class ToolbarPanel extends FlowPanel
 	private void add(ToolbarTab tab) {
 		tab.addStyleName("tab");
 		main.add(tab);
-		tabCount++;
 	}
 
 	/**
 	 * @return width of one tab.
 	 */
 	public int getTabWidth() {
-		int w = this.getOffsetWidth() - (app.isPortrait() ? 0 : CLOSED_WIDTH_LANDSCAPE);
+		int w = this.getOffsetWidth() - (app.isPortrait() ? 0 : getNavigationRailWidth());
 		if (isAnimating() && !app.isPortrait()) {
 			w -= HDRAGGER_WIDTH;
 		}
 		return Math.max(w, 0);
 	}
 
+	/**
+	 * @return the height of one tab
+	 */
 	public int getTabHeight() {
 		return getOffsetHeight()
 				- (app.isPortrait() ? ToolbarPanel.CLOSED_HEIGHT_PORTRAIT : 0);
@@ -175,7 +180,7 @@ public class ToolbarPanel extends FlowPanel
 	private void initGUI() {
 		clear();
 		addStyleName("toolbar");
-		header = new Header(this);
+		header = new NavigationRail(this);
 		add(header);
 		main = new FlowPanel();
 		sinkEvents(Event.ONCLICK);
@@ -357,14 +362,11 @@ public class ToolbarPanel extends FlowPanel
 			if (header.isOpen()) {
 				if (lastOpenWidth != null) {
 					updateWidthForOpening(dockPanel, dockParent);
-					animCallback = new LandscapeAnimationCallback(header,
-							CLOSED_WIDTH_LANDSCAPE, lastOpenWidth);
+					animCallback = new LandscapeAnimationCallback(header);
 				}
 			} else {
 				updateWidthForClosing(dockPanel, dockParent);
-				animCallback = new LandscapeAnimationCallback(header,
-						getLastOpenWidth(),
-						CLOSED_WIDTH_LANDSCAPE) {
+				animCallback = new LandscapeAnimationCallback(header) {
 
 					@Override
 					public void onEnd() {
@@ -384,8 +386,8 @@ public class ToolbarPanel extends FlowPanel
 
 	private void updateWidthForClosing(ToolbarDockPanelW dockPanel, DockSplitPaneW dockParent) {
 		lastOpenWidth = getOffsetWidth();
-		dockParent.setWidgetMinSize(dockPanel, CLOSED_WIDTH_LANDSCAPE);
-		dockParent.setWidgetSize(dockPanel, CLOSED_WIDTH_LANDSCAPE);
+		dockParent.setWidgetMinSize(dockPanel, getNavigationRailWidth());
+		dockParent.setWidgetSize(dockPanel, getNavigationRailWidth());
 	}
 
 	private void setMinimumSize() {
@@ -395,7 +397,7 @@ public class ToolbarPanel extends FlowPanel
 		if (dockParent != null) {
 			dockParent.setWidgetMinSize(dockPanel,
 					header.isOpen() ? OPEN_MIN_WIDTH_LANDSCAPE
-							: CLOSED_WIDTH_LANDSCAPE);
+							: getNavigationRailWidth());
 		}
 	}
 
@@ -573,13 +575,6 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * @return the last width when toolbar was open.
-	 */
-	Integer getLastOpenWidth() {
-		return lastOpenWidth;
-	}
-
-	/**
 	 * @param value to set.
 	 */
 	void setLastOpenWidth(Integer value) {
@@ -604,15 +599,15 @@ public class ToolbarPanel extends FlowPanel
 		ToolTipManagerW.hideAllToolTips();
 		header.selectTab(tab);
 		open();
-		Dom.toggleClass(main, "algebra", tab == TabIds.ALGEBRA);
-		Dom.toggleClass(main, "tools", tab == TabIds.TOOLS);
-		Dom.toggleClass(main, "table", tab == TabIds.TABLE);
-		tabAlgebra.setActive(tab == TabIds.ALGEBRA);
-		tabTools.setActive(tab == TabIds.TOOLS);
-		if (tabTable != null) {
-			tabTable.setActive(tab == TabIds.TABLE);
-		}
 		setFadeTabs(fade);
+		app.invokeLater(() -> {
+			tabAlgebra.setActive(tab == TabIds.ALGEBRA);
+			tabTools.setActive(tab == TabIds.TOOLS);
+			if (tabTable != null) {
+				tabTable.setActive(tab == TabIds.TABLE);
+			}
+		});
+
 	}
 
 	/**
@@ -687,10 +682,7 @@ public class ToolbarPanel extends FlowPanel
 	protected void onOpen() {
 		resizeTabs();
 		main.getElement().getStyle().setProperty("height", "100%");
-		main.getElement().getStyle().setProperty("width",
-				(tabCount * 100) + "%");
-		main.getElement().getStyle().setProperty("left",
-				app.isPortrait() ? "0" : "56px");
+		main.getElement().getStyle().setProperty("width", "100%");
 	}
 
 	/**
@@ -706,6 +698,8 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	private void resizeTabs() {
+		main.getElement().getStyle().setProperty("left",
+				app.isPortrait() ? "0" : getNavigationRailWidth() + "px");
 		if (tabAlgebra != null) {
 			tabAlgebra.onResize();
 		}
@@ -832,8 +826,9 @@ public class ToolbarPanel extends FlowPanel
 	 * @param style style to change color of header (teal -> ok, red -> cheating)
 	 */
 	public void setHeaderStyle(String style) {
-		resetHeaderStyle();
+		resetHeaderClasses();
 		header.addStyleName(style);
+		header.updateIcons(true);
 		ExamUtil.makeRed(header.getElement(), "examCheat".equals(style));
 	}
 
@@ -848,6 +843,11 @@ public class ToolbarPanel extends FlowPanel
 	 * remove exam style
 	 */
 	public void resetHeaderStyle() {
+		resetHeaderClasses();
+		header.updateIcons(false);
+	}
+
+	private void resetHeaderClasses() {
 		ExamUtil.makeRed(header.getElement(), false);
 		header.removeStyleName("examOk");
 		header.removeStyleName("examCheat");
@@ -907,9 +907,12 @@ public class ToolbarPanel extends FlowPanel
 	 * Sets if current tab should animate or not.
 	 * @param fade to set.
 	 */
-	public void setFadeTabs(boolean fade) {
+	private void setFadeTabs(boolean fade) {
 		tabAlgebra.setFade(fade);
 		tabTools.setFade(fade);
+		if (tabTable != null) {
+			tabTable.setFade(fade);
+		}
 	}
 
 	@Override
@@ -946,7 +949,7 @@ public class ToolbarPanel extends FlowPanel
 	 * @return the tab identified by the parameter, or null if no related tab is found
 	 */
 	@Nullable
-	public ToolbarTab getTab(int tabIdentifier) {
+	public ShowableTab getTab(int tabIdentifier) {
 		switch (tabIdentifier) {
 		case App.VIEW_ALGEBRA:
 			return getAlgebraTab();
@@ -980,34 +983,35 @@ public class ToolbarPanel extends FlowPanel
 	 * This getter is public for testing only.
 	 * @return the representation of the side panel containing all the tabs
 	 */
-	public TabContainer getTabContainer() {
+	public ShowableTab getTabContainer() {
 		return tabContainer;
 	}
 
 	private void updatePanelVisibility(boolean isVisible) {
-		app.getGuiManager().setShowView(isVisible, getActiveView());
+		app.getGuiManager().onToolbarVisibilityChanged(App.VIEW_ALGEBRA, isVisible);
 	}
 
-	private int getActiveView() {
-		switch (getSelectedTabId()) {
-		case TABLE:
-			return App.VIEW_TABLE;
-		case TOOLS:
-			return App.VIEW_TOOLS;
-		default:
-			return App.VIEW_ALGEBRA;
-		}
+	/**
+	 * @return navigation rail width
+	 */
+	public int getNavigationRailWidth() {
+		return app.getAppletFrame().hasCompactNavigationRail()
+				? CLOSED_WIDTH_LANDSCAPE_COMPACT : CLOSED_WIDTH_LANDSCAPE;
 	}
 
 	/**
 	 * Base class for Toolbar Tabs-
 	 * @author Laszlo
 	 */
-	public abstract static class ToolbarTab extends ScrollPanel {
+	public abstract static class ToolbarTab extends ScrollPanel implements ShowableTab {
 		/** Constructor */
-		public ToolbarTab() {
+		public ToolbarTab(ToolbarPanel parent) {
 			setSize("100%", "100%");
 			setAlwaysShowScrollBars(false);
+
+			Dom.addEventListener(this.getElement(), "transitionend", evt -> {
+				parent.setFadeTabs(false);
+			});
 		}
 
 		/**

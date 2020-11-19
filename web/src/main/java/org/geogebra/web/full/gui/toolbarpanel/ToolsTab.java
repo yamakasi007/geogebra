@@ -56,9 +56,10 @@ public class ToolsTab extends ToolbarPanel.ToolbarTab {
 
 	/**
 	 * panel containing tools
-	 * @param toolbarPanel TODO
+	 * @param toolbarPanel toolbar panel
 	 */
 	public ToolsTab(ToolbarPanel toolbarPanel) {
+		super(toolbarPanel);
 		this.toolbarPanel = toolbarPanel;
 		this.app = toolbarPanel.getApp();
 
@@ -189,6 +190,7 @@ public class ToolsTab extends ToolbarPanel.ToolbarTab {
 	public void onResize() {
 		super.onResize();
 		int w = this.toolbarPanel.getTabWidth();
+		int left = toolbarPanel.getNavigationRailWidth();
 		if (w < 0) {
 			return;
 		}
@@ -202,7 +204,7 @@ public class ToolsTab extends ToolbarPanel.ToolbarTab {
 		if (app.getWidth() < app.getHeight()) {
 			w = 420;
 		}
-		ToolTipManagerW.sharedInstance().setTooltipWidthOnResize(w);
+		ToolTipManagerW.sharedInstance().setTooltipWidthOnResize(w, left);
 	}
 
 	/**

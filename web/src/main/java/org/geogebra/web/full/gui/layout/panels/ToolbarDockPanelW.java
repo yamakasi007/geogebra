@@ -170,4 +170,7 @@ public class ToolbarDockPanelW extends DockPanelW
 		return null;
 	}
 
+	public int getNavigationRailWidth() {
+		return toolbar.getNavigationRailWidth();
+	}
 }

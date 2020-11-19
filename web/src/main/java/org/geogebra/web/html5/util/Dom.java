@@ -8,6 +8,9 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.UIObject;
 
+import elemental2.dom.EventListener;
+import jsinterop.base.Js;
+
 /**
  * Helper methods for finding DOM elements
  */
@@ -144,4 +147,8 @@ public final class Dom {
 		return $doc.activeElement;
 	}-*/;
 
+	public static void addEventListener(Element element, String name, EventListener listener) {
+		elemental2.dom.Element el = Js.uncheckedCast(element);
+		el.addEventListener(name, listener);
+	}
 }

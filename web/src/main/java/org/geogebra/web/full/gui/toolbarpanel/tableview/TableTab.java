@@ -21,6 +21,7 @@ public class TableTab extends ToolbarPanel.ToolbarTab implements SetLabels {
 	 *            toolbar panel
 	 */
 	public TableTab(ToolbarPanel toolbarPanel) {
+		super(toolbarPanel);
 		this.toolbarPanel = toolbarPanel;
 		this.app = toolbarPanel.getApp();
 		tableValuesPanel = new TableValuesPanel(app);

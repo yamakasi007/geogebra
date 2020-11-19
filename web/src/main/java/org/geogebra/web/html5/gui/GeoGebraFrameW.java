@@ -236,6 +236,10 @@ public abstract class GeoGebraFrameW extends FlowPanel implements
 		return Window.getClientWidth() < 600 || Window.getClientHeight() < 600;
 	}
 
+	public boolean hasCompactNavigationRail() {
+		return app.getWidth() < 600;
+	}
+
 	private void setHeightWithCompactHeader() {
 		geoGebraElement.getStyle().setProperty("height",
 				"calc(100% - " + getSmallScreenHeaderHeight() + "px)");
