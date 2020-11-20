@@ -14,36 +14,19 @@ import org.junit.Test;
 public class IntervalFunctionSamplerTest extends BaseUnitTest {
 
 	@Test
-	public void testRangeSplitting() {
-		IntervalTuple rangeLeft = createRange(-1, 0, -2, 2);
-		IntervalTuple rangeRight = createRange(0, 1, -2, 2);
-		IntervalTuple range = createRange(-1, 1, -2, 2);
-		GeoFunction sinx = add("sinx");
-		IntervalFunctionSampler samplerLeft = newSampler(sinx, rangeLeft, 50);
-		IntervalFunctionSampler samplerRight = newSampler(sinx, rangeRight, 50);
-		IntervalFunctionSampler sampler = newSampler(sinx, range, 100);
-		IntervalTupleList sum = samplerLeft.result();
-		sum.append(samplerRight.result());
-		IntervalTupleList expected = sampler.result();
-		assertEquals(expected, sum);
-	}
-
-	@Test
-	public void testShiftBy() {
-		IntervalTuple rangeActual = createRange(-1, 1, -2, 2);
-		IntervalTuple rangeExpected = createRange(0, 2, -2, 2);
-		GeoFunction sinx = add("sinx");
-		IntervalFunctionSampler sampler = newSampler(sinx, rangeActual, 10);
+	public void testAppend() {
+		IntervalTuple rangeActual = createRange(-5, 5, -1, 1);
+		IntervalTuple rangeExpected = createRange(-3, 7, -1, 1);
+		GeoFunction xDoubled = add("2x");
+		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
 		IntervalTupleList points = sampler.result();
-		IntervalTupleList newPoints = sampler.append(1);
+		IntervalTupleList newPoints = sampler.append(2);
 
 		if (newPoints != null) {
 			points.append(newPoints);
 		}
 
-		IntervalFunctionSampler samplerExpected = newSampler(sinx,
-				rangeExpected,
-				10);
+		IntervalFunctionSampler samplerExpected = newSampler(xDoubled,	rangeExpected,	10);
 
 		IntervalTupleList expected = samplerExpected.result();
 		assertEquals(expected, points);

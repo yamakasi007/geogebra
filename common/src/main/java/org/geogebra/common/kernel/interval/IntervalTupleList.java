@@ -56,7 +56,7 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void append(IntervalTupleList tuples) {
 		List<IntervalTuple> tupleList = tuples.list;
 		this.list.addAll(tupleList);
-		this.list = list.subList(tupleList.size() - 1, list.size() - 1);
+		this.list = list.subList(tupleList.size(), list.size());
 	}
 
 	@Override

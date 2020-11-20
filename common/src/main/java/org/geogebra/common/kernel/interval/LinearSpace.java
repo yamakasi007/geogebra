@@ -57,7 +57,7 @@ public class LinearSpace {
 		return scale;
 	}
 
-	public LinearSpace shiftBy(double delta) {
+	public LinearSpace getAppendedSpace(double delta) {
 		double high = this.interval.getHigh();
 		Interval intervalAdded = new Interval(high, high + delta);
 		double t = intervalAdded.getLow();

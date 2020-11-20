@@ -61,6 +61,13 @@ public class IntervalFunctionSampler {
 	private IntervalTupleList evaluateOnSpace(LinearSpace space) throws Exception {
 		List<Double> xCoords = space.values();
 		IntervalTupleList samples = new IntervalTupleList();
+		if (xCoords.size() == 1) {
+			Interval x = new Interval(xCoords.get(0));
+			Interval y = function.evaluate(x);
+			samples.add(new IntervalTuple(x, y));
+			return samples;
+		}
+
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
 			Interval y = function.evaluate(x);
@@ -87,7 +94,7 @@ public class IntervalFunctionSampler {
 	}
 
 	public IntervalTupleList append(double deltaX) {
-		LinearSpace newDomain = space.shiftBy(deltaX);
+		LinearSpace newDomain = space.getAppendedSpace(deltaX);
 		try {
 			return evaluateOnSpace(newDomain);
 		} catch (Exception e) {
