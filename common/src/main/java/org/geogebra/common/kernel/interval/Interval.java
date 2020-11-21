@@ -615,4 +615,12 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		result += "]";
 		return result;
 	}
+
+	/**
+	 *
+	 * @return the length of the interval
+	 */
+	public double getLength() {
+		return high - low;
+	}
 }

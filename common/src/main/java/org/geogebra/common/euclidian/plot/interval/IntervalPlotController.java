@@ -21,6 +21,9 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 
 	@Override
 	public void onCoordSystemMoved(double dx, double dy) {
+		if (dx == 0) {
+			return;
+		}
 		moveXByPixel(dx);
 	}
 

@@ -19,6 +19,11 @@ public class LinearSpace {
 		values = new ArrayList<>();
 	}
 
+	public LinearSpace(int start, int end, int count) {
+		this();
+		update(new Interval(start, end), count);
+	}
+
 	/**
 	 * Updates the space.
 	 * @param interval the base interval.
@@ -28,9 +33,9 @@ public class LinearSpace {
 		this.interval = interval;
 		this.count = count;
 		values.clear();
-		step = interval.getWidth() / count;
+		step = interval.getLength() / count;
 		fill(interval.getLow(), interval.getHigh(), step);
-		scale = values.size() > 2 ? values.get(1) - values.get(0) : 0;
+		scale = size() > 2 ? values.get(1) - values.get(0) : 0;
 	}
 
 	private void fill(double start, double end, double step) {
@@ -57,22 +62,49 @@ public class LinearSpace {
 		return scale;
 	}
 
-	public LinearSpace getAppendedSpace(double delta) {
-		double high = this.interval.getHigh();
-		Interval intervalAdded = new Interval(high, high + delta);
-		double t = intervalAdded.getLow();
-		count = 0;
+	public LinearSpace appendKeepSize(double delta) {
 		LinearSpace result = new LinearSpace();
-		while (t < intervalAdded.getHigh()) {
+		double t = getLastValue();
+		double max = t + delta;
+		while (t < max) {
 			t += step;
 			result.values.add(t);
-			count++;
+			values.remove(0);
+			values.add(t);
 		}
 		return result;
 	}
 
-	private void update() {
-		update(interval, count);
+	private double getLastValue() {
+		return values.get(size() - 1);
+	}
+
+	private int size() {
+		return values.size();
+	}
+
+	public LinearSpace prependKeepSize(double delta) {
+		LinearSpace result = new LinearSpace();
+		double t = getFirstValue();
+		double min = t - delta;
+		while (min < t) {
+			t -= step;
+			result.values.add(0, t);
+			values.remove(size() - 1);
+			values.add(0, t);
+		}
+		return result;
+	}
+
+	private double getFirstValue() {
+		return values.isEmpty() ? 0 : values.get(0);
+	}
+
+	private double getDiff(double delta) {
+		double m = Math.floor(delta / step) + 1;
+		double diff = (m * step) + step;
+	//	Log.debug("[DIFF] step: " + step + " delta: " + delta + " result: " + diff);
+		return diff;
 	}
 
 	@Override
@@ -89,6 +121,4 @@ public class LinearSpace {
 		return values.toString();
 	}
 
-	public void shiftLeft(double v) {
-	}
 }

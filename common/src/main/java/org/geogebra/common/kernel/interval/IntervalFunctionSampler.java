@@ -94,12 +94,19 @@ public class IntervalFunctionSampler {
 	}
 
 	public IntervalTupleList append(double deltaX) {
-		LinearSpace newDomain = space.getAppendedSpace(deltaX);
+		return evaluateAtDomain(space.appendKeepSize(deltaX));
+	}
+
+	private IntervalTupleList evaluateAtDomain(LinearSpace domain) {
 		try {
-			return evaluateOnSpace(newDomain);
+			return evaluateOnSpace(domain);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public IntervalTupleList prepend(double deltaX) {
+		return evaluateAtDomain(space.prependKeepSize(deltaX));
 	}
 }

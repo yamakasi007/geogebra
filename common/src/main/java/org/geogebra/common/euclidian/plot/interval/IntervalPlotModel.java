@@ -1,9 +1,11 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
+import org.geogebra.common.util.debug.Log;
 
 public class IntervalPlotModel {
 	private final IntervalTuple range;
@@ -53,10 +55,15 @@ public class IntervalPlotModel {
 	}
 
 	public void moveXBy(double deltaX) {
+		updateRanges();
 		if (deltaX < 0) {
 			IntervalTupleList tuples = sampler.append(-deltaX);
 			points.append(tuples);
-			updateRanges();
+		} else {
+			IntervalTupleList tuples = sampler.prepend(deltaX);
+			points.prepend(tuples);
 		}
+		Interval viewX = new Interval(view.getXmin(), view.getXmax());
+		Log.debug("range check: viewX:  " + viewX + " domain" + points.domain()	);
 	}
 }

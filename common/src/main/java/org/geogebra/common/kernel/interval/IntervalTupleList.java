@@ -56,7 +56,17 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void append(IntervalTupleList tuples) {
 		List<IntervalTuple> tupleList = tuples.list;
 		this.list.addAll(tupleList);
-		this.list = list.subList(tupleList.size(), list.size());
+		for (int i = 0; i < tupleList.size(); i++) {
+			list.remove(0);
+		}
+	}
+
+
+	public void prepend(IntervalTupleList newPoints) {
+		list.addAll(0, newPoints.list);
+		for (int i = 0; i < newPoints.size() +  1; i++) {
+			list.remove(list.size() - 1);
+		}
 	}
 
 	@Override
@@ -72,12 +82,17 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(IntervalTuple point: list) {
-			sb.append("( x: ");
+			sb.append(" { x: ");
 			sb.append(point.x().toShortString());
 //			sb.append(" y:");
 //			sb.append(point.y().toShortString());
-			sb.append(")");
+			sb.append("} ");
 		}
 		return sb.toString();
 	}
+
+	public Interval domain() {
+		return new Interval(list.get(0).x().getLow(), list.get(list.size() - 1).x().getHigh() );
+	}
+
 }
