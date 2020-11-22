@@ -13,6 +13,7 @@ public class IntervalPlotModel {
 	private IntervalTupleList points;
 	private IntervalPath path;
 	private final EuclidianView view;
+	private Interval oldDomain;
 
 	public IntervalPlotModel(IntervalTuple range,
 			IntervalFunctionSampler sampler,
@@ -33,8 +34,8 @@ public class IntervalPlotModel {
 	}
 
 	private void updateRanges() {
-		range.x().set(view.getXmin(), view.getXmax());
-		range.y().set(view.getYmin(), view.getYmax());
+		range.set(view.domain(), view.getYInterval());
+		oldDomain = view.domain();
 	}
 
 	void updateSampler() {
@@ -54,8 +55,9 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
-	public void moveXBy(double deltaX) {
-		updateRanges();
+	public void moveDomain() {
+		Interval domain = view.domain();
+		double deltaX = oldDomain.getLow() - domain.getLow();
 		if (deltaX < 0) {
 			IntervalTupleList tuples = sampler.append(-deltaX);
 			points.append(tuples);
@@ -63,7 +65,21 @@ public class IntervalPlotModel {
 			IntervalTupleList tuples = sampler.prepend(deltaX);
 			points.prepend(tuples);
 		}
-		Interval viewX = new Interval(view.getXmin(), view.getXmax());
-		Log.debug("range check: viewX:  " + viewX + " domain" + points.domain()	);
+//		filter(points, deltaX);
+
+		Log.debug("view domain: " + domain.toShortString());
+		Log.debug("oldw domain: " + oldDomain.toShortString());
+		Log.debug("deltaX: " + deltaX);
+		oldDomain = domain;
+	}
+
+	private void filter(IntervalTupleList tuples, double threshold) {
+		for (IntervalTuple tuple: tuples) {
+			if (tuple.x().getHigh() < view.getXmin() - threshold
+					|| tuple.x().getLow() > view.getXmax() + threshold) {
+				tuples.remove(tuple);
+//				Log.debug(tuple + " removed.");
+			}
+		}
 	}
 }

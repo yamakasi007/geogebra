@@ -15,22 +15,18 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 
 	@Test
 	public void testAppend() {
-		IntervalTuple rangeActual = createRange(0, 10, 0, 100);
-		IntervalTuple rangeExpected = createRange(20, 30, 0, 100);
+		IntervalTuple rangeActual = createRange(1, 10, 0, 100);
+		IntervalTuple rangeExpected = createRange(21, 30, 0, 100);
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
-		IntervalTupleList points = sampler.result();
-		for (int i = 0; i < 5; i++) {
-			IntervalTupleList newPoints = sampler.append(2);
-			if (newPoints != null) {
-				points.append(newPoints);
-			}
+		for (int i = 0; i < 10; i++) {
+			sampler.append(1);
 		}
 
 		IntervalFunctionSampler samplerExpected = newSampler(xDoubled,	rangeExpected,	10);
 
 		IntervalTupleList expected = samplerExpected.result();
-		assertEquals(expected, points);
+		assertEquals(expected, sampler.result());
 	}
 
 	@Test

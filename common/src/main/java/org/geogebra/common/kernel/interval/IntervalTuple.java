@@ -61,4 +61,9 @@ public class IntervalTuple {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "{x: " + x().toShortString() + ": " + y().toShortString() + "}";
+	}
 }

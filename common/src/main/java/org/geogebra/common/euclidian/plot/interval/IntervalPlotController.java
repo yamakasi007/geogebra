@@ -24,11 +24,11 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 		if (dx == 0) {
 			return;
 		}
-		moveXByPixel(dx);
+		moveDomain();
 	}
 
-	public void moveXByPixel(double deltaX) {
-		model.moveXBy(deltaX / view.getXscale());
+	public void moveDomain() {
+		model.moveDomain();
 
 	}
 }

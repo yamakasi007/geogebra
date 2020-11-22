@@ -6497,4 +6497,20 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		return new Interval(toScreenCoordYd(interval.getHigh()),
 				toScreenCoordYd(interval.getLow()));
 	}
+
+	/**
+	 *
+	 * @return visible x interval
+	 */
+	public Interval domain() {
+		return new Interval(xmin, xmax);
+	}
+
+	/**
+	 *
+	 * @return visible y interval
+	 */
+	public Interval getYInterval() {
+		return new Interval(xmin, xmax);
+	}
 }
