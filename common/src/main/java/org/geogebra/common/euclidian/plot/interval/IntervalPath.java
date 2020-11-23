@@ -46,7 +46,7 @@ public class IntervalPath {
 	}
 
 	private void plotHigh(Interval x, Interval y) {
-		if (moveTo) {;
+		if (moveTo) {
 			gp.moveTo(x.getLow(), y.getLow());
 		} else {
 			lineTo(x.getLow(), y.getLow());
