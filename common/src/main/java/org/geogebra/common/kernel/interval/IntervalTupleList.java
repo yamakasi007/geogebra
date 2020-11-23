@@ -92,4 +92,8 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void remove(IntervalTuple tuple) {
 		list.remove(tuple);
 	}
+
+	public void remove(int index) {
+		list.remove(index);
+	}
 }

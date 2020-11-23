@@ -6510,7 +6510,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 *
 	 * @return visible y interval
 	 */
-	public Interval getYInterval() {
+	public Interval range() {
 		return new Interval(xmin, xmax);
 	}
 }

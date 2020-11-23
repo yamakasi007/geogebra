@@ -14,6 +14,7 @@ public class IntervalPlotModel {
 	private IntervalPath path;
 	private final EuclidianView view;
 	private Interval oldDomain;
+	private Interval domain;
 
 	public IntervalPlotModel(IntervalTuple range,
 			IntervalFunctionSampler sampler,
@@ -34,7 +35,7 @@ public class IntervalPlotModel {
 	}
 
 	private void updateRanges() {
-		range.set(view.domain(), view.getYInterval());
+		range.set(view.domain(), view.range());
 		oldDomain = view.domain();
 	}
 
@@ -55,31 +56,43 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
-	public void moveDomain() {
-		Interval domain = view.domain();
-		double deltaX = oldDomain.getLow() - domain.getLow();
+	public void moveDomain(Interval domain) {
+		this.domain = domain;
+		double deltaX = oldDomain.getLow() - this.domain.getLow();
 		if (deltaX < 0) {
 			IntervalTupleList tuples = sampler.append(-deltaX);
 			points.append(tuples);
+			Log.debug(tuples);
+			clipDomainLow();
 		} else {
 			IntervalTupleList tuples = sampler.prepend(deltaX);
 			points.prepend(tuples);
+			clipDomainHigh();
 		}
-//		filter(points, deltaX);
-
-		Log.debug("view domain: " + domain.toShortString());
-		Log.debug("oldw domain: " + oldDomain.toShortString());
-		Log.debug("deltaX: " + deltaX);
-		oldDomain = domain;
+		info(deltaX);
+		oldDomain = this.domain;
 	}
 
-	private void filter(IntervalTupleList tuples, double threshold) {
-		for (IntervalTuple tuple: tuples) {
-			if (tuple.x().getHigh() < view.getXmin() - threshold
-					|| tuple.x().getLow() > view.getXmax() + threshold) {
-				tuples.remove(tuple);
-//				Log.debug(tuple + " removed.");
-			}
+	private void info(double deltaX) {
+//		Log.debug("view domain: " + domain.toShortString());
+//		Log.debug("oldw domain: " + oldDomain.toShortString());
+//		Log.debug("deltaX: " + deltaX);
+		Log.debug("pts  domain: " + points.domain() + " length: " + points.domain().getLength());
+	}
+
+	private void clipDomainLow() {
+		double high = points.get(0).x().getHigh();
+		while (high < domain.getLow() && !points.isEmpty()) {
+			points.remove(0);
+			high = points.get(0).x().getHigh();
+		}
+	}
+
+	private void clipDomainHigh() {
+		double low = points.get(points.size() - 1).x().getLow();
+		while (low > domain.getHigh() && !points.isEmpty()) {
+			points.remove(points.size() - 1);
+			low = points.get(0).x().getHigh();
 		}
 	}
 }
