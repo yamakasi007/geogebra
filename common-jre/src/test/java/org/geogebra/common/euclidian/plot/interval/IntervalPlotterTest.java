@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class IntervalPlotterTest extends BaseUnitTest {
-	public static final int NUMBER_OF_SAMPLES = 20;
+	public static final int NUMBER_OF_SAMPLES = 5;
 	private IntervalPlotController controller;
 	private AppCommon app;
 	private EuclidianView view;
@@ -27,20 +27,42 @@ public class IntervalPlotterTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void testMoveSinBy() {
-		IntervalPathPlotterMock plotter = new IntervalPathPlotterMock();
-		IntervalPathPlotterMock plotterExpected = new IntervalPathPlotterMock();
-		IntervalPlotModel model = newSinModel(-5.0, 5.0, plotter);
-		IntervalPlotModel expectedModel = newSinModel(-4.5, 5.5, plotterExpected);
-		IntervalPlotController controller = new IntervalPlotController(model, view);
+	public void testMoveRiht() {
+		view.setRealWorldCoordSystem(0, 5, -20, 20);
+		IntervalPathPlotterMock path = new IntervalPathPlotterMock();
+		IntervalPlotModel model = newModel("sin(x)", 0, 5, path);
 		model.updateAll();
-		model.moveDomain(new Interval(-4.5, 5.5));
-		assertEquals(plotter.getLog(), plotterExpected.getLog());
+		view.setRealWorldCoordSystem(2, 7, -20, 20);
+		model.moveDomain(view.domain());
+		model.updatePath();
+
+		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
+		IntervalPlotModel expectedModel = newModel("sin(x)", 2.0, 7.0, pathExpected);
+		expectedModel.updateAll();
+
+		assertEquals(expectedModel.getPoints()
+				, model.getPoints());
+	}
+	@Test
+	public void testMoveSinBy() {
+		IntervalPathPlotterMock path = new IntervalPathPlotterMock();
+		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
+		view.setRealWorldCoordSystem(-10, 10, -10, 10);
+		IntervalPlotModel model = newModel("2x", -10.0, 10.0, path);
+		IntervalPlotModel expectedModel = newModel("2x", -10.0, 8.0, pathExpected);
+		model.updateAll();
+		expectedModel.updateAll();
+		model.moveDomain(new Interval(-5.0,15.0));
+		model.moveDomain(new Interval(-10.0,10.0));
+		model.updatePath();
+		assertEquals(expectedModel.getPoints()
+				, model.getPoints());
 	}
 
-	private IntervalPlotModel newSinModel(double low, double high, IntervalPathPlotterMock gp) {
+	private IntervalPlotModel newModel(String functionString,
+			double low, double high, IntervalPathPlotterMock gp) {
 		IntervalTuple range = createRange(low, high, -3.0, 3.0);
-		IntervalPlotModel model = createModel(range, createSampler("sin(x)",
+		IntervalPlotModel model = createModel(range, createSampler(functionString,
 				range), view);
 		IntervalPath path = new IntervalPath(gp, view, model);
 		model.setPath(path);

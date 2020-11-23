@@ -82,7 +82,7 @@ public class IntervalPlotModel {
 
 	private void clipDomainLow() {
 		double high = points.get(0).x().getHigh();
-		while (high < domain.getLow() && !points.isEmpty()) {
+		while (high <= domain.getLow() && !points.isEmpty()) {
 			points.remove(0);
 			high = points.get(0).x().getHigh();
 		}
@@ -90,7 +90,7 @@ public class IntervalPlotModel {
 
 	private void clipDomainHigh() {
 		double low = points.get(points.size() - 1).x().getLow();
-		while (low > domain.getHigh() && !points.isEmpty()) {
+		while (low >= domain.getHigh() && !points.isEmpty()) {
 			points.remove(points.size() - 1);
 			low = points.get(0).x().getHigh();
 		}

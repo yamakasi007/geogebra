@@ -64,13 +64,13 @@ public class LinearSpace {
 
 	public LinearSpace appendKeepSize(double delta) {
 		LinearSpace result = new LinearSpace();
-		double max = getLastValue() + delta;
+		double max = getLastValue() + delta + step;
 		double t = getLastValue();
 		while (t < max) {
-			t += step;
 			result.values.add(t);
 			values.remove(0);
 			values.add(t);
+			t += step;
 		}
 		return result;
 	}

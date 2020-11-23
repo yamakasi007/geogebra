@@ -76,11 +76,7 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(IntervalTuple point: list) {
-			sb.append(" { x: ");
-			sb.append(point.x().toShortString());
-//			sb.append(" y:");
-//			sb.append(point.y().toShortString());
-			sb.append("} ");
+			sb.append(point.toString());
 		}
 		return sb.toString();
 	}
