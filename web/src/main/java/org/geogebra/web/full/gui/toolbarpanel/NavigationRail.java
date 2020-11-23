@@ -35,16 +35,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.himamis.retex.editor.share.util.GWTKeycodes;
 
 /**
- * header of toolbar
- *
+ * Navigation rail or bottom bar
  */
 class NavigationRail extends FlowPanel implements KeyDownHandler {
 	private MenuToggleButton btnMenu;
 	private StandardButton btnAlgebra;
 	private StandardButton btnTools;
 	private StandardButton btnTableView;
-	private Image imgMenu;
-	private FlowPanel contents;
+	private final Image imgMenu;
+	private final FlowPanel contents;
 	private FlowPanel center;
 	/**
 	 * panel containing undo and redo
@@ -215,7 +214,7 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		setAnimating(true);
 		updateIcons(null, app.isExamStarted());
 		removeOrientationStyles();
-		Widget headerParent = toolbarPanel.header.getParent().getParent()
+		Widget headerParent = toolbarPanel.navRail.getParent().getParent()
 				.getParent();
 		if (app.isPortrait()) {
 			headerParent.addStyleName("closePortrait");
@@ -244,7 +243,7 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	}
 
 	private void removeOrientationStyles() {
-		Widget headerParent = toolbarPanel.header.getParent().getParent()
+		Widget headerParent = toolbarPanel.navRail.getParent().getParent()
 				.getParent();
 		headerParent.removeStyleName("closePortrait");
 		headerParent.removeStyleName("closeLandscape");

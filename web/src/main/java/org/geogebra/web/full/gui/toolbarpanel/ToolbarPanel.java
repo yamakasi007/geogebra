@@ -43,9 +43,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import elemental2.dom.Element;
-import jsinterop.base.Js;
-
 /**
  * @author Laszlo Gal
  */
@@ -65,7 +62,7 @@ public class ToolbarPanel extends FlowPanel
 	private static final int HDRAGGER_WIDTH = 8;
 	private static final int OPEN_ANIM_TIME = 200;
 	/** Header of the panel with buttons and tabs */
-	NavigationRail header;
+	NavigationRail navRail;
 	/** Application */
 	private final AppW app;
 	private EventDispatcher eventDispatcher;
@@ -114,14 +111,14 @@ public class ToolbarPanel extends FlowPanel
 	 * or inactive
 	 */
 	public void updateUndoRedoActions() {
-		header.updateUndoRedoActions();
+		navRail.updateUndoRedoActions();
 	}
 
 	/**
 	 * Updates the position of undo and redo buttons
 	 */
 	public void updateUndoRedoPosition() {
-		header.updateUndoRedoPosition();
+		navRail.updateUndoRedoPosition();
 	}
 
 	/**
@@ -148,7 +145,7 @@ public class ToolbarPanel extends FlowPanel
 	 * @return width of one tab.
 	 */
 	public int getTabWidth() {
-		int w = this.getOffsetWidth() - (app.isPortrait() ? 0 : getNavigationRailWidth());
+		int w = this.getOffsetWidth() - getNavigationRailWidth();
 		if (isAnimating() && !app.isPortrait()) {
 			w -= HDRAGGER_WIDTH;
 		}
@@ -159,8 +156,14 @@ public class ToolbarPanel extends FlowPanel
 	 * @return the height of one tab
 	 */
 	public int getTabHeight() {
-		return getOffsetHeight()
-				- (app.isPortrait() ? ToolbarPanel.CLOSED_HEIGHT_PORTRAIT : 0);
+		return getOffsetHeight() - getNavigationRailHeight();
+	}
+
+	private int getNavigationRailHeight() {
+		if (!app.showToolBar() || isKeyboardShowing()) {
+			return 0;
+		}
+		return app.isPortrait() ? ToolbarPanel.CLOSED_HEIGHT_PORTRAIT : 0;
 	}
 
 	private void initClickStartHandler() {
@@ -180,8 +183,10 @@ public class ToolbarPanel extends FlowPanel
 	private void initGUI() {
 		clear();
 		addStyleName("toolbar");
-		header = new NavigationRail(this);
-		add(header);
+		navRail = new NavigationRail(this);
+		if (app.showToolBar()) {
+			add(navRail);
+		}
 		main = new FlowPanel();
 		sinkEvents(Event.ONCLICK);
 		main.addStyleName("main");
@@ -230,7 +235,7 @@ public class ToolbarPanel extends FlowPanel
 	public void reset() {
 		lastOpenWidth = null;
 		hideDragger();
-		header.reset();
+		navRail.reset();
 		resizeTabs();
 	}
 
@@ -359,14 +364,14 @@ public class ToolbarPanel extends FlowPanel
 			AnimationCallback animCallback = null;
 			dockParent.addStyleName("hide-Dragger");
 			opposite.addStyleName("hiddenHDraggerRightPanel");
-			if (header.isOpen()) {
+			if (navRail.isOpen()) {
 				if (lastOpenWidth != null) {
 					updateWidthForOpening(dockPanel, dockParent);
-					animCallback = new LandscapeAnimationCallback(header);
+					animCallback = new LandscapeAnimationCallback(navRail);
 				}
 			} else {
 				updateWidthForClosing(dockPanel, dockParent);
-				animCallback = new LandscapeAnimationCallback(header) {
+				animCallback = new LandscapeAnimationCallback(navRail) {
 
 					@Override
 					public void onEnd() {
@@ -396,7 +401,7 @@ public class ToolbarPanel extends FlowPanel
 				? dockPanel.getParentSplitPane() : null;
 		if (dockParent != null) {
 			dockParent.setWidgetMinSize(dockPanel,
-					header.isOpen() ? OPEN_MIN_WIDTH_LANDSCAPE
+					navRail.isOpen() ? OPEN_MIN_WIDTH_LANDSCAPE
 							: getNavigationRailWidth());
 		}
 	}
@@ -412,14 +417,14 @@ public class ToolbarPanel extends FlowPanel
 		final DockSplitPaneW dockParent = dockPanel != null ? dockPanel.getParentSplitPane() : null;
 		Widget evPanel = dockParent != null ? dockParent.getOpposite(dockPanel) : null;
 		if (evPanel != null) {
-			if (header.isOpen()) {
+			if (navRail.isOpen()) {
 				updateHeightForOpening(dockParent, evPanel);
 			} else {
 				updateHeightForClosing(dockParent, evPanel);
 			}
 
 			dockParent.animate(OPEN_ANIM_TIME,
-					new PortraitAnimationCallback(header, app) {
+					new PortraitAnimationCallback(navRail, app) {
 						@Override
 						protected void onEnd() {
 							super.onEnd();
@@ -436,7 +441,7 @@ public class ToolbarPanel extends FlowPanel
 
 	private void updateHeightForClosing(DockSplitPaneW dockParent, Widget evPanel) {
 		dockParent.setWidgetSize(evPanel,
-				app.getHeight() - header.getOffsetHeight()
+				app.getHeight() - navRail.getOffsetHeight()
 						- app.getAppletParameters().getBorderThickness()
 						- VSHADOW_OFFSET);
 		dockParent.addStyleName("hide-VDragger");
@@ -571,7 +576,7 @@ public class ToolbarPanel extends FlowPanel
 	 * @param expanded whether menu is open
 	 */
 	public void markMenuAsExpanded(boolean expanded) {
-		header.markMenuAsExpanded(expanded);
+		navRail.markMenuAsExpanded(expanded);
 	}
 
 	/**
@@ -597,7 +602,7 @@ public class ToolbarPanel extends FlowPanel
 
 	private void switchTab(TabIds tab, boolean fade) {
 		ToolTipManagerW.hideAllToolTips();
-		header.selectTab(tab);
+		navRail.selectTab(tab);
 		open();
 		setFadeTabs(fade);
 		app.invokeLater(() -> {
@@ -681,7 +686,6 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	protected void onOpen() {
 		resizeTabs();
-		main.getElement().getStyle().setProperty("height", "100%");
 		main.getElement().getStyle().setProperty("width", "100%");
 	}
 
@@ -693,13 +697,18 @@ public class ToolbarPanel extends FlowPanel
 			return;
 		}
 
-		header.resize();
+		navRail.resize();
 		resizeTabs();
 	}
 
 	private void resizeTabs() {
 		main.getElement().getStyle().setProperty("left",
-				app.isPortrait() ? "0" : getNavigationRailWidth() + "px");
+				getNavigationRailWidth() + "px");
+		main.getElement().getStyle().setProperty("height",
+				"calc(100% - " + getNavigationRailHeight() + "px)");
+		if (app.isPortrait()) {
+			navRail.setVisible(!isKeyboardShowing());
+		}
 		if (tabAlgebra != null) {
 			tabAlgebra.onResize();
 		}
@@ -713,12 +722,16 @@ public class ToolbarPanel extends FlowPanel
 		}
 	}
 
+	private boolean isKeyboardShowing() {
+		return app.getAppletFrame().isKeyboardShowing();
+	}
+
 	/**
 	 * Shows/hides full toolbar.
 	 */
 	void updateStyle() {
 		setMinimumSize();
-		if (header.isOpen()) {
+		if (navRail.isOpen()) {
 			main.removeStyleName("hidden");
 		} else {
 			main.addStyleName("hidden");
@@ -761,7 +774,7 @@ public class ToolbarPanel extends FlowPanel
 	public double getMinVHeight() {
 		int rows = getFrame().isKeyboardShowing() ? MIN_ROWS_WITH_KEYBOARD
 				: MIN_ROWS_WITHOUT_KEYBOARD;
-		return rows * header.getOffsetHeight();
+		return rows * CLOSED_HEIGHT_PORTRAIT;
 	}
 
 	/**
@@ -805,7 +818,7 @@ public class ToolbarPanel extends FlowPanel
 	 * @return if toolbar is animating or not.
 	 */
 	public boolean isAnimating() {
-		return header.isAnimating();
+		return navRail.isAnimating();
 	}
 
 	/**
@@ -819,7 +832,7 @@ public class ToolbarPanel extends FlowPanel
 	 * update header style
 	 */
 	public void updateHeader() {
-		header.updateStyle();
+		navRail.updateStyle();
 	}
 
 	/**
@@ -827,16 +840,16 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void setHeaderStyle(String style) {
 		resetHeaderClasses();
-		header.addStyleName(style);
-		header.updateIcons(true);
-		ExamUtil.makeRed(header.getElement(), "examCheat".equals(style));
+		navRail.addStyleName(style);
+		navRail.updateIcons(true);
+		ExamUtil.makeRed(navRail.getElement(), "examCheat".equals(style));
 	}
 
 	/**
 	 *
 	 */
 	public void initInfoBtnAction() {
-		header.initInfoBtnAction();
+		navRail.initInfoBtnAction();
 	}
 
 	/**
@@ -844,20 +857,20 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void resetHeaderStyle() {
 		resetHeaderClasses();
-		header.updateIcons(false);
+		navRail.updateIcons(false);
 	}
 
 	private void resetHeaderClasses() {
-		ExamUtil.makeRed(header.getElement(), false);
-		header.removeStyleName("examOk");
-		header.removeStyleName("examCheat");
+		ExamUtil.makeRed(navRail.getElement(), false);
+		navRail.removeStyleName("examOk");
+		navRail.removeStyleName("examCheat");
 	}
 
 	/**
 	 * Called when app changes orientation.
 	 */
 	public void onOrientationChange() {
-		header.onOrientationChange();
+		navRail.onOrientationChange();
 		hideDragger();
 	}
 
@@ -865,7 +878,7 @@ public class ToolbarPanel extends FlowPanel
 	 * set labels of gui elements
 	 */
 	public void setLabels() {
-		header.setLabels();
+		navRail.setLabels();
 		if (!getToolsTab().isCustomToolbar) {
 			tabTools.toolsPanel.setLabels();
 			tabTools.moreBtn
@@ -900,7 +913,7 @@ public class ToolbarPanel extends FlowPanel
 	 * sets icons tab-able.
 	 */
 	public void setTabIndexes() {
-		header.setTabIndexes();
+		navRail.setTabIndexes();
 	}
 
 	/**
@@ -917,7 +930,7 @@ public class ToolbarPanel extends FlowPanel
 
 	@Override
 	public void focusMenu() {
-		header.focusMenu();
+		navRail.focusMenu();
 	}
 
 	@Override
@@ -925,7 +938,7 @@ public class ToolbarPanel extends FlowPanel
 		if (force) {
 			openAlgebra(true);
 		}
-		return header.isOpen() && isAlgebraViewActive()
+		return navRail.isOpen() && isAlgebraViewActive()
 				&& tabAlgebra.focusInput();
 	}
 
@@ -995,6 +1008,9 @@ public class ToolbarPanel extends FlowPanel
 	 * @return navigation rail width
 	 */
 	public int getNavigationRailWidth() {
+		if (!app.showToolBar() || app.isPortrait()) {
+			return 0;
+		}
 		return app.getAppletFrame().hasCompactNavigationRail()
 				? CLOSED_WIDTH_LANDSCAPE_COMPACT : CLOSED_WIDTH_LANDSCAPE;
 	}
@@ -1013,16 +1029,6 @@ public class ToolbarPanel extends FlowPanel
 				parent.setFadeTabs(false);
 			});
 		}
-
-		/**
-		 * Opens the tab.
-		 */
-		public abstract void open();
-
-		/**
-		 * Closes the tab.
-		 */
-		public abstract void close();
 
 		@Override
 		public void onResize() {

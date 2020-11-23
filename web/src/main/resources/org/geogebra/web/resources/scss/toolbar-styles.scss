@@ -268,10 +268,6 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 				}
 			}
 
-			.moveBtnMiddleTab {
-				right: calc(33.3% + 12px)
-			}
-
 			.showMoveBtn {
 				@extend .moveFloatingBtn;
 				opacity: 1;
