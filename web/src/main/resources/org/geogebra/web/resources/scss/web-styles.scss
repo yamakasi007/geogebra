@@ -468,7 +468,7 @@
 		cursor: pointer;
 	}
 
-	.button-up-disabled, .MyToggleButton.gwt-ToggleButton-up-disabled, .MyToggleButton.gwt-ToggleButton-down-disabled,
+	.button:disabled, .MyToggleButton.gwt-ToggleButton-up-disabled, .MyToggleButton.gwt-ToggleButton-down-disabled,
 	.MyCanvasButton.disabled {
 		cursor: default !important;
 		opacity: .5;
@@ -485,11 +485,11 @@
 		}
 	}
 
-	.button-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-down-disabled:focus {
+	.button:disabled, .MyToggleButton.gwt-ToggleButton-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-down-disabled:focus {
 		outline: none;
 	}
 
-	.button-up-disabled:active, .MyToggleButton.gwt-ToggleButton-up-disabled:active, .MyToggleButton.gwt-ToggleButton-down-disabled:active {
+	.MyToggleButton.gwt-ToggleButton-up-disabled:active, .MyToggleButton.gwt-ToggleButton-down-disabled:active {
 		border: 1px solid #6161FF;
 	}
 
@@ -2083,7 +2083,7 @@
 		margin-right: 20px;
 	}
 
-	.checkBoxPanel .gwt-Label, .panelRow .gwt-Label, .listBoxPanel .gwt-Label, .panelRowIndent .gwt-Label,
+	.checkBoxPanel .gwt-Label, .listBoxPanel .gwt-Label, .panelRowIndent .gwt-Label,
 	.optionsPanel .gwt-Label, .optionsPanelIndent .gwt-Label {
 		margin-right: 10px;
 	}

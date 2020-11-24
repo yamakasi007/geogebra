@@ -12,7 +12,7 @@
 		z-index: $always_on_top;
 	}
 
-	.button.flatButton.graphicsContextMenuBtn.button-up {
+	.flatButton.graphicsContextMenuBtn {
 		margin-top: 10px;
 		margin-right: 10px;
 		position: relative;
@@ -22,22 +22,18 @@
 		img {
 			opacity: 0.54;
 		}
-	}
-		
-	.button.flatButton.graphicsContextMenuBtn.button-up-hovering {
-		@extend .button-up;
-				
-		img {
-			opacity: 0.84;	
-		}
-	}
 
-	.button.flatButton.graphicsContextMenuBtn.mow.button-up-hovering {
-		@extend .button-up;
-			
-		background-color: $mow_card_background_hover;
-		img {
-			opacity: 1;	
+		&:hover {
+			img {
+				opacity: 0.84;
+			}
+		}
+
+		&.mow:hover {
+			background-color: $mow_card_background_hover;
+			img {
+				opacity: 1;
+			}
 		}
 	}
 
@@ -353,6 +349,7 @@
 		will-change: transform;
 
     	.zoomPanelBtn {
+			display: block;
     		position: relative;
     		width: 36px;
     		height: 36px;
@@ -423,6 +420,7 @@
 	    right: 4px !important;
 
 	    .zoomPanelBtn {
+			display: block;
 	    	position: relative;
 		    margin: 6px;
 		    padding: 6px;

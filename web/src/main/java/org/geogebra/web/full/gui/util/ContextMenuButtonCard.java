@@ -50,9 +50,6 @@ public class ContextMenuButtonCard extends StandardButton
 
 	private void initButton() {
 		SVGResource resource = getActiveImageResource();
-		Image hoveringFace = getImage(resource);
-		getUpHoveringFace().setImage(hoveringFace);
-		getDownHoveringFace().setImage(hoveringFace);
 		addStyleName("mowMoreButton");
 
 		addFastClickHandler(source -> {
@@ -146,11 +143,10 @@ public class ContextMenuButtonCard extends StandardButton
 	 */
 	protected void toggleIcon(boolean toggle) {
 		if (toggle) {
-			getUpFace().setImage(getImage(getActiveImageResource()));
+			setIcon(getActiveImageResource());
 			addStyleName("active");
 		} else {
-			getUpFace().setImage(getImage(
-					MaterialDesignResources.INSTANCE.more_vert_black()));
+			setIcon(MaterialDesignResources.INSTANCE.more_vert_black());
 			removeStyleName("active");
 		}
 	}
