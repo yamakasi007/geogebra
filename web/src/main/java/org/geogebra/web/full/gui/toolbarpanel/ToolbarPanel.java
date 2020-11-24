@@ -146,8 +146,8 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public int getTabWidth() {
 		int w = this.getOffsetWidth() - getNavigationRailWidth();
-		if (isAnimating() && !app.isPortrait()) {
-			w -= HDRAGGER_WIDTH;
+		if (isAnimating() && !app.isPortrait() && lastOpenWidth != null) {
+			w = lastOpenWidth - getNavigationRailWidth() - HDRAGGER_WIDTH;
 		}
 		return Math.max(w, 0);
 	}
@@ -257,7 +257,7 @@ public class ToolbarPanel extends FlowPanel
 		// too
 		moveBtn.addStyleName("moveMoveBtnDown");
 		main.add(moveBtn);
-		hideMoveFloatingButton();
+		setMoveFloatingButtonVisible(false);
 		FastClickHandler moveBtnHandler = source -> moveBtnClicked();
 		moveBtn.addFastClickHandler(moveBtnHandler);
 	}
@@ -364,7 +364,7 @@ public class ToolbarPanel extends FlowPanel
 			AnimationCallback animCallback = null;
 			dockParent.addStyleName("hide-Dragger");
 			opposite.addStyleName("hiddenHDraggerRightPanel");
-			if (navRail.isOpen()) {
+			if (isOpen()) {
 				if (lastOpenWidth != null) {
 					updateWidthForOpening(dockPanel, dockParent);
 					animCallback = new LandscapeAnimationCallback(navRail);
@@ -401,7 +401,7 @@ public class ToolbarPanel extends FlowPanel
 				? dockPanel.getParentSplitPane() : null;
 		if (dockParent != null) {
 			dockParent.setWidgetMinSize(dockPanel,
-					navRail.isOpen() ? OPEN_MIN_WIDTH_LANDSCAPE
+					isOpen() ? OPEN_MIN_WIDTH_LANDSCAPE
 							: getNavigationRailWidth());
 		}
 	}
@@ -417,20 +417,14 @@ public class ToolbarPanel extends FlowPanel
 		final DockSplitPaneW dockParent = dockPanel != null ? dockPanel.getParentSplitPane() : null;
 		Widget evPanel = dockParent != null ? dockParent.getOpposite(dockPanel) : null;
 		if (evPanel != null) {
-			if (navRail.isOpen()) {
+			if (isOpen()) {
 				updateHeightForOpening(dockParent, evPanel);
 			} else {
 				updateHeightForClosing(dockParent, evPanel);
 			}
 
 			dockParent.animate(OPEN_ANIM_TIME,
-					new PortraitAnimationCallback(navRail, app) {
-						@Override
-						protected void onEnd() {
-							super.onEnd();
-							dockParent.forceLayout();
-						}
-					});
+					new PortraitAnimationCallback(navRail, app, dockParent));
 		}
 	}
 
@@ -475,33 +469,18 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	private void updateMoveButton(int mode) {
-		if (mode == EuclidianConstants.MODE_MOVE) {
-			hideMoveFloatingButton();
-		} else {
-			showMoveFloatingButton();
-		}
-	}
-
-	/**
-	 * Show move floating action button
-	 */
-	void showMoveFloatingButton() {
-		if (moveBtn == null) {
-			return;
-		}
-		moveBtn.addStyleName("showMoveBtn");
-		moveBtn.removeStyleName("hideMoveBtn");
+		setMoveFloatingButtonVisible(mode != EuclidianConstants.MODE_MOVE
+			&& getSelectedTabId() == TabIds.TOOLS);
 	}
 
 	/**
 	 * Hide move floating action button
 	 */
-	public void hideMoveFloatingButton() {
+	public void setMoveFloatingButtonVisible(boolean visible) {
 		if (moveBtn == null) {
 			return;
 		}
-		moveBtn.addStyleName("hideMoveBtn");
-		moveBtn.removeStyleName("showMoveBtn");
+		Dom.toggleClass(moveBtn, "showMoveBtn", "hideMoveBtn", visible);
 	}
 
 	/**
@@ -591,11 +570,7 @@ public class ToolbarPanel extends FlowPanel
 	 * @param fade decides if tab should fade during animation.
 	 */
 	public void openAlgebra(boolean fade) {
-		if (this.getSelectedTabId() == TabIds.TABLE) {
-			tabTools.setVisible(false);
-		}
 		switchTab(TabIds.ALGEBRA, fade);
-		hideMoveFloatingButton();
 		setMoveMode();
 		dispatchEvent(EventType.ALGEBRA_PANEL_SELECTED);
 	}
@@ -612,7 +587,7 @@ public class ToolbarPanel extends FlowPanel
 				tabTable.setActive(tab == TabIds.TABLE);
 			}
 		});
-
+		updateMoveButton();
 	}
 
 	/**
@@ -628,7 +603,6 @@ public class ToolbarPanel extends FlowPanel
 		ToolTipManagerW.hideAllToolTips();
 
 		switchTab(TabIds.TOOLS, fade);
-		updateMoveButton();
 		dispatchEvent(EventType.TOOLS_PANEL_SELECTED);
 	}
 
@@ -647,9 +621,6 @@ public class ToolbarPanel extends FlowPanel
 			return;
 		}
 
-		if (this.getSelectedTabId() == TabIds.ALGEBRA) {
-			tabTools.setVisible(false);
-		}
 		switchTab(TabIds.TABLE, fade);
 		tabTable.scrollTo(geo);
 		dispatchEvent(EventType.TABLE_PANEL_SELECTED);
@@ -686,7 +657,8 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	protected void onOpen() {
 		resizeTabs();
-		main.getElement().getStyle().setProperty("width", "100%");
+		main.getElement().getStyle().setProperty("width", "calc(100% - "
+				+ getNavigationRailWidth() + "px)");
 	}
 
 	/**
@@ -706,9 +678,9 @@ public class ToolbarPanel extends FlowPanel
 				getNavigationRailWidth() + "px");
 		main.getElement().getStyle().setProperty("height",
 				"calc(100% - " + getNavigationRailHeight() + "px)");
-		if (app.isPortrait()) {
-			navRail.setVisible(!isKeyboardShowing());
-		}
+
+		navRail.setVisible(!app.isPortrait() || !isKeyboardShowing());
+
 		if (tabAlgebra != null) {
 			tabAlgebra.onResize();
 		}
@@ -731,7 +703,7 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	void updateStyle() {
 		setMinimumSize();
-		if (navRail.isOpen()) {
+		if (isOpen()) {
 			main.removeStyleName("hidden");
 		} else {
 			main.addStyleName("hidden");
@@ -938,7 +910,7 @@ public class ToolbarPanel extends FlowPanel
 		if (force) {
 			openAlgebra(true);
 		}
-		return navRail.isOpen() && isAlgebraViewActive()
+		return isOpen() && isAlgebraViewActive()
 				&& tabAlgebra.focusInput();
 	}
 

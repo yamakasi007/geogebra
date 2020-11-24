@@ -5,20 +5,22 @@ $tab-transition: opacity $tab-anim;
 $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 
 .GeoGebraFrame {
-	.gwt-ToggleButton.flatButton.menu.landscapeMenuBtn,.gwt-ToggleButton.flatButton.menu {
-		margin-left: 10px;
+	.gwt-ToggleButton.flatButton.menu {
+		margin-left: 18px;
 		&:focus {
 			outline: $focus-black 5px auto;
 		}
 	}
-
-	.gwt-ToggleButton.flatButton.menu.portraitMenuBtn {
+	&.small .gwt-ToggleButton.flatButton.menu.landscapeMenuBtn {
+		margin-left: 10px;
+	}
+	.gwt-ToggleButton.flatButton.menu {
 		img {
 			opacity: 0.54;
 		}
 	}
 
-	.gwt-ToggleButton.flatButton.menu.portraitMenuBtn.gwt-ToggleButton-up-hovering {
+	.gwt-ToggleButton.flatButton.menu.gwt-ToggleButton-up-hovering {
 		img {
 			opacity: 0.8;
 		}
@@ -110,14 +112,11 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 				width: 56px;
 			}
 			.center {
-				display: table-cell;
+				display: block;
 				width: 100%;
-				top: calc(50% - 64px);
-
-				&.threeTab {
-					left: 50%;
-					transform: translateX(-50%);
-					top: calc(50% - 86px);
+				top: 24px;
+				&.withMenu {
+					top: 56px;
 				}
 			}
 
@@ -322,6 +321,7 @@ $movebtn-transition: bottom  250ms cubic-bezier(0.4, 0, 1, 1) 0ms;
 
 			.tab {
 				opacity: 1;
+				right: 0;
 			}
 
 		}

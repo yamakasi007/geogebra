@@ -6,7 +6,6 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.io.layout.DockPanelData.TabIds;
 import org.geogebra.common.io.layout.PerspectiveDecoder;
-import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.exam.ExamLogAndExitDialog;
 import org.geogebra.web.full.gui.menubar.FileMenuW;
@@ -53,10 +52,7 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	private MyToggleButton btnRedo;
 	private boolean animating = false;
 	private boolean lastOrientation;
-	/**
-	 * height in open state
-	 */
-	private static final int OPEN_HEIGHT = 56;
+
 	/**
 	 * application
 	 */
@@ -65,7 +61,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	 * Parent tool panel
 	 */
 	final ToolbarPanel toolbarPanel;
-	private static final int PADDING = 12;
 	private FocusableWidget focusableMenuButton;
 
 	/**
@@ -124,7 +119,9 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 				center.addStyleName("threeTab");
 			}
 		}
-
+		if (btnMenu != null && !isHeaderExternal()) {
+			center.addStyleName("withMenu");
+		}
 		contents.add(center);
 	}
 
@@ -225,21 +222,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		toolbarPanel.setMoveMode();
 		toolbarPanel.close();
 		app.getAccessibilityManager().focusAnchorOrMenu();
-	}
-
-	private void onOpen() {
-		removeOrientationStyles();
-		TabIds tab = toolbarPanel.getSelectedTabId();
-		if (tab == TabIds.ALGEBRA) {
-			onAlgebraPressed();
-		} else if (tab == TabIds.TABLE) {
-			onTableViewPressed();
-		} else {
-			// tools or null
-			onToolsPressed();
-		}
-		toolbarPanel.open();
-		updateStyle();
 	}
 
 	private void removeOrientationStyles() {
@@ -350,7 +332,7 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		if (btnMenu == null) {
 			return;
 		}
-		boolean external = needsHeader() && GlobalHeader.isInDOM();
+		boolean external = isHeaderExternal();
 		btnMenu.setExternal(external);
 		if (external) {
 			btnMenu.addToGlobalHeader();
@@ -360,20 +342,20 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		}
 	}
 
+	private boolean isHeaderExternal() {
+		return needsHeader() && GlobalHeader.isInDOM();
+	}
+
 	private boolean needsHeader() {
 		return !app.getAppletFrame().shouldHideHeader();
 	}
 
 	private void addShareButton() {
-		GlobalHeader.INSTANCE.initShareButton(new AsyncOperation<Widget>() {
-
-			@Override
-			public void callback(Widget share) {
-				if (app.isMenuShowing()) {
-					app.toggleMenu();
-				}
-				FileMenuW.share(app, share);
+		GlobalHeader.INSTANCE.initShareButton(share -> {
+			if (app.isMenuShowing()) {
+				app.toggleMenu();
 			}
+			FileMenuW.share(app, share);
 		});
 	}
 
@@ -541,42 +523,9 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		if (btnMenu == null) {
 			return;
 		}
-		if (isOpen()) {
-			btnMenu.removeStyleName("landscapeMenuBtn");
-		} else {
-			if (!app.isPortrait()) {
-				btnMenu.addStyleName("landscapeMenuBtn");
-			} else {
-				btnMenu.removeStyleName("landscapeMenuBtn");
-			}
-		}
-		if (app.isPortrait()) {
-			btnMenu.addStyleName("portraitMenuBtn");
-		} else {
-			btnMenu.removeStyleName("portraitMenuBtn");
-		}
+		Dom.toggleClass(btnMenu, "portraitMenuBtn",
+				"landscapeMenuBtn", app.isPortrait());
 		btnMenu.getUpFace().setImage(imgMenu);
-	}
-
-	/**
-	 * update center posiotion by resize
-	 */
-	void updateCenterSize() {
-		int h = 0;
-		if (isOpen()) {
-			h = OPEN_HEIGHT;
-		} else {
-			h = getOffsetHeight() - getMenuButtonHeight()
-					- 2 * PADDING;
-		}
-
-		if (h > 0 && center != null) {
-			center.setHeight(h + "px");
-		}
-	}
-
-	private int getMenuButtonHeight() {
-		return btnMenu == null ? 0 : btnMenu.getOffsetHeight();
 	}
 
 	/**
@@ -587,7 +536,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 			return;
 		}
 		updateMenuPosition();
-		updateCenterSize();
 		updateStyle();
 	}
 
@@ -612,7 +560,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	public void reset() {
 		resize();
 		updateUndoRedoPosition();
-		getElement().getStyle().setHeight(OPEN_HEIGHT, Unit.PX);
 	}
 
 	/**
@@ -708,7 +655,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	public void onLandscapeAnimationEnd() {
 		if (!isOpen()) {
 			getElement().getStyle().clearWidth();
-			setHeight("100%");
 			toolbarPanel.updateUndoRedoPosition();
 		} else {
 			toolbarPanel.onOpen();
@@ -716,7 +662,6 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		toolbarPanel.onResize();
 
 		Scheduler.get().scheduleDeferred(() -> {
-			updateCenterSize();
 			showUndoRedoPanel();
 			updateUndoRedoPosition();
 			resize();

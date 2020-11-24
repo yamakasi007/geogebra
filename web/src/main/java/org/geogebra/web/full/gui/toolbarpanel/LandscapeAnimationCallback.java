@@ -5,8 +5,6 @@ package org.geogebra.web.full.gui.toolbarpanel;
  */
 public class LandscapeAnimationCallback extends NavRailAnimationCallback {
 
-	private static final int OPEN_HEIGHT = 56;
-
 	/**
 	 * @param header
 	 *            header
@@ -17,14 +15,13 @@ public class LandscapeAnimationCallback extends NavRailAnimationCallback {
 
 	@Override
 	protected void onStart() {
+		navRail.setAnimating(true);
 		navRail.hideUndoRedoPanel();
-		if (navRail.isOpen()) {
-			navRail.setHeight(OPEN_HEIGHT + "px");
-		}
 	}
 
 	@Override
 	protected void onEnd() {
+		navRail.setAnimating(false);
 		navRail.onLandscapeAnimationEnd();
 	}
 }

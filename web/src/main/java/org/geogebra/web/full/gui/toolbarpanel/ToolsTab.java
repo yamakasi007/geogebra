@@ -195,7 +195,6 @@ public class ToolsTab extends ToolbarPanel.ToolbarTab {
 			return;
 		}
 		setWidth(w + "px");
-
 		sp.setWidth(w + "px");
 		double height = toolbarPanel.getTabHeight();
 		if (height >= 0) {
