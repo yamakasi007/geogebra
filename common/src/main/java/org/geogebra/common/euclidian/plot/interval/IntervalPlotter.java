@@ -75,4 +75,11 @@ public class IntervalPlotter {
 	public boolean isEnabled() {
 		return enabled;
 	}
+
+	/**
+	 * Disable interval plotter.
+	 */
+	public void disable() {
+		enabled = false;
+	}
 }

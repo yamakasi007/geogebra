@@ -1,7 +1,6 @@
 package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
-import static org.geogebra.common.kernel.interval.IntervalConstants.WHOLE;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
 
 import java.util.Objects;
@@ -291,7 +290,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	void setWhole() {
-		set(WHOLE.low, WHOLE.high);
+		set(IntervalConstants.whole());
 	}
 
 	/**
