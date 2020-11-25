@@ -24,10 +24,6 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 		if (dx == 0) {
 			return;
 		}
-		moveDomain(dx);
-	}
-
-	public void moveDomain(double dx) {
-		model.moveDomain(view.domain(), dx);
+		model.moveDomain();
 	}
 }

@@ -20,7 +20,7 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
 		for (int i = 0; i < 10; i++) {
-			sampler.append(1);
+			sampler.extendTo(1);
 		}
 
 		IntervalFunctionSampler samplerExpected = newSampler(xDoubled,	rangeExpected,	10);
@@ -36,7 +36,7 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
 		IntervalTupleList points = sampler.result();
-		IntervalTupleList newPoints = sampler.prepend(2);
+		IntervalTupleList newPoints = sampler.shrinkTo(2);
 
 		if (newPoints != null) {
 			points.prepend(newPoints);

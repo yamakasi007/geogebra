@@ -5,7 +5,6 @@ import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
-import org.geogebra.common.util.debug.Log;
 
 public class IntervalPlotModel {
 	private final IntervalTuple range;
@@ -56,24 +55,15 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
-	public void moveDomain(Interval domain, double dx) {
-		this.domain = domain;
-		double deltaX = dx / view.getXscale();
+	public void moveDomain() {
+		double deltaX = oldDomain.getLow() - view.domain().getLow();
+		oldDomain = view.domain();
 		if (deltaX < 0) {
-			Log.debug("append");
-			IntervalTupleList tuples = sampler.append(-deltaX);
+			IntervalTupleList tuples = sampler.extendTo(view.getXmax());
 			points.append(tuples);
 		} else {
-			Log.debug("prepend");
-			IntervalTupleList tuples = sampler.prepend(deltaX);
+			IntervalTupleList tuples = sampler.shrinkTo(view.getXmin());
 			points.prepend(tuples);
 		}
-		info(dx, deltaX);
-		oldDomain = this.domain;
-	}
-
-	private void info(double dx, double deltaX) {
-		Log.debug("view: " + view.domain() + " pts: " + points.domain());
-		Log.debug("dx: " + dx + " rw " + deltaX + " cnt: " + points.count());
 	}
 }

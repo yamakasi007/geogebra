@@ -8,7 +8,6 @@ import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.jre.headless.AppCommon;
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.junit.Before;
@@ -33,7 +32,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel model = newModel("sin(x)", 0, 5, path);
 		model.updateAll();
 		view.setRealWorldCoordSystem(2, 7, -20, 20);
-		model.moveDomain(view.domain(), 3);
+		model.moveDomain();
 		model.updatePath();
 
 		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
@@ -52,8 +51,8 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel expectedModel = newModel("2x", -10.0, 8.0, pathExpected);
 		model.updateAll();
 		expectedModel.updateAll();
-		model.moveDomain(new Interval(-5.0,15.0), 3);
-		model.moveDomain(new Interval(-10.0,10.0), 3);
+		model.moveDomain();
+		model.moveDomain();
 		model.updatePath();
 		assertEquals(expectedModel.getPoints()
 				, model.getPoints());

@@ -62,15 +62,14 @@ public class LinearSpace {
 		return scale;
 	}
 
-	public LinearSpace appendKeepSize(double delta) {
+	public LinearSpace extendKeepSize(double max) {
 		LinearSpace result = new LinearSpace();
-		double max = getLastValue() + Math.max(delta, step) + step;
-		double t = getLastValue() + step;
+		double t = getLastValue();
 		while (t <= max) {
-			result.values.add(t);
-			values.remove(0);
-			values.add(t);
 			t += step;
+			values.add(t);
+			values.remove(0);
+			result.values.add(t);
 		}
 		return result;
 	}
@@ -83,9 +82,8 @@ public class LinearSpace {
 		return values.size();
 	}
 
-	public LinearSpace prependKeepSize(double delta) {
+	public LinearSpace shrinkKeepSize(double min) {
 		LinearSpace result = new LinearSpace();
-		double min = getFirstValue() - Math.max(delta, step);
 		double t = getFirstValue();
 		while (min < t) {
 			t -= step;
@@ -98,13 +96,6 @@ public class LinearSpace {
 
 	private double getFirstValue() {
 		return values.isEmpty() ? 0 : values.get(0);
-	}
-
-	private double getDiff(double delta) {
-		double m = Math.floor(delta / step) + 1;
-		double diff = (m * step) + step;
-	//	Log.debug("[DIFF] step: " + step + " delta: " + delta + " result: " + diff);
-		return diff;
 	}
 
 	@Override
