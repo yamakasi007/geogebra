@@ -63,11 +63,9 @@ public class IntervalPlotModel {
 			IntervalTupleList tuples = sampler.append(-deltaX);
 			points.append(tuples);
 			Log.debug(tuples);
-			clipDomainLow();
 		} else {
 			IntervalTupleList tuples = sampler.prepend(deltaX);
 			points.prepend(tuples);
-			clipDomainHigh();
 		}
 		info(deltaX);
 		oldDomain = this.domain;

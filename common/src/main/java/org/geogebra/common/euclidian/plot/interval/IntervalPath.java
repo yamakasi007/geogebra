@@ -67,6 +67,4 @@ public class IntervalPath {
 	private void lineTo(double low, double high) {
 		gp.lineTo(low, high);
 	}
-
-
 }
