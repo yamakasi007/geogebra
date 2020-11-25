@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.kernel.geos.GeoAudio;
-import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.sound.SoundManager;
 import org.geogebra.common.util.AsyncOperation;
@@ -23,7 +22,8 @@ public class SoundManagerW implements SoundManager {
 	private final AppW app;
 	private final EuclidianView view;
 	private boolean mp3active = true;
-	private final Map<GeoAudio, HTMLAudioElement> geoAudioElements;
+	private final Map<String, HTMLAudioElement> audioElements;
+	private final Map<String, GeoAudio> geoAudios;
 	private AsyncOperation<Boolean> urlCallback = null;
 
 	/**
@@ -32,7 +32,8 @@ public class SoundManagerW implements SoundManager {
 	 */
 	public SoundManagerW(AppW app) {
 		this.app = app;
-		geoAudioElements = new HashMap<>();
+		audioElements = new HashMap<>();
+		geoAudios = new HashMap<>();
 		view = app.getActiveEuclidianView();
 	}
 
@@ -63,9 +64,9 @@ public class SoundManagerW implements SoundManager {
 	}
 
 	@Override
-	public void playFile(GeoElement geoElement, String file) {
+	public void playFile(String url0) {
 		this.mp3active = true;
-		String url = file;
+		String url = url0;
 		// eg PlaySound["#12345"] to play material 12345 from GeoGebraTube
 		boolean fmtMp3 = url.startsWith("#");
 		boolean fmtMidi = url.startsWith("@");
@@ -80,11 +81,11 @@ public class SoundManagerW implements SoundManager {
 		}
 
 		Log.debug("playing URL as MP3: " + url);
-		final HTMLAudioElement audio = geoAudioElements.get(geoElement);
+		final HTMLAudioElement audio = audioElements.get(url);
 		if (audio != null) {
 			app.invokeLater(audio::play);
 		} else {
-			playMP3((GeoAudio) geoElement);
+			playMP3(url);
 		}
 	}
 
@@ -99,11 +100,11 @@ public class SoundManagerW implements SoundManager {
 	 *
 	 * @param audio
 	 *            Element that is ready to play.
-	 * @param geoAudio
-	 *            The audio geo.
+	 * @param url
+	 *            The url of the audio element.
 	 */
-	protected void onCanPlay(HTMLAudioElement audio, GeoAudio geoAudio) {
-		geoAudioElements.put(geoAudio, audio);
+	protected void onCanPlay(HTMLAudioElement audio, String url) {
+		audioElements.put(url, audio);
 		if (mp3active) {
 			audio.play();
 		}
@@ -114,12 +115,12 @@ public class SoundManagerW implements SoundManager {
 	 * 
 	 * @param audio
 	 *            Element that is ready to play.
-	 * @param geoAudio
-	 *            Audio geo element.
+	 * @param url
+	 *            The url of the audio element.
 	 */
-	protected void onGeoAudioUpdate(HTMLAudioElement audio, GeoAudio geoAudio) {
-		geoAudioElements.put(geoAudio, audio);
-		view.update(geoAudio);
+	protected void onGeoAudioUpdate(HTMLAudioElement audio, String url) {
+		audioElements.put(url, audio);
+		view.update(geoAudios.get(url));
 		view.repaintView();
 	}
 
@@ -136,14 +137,45 @@ public class SoundManagerW implements SoundManager {
 	}
 
 	/**
-	 * @param geoAudio
-	 *            the audio geo element
+	 * @param url
+	 *            eg
+	 *            http://www.geogebra.org/static/spelling/spanish/00/00002.mp3
 	 */
-	void playMP3(GeoAudio geoAudio) {
+	void playMP3(String url) {
 		HTMLAudioElement audio = createHtmlAudioElement();
-		audio.src = geoAudio.getSrc();
+		audio.src = url;
 		audio.oncanplay = p0 -> {
-			onCanPlay(audio, geoAudio);
+			onCanPlay(audio, url);
+			return null;
+		};
+
+		audio.load();
+	}
+
+	private void loadGeoAudio(String url) {
+		HTMLAudioElement audio = createHtmlAudioElement();
+		if (audio == null) {
+			return;
+		}
+
+		audio.src = url;
+		audio.oncanplay = p0 -> {
+			onGeoAudioUpdate(audio, url);
+			return null;
+		};
+
+		audio.ontimeupdate = p0 -> {
+			onGeoAudioUpdate(audio, url);
+			return null;
+		};
+
+		audio.onplay = p0 -> {
+			onGeoAudioUpdate(audio, url);
+			return null;
+		};
+
+		audio.onended = p0 -> {
+			onGeoAudioUpdate(audio, url);
 			return null;
 		};
 
@@ -204,38 +236,13 @@ public class SoundManagerW implements SoundManager {
 
 	@Override
 	public void loadGeoAudio(GeoAudio geo) {
-		HTMLAudioElement audio = createHtmlAudioElement();
-		if (audio == null) {
-			return;
-		}
-
-		audio.src = geo.getSrc();
-		audio.oncanplay = p0 -> {
-			onGeoAudioUpdate(audio, geo);
-			return null;
-		};
-
-		audio.ontimeupdate = p0 -> {
-			onGeoAudioUpdate(audio, geo);
-			return null;
-		};
-
-		audio.onplay = p0 -> {
-			onGeoAudioUpdate(audio, geo);
-			return null;
-		};
-
-		audio.onended = p0 -> {
-			onGeoAudioUpdate(audio, geo);
-			return null;
-		};
-
-		audio.load();
+		geoAudios.put(geo.getSrc(), geo);
+		loadGeoAudio(geo.getSrc());
 	}
 
 	@Override
-	public int getDuration(GeoAudio geoAudio) {
-		final HTMLAudioElement audio = geoAudioElements.get(geoAudio);
+	public int getDuration(String url) {
+		final HTMLAudioElement audio = audioElements.get(url);
 		if (audio != null) {
 			return getDuration(audio);
 		}
@@ -243,8 +250,8 @@ public class SoundManagerW implements SoundManager {
 	}
 
 	@Override
-	public int getCurrentTime(GeoAudio geoAudio) {
-		final HTMLAudioElement audio = geoAudioElements.get(geoAudio);
+	public int getCurrentTime(String url) {
+		final HTMLAudioElement audio = audioElements.get(url);
 		if (audio != null) {
 			return getCurrentTime(audio);
 		}
@@ -252,8 +259,8 @@ public class SoundManagerW implements SoundManager {
 	}
 
 	@Override
-	public void setCurrentTime(GeoAudio geoAudio, int time) {
-		final HTMLAudioElement audio = geoAudioElements.get(geoAudio);
+	public void setCurrentTime(String url, int time) {
+		final HTMLAudioElement audio = audioElements.get(url);
 		if (audio != null) {
 			setCurrentTime(audio, time);
 		}
@@ -274,7 +281,7 @@ public class SoundManagerW implements SoundManager {
 	}
 
 	protected HTMLAudioElement geoAudioToElement(GeoAudio geo) {
-		return geoAudioElements.get(geo);
+		return audioElements.get(geo.getSrc());
 	}
 
 	@Override

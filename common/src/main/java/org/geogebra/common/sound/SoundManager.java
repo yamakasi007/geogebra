@@ -1,7 +1,6 @@
 package org.geogebra.common.sound;
 
 import org.geogebra.common.kernel.geos.GeoAudio;
-import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.util.AsyncOperation;
 
@@ -16,13 +15,11 @@ public interface SoundManager {
 	void playFunction(GeoFunction geoFunction, double double1, double double2);
 
 	/**
-	 * @param geoAudible
-	 * 			  audio geo element
-	 * @param url
+	 * @param string
 	 *            file to play. Desktop currently just supports .mid, Wed
 	 *            supports .mp3
 	 */
-	void playFile(GeoElement geoAudible, String url);
+	void playFile(String string);
 
 	void playFunction(GeoFunction geoFunction, double double1, double double2,
 			int double3, int double4);
@@ -38,30 +35,30 @@ public interface SoundManager {
 	/**
 	 * Gets the length of the audio given by its URL.
 	 * 
-	 * @param geoAudio
-	 *           Audio geo element.
+	 * @param url
+	 *            URL of the audio resource.
 	 * @return the duration of the audio resource.
 	 */
-	int getDuration(GeoAudio geoAudio);
+	int getDuration(String url);
 
 	/**
 	 * Gets the current time elapsed of the audio given by its URL.
 	 * 
-	 * @param geoAudio
-	 *            Audio geo element.
+	 * @param url
+	 *            URL of the audio resource.
 	 * @return the duration of the audio resource.
 	 */
-	int getCurrentTime(GeoAudio geoAudio);
+	int getCurrentTime(String url);
 
 	/**
 	 * Sets the current time position of the audio given by its URL.
 	 * 
-	 * @param geoAudio
-	 *            Audio geo element.
+	 * @param url
+	 *            URL of the audio resource.
 	 * @param pos
 	 *            to set.
 	 */
-	void setCurrentTime(GeoAudio geoAudio, int pos);
+	void setCurrentTime(String url, int pos);
 
 	/**
 	 * 
