@@ -64,9 +64,9 @@ public class LinearSpace {
 
 	public LinearSpace appendKeepSize(double delta) {
 		LinearSpace result = new LinearSpace();
-		double max = getLastValue() + delta + step;
+		double max = getLastValue() + Math.max(delta, step) + step;
 		double t = getLastValue() + step;
-		while (t < max) {
+		while (t <= max) {
 			result.values.add(t);
 			values.remove(0);
 			values.add(t);
@@ -85,8 +85,8 @@ public class LinearSpace {
 
 	public LinearSpace prependKeepSize(double delta) {
 		LinearSpace result = new LinearSpace();
+		double min = getFirstValue() - Math.max(delta, step);
 		double t = getFirstValue();
-		double min = t - delta;
 		while (min < t) {
 			t -= step;
 			result.values.add(0, t);

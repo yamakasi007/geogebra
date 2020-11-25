@@ -45,7 +45,7 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	 *
 	 * @return the size of the list
 	 */
-	public int size() {
+	public int count() {
 		return list.size();
 	}
 
@@ -60,13 +60,13 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		}
 
 		this.list.addAll(tupleList);
-		list = list.subList(tupleList.size() - 2, list.size());
+		list = list.subList(tupleList.size(), list.size());
 	}
 
 
 	public void prepend(IntervalTupleList newPoints) {
 		list.addAll(0, newPoints.list);
-		int lastIndex = newPoints.size() < list.size() ? list.size() - newPoints.size() : 0;
+		int lastIndex = newPoints.count() < list.size() ? list.size() - newPoints.count() : 0;
 		list = list.subList(0, lastIndex);
 	}
 

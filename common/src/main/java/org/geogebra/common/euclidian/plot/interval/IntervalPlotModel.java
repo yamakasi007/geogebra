@@ -56,41 +56,24 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
-	public void moveDomain(Interval domain) {
+	public void moveDomain(Interval domain, double dx) {
 		this.domain = domain;
-		double deltaX = oldDomain.getLow() - this.domain.getLow();
+		double deltaX = dx / view.getXscale();
 		if (deltaX < 0) {
+			Log.debug("append");
 			IntervalTupleList tuples = sampler.append(-deltaX);
 			points.append(tuples);
-			Log.debug(tuples);
 		} else {
+			Log.debug("prepend");
 			IntervalTupleList tuples = sampler.prepend(deltaX);
 			points.prepend(tuples);
 		}
-		info(deltaX);
+		info(dx, deltaX);
 		oldDomain = this.domain;
 	}
 
-	private void info(double deltaX) {
-//		Log.debug("view domain: " + domain.toShortString());
-//		Log.debug("oldw domain: " + oldDomain.toShortString());
-//		Log.debug("deltaX: " + deltaX);
-		Log.debug("pts  domain: " + points.domain() + " length: " + points.domain().getLength());
-	}
-
-	private void clipDomainLow() {
-		double high = points.get(0).x().getHigh();
-		while (high <= domain.getLow() && !points.isEmpty()) {
-			points.remove(0);
-			high = points.get(0).x().getHigh();
-		}
-	}
-
-	private void clipDomainHigh() {
-		double low = points.get(points.size() - 1).x().getLow();
-		while (low >= domain.getHigh() && !points.isEmpty()) {
-			points.remove(points.size() - 1);
-			low = points.get(0).x().getHigh();
-		}
+	private void info(double dx, double deltaX) {
+		Log.debug("view: " + view.domain() + " pts: " + points.domain());
+		Log.debug("dx: " + dx + " rw " + deltaX + " cnt: " + points.count());
 	}
 }
