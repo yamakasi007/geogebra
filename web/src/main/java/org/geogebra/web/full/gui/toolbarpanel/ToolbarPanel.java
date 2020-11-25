@@ -646,19 +646,10 @@ public class ToolbarPanel extends FlowPanel
 	}
 
 	/**
-	 * Update all tabs
-	 */
-	public void updateTabs() {
-		resizeTabs();
-	}
-
-	/**
 	 * Called after open.
 	 */
 	protected void onOpen() {
 		resizeTabs();
-		main.getElement().getStyle().setProperty("width", "calc(100% - "
-				+ getNavigationRailWidth() + "px)");
 	}
 
 	/**
@@ -673,11 +664,16 @@ public class ToolbarPanel extends FlowPanel
 		resizeTabs();
 	}
 
-	private void resizeTabs() {
+	/**
+	 * Update the size of tab container and all tabs
+	 */
+	public void resizeTabs() {
 		main.getElement().getStyle().setProperty("left",
 				getNavigationRailWidth() + "px");
 		main.getElement().getStyle().setProperty("height",
 				"calc(100% - " + getNavigationRailHeight() + "px)");
+		main.getElement().getStyle().setProperty("width", "calc(100% - "
+				+ getNavigationRailWidth() + "px)");
 
 		navRail.setVisible(!app.isPortrait() || !isKeyboardShowing());
 
