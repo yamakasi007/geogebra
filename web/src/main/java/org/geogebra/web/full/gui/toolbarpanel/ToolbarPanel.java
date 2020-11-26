@@ -48,8 +48,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class ToolbarPanel extends FlowPanel
 		implements MyModeChangedListener, SideBarAccessibilityAdapter {
-	/** vertical offset for shadow */
-	public static final int VSHADOW_OFFSET = 4;
+
 	/** Closed width of header in landscape mode */
 	public static final int CLOSED_WIDTH_LANDSCAPE = 72;
 	public static final int CLOSED_WIDTH_LANDSCAPE_COMPACT = 56;
@@ -280,7 +279,7 @@ public class ToolbarPanel extends FlowPanel
 				? dockPanel.getParentSplitPane() : null;
 		if (dockParent != null) {
 			final Widget opposite = dockParent.getOpposite(dockPanel);
-			dockParent.addStyleName("hide-Dragger");
+			updateDraggerStyle();
 			if (opposite != null) {
 				Dom.toggleClass(opposite, "hiddenHDraggerRightPanel", dockParent
 						.getOrientation() == SwingConstants.HORIZONTAL_SPLIT);
@@ -293,7 +292,7 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	private void doOpen() {
 		isOpen = true;
-		updateDraggerStyle(true);
+		updateDraggerStyle();
 		updateSizes();
 		updateKeyboardVisibility();
 		updatePanelVisibility(isOpen);
@@ -307,23 +306,19 @@ public class ToolbarPanel extends FlowPanel
 			return;
 		}
 		isOpen = false;
-		updateDraggerStyle(false);
+		updateDraggerStyle();
 		updateSizes();
 		updateKeyboardVisibility();
 		dispatchEvent(EventType.SIDE_PANEL_CLOSED);
 		updatePanelVisibility(isOpen);
 	}
 
-	private void updateDraggerStyle(boolean close) {
+	private void updateDraggerStyle() {
 		DockSplitPaneW dockParent = getDockParent();
 		if (dockParent != null) {
-			if (app.isPortrait() && !close) {
-				dockParent.removeStyleName("hide-Dragger");
-				dockParent.addStyleName("moveUpDragger");
-			} else {
-				dockParent.removeStyleName("moveUpDragger");
-				dockParent.addStyleName("hide-Dragger");
-			}
+			dockParent.setStyleName("matDragger", isOpen);
+			dockParent.setStyleName("moveUpDragger", !isOpen && app.isPortrait());
+			dockParent.setStyleName("hideDragger", !isOpen && !app.isPortrait());
 		}
 	}
 
@@ -366,7 +361,7 @@ public class ToolbarPanel extends FlowPanel
 		if (dockParent != null) {
 			final Widget opposite = dockParent.getOpposite(dockPanel);
 			AnimationCallback animCallback = null;
-			dockParent.addStyleName("hide-Dragger");
+			updateDraggerStyle();
 			opposite.addStyleName("hiddenHDraggerRightPanel");
 			if (isOpen()) {
 				if (lastOpenWidth != null) {
@@ -440,8 +435,7 @@ public class ToolbarPanel extends FlowPanel
 	private void updateHeightForClosing(DockSplitPaneW dockParent, Widget evPanel) {
 		dockParent.setWidgetSize(evPanel,
 				app.getHeight() - navRail.getOffsetHeight()
-						- app.getAppletParameters().getBorderThickness()
-						- VSHADOW_OFFSET);
+						- app.getAppletParameters().getBorderThickness());
 		dockParent.addStyleName("hide-VDragger");
 	}
 
