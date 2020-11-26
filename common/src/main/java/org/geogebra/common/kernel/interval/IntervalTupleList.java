@@ -101,7 +101,11 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 
 	@Override
 	public int hashCode() {
-		return (int)domain().getLength();
+		int hashCode = 7;
+		for (IntervalTuple point: list) {
+			hashCode += point.hashCode();
+		}
+		return hashCode;
 	}
 
 	public Interval domain() {

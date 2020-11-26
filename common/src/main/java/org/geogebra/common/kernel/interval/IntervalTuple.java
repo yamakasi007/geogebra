@@ -1,5 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
+import org.geogebra.common.util.DoubleUtil;
+
 /**
  * Tuple of (x, y) intervals
  *
@@ -64,7 +66,7 @@ public class IntervalTuple {
 
 	@Override
 	public int hashCode() {
-		return (int)(x.getLength() + y.getLength());
+		return DoubleUtil.hashCode(x.getLength() + y.getLength());
 	}
 
 	@Override
