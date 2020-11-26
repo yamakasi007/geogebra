@@ -74,7 +74,7 @@ public class LinearSpace {
 	public LinearSpace extendKeepSize(double max) {
 		LinearSpace result = new LinearSpace();
 		double t = getLastValue();
-		while (t <= max) {
+		while (t < max) {
 			t += step;
 			values.add(t);
 			values.remove(0);

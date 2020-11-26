@@ -17,49 +17,34 @@ public class LinearSpaceTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void testAppendNoMod() {
+	public void testExtendToInt() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(8, 18, 10);
-		space.extendKeepSize(4);
-		space.extendKeepSize(4);
+		space.extendKeepSize(18);
 		assertEquals(expected.values(), space.values());
 	}
 
 	@Test
-	public void testAppendMod() {
+	public void testExtendToReal() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
-		LinearSpace expected = new LinearSpace(4, 14, 10);
-		space.extendKeepSize(2.1);
-		space.extendKeepSize(0.6);
+		LinearSpace expected = new LinearSpace(5, 15, 10);
+		space.extendKeepSize(14.5);
 		assertEquals(expected.values(), space.values());
-		// -2.96, 3.080000000000001
 	}
 
 	@Test
-	public void testAppendReal() {
-		int start = view.toScreenCoordX(3.05);
-		int end = view.toScreenCoordX(4.05);
-		int diff = end - start;
-		int k = 1;
-		int count = 300;
-		LinearSpace space = new LinearSpace(start, end, count);
-
-		for (int i = 0; i < k; i++) {
-			space.extendKeepSize(diff);
-		}
-
-		LinearSpace expsp = new LinearSpace(start + (k * diff), end + (k * diff), count);
-		assertEquals(expsp, space);
-	}
-
-	@Test
-	public void testPrepend() {
+	public void testShrinkToInt() {
 		LinearSpace space = new LinearSpace(8, 18, 10);
 		LinearSpace expected = new LinearSpace(0, 10, 10);
-		space.shrinkKeepSize(1.5);
-		space.shrinkKeepSize(1.5);
-		space.shrinkKeepSize(1.5);
-		space.shrinkKeepSize(1.5);
+		space.shrinkKeepSize(0);
+		assertEquals(expected.values(), space.values());
+	}
+
+	@Test
+	public void testShrinkToReal() {
+		LinearSpace space = new LinearSpace(8, 18, 10);
+		LinearSpace expected = new LinearSpace(-2, 8, 10);
+		space.shrinkKeepSize(-1.4);
 		assertEquals(expected.values(), space.values());
 	}
 }
