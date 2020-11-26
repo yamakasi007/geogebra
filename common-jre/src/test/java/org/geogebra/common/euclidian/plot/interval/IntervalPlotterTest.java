@@ -32,7 +32,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel model = newModel("sin(x)", 0, 5, path);
 		model.updateAll();
 		view.setRealWorldCoordSystem(2, 7, -20, 20);
-		model.moveDomain();
+		model.updateDomain();
 		model.updatePath();
 
 		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
@@ -51,8 +51,8 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel expectedModel = newModel("2x", -10.0, 8.0, pathExpected);
 		model.updateAll();
 		expectedModel.updateAll();
-		model.moveDomain();
-		model.moveDomain();
+		model.updateDomain();
+		model.updateDomain();
 		model.updatePath();
 		assertEquals(expectedModel.getPoints()
 				, model.getPoints());

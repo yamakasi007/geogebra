@@ -12117,7 +12117,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	public void removeZoomerListener(CoordSystemListener coordSystemListener) {
 		zoomerListeners.remove(coordSystemListener);
 	}
-/**
+
+	/**
 	 * @param listener
 	 *            coord system animation listener
 	 */

@@ -53,9 +53,15 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		return list.isEmpty();
 	}
 
-	public void append(IntervalTupleList tuples) {
-		List<IntervalTuple> tupleList = tuples.list;
-		if (tuples.isEmpty()) {
+	/**
+	 * Adds points to the tail of the list and removes
+	 * from the head as many as added to keep the size unchanged.
+	 *
+	 * @param newPoints to append
+	 */
+	public void appendKeepingSize(IntervalTupleList newPoints) {
+		List<IntervalTuple> tupleList = newPoints.list;
+		if (newPoints.isEmpty()) {
 			return;
 		}
 
@@ -63,8 +69,13 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		list = list.subList(tupleList.size(), list.size());
 	}
 
-
-	public void prepend(IntervalTupleList newPoints) {
+	/**
+	 * Adds points to the head of the list and removes
+	 * from the tail as many as added to keep size unchanged.
+	 *
+	 * @param newPoints to append
+	 */
+	public void prependKeepingSize(IntervalTupleList newPoints) {
 		list.addAll(0, newPoints.list);
 		int lastIndex = newPoints.count() < list.size() ? list.size() - newPoints.count() : 0;
 		list = list.subList(0, lastIndex);
@@ -82,14 +93,14 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(IntervalTuple point: list) {
+		for (IntervalTuple point: list) {
 			sb.append(point.toString());
 		}
 		return sb.toString();
 	}
 
 	public Interval domain() {
-		return new Interval(list.get(0).x().getLow(), list.get(list.size() - 1).x().getHigh() );
+		return new Interval(list.get(0).x().getLow(), list.get(list.size() - 1).x().getHigh());
 	}
 
 	public void remove(IntervalTuple tuple) {

@@ -19,6 +19,13 @@ public class LinearSpace {
 		values = new ArrayList<>();
 	}
 
+	/**
+	 * Constructor
+	 *
+	 * @param start value
+	 * @param end value
+	 * @param count the refinement of the linear space.
+	 */
 	public LinearSpace(int start, int end, int count) {
 		this();
 		update(new Interval(start, end), count);
@@ -62,6 +69,12 @@ public class LinearSpace {
 		return scale;
 	}
 
+	/**
+	 * Adjust space to the given maximum keeping the original size.
+	 *
+	 * @param max to adjust to.
+	 * @return the new {@link LinearSpace} that contains the new values only.
+	 */
 	public LinearSpace extendKeepSize(double max) {
 		LinearSpace result = new LinearSpace();
 		double t = getLastValue();
@@ -82,6 +95,12 @@ public class LinearSpace {
 		return values.size();
 	}
 
+	/**
+	 * Adjust space to the given minimum keeping the original size.
+	 *
+	 * @param min to adjust to.
+	 * @return the new {@link LinearSpace} that contains the new values only.
+	 */
 	public LinearSpace shrinkKeepSize(double min) {
 		LinearSpace result = new LinearSpace();
 		double t = getFirstValue();

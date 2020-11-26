@@ -39,7 +39,7 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		IntervalTupleList newPoints = sampler.shrinkTo(2);
 
 		if (newPoints != null) {
-			points.prepend(newPoints);
+			points.prependKeepingSize(newPoints);
 		}
 
 		IntervalFunctionSampler samplerExpected = newSampler(xDoubled,	rangeExpected,	10);

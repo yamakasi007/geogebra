@@ -123,7 +123,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		}
 
 		if (o instanceof Interval) {
-			return almostEqual((Interval)o);
+			return almostEqual((Interval) o);
 		}
 		return false;
 

@@ -10,12 +10,21 @@ public class IntervalPath {
 	private final IntervalPlotModel model;
 	private boolean moveTo;
 
+	/**
+	 * Constructor.
+	 * @param gp {@link IntervalPathPlotter}
+	 * @param view {@link EuclidianView}
+	 * @param model {@link IntervalPlotModel}
+	 */
 	public IntervalPath(IntervalPathPlotter gp, EuclidianView view, IntervalPlotModel model) {
 		this.gp = gp;
 		this.view = view;
 		this.model = model;
 	}
 
+	/**
+	 * Update the path based on the model.
+	 */
 	public void update() {
 		if (model.isEmpty()) {
 			return;

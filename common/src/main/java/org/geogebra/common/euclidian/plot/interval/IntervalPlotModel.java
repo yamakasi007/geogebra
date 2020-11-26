@@ -6,6 +6,11 @@ import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
 
+/**
+ * Model for Interval plotter.
+ *
+ * @author laszlo
+ */
 public class IntervalPlotModel {
 	private final IntervalTuple range;
 	private final IntervalFunctionSampler sampler;
@@ -13,8 +18,14 @@ public class IntervalPlotModel {
 	private IntervalPath path;
 	private final EuclidianView view;
 	private Interval oldDomain;
-	private Interval domain;
 
+	/**
+	 * Constructor
+	 *
+	 * @param range to plot.
+	 * @param sampler to retrieve function data from.
+	 * @param view {@link EuclidianView}
+	 */
 	public IntervalPlotModel(IntervalTuple range,
 			IntervalFunctionSampler sampler,
 			EuclidianView view) {
@@ -27,6 +38,9 @@ public class IntervalPlotModel {
 		this.path = path;
 	}
 
+	/**
+	 * Updates the entire model.
+	 */
 	public void updateAll() {
 		updateRanges();
 		updateSampler();
@@ -55,15 +69,18 @@ public class IntervalPlotModel {
 		path.update();
 	}
 
-	public void moveDomain() {
+	/**
+	 * update function domain to plot due to the visible x range.
+	 */
+	public void updateDomain() {
 		double deltaX = oldDomain.getLow() - view.domain().getLow();
 		oldDomain = view.domain();
 		if (deltaX < 0) {
 			IntervalTupleList tuples = sampler.extendTo(view.getXmax());
-			points.append(tuples);
+			points.appendKeepingSize(tuples);
 		} else {
 			IntervalTupleList tuples = sampler.shrinkTo(view.getXmin());
-			points.prepend(tuples);
+			points.prependKeepingSize(tuples);
 		}
 	}
 }
