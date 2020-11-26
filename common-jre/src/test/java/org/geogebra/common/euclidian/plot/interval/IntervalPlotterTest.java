@@ -41,8 +41,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		IntervalPlotModel expectedModel = newModel("sin(x)", 2.0, 7.0, pathExpected);
 		expectedModel.updateAll();
 
-		assertEquals(expectedModel.getPoints()
-				, model.getPoints());
+		assertEquals(expectedModel.getPoints(), model.getPoints());
 	}
 
 	@Ignore
@@ -58,8 +57,7 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		model.updateDomain();
 		model.updateDomain();
 		model.updatePath();
-		assertEquals(expectedModel.getPoints()
-				, model.getPoints());
+		assertEquals(expectedModel.getPoints(), model.getPoints());
 	}
 
 	private IntervalPlotModel newModel(String functionString,
