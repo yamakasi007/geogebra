@@ -63,6 +63,11 @@ public class IntervalTuple {
 	}
 
 	@Override
+	public int hashCode() {
+		return (int)(x.getLength() + y.getLength());
+	}
+
+	@Override
 	public String toString() {
 		return "{x: " + x().toShortString() + ": " + y().toShortString() + "}";
 	}

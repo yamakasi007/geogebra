@@ -1,7 +1,7 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.euclidian.CoordSystemAnimationListener;
-import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.EuclidianController;
 
 /**
  * Controller for Interval Plotter to handle zoom and moving the view.
@@ -15,11 +15,16 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 	/**
 	 * Constructor.
 	 * @param model {@link IntervalPlotModel}
-	 * @param view {@link EuclidianView}
 	 */
-	public IntervalPlotController(IntervalPlotModel model, EuclidianView view) {
+	public IntervalPlotController(IntervalPlotModel model) {
 		this.model = model;
-		view.getEuclidianController().addZoomerAnimationListener(this);
+	}
+
+	/**
+	 * @param controller {@link EuclidianController}
+	 */
+	public void attachEuclidianController(EuclidianController controller) {
+		controller.addZoomerAnimationListener(this);
 	}
 
 	@Override

@@ -99,6 +99,11 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		return sb.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		return (int)domain().getLength();
+	}
+
 	public Interval domain() {
 		return new Interval(list.get(0).x().getLow(), list.get(list.size() - 1).x().getHigh());
 	}

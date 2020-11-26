@@ -17,7 +17,6 @@ public class IntervalPlotter {
 	private final IntervalPathPlotter gp;
 	private boolean enabled;
 	private IntervalPlotModel model;
-	private IntervalPlotController controller;
 
 	/**
 	 * Creates a disabled plotter
@@ -39,7 +38,8 @@ public class IntervalPlotter {
 	}
 
 	private void createController() {
-		controller = new IntervalPlotController(model, view);
+		IntervalPlotController controller = new IntervalPlotController(model);
+		controller.attachEuclidianController(view.getEuclidianController());
 	}
 
 	private void createModel(GeoFunction function) {

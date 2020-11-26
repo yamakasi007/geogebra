@@ -11,8 +11,6 @@ import java.util.List;
 public class LinearSpace {
 	public List<Double> values;
 	private double scale;
-	private Interval interval;
-	private int count;
 	private double step;
 
 	public LinearSpace() {
@@ -37,8 +35,6 @@ public class LinearSpace {
 	 * @param count of the interval to divide.
 	 */
 	public void update(Interval interval, int count) {
-		this.interval = interval;
-		this.count = count;
 		values.clear();
 		step = interval.getLength() / count;
 		fill(interval.getLow(), interval.getHigh(), step);
@@ -131,4 +127,8 @@ public class LinearSpace {
 		return values.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		return values.hashCode();
+	}
 }
