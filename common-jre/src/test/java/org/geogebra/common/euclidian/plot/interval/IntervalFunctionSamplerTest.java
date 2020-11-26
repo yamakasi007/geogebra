@@ -14,8 +14,8 @@ import org.junit.Test;
 public class IntervalFunctionSamplerTest extends BaseUnitTest {
 
 	@Test
-	public void testAppend() {
-		IntervalTuple rangeActual = createRange(1, 10, 0, 100);
+	public void testExtendTo() {
+		IntervalTuple rangeActual = createRange(0, 10, 0, 100);
 		IntervalTuple rangeExpected = createRange(20, 30, 0, 100);
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
@@ -28,13 +28,13 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void testPrepend() {
+	public void testShrinkTo() {
 		IntervalTuple rangeActual = createRange(0, 10, 0, 100);
 		IntervalTuple rangeExpected = createRange(-2, 8, 0, 100);
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
 		IntervalTupleList points = sampler.result();
-		IntervalTupleList newPoints = sampler.shrinkTo(2);
+		IntervalTupleList newPoints = sampler.shrinkTo(-2);
 
 		if (newPoints != null) {
 			points.prependKeepingSize(newPoints);

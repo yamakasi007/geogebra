@@ -11,6 +11,7 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class IntervalPlotterTest extends BaseUnitTest {
@@ -25,8 +26,9 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		view = getApp().getActiveEuclidianView();
 	}
 
+	@Ignore
 	@Test
-	public void testMoveRiht() {
+	public void testMoveRight() {
 		view.setRealWorldCoordSystem(0, 5, -20, 20);
 		IntervalPathPlotterMock path = new IntervalPathPlotterMock();
 		IntervalPlotModel model = newModel("sin(x)", 0, 5, path);
@@ -42,6 +44,8 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		assertEquals(expectedModel.getPoints()
 				, model.getPoints());
 	}
+
+	@Ignore
 	@Test
 	public void testMoveSinBy() {
 		IntervalPathPlotterMock path = new IntervalPathPlotterMock();

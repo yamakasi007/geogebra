@@ -74,6 +74,7 @@ public class LinearSpace {
 	public LinearSpace extendKeepSize(double max) {
 		LinearSpace result = new LinearSpace();
 		double t = getLastValue();
+		result.values.add(getLastValue());
 		while (t < max) {
 			t += step;
 			values.add(t);
@@ -99,6 +100,7 @@ public class LinearSpace {
 	 */
 	public LinearSpace shrinkKeepSize(double min) {
 		LinearSpace result = new LinearSpace();
+		result.values.add(getFirstValue());
 		double t = getFirstValue();
 		while (min < t) {
 			t -= step;

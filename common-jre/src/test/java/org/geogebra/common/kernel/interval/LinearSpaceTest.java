@@ -34,9 +34,17 @@ public class LinearSpaceTest extends BaseUnitTest {
 
 	@Test
 	public void testShrinkToInt() {
-		LinearSpace space = new LinearSpace(8, 18, 10);
+		LinearSpace space = new LinearSpace(8, 10, 10);
 		LinearSpace expected = new LinearSpace(0, 10, 10);
 		space.shrinkKeepSize(0);
+		assertEquals(expected.values(), space.values());
+	}
+
+	@Test
+	public void testShrinkToMinusInt() {
+		LinearSpace space = new LinearSpace(0, 10, 10);
+		LinearSpace expected = new LinearSpace(-2, 8, 10);
+		space.shrinkKeepSize(-2);
 		assertEquals(expected.values(), space.values());
 	}
 

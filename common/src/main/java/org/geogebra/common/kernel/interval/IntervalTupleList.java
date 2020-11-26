@@ -76,9 +76,9 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	 * @param newPoints to append
 	 */
 	public void prependKeepingSize(IntervalTupleList newPoints) {
+		int sizeToKeep = list.size();
 		list.addAll(0, newPoints.list);
-		int lastIndex = newPoints.count() < list.size() ? list.size() - newPoints.count() : 0;
-		list = list.subList(0, lastIndex);
+		list = list.subList(0, sizeToKeep);
 	}
 
 	@Override
