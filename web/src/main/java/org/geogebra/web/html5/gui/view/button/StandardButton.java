@@ -1,6 +1,5 @@
 package org.geogebra.web.html5.gui.view.button;
 
-import org.geogebra.common.gui.view.ActionView;
 import org.geogebra.common.main.App;
 import org.geogebra.web.html5.gui.FastClickHandler;
 import org.geogebra.web.html5.gui.util.AriaHelper;
@@ -19,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author csilla
  * 
  */
-public class StandardButton extends Widget implements HasResource, ActionView {
+public class StandardButton extends Widget implements HasResource {
 
 	private App app;
 	private ResourcePrototype icon;
@@ -175,12 +174,6 @@ public class StandardButton extends Widget implements HasResource, ActionView {
 		btnImage.setResource(res);
 	}
 
-	@Override
-	public void setAction(final Runnable action) {
-		Dom.addEventListener(this.getElement(), "onclick", (e) -> action.run());
-	}
-
-	@Override
 	public void setEnabled(boolean enabled) {
 		if (enabled) {
 			getElement().removeAttribute("disabled");
@@ -190,6 +183,9 @@ public class StandardButton extends Widget implements HasResource, ActionView {
 	}
 
 	public void addFastClickHandler(FastClickHandler handler) {
-		Dom.addEventListener(this.getElement(), "click", (e) -> handler.onClick(this));
+		Dom.addEventListener(this.getElement(), "click", (e) -> {
+			handler.onClick(this);
+			e.stopPropagation();
+		});
 	}
 }
