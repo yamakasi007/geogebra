@@ -122,6 +122,7 @@ public class Parser implements ParserInterface {
 		geoGebraCASParsing = false;
 		externalCASParsing = false;
 		giacParsing = false;
+		highPrecisionParsing = true;
 		functionParser.setInputBoxParsing(false);
 		enableStructures = kernel.getAlgebraProcessor().enableStructures();
 		undecided.clear();
@@ -136,6 +137,14 @@ public class Parser implements ParserInterface {
 		processUndecided();
 		return ret;
 	}
+
+	public ValidExpression parseGeoGebraExpressionLowPrecision(String parseString) throws ParseException {
+    		myReInit(stripEqualSign(parseString));
+    		highPrecisionParsing = false;
+    		ValidExpression ret = buildValidExpression();
+    		processUndecided();
+    		return ret;
+    }
 
 	public ValidExpression parseInputBoxExpression(String parseString) throws ParseException {
     	myReInit(stripEqualSign(parseString));
