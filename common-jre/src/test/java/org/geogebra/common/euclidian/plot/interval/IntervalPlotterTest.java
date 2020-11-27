@@ -26,7 +26,6 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		view = getApp().getActiveEuclidianView();
 	}
 
-	@Ignore
 	@Test
 	public void testMoveRight() {
 		view.setRealWorldCoordSystem(0, 5, -20, 20);
@@ -42,6 +41,31 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		expectedModel.updateAll();
 
 		assertEquals(expectedModel.getPoints(), model.getPoints());
+	}
+
+	@Test
+	public void testMoveUpRightAndBack() {
+		view.setRealWorldCoordSystem(-15, 15, -9, 9);
+		IntervalPathPlotterMock path = new IntervalPathPlotterMock();
+		IntervalPlotModel model = newModel("sin(x)",
+				-15, 15, -9, 9, path);
+		model.updateAll();
+		moveModel(model, 2,2);
+		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
+		IntervalPlotModel expectedModel = newModel("sin(x)",
+				-13, 17, -7, 11, pathExpected);
+		expectedModel.updateAll();
+		assertEquals(expectedModel.getPoints().domain(), model.getPoints().domain());
+	}
+
+	private void moveModel(IntervalPlotModel model,
+			double dx, double dy) {
+		double xmin = view.getXmin() + dx;
+		double xmax = view.getXmax() + dx;
+		double ymin = view.getYmin() + dy;
+		double ymax = view.getYmax() + dy;
+		view.setRealWorldCoordSystem(xmin, xmax, ymin, ymax);
+		model.updatePath();
 	}
 
 	@Ignore
@@ -62,7 +86,12 @@ public class IntervalPlotterTest extends BaseUnitTest {
 
 	private IntervalPlotModel newModel(String functionString,
 			double low, double high, IntervalPathPlotterMock gp) {
-		IntervalTuple range = createRange(low, high, -3.0, 3.0);
+		return newModel(functionString, low, high, -3, 3, gp);
+	}
+
+	private IntervalPlotModel newModel(String functionString,
+			double xLow, double xHigh, double yLow, double yHigh, IntervalPathPlotterMock gp) {
+		IntervalTuple range = createRange(xLow, xHigh, yLow, yHigh);
 		IntervalPlotModel model = createModel(range, createSampler(functionString,
 				range), view);
 		IntervalPath path = new IntervalPath(gp, view, model);
@@ -70,7 +99,6 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		model.updateSampler();
 		model.updatePath();
 		return model;
-
 	}
 
 	private IntervalFunctionSampler createSampler(String functionString,
