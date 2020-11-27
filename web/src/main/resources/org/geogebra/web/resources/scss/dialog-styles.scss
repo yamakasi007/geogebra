@@ -1280,9 +1280,10 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 	.mowPermissionDialog{
 		max-width: 500px;
 		max-height: 177px;
-		.gwt-Label{
+		.dialogContent>.gwt-Label{
 			margin-top: 0 !important;
 			margin-bottom: 20px;
+			font-size: 80%;
 		}
 		&.narrowDialog {
 			max-width: 376px; // 400px - (8px + 16px) padding
