@@ -13,5 +13,10 @@ public interface CoordSystemAnimationListener {
 	 * @param dx x difference of the move
 	 * @param dy y difference of the move
 	 */
-	void onCoordSystemMoved(double dx, double dy);
+	void onMoved(double dx, double dy);
+
+	/**
+	 * Called when coordinate system stops moving.
+	 */
+	void onMoveStop();
 }

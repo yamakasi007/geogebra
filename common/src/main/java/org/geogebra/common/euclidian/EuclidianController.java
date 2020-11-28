@@ -10220,6 +10220,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				}
 			}
 			notifyCoordSystemListeners();
+			if (moveMode == MOVE_VIEW) {
+				notifyCoordSystemMoveStop();
+			}
 		} else {
 			movedGeoElement = null;
 			// no hits: release mouse button creates a point
@@ -12155,7 +12158,16 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void notifyCoordSystemMoved(double dx, double dy) {
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
-			listener.onCoordSystemMoved(dx, dy);
+			listener.onMoved(dx, dy);
+		}
+	}
+	/**
+	 * Notify listeners that coordinate system has stopped moving.
+	 *
+	 */
+	public void notifyCoordSystemMoveStop() {
+		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
+			listener.onMoveStop();
 		}
 	}
 
