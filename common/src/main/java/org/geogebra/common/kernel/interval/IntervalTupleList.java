@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * List to hold IntervalTuples
  *
@@ -36,6 +38,7 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		return list.get(index);
 	}
 
+	@Nonnull
 	@Override
 	public Iterator<IntervalTuple> iterator() {
 		return list.iterator();
@@ -54,31 +57,29 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	}
 
 	/**
-	 * Adds points to the tail of the list and removes
-	 * from the head as many as added to keep the size unchanged.
+	 * Adds points to the tail of the list.
 	 *
 	 * @param newPoints to append
 	 */
-	public void appendKeepingSize(IntervalTupleList newPoints) {
-		List<IntervalTuple> tupleList = newPoints.list;
+	public void append(IntervalTupleList newPoints) {
 		if (newPoints.isEmpty()) {
 			return;
 		}
 
-		this.list.addAll(tupleList);
-		list = list.subList(tupleList.size(), list.size());
+		this.list.addAll(newPoints.list);
+	}
+
+	private void shrinkFrom(int size) {
+		list = list.subList(size, list.size());
 	}
 
 	/**
-	 * Adds points to the head of the list and removes
-	 * from the tail as many as added to keep size unchanged.
+	 * Adds points to the head of the list.
 	 *
-	 * @param newPoints to append
+	 * @param newPoints to prepend
 	 */
-	public void prependKeepingSize(IntervalTupleList newPoints) {
-		int sizeToKeep = list.size();
+	public void prepend(IntervalTupleList newPoints) {
 		list.addAll(0, newPoints.list);
-		list = list.subList(0, sizeToKeep);
 	}
 
 	@Override
@@ -118,5 +119,13 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 
 	public void remove(int index) {
 		list.remove(index);
+	}
+
+	public void removeFromTail(int count) {
+		list = list.subList(0, list.size() - count);
+	}
+
+	public void removeFromHead(int count) {
+		list = list.subList(count, list.size());
 	}
 }

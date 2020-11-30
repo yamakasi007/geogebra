@@ -20,7 +20,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testExtendToInt() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(8, 18, 10);
-		space.extendKeepSize(18);
+		space.extendTo(18);
 		assertEquals(expected.values(), space.values());
 	}
 
@@ -28,7 +28,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testExtendToReal() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(5, 15, 10);
-		space.extendKeepSize(14.5);
+		space.extendTo(14.5);
 		assertEquals(expected.values(), space.values());
 	}
 

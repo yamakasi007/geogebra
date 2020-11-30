@@ -5,6 +5,7 @@ import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.geogebra.common.kernel.interval.IntervalTupleList;
+import org.geogebra.common.util.debug.Log;
 
 /**
  * Model for Interval plotter.
@@ -73,14 +74,45 @@ public class IntervalPlotModel {
 	 * update function domain to plot due to the visible x range.
 	 */
 	public void updateDomain() {
-		double deltaX = oldDomain.getLow() - view.domain().getLow();
+		double oldMin = oldDomain.getLow();
+		double oldMax = oldDomain.getHigh();
 		oldDomain = view.domain();
-		if (deltaX < 0) {
-			IntervalTupleList tuples = sampler.extendTo(view.getXmax());
-			points.appendKeepingSize(tuples);
+		double min = view.domain().getLow();
+		double max = view.domain().getHigh();
+		if (oldMax < max) {
+			extendMax();
 		} else {
-			IntervalTupleList tuples = sampler.shrinkTo(view.getXmin());
-			points.prependKeepingSize(tuples);
+			shrinkMax();
 		}
+
+		if (min < oldMin) {
+			extendMin();
+		} else {
+			shrinkMin();
+		}
+
+		Log.debug("points: " + points.count());
+
 	}
+
+	private void extendMin() {
+		IntervalTupleList newPoints = sampler.extendMin(view.getXmin());
+		points.prepend(newPoints);
+	}
+
+	private void shrinkMin() {
+		int removeCount = sampler.shrinkMin(view.getXmin());
+		points.removeFromHead(removeCount);
+	}
+
+	private void shrinkMax() {
+		int removeCount = sampler.shrinkMax(view.getXmax());
+		points.removeFromTail(removeCount);
+	}
+
+	private void extendMax() {
+		IntervalTupleList newPoints = sampler.extendMax(view.getXmax());
+		points.append(newPoints);
+	}
+
 }

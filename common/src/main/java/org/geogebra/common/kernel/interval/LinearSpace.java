@@ -66,19 +66,19 @@ public class LinearSpace {
 	}
 
 	/**
-	 * Adjust space to the given maximum keeping the original size.
+	 * Extend space to the given maximum.
 	 *
 	 * @param max to adjust to.
 	 * @return the new {@link LinearSpace} that contains the new values only.
 	 */
-	public LinearSpace extendKeepSize(double max) {
+	public LinearSpace extendTo(double max) {
 		LinearSpace result = new LinearSpace();
 		double t = getLastValue();
 		result.values.add(getLastValue());
 		while (t < max) {
 			t += step;
 			values.add(t);
-			values.remove(0);
+			//values.remove(0);
 			result.values.add(t);
 		}
 		return result;
@@ -132,5 +132,27 @@ public class LinearSpace {
 	@Override
 	public int hashCode() {
 		return values.hashCode();
+	}
+
+	public int shrinkMax(double max) {
+		double t = getLastValue();
+		int count = 0;
+		while(t > max) {
+			values.remove(size() - 1);
+			t = getLastValue();
+			count++;
+		}
+		return count;
+	}
+
+	public int shrinkMin(double min) {
+		int count = 0;
+		double t = getFirstValue();
+		while (t < min) {
+			values.remove(0);
+			t = getFirstValue();
+			count++;
+		}
+		return count;
 	}
 }

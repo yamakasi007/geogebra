@@ -19,7 +19,7 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		IntervalTuple rangeExpected = createRange(20, 30, 0, 100);
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
-		sampler.extendTo(30);
+		sampler.extendMax(30);
 
 		IntervalFunctionSampler samplerExpected = newSampler(xDoubled,	rangeExpected,	10);
 
@@ -34,7 +34,7 @@ public class IntervalFunctionSamplerTest extends BaseUnitTest {
 		GeoFunction xDoubled = add("2x");
 		IntervalFunctionSampler sampler = newSampler(xDoubled, rangeActual, 10);
 		IntervalTupleList points = sampler.result();
-		IntervalTupleList newPoints = sampler.shrinkTo(-2);
+		IntervalTupleList newPoints = sampler.extendMin(-2);
 
 		if (newPoints != null) {
 			points.prependKeepingSize(newPoints);
