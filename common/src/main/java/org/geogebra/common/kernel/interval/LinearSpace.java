@@ -71,14 +71,13 @@ public class LinearSpace {
 	 * @param max to adjust to.
 	 * @return the new {@link LinearSpace} that contains the new values only.
 	 */
-	public LinearSpace extendTo(double max) {
+	public LinearSpace extendMax(double max) {
 		LinearSpace result = new LinearSpace();
 		double t = getLastValue();
 		result.values.add(getLastValue());
 		while (t < max) {
 			t += step;
 			values.add(t);
-			//values.remove(0);
 			result.values.add(t);
 		}
 		return result;
@@ -93,19 +92,18 @@ public class LinearSpace {
 	}
 
 	/**
-	 * Adjust space to the given minimum keeping the original size.
+	 * Adjust space to the given minimum.
 	 *
 	 * @param min to adjust to.
 	 * @return the new {@link LinearSpace} that contains the new values only.
 	 */
-	public LinearSpace shrinkKeepSize(double min) {
+	public LinearSpace extendMin(double min) {
 		LinearSpace result = new LinearSpace();
 		result.values.add(getFirstValue());
 		double t = getFirstValue();
 		while (min < t) {
 			t -= step;
 			result.values.add(0, t);
-			values.remove(size() - 1);
 			values.add(0, t);
 		}
 		return result;

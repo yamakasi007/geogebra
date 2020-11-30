@@ -79,25 +79,35 @@ public class IntervalPlotModel {
 		oldDomain = view.domain();
 		double min = view.domain().getLow();
 		double max = view.domain().getHigh();
-		if (oldMax < max) {
-			extendMax();
+		if (oldMax < max && oldMin > min) {
+			extendDomain();
+		} else if (oldMax > max && oldMin < min){
+			shrinkDomain();
 		} else {
-			shrinkMax();
+			moveDomain(oldMax - max);
 		}
 
-		if (min < oldMin) {
-			extendMin();
-		} else {
-			shrinkMin();
-		}
 
+	//	Log.debug("minDiff: " + (oldMin - view.getXmin()) + " maxDiff: " + (oldMax - view.getXmax()));
 		Log.debug("points: " + points.count());
 
 	}
 
-	private void extendMin() {
+
+	private void shrinkDomain() {
+		shrinkMin();
+		shrinkMax();
+	}
+
+	private void extendDomain() {
+		extendMin();
+		extendMax();
+	}
+
+	private int extendMin() {
 		IntervalTupleList newPoints = sampler.extendMin(view.getXmin());
 		points.prepend(newPoints);
+		return newPoints.count();
 	}
 
 	private void shrinkMin() {
@@ -110,9 +120,17 @@ public class IntervalPlotModel {
 		points.removeFromTail(removeCount);
 	}
 
-	private void extendMax() {
+	private int extendMax() {
 		IntervalTupleList newPoints = sampler.extendMax(view.getXmax());
 		points.append(newPoints);
+		return newPoints.count();
 	}
 
+	private void moveDomain(double difference) {
+		if (difference < 0) {
+			points.removeFromHead(extendMax());
+		} else {
+			points.removeFromTail(extendMin());
+		}
+	}
 }

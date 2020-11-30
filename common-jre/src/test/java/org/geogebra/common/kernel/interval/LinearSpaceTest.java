@@ -20,7 +20,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testExtendToInt() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(8, 18, 10);
-		space.extendTo(18);
+		space.extendMax(18);
 		assertEquals(expected.values(), space.values());
 	}
 
@@ -28,7 +28,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testExtendToReal() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(5, 15, 10);
-		space.extendTo(14.5);
+		space.extendMax(14.5);
 		assertEquals(expected.values(), space.values());
 	}
 
@@ -36,7 +36,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testShrinkToInt() {
 		LinearSpace space = new LinearSpace(8, 10, 10);
 		LinearSpace expected = new LinearSpace(0, 10, 10);
-		space.shrinkKeepSize(0);
+		space.extendMin(0);
 		assertEquals(expected.values(), space.values());
 	}
 
@@ -44,7 +44,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testShrinkToMinusInt() {
 		LinearSpace space = new LinearSpace(0, 10, 10);
 		LinearSpace expected = new LinearSpace(-2, 8, 10);
-		space.shrinkKeepSize(-2);
+		space.extendMin(-2);
 		assertEquals(expected.values(), space.values());
 	}
 
@@ -52,7 +52,7 @@ public class LinearSpaceTest extends BaseUnitTest {
 	public void testShrinkToReal() {
 		LinearSpace space = new LinearSpace(8, 18, 10);
 		LinearSpace expected = new LinearSpace(-2, 8, 10);
-		space.shrinkKeepSize(-1.4);
+		space.extendMin(-1.4);
 		assertEquals(expected.values(), space.values());
 	}
 }

@@ -94,7 +94,7 @@ public class IntervalFunctionSampler {
 	}
 
 	public IntervalTupleList extendMax(double max) {
-		return evaluateAtDomain(space.extendTo(max));
+		return evaluateAtDomain(space.extendMax(max));
 	}
 
 	private IntervalTupleList evaluateAtDomain(LinearSpace domain) {
@@ -107,7 +107,7 @@ public class IntervalFunctionSampler {
 	}
 
 	public IntervalTupleList extendMin(double min) {
-		return evaluateAtDomain(space.shrinkKeepSize(min));
+		return evaluateAtDomain(space.extendMin(min));
 	}
 
 	public int shrinkMax(double max) {
