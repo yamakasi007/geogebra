@@ -122,10 +122,10 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	}
 
 	public void removeFromTail(int count) {
-		list = list.subList(0, list.size() - count);
+		list = list.subList(0, list.size() - count - 1);
 	}
 
 	public void removeFromHead(int count) {
-		list = list.subList(count, list.size());
+		list = list.subList(count + 1, list.size());
 	}
 }
