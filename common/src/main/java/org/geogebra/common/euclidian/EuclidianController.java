@@ -420,6 +420,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 	private GeoPriorityComparator priorityComparator;
 
+	public void clearZoomerAnimationListeners() {
+		zoomerAnimationListeners.clear();
+	}
+
 	/**
 	 * state for selection tool over press/release
 	 */
