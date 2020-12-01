@@ -54,6 +54,7 @@ public class SettingsUpdater {
 
 	private void setEuclidianSettings() {
 		EuclidianSettings euclidianSettings = euclidianHost.getActiveEuclidianView().getSettings();
+		euclidianSettings.reset();
 		euclidianSettings.showGrid(appConfig.showGridOnFileNew());
 		euclidianSettings.setShowAxes(appConfig.showAxesOnFileNew());
 	}

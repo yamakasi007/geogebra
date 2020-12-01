@@ -2065,6 +2065,23 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	/**
+	 * Update the UI perspective.
+	 * @param p perspective
+	 */
+	public void setPerspective(Perspective p) {
+		try {
+			persistWidthAndHeight();
+			getGuiManager().getLayout().applyPerspective(p);
+			updateViewSizes();
+			getGuiManager().updateMenubar();
+			getGuiManager().updateToolbar();
+			updateKeyboard();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * @param idx
 	 *            view index; 1 for EV2
 	 * @return EV2
@@ -3895,9 +3912,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		case ADJUST_WIDGETS:
 			return false;
 
-		case SYMBOLIC_AV:
-			return true;
-
 		/** GGB-2255 */
 		case GEOMETRIC_DISCOVERY:
 			return prerelease;
@@ -4266,6 +4280,14 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public String getSlideID() {
 		return "";
+	}
+
+	/**
+	 * @param subApp subapp code
+	 * @param p perspective
+	 */
+	public void updateAppCodeSuite(String subApp, Perspective p) {
+		// only in Web
 	}
 
 	/**
@@ -5043,6 +5065,16 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 			SettingsUpdaterBuilder settingsUpdaterBuilder = newSettingsUpdaterBuilder();
 			settingsUpdater = settingsUpdaterBuilder.newSettingsUpdater();
 		}
+		return settingsUpdater;
+	}
+
+	/**
+	 * make sure we create a new settings updater according the new appConfig
+	 * @return setting updater
+	 */
+	public SettingsUpdater initSettingsUpdater() {
+		SettingsUpdaterBuilder settingsUpdaterBuilder = newSettingsUpdaterBuilder();
+		settingsUpdater = settingsUpdaterBuilder.newSettingsUpdater();
 		return settingsUpdater;
 	}
 

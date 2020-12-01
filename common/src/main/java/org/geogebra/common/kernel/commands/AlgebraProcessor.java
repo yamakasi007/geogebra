@@ -1944,7 +1944,6 @@ public class AlgebraProcessor {
 	 */
 	public GeoElement[] processValidExpression(ValidExpression ve,
 			EvalInfo info) throws MyError, Exception {
-
 		EvalInfo evalInfo = info;
 		ValidExpression expression = ve;
 		// check for existing labels
