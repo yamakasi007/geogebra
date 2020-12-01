@@ -62,15 +62,20 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	 * @param newPoints to append
 	 */
 	public void append(IntervalTupleList newPoints) {
-		if (newPoints.isEmpty()) {
+		if (newPoints.isEmpty() || newPoints.isAllUndefined()) {
 			return;
 		}
 
 		this.list.addAll(newPoints.list);
 	}
 
-	private void shrinkFrom(int size) {
-		list = list.subList(size, list.size());
+	private boolean isAllUndefined() {
+		for (IntervalTuple tuple: list) {
+			if (!tuple.y().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -79,6 +84,10 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	 * @param newPoints to prepend
 	 */
 	public void prepend(IntervalTupleList newPoints) {
+		if (newPoints.isEmpty() || newPoints.isAllUndefined()) {
+			return;
+		}
+
 		list.addAll(0, newPoints.list);
 	}
 
