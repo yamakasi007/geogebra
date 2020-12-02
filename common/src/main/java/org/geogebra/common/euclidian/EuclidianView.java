@@ -1362,6 +1362,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				|| (yscale > Kernel.INV_MAX_DOUBLE_PRECISION)) {
 			return;
 		}
+		boolean xAxisScale = (this.xscale != xscale && this.yscale == yscale);
 		this.xZero = xZero;
 		this.yZero = yZero;
 		this.setXscale(xscale);
@@ -1373,11 +1374,14 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		setRealWorldBounds();
         onCoordSystemChangedFromSetCoordSystem();
 		// if (drawMode == DRAW_MODE_BACKGROUND_IMAGE)
-		if (axesRatioZoomer == null || !axesRatioZoomer.isAxisZoom()) {
+		if (axesRatioZoomer == null || !axesRatioZoomer.isAxisZoom() || !xAxisScale) {
 			euclidianController.notifyCoordSystemMoved(this.xZero - xZeroOld,
 					this.yZero - yZeroOld);
 		}
 
+		if (xAxisScale) {
+			Log.debug("X Axis Scale!");
+		}
 		if (repaint) {
 			invalidateBackground();
 			updateAllDrawablesForView(repaint);

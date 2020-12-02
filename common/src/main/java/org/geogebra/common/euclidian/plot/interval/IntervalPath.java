@@ -33,12 +33,21 @@ public class IntervalPath {
 		reset();
 
 		Interval lastY = new Interval();
-		for (IntervalTuple point: model.getPoints()) {
-			if (point != null) {
-				plotInterval(lastY, point);
+
+		int pointCount = model.getPoints().count();
+		for (int i = 0; i < pointCount; i++) {
+			IntervalTuple tuple =  model.getPoints().get(i);
+
+
+			if (tuple != null) {
+				if (i < pointCount - 2) {
+					moveTo = model.getPoints().get(i + 1).y().isEmpty();
+				}
+				plotInterval(lastY, tuple);
+			} else {
+				moveTo = true;
 			}
 
-			moveTo = point == null;
 		}
 	}
 

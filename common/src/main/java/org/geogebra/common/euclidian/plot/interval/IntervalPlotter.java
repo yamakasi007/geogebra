@@ -16,7 +16,7 @@ public class IntervalPlotter {
 	private final EuclidianView view;
 	private final IntervalPathPlotter gp;
 	private boolean enabled;
-	private IntervalPlotModel model;
+	private IntervalPlotModel model=null;
 
 	/**
 	 * Creates a disabled plotter
@@ -81,6 +81,8 @@ public class IntervalPlotter {
 	 */
 	public void disable() {
 		enabled = false;
-		model.clear();
+		if (model != null) {
+			model.clear();
+		}
 	}
 }

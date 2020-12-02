@@ -11,11 +11,10 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class IntervalPlotterTest extends BaseUnitTest {
-	public static final int NUMBER_OF_SAMPLES = 5;
+	public static final int NUMBER_OF_SAMPLES = 100;
 	private IntervalPlotController controller;
 	private AppCommon app;
 	private EuclidianView view;
@@ -68,20 +67,12 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		model.updatePath();
 	}
 
-	@Ignore
 	@Test
-	public void testMoveSinBy() {
+	public void testSqrtSin() {
+		view.setCoordSystem(0, 2, 50, 50);
 		IntervalPathPlotterMock path = new IntervalPathPlotterMock();
-		IntervalPathPlotterMock pathExpected = new IntervalPathPlotterMock();
-		view.setRealWorldCoordSystem(-10, 10, -10, 10);
-		IntervalPlotModel model = newModel("2x", -10.0, 10.0, path);
-		IntervalPlotModel expectedModel = newModel("2x", -10.0, 8.0, pathExpected);
+		IntervalPlotModel model = newModel("sqrt(sin(x))", 0, 7, path);
 		model.updateAll();
-		expectedModel.updateAll();
-		model.updateDomain();
-		model.updateDomain();
-		model.updatePath();
-		assertEquals(expectedModel.getPoints(), model.getPoints());
 	}
 
 	private IntervalPlotModel newModel(String functionString,
