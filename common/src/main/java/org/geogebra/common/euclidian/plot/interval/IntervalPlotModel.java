@@ -139,4 +139,9 @@ public class IntervalPlotModel {
 			extendMin();
 		}
 	}
+
+	public void clear() {
+		points.clear();
+		path.reset();
+	}
 }

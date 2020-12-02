@@ -54,6 +54,7 @@ public abstract class CoordSystemAnimation {
 	private boolean setStandard = false;
 	private double standardX;
 	private double standardY;
+	private boolean axisZoom = false;
 
 	/**
 	 * Creates new zoomer
@@ -185,11 +186,13 @@ public abstract class CoordSystemAnimation {
 				factor = 1.0 + ((counter * add) / oldScale);
 				view.setCoordSystem(view.getXZero(), view.getYZero(),
 						oldScale * factor, view.getYscale());
+				axisZoom = true;
 				break;
 			case AXES_Y:
 				factor = 1.0 + ((counter * add) / oldScale);
 				view.setCoordSystem(view.getXZero(), view.getYZero(),
 						view.getXscale(), oldScale * factor);
+				axisZoom = true;
 				break;
 			case ZOOM:
 				factor = 1.0 + ((counter * add) / oldScale);
@@ -221,10 +224,12 @@ public abstract class CoordSystemAnimation {
 		case AXES_X:
 			view.setCoordSystem(view.getXZero(), view.getYZero(), newScale,
 					view.getYscale());
+			controller.notifyZoomerStopped();
 			break;
 		case AXES_Y:
 			view.setCoordSystem(view.getXZero(), view.getYZero(),
 					view.getXscale(), newScale);
+			controller.notifyZoomerStopped();
 			break;
 		case ZOOM:
 			factor = newScale / oldScale;
@@ -234,6 +239,7 @@ public abstract class CoordSystemAnimation {
 			break;
 		case ZOOM_RW:
 			view.setRealWorldCoordSystem(x0, x1, y0, y1);
+			controller.notifyZoomerStopped();
 			break;
 		case MOVE:
 			view.setCoordSystem(px, py, view.getXscale(), view.getYscale());
@@ -247,7 +253,7 @@ public abstract class CoordSystemAnimation {
 		if (storeUndo) {
 			view.getApplication().storeUndoInfo();
 		}
-
+		axisZoom = false;
 		controller.notifyCoordSystemListeners();
 	}
 
@@ -317,5 +323,13 @@ public abstract class CoordSystemAnimation {
 	 */
 	public boolean isStandardZoom() {
 		return DoubleUtil.checkInteger(newScale) == EuclidianView.SCALE_STANDARD;
+	}
+
+	/**
+	 *
+	 * @return if axis has zoomed.
+	 */
+	public boolean isAxisZoom() {
+		return axisZoom;
 	}
 }

@@ -137,4 +137,8 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void removeFromHead(int count) {
 		list = list.subList(count + 1, list.size());
 	}
+
+	public void clear() {
+		list.clear();
+	}
 }

@@ -81,5 +81,6 @@ public class IntervalPlotter {
 	 */
 	public void disable() {
 		enabled = false;
+		model.clear();
 	}
 }

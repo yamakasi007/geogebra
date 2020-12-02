@@ -30,7 +30,7 @@ public class IntervalPath {
 			return;
 		}
 
-		gp.reset();
+		reset();
 
 		Interval lastY = new Interval();
 		for (IntervalTuple point: model.getPoints()) {
@@ -40,6 +40,13 @@ public class IntervalPath {
 
 			moveTo = point == null;
 		}
+	}
+
+	/**
+	 * Resets path
+	 */
+	void reset() {
+		gp.reset();
 	}
 
 	private void plotInterval(Interval lastY, IntervalTuple point) {

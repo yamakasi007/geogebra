@@ -1373,9 +1373,11 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		setRealWorldBounds();
         onCoordSystemChangedFromSetCoordSystem();
 		// if (drawMode == DRAW_MODE_BACKGROUND_IMAGE)
+		if (axesRatioZoomer == null || !axesRatioZoomer.isAxisZoom()) {
+			euclidianController.notifyCoordSystemMoved(this.xZero - xZeroOld,
+					this.yZero - yZeroOld);
+		}
 
-		euclidianController.notifyCoordSystemMoved(this.xZero - xZeroOld,
-				this.yZero - yZeroOld);
 		if (repaint) {
 			invalidateBackground();
 			updateAllDrawablesForView(repaint);
