@@ -1333,4 +1333,15 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 		t("Assume(k>0, InflectionPoint(0.25 k x^3 - 0.5x^2 + k))",
 				"{(2 / (3 * k), (27 * k^(3) - 4) / (27 * k^(2)))}");
 	}
+
+	@Test
+	public void testInnerNestedCommands() {
+		add("f(x)=x^2");
+		add("a(x)=Solve(Derivative(f))");
+		add("1+1");
+		undoRedo();
+		int n = kernel.getConstruction().steps();
+		assertThat(n, equalTo(3));
+	}
+
 }

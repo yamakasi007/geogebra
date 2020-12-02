@@ -170,7 +170,9 @@ public class SymbolicProcessor {
 					.wrap();
 			ve.wrap().setLabel(null);
 		}
-
+		if (ve instanceof ValidExpression && ((ValidExpression) ve).isRootNode()) {
+			replaced.setAsRootNode();
+		}
 		return doEvalSymbolicNoLabel(replaced, info);
 	}
 
