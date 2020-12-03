@@ -73,4 +73,8 @@ public class IntervalTuple {
 	public String toString() {
 		return "{x: " + x().toShortString() + ": " + y().toShortString() + "}";
 	}
+
+	public boolean isYNaN() {
+		return y == null || y.isEmpty();
+	}
 }

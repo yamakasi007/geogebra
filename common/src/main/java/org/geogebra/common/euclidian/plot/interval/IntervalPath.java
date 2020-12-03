@@ -41,7 +41,8 @@ public class IntervalPath {
 
 			if (tuple != null) {
 				if (i < pointCount - 2) {
-					moveTo = model.getPoints().get(i + 1).y().isEmpty();
+					IntervalTuple nextTuple = model.getPoints().get(i + 1);
+					moveTo = nextTuple == null || nextTuple.isYNaN();
 				}
 				plotInterval(lastY, tuple);
 			} else {

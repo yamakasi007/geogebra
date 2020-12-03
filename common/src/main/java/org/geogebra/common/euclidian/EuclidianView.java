@@ -570,6 +570,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	public EuclidianView(EuclidianController ec, int viewNo,
 		EuclidianSettings settings) {
 		this();
+		coordSystemInfo = new CoordSystemInfo(this);
 		init(ec, viewNo, settings);
 	}
 
@@ -618,8 +619,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 				5);
         setXscale(SCALE_STANDARD);
         setYscale(SCALE_STANDARD);
-        coordSystemInfo = new CoordSystemInfo(this);
-	}
+
+   }
 
 	/**
 	 * 

@@ -441,7 +441,7 @@ public class EuclidianView3DD extends EuclidianView3D
 
 	@Override
 	protected MyZoomerD newZoomer(CoordSystemInfo coordSystemInfo) {
-		return new MyZoomerD(this);
+		return new MyZoomerD(this, coordSystemInfo);
 	}
 
 	@Override
