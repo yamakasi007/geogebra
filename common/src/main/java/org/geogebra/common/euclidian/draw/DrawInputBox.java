@@ -502,7 +502,7 @@ public class DrawInputBox extends CanvasDrawable {
 		if (drawDynamicCaption.isEnabled()) {
 			drawDynamicCaption.draw(g2);
 		} else if (isLatexString(text)) {
-			labelDimension = drawLatex(g2, geo0, getLabelFont(), text, xLabel, getLabelTop());
+			labelDimension = drawLatex(g2, geo0, getLabelFont(), text, xLabel, (int) getLabelTop());
 		} else {
 			g2.setPaint(geo.getObjectColor());
 
@@ -530,11 +530,21 @@ public class DrawInputBox extends CanvasDrawable {
 		view.getViewTextField().revalidateBox();
 		recomputeSize();
 		labelRectangle.setBounds(boxLeft,
-				(int) Math.round(getLabelTop() + ((getHeightForLabel(labelDesc)
-						- getPreferredHeight()) / 2.0)),
+				computeBoxTop(getPreferredHeight()),
 				getPreferredWidth(),
 				getPreferredHeight());
 		view.getViewTextField().setBoxBounds(labelRectangle);
+	}
+
+	/**
+	 * Compute the top of the box based on the position of the label, the height
+	 * of the label and the height of the box
+	 * @param height height of the box
+	 * @return y coordinate of the box
+	 */
+	public int computeBoxTop(double height) {
+		double labelHeight = getHeightForLabel(labelDesc);
+		return (int) Math.floor(getLabelTop() + ((labelHeight - height) / 2));
 	}
 
 	/**
