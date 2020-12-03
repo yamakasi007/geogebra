@@ -5,6 +5,7 @@ import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.CoordSystemAnimation;
+import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianCursor;
 import org.geogebra.common.euclidian.EuclidianStyleBar;
@@ -187,8 +188,9 @@ public class EuclidianViewNoGui extends EuclidianView {
 	}
 
 	@Override
-	protected CoordSystemAnimation newZoomer() {
-		return new CoordSystemAnimation(this) {
+	protected CoordSystemAnimation newZoomer(
+			CoordSystemInfo coordSystemInfo) {
+		return new CoordSystemAnimation(this, coordSystemInfo) {
 			private boolean running = false;
 
 			@Override

@@ -3,17 +3,17 @@ package org.geogebra.common.euclidian;
 public interface CoordSystemAnimationListener {
 
 	/**
-	 * Called when zoom stops animating. 
+	 * Called when zoom stops animating.
+	 * @param info about the coordinate system changes.
 	 */
-	void onZoomStop();
+	void onZoomStop(CoordSystemInfo info);
 
 	/**
 	 * Called when coordinate system has moved.
 	 *
-	 * @param dx x difference of the move
-	 * @param dy y difference of the move
+	 * @param info about the coordinate system changes.
 	 */
-	void onMoved(double dx, double dy);
+	void onMove(CoordSystemInfo info);
 
 	/**
 	 * Called when coordinate system stops moving.

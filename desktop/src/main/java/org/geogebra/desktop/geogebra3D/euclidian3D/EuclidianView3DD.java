@@ -28,6 +28,7 @@ import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPointWithZ;
+import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianStyleBar;
 import org.geogebra.common.euclidian3D.Mouse3DEvent;
 import org.geogebra.common.geogebra3D.euclidian3D.EuclidianController3D;
@@ -439,7 +440,7 @@ public class EuclidianView3DD extends EuclidianView3D
 	}
 
 	@Override
-	protected MyZoomerD newZoomer() {
+	protected MyZoomerD newZoomer(CoordSystemInfo coordSystemInfo) {
 		return new MyZoomerD(this);
 	}
 

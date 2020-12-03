@@ -12,7 +12,7 @@ public class MyZoomerD extends CoordSystemAnimation implements ActionListener {
 	protected Timer timer; // for animation
 
 	public MyZoomerD(EuclidianView view) {
-		super(view);
+		super(view, coordSystemInfo);
 		timer = new Timer(DELAY, this);
 	}
 

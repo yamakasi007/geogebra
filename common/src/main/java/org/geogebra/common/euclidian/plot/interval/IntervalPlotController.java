@@ -1,6 +1,7 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.euclidian.CoordSystemAnimationListener;
+import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.util.debug.Log;
 
@@ -29,7 +30,8 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 	}
 
 	@Override
-	public void onZoomStop() {
+	public void onZoomStop(CoordSystemInfo info) {
+		info.setAxisZoom(false);
 		model.updateAll();
 	}
 
@@ -39,8 +41,13 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 	}
 
 	@Override
-	public void onMoved(double dx, double dy) {
+	public void onMove(CoordSystemInfo info) {
+		if (info.isAxisZoom()) {
+			Log.debug("Axis zoom - onMove() canceled");
+			return;
+		}
 		model.updateDomain();
+		Log.debug(info);
 		Log.debug("Points: " + model.getPoints().count());
 	}
 }

@@ -22,6 +22,7 @@ public abstract class CoordSystemAnimation {
 	private static final int MAX_TIME = 400; // millis
 
 	private final EuclidianView view;
+	private CoordSystemInfo coordSystemInfo;
 	private AnimationMode mode;
 
 	private double px; // zoom point
@@ -58,12 +59,15 @@ public abstract class CoordSystemAnimation {
 
 	/**
 	 * Creates new zoomer
-	 * 
+	 *
 	 * @param view
 	 *            view
+	 * @param coordSystemInfo
 	 */
-	public CoordSystemAnimation(EuclidianView view) {
+	public CoordSystemAnimation(EuclidianView view,
+			CoordSystemInfo coordSystemInfo) {
 		this.view = view;
+		this.coordSystemInfo = coordSystemInfo;
 	}
 
 	/**
@@ -186,19 +190,20 @@ public abstract class CoordSystemAnimation {
 				factor = 1.0 + ((counter * add) / oldScale);
 				view.setCoordSystem(view.getXZero(), view.getYZero(),
 						oldScale * factor, view.getYscale());
-				axisZoom = true;
+				coordSystemInfo.setAxisZoom(true);
 				break;
 			case AXES_Y:
 				factor = 1.0 + ((counter * add) / oldScale);
 				view.setCoordSystem(view.getXZero(), view.getYZero(),
 						view.getXscale(), oldScale * factor);
-				axisZoom = true;
-				break;
+				coordSystemInfo.setAxisZoom(true);
+			break;
 			case ZOOM:
 				factor = 1.0 + ((counter * add) / oldScale);
 				view.setCoordSystem(px + (dx * factor), py + (dy * factor),
 						oldScale * factor,
 						oldScale * factor * view.getScaleRatio());
+				coordSystemInfo.setAxisZoom(false);
 				break;
 			case ZOOM_RW:
 				double i = counter;
@@ -207,11 +212,13 @@ public abstract class CoordSystemAnimation {
 						((x1 * i) + (xmaxOld * j)) / steps,
 						((y0 * i) + (yminOld * j)) / steps,
 						((y1 * i) + (ymaxOld * j)) / steps);
+				coordSystemInfo.setAxisZoom(false);
 				break;
 			case MOVE:
 				factor = 1.0 - (counter * add);
 				view.setCoordSystem(px + (dx * factor), py + (dy * factor),
 						view.getXscale(), view.getYscale());
+				coordSystemInfo.setAxisZoom(false);
 			}
 		}
 	}
@@ -224,12 +231,12 @@ public abstract class CoordSystemAnimation {
 		case AXES_X:
 			view.setCoordSystem(view.getXZero(), view.getYZero(), newScale,
 					view.getYscale());
-			controller.notifyZoomerStopped();
+			onAxisZoomEnd(controller);
 			break;
 		case AXES_Y:
 			view.setCoordSystem(view.getXZero(), view.getYZero(),
 					view.getXscale(), newScale);
-			controller.notifyZoomerStopped();
+			onAxisZoomEnd(controller);
 			break;
 		case ZOOM:
 			factor = newScale / oldScale;
@@ -255,6 +262,11 @@ public abstract class CoordSystemAnimation {
 		}
 		axisZoom = false;
 		controller.notifyCoordSystemListeners();
+	}
+
+	private void onAxisZoomEnd(EuclidianController controller) {
+		coordSystemInfo.setAxisZoom(false);
+		controller.notifyZoomerStopped();
 	}
 
 	/**
@@ -284,6 +296,7 @@ public abstract class CoordSystemAnimation {
 		case AXES_X:
 		case AXES_Y:
 			add = (newScale - oldScale) / steps;
+			coordSystemInfo.setAxisZoom(true);
 			break;
 		case ZOOM:
 			add = (newScale - oldScale) / steps;

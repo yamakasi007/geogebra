@@ -7940,7 +7940,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	protected void scaleXAxis(boolean repaint) {
 		if (repaint) {
 			if (temporaryMode) {
-				view.setCursor(EuclidianCursor.RESIZE_X);
+				view.onResizeX();
 			}
 
 			setScaleAxis(view.getXZero(), view.getXmin(), view.getXmax(),
@@ -10479,6 +10479,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		moveMode = MOVE_NONE;
 		initShowMouseCoords();
 		view.setShowAxesRatio(false);
+		view.onAxisZoomCancel();
 
 		if (!hasJustCreatedGeos()) { // first try to set just created
 			// geos as selected
@@ -12150,7 +12151,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 */
 	public void notifyZoomerStopped() {
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
-			listener.onZoomStop();
+			listener.onZoomStop(view.getCoordSystemInfo());
 		}
 	}
 
@@ -12160,9 +12161,9 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 * @param dx x difference of the move
 	 * @param dy y difference of the move
 	 */
-	public void notifyCoordSystemMoved(double dx, double dy) {
+	public void notifyCoordSystemMoved(CoordSystemInfo info) {
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
-			listener.onMoved(dx, dy);
+			listener.onMove(info);
 		}
 	}
 	/**
