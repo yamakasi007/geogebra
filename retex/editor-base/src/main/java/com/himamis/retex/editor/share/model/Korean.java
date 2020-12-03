@@ -647,6 +647,60 @@ public class Korean {
 		return ch;
 	}
 
+	public static char unmergeDoubleVowels(char ch) {
+		switch (ch) {
+		case '\u116a':
+		case '\u1161':
+			return '\u314f';
+
+		case '\u1162':
+			return '\u3150';
+
+		case '\u1163':
+			return '\u3151';
+
+		case '\u116b':
+		case '\u1164':
+			return '\u3152';
+
+		case '\u116f':
+		case '\u1165':
+			return '\u3153';
+
+		case '\u1170':
+		case '\u1166':
+			return '\u3154';
+
+		case '\u1167':
+			return '\u3155';
+
+		case '\u1168':
+			return '\u3156';
+
+		case '\u1169':
+			return '\u3157';
+
+		case '\u116d':
+			return '\u315b';
+
+		case '\u116e':
+			return '\u315c';
+
+		case '\u1172':
+			return '\u3160';
+
+		case '\u1173':
+			return '\u3161';
+
+		case '\u116c':
+		case '\u1171':
+		case '\u1174':
+			return '\u3163';
+		}
+
+		return 0;
+	}
+
 	/*
 	 * http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
 	 * http://gernot-katzers-spice-pages.com/var/korean_hangul_unicode.html
@@ -665,7 +719,7 @@ public class Korean {
 		}
 	}
 
-	private static String unmergeDoubleCharacterToLeadTail(char c) {
+	public static String unmergeDoubleCharacterToLeadTail(char c) {
 
 		switch (c) {
 
@@ -1132,5 +1186,4 @@ public class Korean {
 		return isKoreanLeadChar(ch, true) || isKoreanVowelChar(ch, true)
 				|| isKoreanTailChar(ch, true);
 	}
-
 }
