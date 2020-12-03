@@ -219,13 +219,8 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 	private void onClose() {
 		setAnimating(true);
 		updateIcons(null, app.isExamStarted());
-		removeOrientationStyles();
-		Widget headerParent = toolbarPanel.navRail.getParent().getParent()
-				.getParent();
-		if (app.isPortrait()) {
-			headerParent.addStyleName("closePortrait");
-		} else {
-			headerParent.addStyleName("closeLandscape");
+		addCloseOrientationStyles();
+		if (!app.isPortrait()) {
 			toolbarPanel.setLastOpenWidth(getOffsetWidth());
 		}
 		toolbarPanel.setMoveMode();
@@ -233,11 +228,14 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		app.getAccessibilityManager().focusAnchorOrMenu();
 	}
 
-	private void removeOrientationStyles() {
-		Widget headerParent = toolbarPanel.navRail.getParent().getParent()
-				.getParent();
-		headerParent.removeStyleName("closePortrait");
-		headerParent.removeStyleName("closeLandscape");
+	private void addCloseOrientationStyles() {
+		Dom.toggleClass(toolbarPanel, "closePortrait",
+				"closeLandscape", app.isPortrait());
+	}
+
+	void removeCloseOrientationStyles() {
+		toolbarPanel.removeStyleName("closePortrait");
+		toolbarPanel.removeStyleName("closeLandscape");
 	}
 
 	/**
@@ -519,6 +517,7 @@ class NavigationRail extends FlowPanel implements KeyDownHandler {
 		} else {
 			removeOpenStyles();
 			addStyleName("header-close-" + orientation);
+			addCloseOrientationStyles();
 		}
 
 		updateMenuButtonStyle();

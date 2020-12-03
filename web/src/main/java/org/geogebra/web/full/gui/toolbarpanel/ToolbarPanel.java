@@ -364,6 +364,7 @@ public class ToolbarPanel extends FlowPanel
 			updateDraggerStyle();
 			opposite.addStyleName("hiddenHDraggerRightPanel");
 			if (isOpen()) {
+				navRail.removeCloseOrientationStyles();
 				if (lastOpenWidth != null) {
 					updateWidthForOpening(dockPanel, dockParent);
 					animCallback = new LandscapeAnimationCallback(navRail);
