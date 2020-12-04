@@ -153,22 +153,20 @@ public class ZoomSplitLayoutPanel extends DockLayoutPanel {
 			if (!impl.shouldHandleEvent(event, mouseDown)) {
 				return;
 			}
-			Element splitter = null;
+			Element splitter = impl.getSplitterElement();
 			switch (DOM.eventGetType(event)) {
 			default:
 				// do nothing
 				break;
 			case Event.ONTOUCHSTART:
-				splitter = impl.getSplitterElement();
 				splitter.addClassName("gwt-SplitLayoutPanel-Dragger-ACTIVE");
-				startDrag(event);
+				startDrag(event, splitter.hasClassName("gwt-SplitLayoutPanel-HDragger"));
 				break;
 			case Event.ONMOUSEDOWN:
-				startDrag(event);
+				startDrag(event, splitter.hasClassName("gwt-SplitLayoutPanel-HDragger"));
 				break;
 	
 			case Event.ONTOUCHEND:
-					splitter = impl.getSplitterElement();
 				splitter.removeClassName("gwt-SplitLayoutPanel-Dragger-ACTIVE");
 				endDrag(event);
 				break;
@@ -236,7 +234,7 @@ public class ZoomSplitLayoutPanel extends DockLayoutPanel {
 
 		}
 
-		private void startDrag(Event event) {
+		private void startDrag(Event event, boolean horizontal) {
 			if (splitPanel.hasSplittersFrozen()) {
 				event.preventDefault();
 				return;
@@ -254,6 +252,8 @@ public class ZoomSplitLayoutPanel extends DockLayoutPanel {
 			Element glass = getGlassElem();
 			glass.getStyle().setHeight(height, Unit.PX);
 			glass.getStyle().setWidth(width, Unit.PX);
+
+			glass.getStyle().setProperty("cursor",  horizontal ? "ew-resize" : "ns-resize");
 			Document.get().getBody().appendChild(glass);
 
 			offset = getEventPosition(event) - getAbsolutePosition();

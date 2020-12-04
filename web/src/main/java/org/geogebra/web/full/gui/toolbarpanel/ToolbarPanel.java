@@ -1,5 +1,6 @@
 package org.geogebra.web.full.gui.toolbarpanel;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.geogebra.common.euclidian.EuclidianConstants;
@@ -43,6 +44,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import elemental2.dom.EventListener;
+
 /**
  * @author Laszlo Gal
  */
@@ -56,8 +59,6 @@ public class ToolbarPanel extends FlowPanel
 	public static final int OPEN_MIN_WIDTH_LANDSCAPE = 160;
 	/** Closed height of header in portrait mode */
 	public static final int CLOSED_HEIGHT_PORTRAIT = 56;
-	private static final int MIN_ROWS_WITHOUT_KEYBOARD = 5;
-	private static final int MIN_ROWS_WITH_KEYBOARD = 3;
 	private static final int HDRAGGER_WIDTH = 8;
 	private static final int OPEN_ANIM_TIME = 200;
 	/** Header of the panel with buttons and tabs */
@@ -69,7 +70,7 @@ public class ToolbarPanel extends FlowPanel
 	private StandardButton moveBtn;
 	private Integer lastOpenWidth;
 	private AlgebraTab tabAlgebra;
-	private TableTab tabTable;
+	private @CheckForNull TableTab tabTable;
 	private ToolsTab tabTools;
 	private ShowableTab tabContainer;
 	private boolean isOpen;
@@ -135,8 +136,8 @@ public class ToolbarPanel extends FlowPanel
 		}
 	}
 
-	private void add(ToolbarTab tab) {
-		tab.addStyleName("tab");
+	private void addTab(ToolbarTab tab, boolean active) {
+		tab.addStyleName(active ? "tab" : "tab-hidden");
 		main.add(tab);
 	}
 
@@ -180,6 +181,12 @@ public class ToolbarPanel extends FlowPanel
 	 * Init gui, don't open any panels
 	 */
 	public void initGUI() {
+		if (tabTable != null && app.getConfig().hasTableView()) {
+			return;
+		}
+		if (tabAlgebra != null && tabTable == null && !app.getConfig().hasTableView()) {
+			return;
+		}
 		clear();
 		if (navRail != null) {
 			navRail.removeUndoRedoPanel();
@@ -197,11 +204,13 @@ public class ToolbarPanel extends FlowPanel
 		tabTools = new ToolsTab(this);
 		tabContainer = new TabContainer(this);
 
-		add(tabAlgebra);
-		add(tabTools);
+		addTab(tabAlgebra, true);
+		addTab(tabTools, false);
 		if (app.getConfig().hasTableView()) {
 			tabTable = new TableTab(this);
-			add(tabTable);
+			addTab(tabTable, false);
+		} else {
+			tabTable = null;
 		}
 		addMoveBtn();
 		add(main);
@@ -621,7 +630,9 @@ public class ToolbarPanel extends FlowPanel
 		}
 
 		switchTab(TabIds.TABLE, fade);
-		tabTable.scrollTo(geo);
+		if (tabTable != null) {
+			tabTable.scrollTo(geo);
+		}
 		dispatchEvent(EventType.TABLE_PANEL_SELECTED);
 	}
 
@@ -733,15 +744,6 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void setSelectedTabId(TabIds tabId) {
 		this.getToolbarDockPanel().doSetTabId(tabId);
-	}
-
-	/**
-	 * @return The height that AV should have minimally in portrait mode.
-	 */
-	public double getMinVHeight() {
-		int rows = getFrame().isKeyboardShowing() ? MIN_ROWS_WITH_KEYBOARD
-				: MIN_ROWS_WITHOUT_KEYBOARD;
-		return rows * CLOSED_HEIGHT_PORTRAIT;
 	}
 
 	/**
@@ -992,9 +994,9 @@ public class ToolbarPanel extends FlowPanel
 			setSize("100%", "100%");
 			setAlwaysShowScrollBars(false);
 
-			Dom.addEventListener(this.getElement(), "transitionend", evt -> {
-				parent.setFadeTabs(false);
-			});
+			EventListener onTransitionEnd = evt -> parent.setFadeTabs(false);
+			Dom.addEventListener(this.getElement(), "transitionend",
+					onTransitionEnd);
 		}
 
 		@Override

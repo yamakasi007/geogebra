@@ -82,6 +82,9 @@ public class DockSplitPaneW extends ZoomSplitLayoutPanel
 		if (hasSplittersFrozen()) {
 			addStyleName("splitterFixed");
 		}
+		if (!app.isUnbundled()) {
+			addStyleName("highlightDraggers");
+		}
 	}
 
 	// ========================================
