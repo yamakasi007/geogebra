@@ -26,10 +26,10 @@ public class CoordSystemInfo {
 
 	@Override
 	public String toString() {
-		return "CoordSystemInfo{" +
-				"dx: " + deltaX() +
-				", dy: " + deltaY() +
-				", axisZoom: " + isAxisZoom() +
-				'}';
+		return "CoordSystemInfo{"
+				+ "dx: " + deltaX()
+				+ ", dy: " + deltaY()
+				+ ", axisZoom: " + isAxisZoom()
+				+ '}';
 	}
 }

@@ -62,7 +62,7 @@ public abstract class CoordSystemAnimation {
 	 *
 	 * @param view
 	 *            view
-	 * @param coordSystemInfo
+	 * @param coordSystemInfo info about the coordinate system
 	 */
 	public CoordSystemAnimation(EuclidianView view,
 			CoordSystemInfo coordSystemInfo) {

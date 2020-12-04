@@ -132,10 +132,17 @@ public class LinearSpace {
 		return values.hashCode();
 	}
 
+	/**
+	 * Reduces linear space to a new maximum.
+	 *
+	 * @param max to reduce.
+	 *
+	 * @return number of values deleted.
+	 */
 	public int shrinkMax(double max) {
 		double t = getLastValue();
 		int count = 0;
-		while(t > max) {
+		while (t > max) {
 			values.remove(size() - 1);
 			t = getLastValue();
 			count++;
@@ -143,6 +150,13 @@ public class LinearSpace {
 		return count;
 	}
 
+	/**
+	 * Reduces linear space to a new minimum.
+	 *
+	 * @param min to reduce.
+	 *
+	 * @return number of values deleted.
+	 */
 	public int shrinkMin(double min) {
 		int count = 0;
 		double t = getFirstValue();

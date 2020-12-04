@@ -5187,7 +5187,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * instantiate new zoomer
 	 * 
 	 * @return zoomer
-	 * @param coordSystemInfo
+	 * @param coordSystemInfo {@link CoordSystemInfo}
 	 */
 	protected abstract CoordSystemAnimation newZoomer(
 			CoordSystemInfo coordSystemInfo);
@@ -6525,6 +6525,9 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		return coordSystemInfo;
 	}
 
+	/**
+	 * Called when x-axis is resized.
+	 */
 	public void onResizeX() {
 		setCursor(EuclidianCursor.RESIZE_X);
 		coordSystemInfo.setAxisZoom(true);

@@ -38,7 +38,6 @@ public class IntervalPath {
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple tuple =  model.getPoints().get(i);
 
-
 			if (tuple != null) {
 				if (i < pointCount - 2) {
 					IntervalTuple nextTuple = model.getPoints().get(i + 1);

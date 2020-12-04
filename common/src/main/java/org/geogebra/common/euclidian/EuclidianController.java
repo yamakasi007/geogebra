@@ -6522,6 +6522,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		view.setCursor(EuclidianCursor.DEFAULT);
 	}
 
+	/**
+	 * Change cursor based on which object is hit
+	 * @param hits geos hit.
+	 */
 	protected void setCursorForTranslateView(Hits hits) {
 		if (hits.hasXAxis()) {
 			view.setCursor(EuclidianCursor.RESIZE_X);
@@ -12158,14 +12162,14 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	/**
 	 * Notify listeners that coordinate system has moved.
 	 *
-	 * @param dx x difference of the move
-	 * @param dy y difference of the move
+	 * @param info {@link CoordSystemInfo}
 	 */
 	public void notifyCoordSystemMoved(CoordSystemInfo info) {
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
 			listener.onMove(info);
 		}
 	}
+
 	/**
 	 * Notify listeners that coordinate system has stopped moving.
 	 *

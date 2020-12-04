@@ -82,7 +82,7 @@ public class IntervalPlotModel {
 		double max = view.domain().getHigh();
 		if (oldMax < max && oldMin > min) {
 			extendDomain();
-		} else if (oldMax > max && oldMin < min){
+		} else if (oldMax > max && oldMin < min) {
 			shrinkDomain();
 		} else {
 			moveDomain(oldMax - max);
@@ -98,7 +98,6 @@ public class IntervalPlotModel {
 		}
 //		Log.debug("points: " + points.count());
 	}
-
 
 	private void shrinkDomain() {
 		shrinkMin();
@@ -140,6 +139,9 @@ public class IntervalPlotModel {
 		}
 	}
 
+	/**
+	 * Clears the entire model.
+	 */
 	public void clear() {
 		points.clear();
 		path.reset();

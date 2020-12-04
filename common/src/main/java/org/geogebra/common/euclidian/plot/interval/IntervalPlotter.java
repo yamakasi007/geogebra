@@ -16,7 +16,7 @@ public class IntervalPlotter {
 	private final EuclidianView view;
 	private final IntervalPathPlotter gp;
 	private boolean enabled;
-	private IntervalPlotModel model=null;
+	private IntervalPlotModel model = null;
 
 	/**
 	 * Creates a disabled plotter
