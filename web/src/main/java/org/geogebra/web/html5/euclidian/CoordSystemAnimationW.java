@@ -12,7 +12,7 @@ public class CoordSystemAnimationW extends CoordSystemAnimation implements GTime
 	/**
 	 * @param view
 	 *            zoomed / panned Euclidian view
-	 * @param coordSystemInfo
+	 * @param coordSystemInfo {@link CoordSystemInfo}
 	 */
 	public CoordSystemAnimationW(EuclidianView view,
 			CoordSystemInfo coordSystemInfo) {
