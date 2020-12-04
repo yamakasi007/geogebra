@@ -5232,7 +5232,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		if (axesRatioZoomer == null) {
 			axesRatioZoomer = newZoomer(coordSystemInfo);
-			coordSystemInfo.setAxesRatioZoomer(axesRatioZoomer);
 		}
 
 		coordSystemInfo.setAxisZoom(true);

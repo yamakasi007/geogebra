@@ -3,18 +3,9 @@ package org.geogebra.common.kernel.interval;
 import static org.junit.Assert.assertEquals;
 
 import org.geogebra.common.BaseUnitTest;
-import org.geogebra.common.euclidian.EuclidianView;
-import org.junit.Before;
 import org.junit.Test;
 
 public class LinearSpaceTest extends BaseUnitTest {
-
-	private EuclidianView view;
-
-	@Before
-	public void setUp() {
-		view = getApp().getActiveEuclidianView();
-	}
 
 	@Test
 	public void testExtendToInt() {
