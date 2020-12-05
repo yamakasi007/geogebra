@@ -1,6 +1,8 @@
 package org.geogebra.common.euclidian.plot.interval;
 
+import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.plot.LabelPositionCalculator;
 import org.geogebra.common.kernel.interval.Interval;
 import org.geogebra.common.kernel.interval.IntervalFunctionSampler;
 import org.geogebra.common.kernel.interval.IntervalTuple;
@@ -14,14 +16,15 @@ import org.geogebra.common.kernel.interval.IntervalTupleList;
 public class IntervalPlotModel {
 	private final IntervalTuple range;
 	private final IntervalFunctionSampler sampler;
+	private final LabelPositionCalculator labelPositionCalculator;
 	private IntervalTupleList points;
 	private IntervalPath path;
 	private final EuclidianView view;
 	private Interval oldDomain;
+	private GPoint labelPoint;
 
 	/**
 	 * Constructor
-	 *
 	 * @param range to plot.
 	 * @param sampler to retrieve function data from.
 	 * @param view {@link EuclidianView}
@@ -32,6 +35,7 @@ public class IntervalPlotModel {
 		this.range = range;
 		this.sampler = sampler;
 		this.view = view;
+		labelPositionCalculator = new LabelPositionCalculator(view);
 	}
 
 	public void setPath(IntervalPath path) {
@@ -39,13 +43,31 @@ public class IntervalPlotModel {
 	}
 
 	/**
-	 * Updates the entire model.
+	 * Updates what's necessary.
 	 */
+	public void update() {
+		updatePath();
+		updateLabelPosition();
+	}
+
+		/**
+		 * Updates the entire model.
+		 */
 	public void updateAll() {
 		updateRanges();
 		updateSampler();
 		updatePath();
 		logDomain();
+		updateLabelPosition();
+	}
+
+	private void updateLabelPosition() {
+		if (points.isEmpty()) {
+			return;
+		}
+		IntervalTuple firstPoint = points.get(0);
+		labelPoint = labelPositionCalculator.calculate(firstPoint.x().getHigh(),
+				firstPoint.y().getLow());
 	}
 
 	private void updateRanges() {
@@ -145,5 +167,9 @@ public class IntervalPlotModel {
 	public void clear() {
 		points.clear();
 		path.reset();
+	}
+
+	GPoint getLabelPoint() {
+		return labelPoint;
 	}
 }

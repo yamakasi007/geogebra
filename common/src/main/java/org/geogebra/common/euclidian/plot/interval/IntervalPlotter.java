@@ -1,6 +1,7 @@
 package org.geogebra.common.euclidian.plot.interval;
 
 import org.geogebra.common.awt.GGraphics2D;
+import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.GeneralPathClipped;
 import org.geogebra.common.kernel.geos.GeoFunction;
@@ -56,7 +57,7 @@ public class IntervalPlotter {
 	 * Update path to draw.
 	 */
 	public void update() {
-		model.updatePath();
+		model.update();
 	}
 
 	/**
@@ -84,5 +85,12 @@ public class IntervalPlotter {
 		if (model != null) {
 			model.clear();
 		}
+	}
+
+	/**
+	 * @return point of label
+	 */
+	public GPoint getLabelPoint() {
+		return model.getLabelPoint();
 	}
 }
